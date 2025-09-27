@@ -14,6 +14,7 @@ void Chassis_Task_Init()
     printf("hello\n");
     printf("hello again\n");
     printf("Adele\n");
+    printf("Hello from the other side\n");
 }
 
 void Chassis_Ctrl_Loop()
