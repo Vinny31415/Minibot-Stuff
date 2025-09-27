@@ -11,6 +11,7 @@ float chassis_rad;
 void Chassis_Task_Init()
 {
     // Init chassis hardware
+    printf("hello\n");
 }
 
 void Chassis_Ctrl_Loop()
