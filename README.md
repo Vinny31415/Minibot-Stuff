@@ -1,3 +1,4 @@
-# WARNING, this is a temporary README
+# Minibot Template 
 
-If you need to set up this repo, refer to the [old control-base repo's README](https://github.com/PurdueRM/control-base)
+Step 1: Star this repository
+Step 2: Open Minibot/ and start coding
