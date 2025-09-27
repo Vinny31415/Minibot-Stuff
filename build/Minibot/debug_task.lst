@@ -1,0 +1,140 @@
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccsr2qDs.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"debug_task.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "Minibot/src/debug_task.c"
+  20              		.section	.text.Debug_Task_Loop,"ax",%progbits
+  21              		.align	1
+  22              		.global	Debug_Task_Loop
+  23              		.syntax unified
+  24              		.thumb
+  25              		.thumb_func
+  27              	Debug_Task_Loop:
+  28              	.LFB142:
+   1:Minibot/src/debug_task.c **** #include "debug_task.h"
+   2:Minibot/src/debug_task.c **** 
+   3:Minibot/src/debug_task.c **** #include "bsp_serial.h"
+   4:Minibot/src/debug_task.c **** #include "remote.h"
+   5:Minibot/src/debug_task.c **** #include "user_math.h"
+   6:Minibot/src/debug_task.c **** #include "imu_task.h"
+   7:Minibot/src/debug_task.c **** #include "robot.h"
+   8:Minibot/src/debug_task.c **** #include "referee_system.h"
+   9:Minibot/src/debug_task.c **** #include "jetson_orin.h"
+  10:Minibot/src/debug_task.c **** #include "bsp_daemon.h"
+  11:Minibot/src/debug_task.c **** #include "launch_task.h"
+  12:Minibot/src/debug_task.c **** 
+  13:Minibot/src/debug_task.c **** extern Robot_State_t g_robot_state;
+  14:Minibot/src/debug_task.c **** extern IMU_t g_imu;
+  15:Minibot/src/debug_task.c **** extern Remote_t g_remote;
+  16:Minibot/src/debug_task.c **** extern Daemon_Instance_t *g_daemon_instances[3];
+  17:Minibot/src/debug_task.c **** extern Daemon_Instance_t *g_remote_daemon;
+  18:Minibot/src/debug_task.c **** extern Daemon_Instance_t *g_referee_daemon_instance_ptr;
+  19:Minibot/src/debug_task.c **** extern float test_tmd;
+  20:Minibot/src/debug_task.c **** // #define PRINT_RUNTIME_STATS
+  21:Minibot/src/debug_task.c **** #ifdef PRINT_RUNTIME_STATS
+  22:Minibot/src/debug_task.c **** char g_debug_buffer[1024 * 2] = {0};
+  23:Minibot/src/debug_task.c **** #endif
+  24:Minibot/src/debug_task.c **** 
+  25:Minibot/src/debug_task.c **** const char *top_border = "\r\n\r\n\r\n/***** System Info *****/\r\n";
+  26:Minibot/src/debug_task.c **** const char *bottom_border = "/***** End of Info *****/\r\n";
+  27:Minibot/src/debug_task.c **** 
+  28:Minibot/src/debug_task.c **** #define DEBUG_ENABLED
+  29:Minibot/src/debug_task.c **** 
+  30:Minibot/src/debug_task.c **** void Debug_Task_Loop(void)
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccsr2qDs.s 			page 2
+
+
+  31:Minibot/src/debug_task.c **** {
+  29              		.loc 1 31 1 view -0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33              		@ link register save eliminated.
+  32:Minibot/src/debug_task.c **** #ifdef DEBUG_ENABLED
+  33:Minibot/src/debug_task.c **** // static uint32_t counter = 0;
+  34:Minibot/src/debug_task.c **** #ifdef PRINT_RUNTIME_STATS
+  35:Minibot/src/debug_task.c ****     if (counter % 100 == 0) // Print every 100 cycles
+  36:Minibot/src/debug_task.c ****     {
+  37:Minibot/src/debug_task.c ****         vTaskGetRunTimeStats(g_debug_buffer);
+  38:Minibot/src/debug_task.c ****         DEBUG_PRINTF(&huart6, "%s", top_border);
+  39:Minibot/src/debug_task.c ****         DEBUG_PRINTF(&huart6, "%s", g_debug_buffer);
+  40:Minibot/src/debug_task.c ****         DEBUG_PRINTF(&huart6, "%s", bottom_border);
+  41:Minibot/src/debug_task.c ****     }
+  42:Minibot/src/debug_task.c **** #endif
+  43:Minibot/src/debug_task.c ****     // DEBUG_PRINTF(&huart6, ">time:%.1f\n>ref:%f\n",(float) counter / 1000.0f * DEBUG_PERIOD,Refer
+  44:Minibot/src/debug_task.c ****     //  DEBUG_PRINTF(&huart6, ">time:%.1f\n>yaw:%f\n>pitch:%f\n>roll:%f\n", (float) counter / 1000.
+  45:Minibot/src/debug_task.c ****     //              g_imu.deg.yaw, g_imu.deg.pitch, g_imu.deg.roll);
+  46:Minibot/src/debug_task.c ****     //  DEBUG_PRINTF(&huart6, ">remote_daemon:%d\n", g_remote_daemon->counter);
+  47:Minibot/src/debug_task.c ****     //  counter++;
+  48:Minibot/src/debug_task.c ****     //  if (counter > 0xFFFFFFFF) {
+  49:Minibot/src/debug_task.c ****     //      counter = 0;
+  50:Minibot/src/debug_task.c ****     //  }
+  51:Minibot/src/debug_task.c **** #endif
+  52:Minibot/src/debug_task.c **** }...
+  34              		.loc 1 52 1 view .LVU1
+  35 0000 7047     		bx	lr
+  36              		.cfi_endproc
+  37              	.LFE142:
+  39              		.global	bottom_border
+  40              		.section	.rodata.str1.4,"aMS",%progbits,1
+  41              		.align	2
+  42              	.LC0:
+  43 0000 2F2A2A2A 		.ascii	"/***** End of Info *****/\015\012\000"
+  43      2A2A2045 
+  43      6E64206F 
+  43      6620496E 
+  43      666F202A 
+  44              		.section	.data.bottom_border,"aw"
+  45              		.align	2
+  48              	bottom_border:
+  49 0000 00000000 		.word	.LC0
+  50              		.global	top_border
+  51              		.section	.rodata.str1.4
+  52              		.align	2
+  53              	.LC1:
+  54 001c 0D0A0D0A 		.ascii	"\015\012\015\012\015\012/***** System Info *****/\015"
+  54      0D0A2F2A 
+  54      2A2A2A2A 
+  54      20537973 
+  54      74656D20 
+  55 003c 0A00     		.ascii	"\012\000"
+  56              		.section	.data.top_border,"aw"
+  57              		.align	2
+  60              	top_border:
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccsr2qDs.s 			page 3
+
+
+  61 0000 1C000000 		.word	.LC1
+  62              		.text
+  63              	.Letext0:
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccsr2qDs.s 			page 4
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 debug_task.c
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccsr2qDs.s:21     .text.Debug_Task_Loop:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccsr2qDs.s:27     .text.Debug_Task_Loop:00000000 Debug_Task_Loop
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccsr2qDs.s:48     .data.bottom_border:00000000 bottom_border
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccsr2qDs.s:41     .rodata.str1.4:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccsr2qDs.s:45     .data.bottom_border:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccsr2qDs.s:60     .data.top_border:00000000 top_border
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccsr2qDs.s:57     .data.top_border:00000000 $d
+
+NO UNDEFINED SYMBOLS

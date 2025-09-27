@@ -1,0 +1,718 @@
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgkHrPu.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"remote.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "control-base/devices/src/remote.c"
+  20              		.section	.text.Remote_Timeout_Callback,"ax",%progbits
+  21              		.align	1
+  22              		.global	Remote_Timeout_Callback
+  23              		.syntax unified
+  24              		.thumb
+  25              		.thumb_func
+  27              	Remote_Timeout_Callback:
+  28              	.LFB136:
+   1:control-base/devices/src/remote.c **** /**
+   2:control-base/devices/src/remote.c ****   ******************************************************************************
+   3:control-base/devices/src/remote.c ****   * @file    remote.c
+   4:control-base/devices/src/remote.c ****   * @brief   This file contains the driver functions for DR16 Remote From DJI
+   5:control-base/devices/src/remote.c ****   ******************************************************************************
+   6:control-base/devices/src/remote.c ****   */
+   7:control-base/devices/src/remote.c **** #include "remote.h"
+   8:control-base/devices/src/remote.c **** #include "bsp_uart.h"
+   9:control-base/devices/src/remote.c **** #include "bsp_daemon.h"
+  10:control-base/devices/src/remote.c **** #include <memory.h>
+  11:control-base/devices/src/remote.c **** 
+  12:control-base/devices/src/remote.c **** Remote_t g_remote;
+  13:control-base/devices/src/remote.c **** UART_Instance_t *g_remote_uart;
+  14:control-base/devices/src/remote.c **** Daemon_Instance_t *g_remote_daemon;
+  15:control-base/devices/src/remote.c **** 
+  16:control-base/devices/src/remote.c **** uint8_t remote_buffer[18];
+  17:control-base/devices/src/remote.c **** volatile uint8_t debug_buffer[18];
+  18:control-base/devices/src/remote.c **** /*
+  19:control-base/devices/src/remote.c ****  * Remote_BufferProcess()
+  20:control-base/devices/src/remote.c ****  * 
+  21:control-base/devices/src/remote.c ****  * Decode the buffer received from DR16 receiver to g_remote. @ref Remote_t
+  22:control-base/devices/src/remote.c ****  */
+  23:control-base/devices/src/remote.c **** void Remote_Buffer_Process()
+  24:control-base/devices/src/remote.c **** {
+  25:control-base/devices/src/remote.c **** 	memcpy((void*) debug_buffer, remote_buffer, 18);
+  26:control-base/devices/src/remote.c **** 	// controller decode
+  27:control-base/devices/src/remote.c **** 	g_remote.controller.right_stick.x = ((remote_buffer[0] | (remote_buffer[1] << 8)) & 0x07ff) - 1024
+  28:control-base/devices/src/remote.c **** 	g_remote.controller.right_stick.y = (((remote_buffer[1] >> 3) | (remote_buffer[2] << 5)) & 0x07ff)
+  29:control-base/devices/src/remote.c **** 	g_remote.controller.left_stick.x = (((remote_buffer[2] >> 6) | (remote_buffer[3] << 2) | (remote_b
+  30:control-base/devices/src/remote.c **** 	g_remote.controller.left_stick.y = (((remote_buffer[4] >> 1) | (remote_buffer[5] << 7)) & 0x07ff) 
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgkHrPu.s 			page 2
+
+
+  31:control-base/devices/src/remote.c **** 	g_remote.controller.wheel = ((remote_buffer[16] | (remote_buffer[17] << 8)) & 0x07FF) - 1024;
+  32:control-base/devices/src/remote.c **** 	g_remote.controller.left_switch = ((remote_buffer[5] >> 4) & 0x000C) >> 2;
+  33:control-base/devices/src/remote.c **** 	g_remote.controller.right_switch = ((remote_buffer[5] >> 4) & 0x0003);
+  34:control-base/devices/src/remote.c **** 
+  35:control-base/devices/src/remote.c **** 	// mouse decode
+  36:control-base/devices/src/remote.c **** 	g_remote.mouse.x = (remote_buffer[6]) | (remote_buffer[7] << 8);
+  37:control-base/devices/src/remote.c **** 	g_remote.mouse.y = remote_buffer[8] | (remote_buffer[9] << 8);
+  38:control-base/devices/src/remote.c **** 	g_remote.mouse.z = remote_buffer[10] | (remote_buffer[11] << 8);
+  39:control-base/devices/src/remote.c **** 	g_remote.mouse.left = remote_buffer[12];
+  40:control-base/devices/src/remote.c **** 	g_remote.mouse.right = remote_buffer[13];
+  41:control-base/devices/src/remote.c **** 
+  42:control-base/devices/src/remote.c **** 	// key decode
+  43:control-base/devices/src/remote.c **** 	uint16_t key_buffer = remote_buffer[14] | (remote_buffer[15] << 8);
+  44:control-base/devices/src/remote.c **** 	g_remote.keyboard.W = (key_buffer >> 0) & 0x001;
+  45:control-base/devices/src/remote.c **** 	g_remote.keyboard.S = (key_buffer >> 1) & 0x001;
+  46:control-base/devices/src/remote.c **** 	g_remote.keyboard.A = (key_buffer >> 2) & 0x001;
+  47:control-base/devices/src/remote.c **** 	g_remote.keyboard.D = (key_buffer >> 3) & 0x001;
+  48:control-base/devices/src/remote.c **** 	g_remote.keyboard.Shift = (key_buffer >> 4) & 0x001;
+  49:control-base/devices/src/remote.c **** 	g_remote.keyboard.Ctrl = (key_buffer >> 5) & 0x001;
+  50:control-base/devices/src/remote.c **** 	g_remote.keyboard.Q = (key_buffer >> 6) & 0x001;
+  51:control-base/devices/src/remote.c **** 	g_remote.keyboard.E = (key_buffer >> 7) & 0x001;
+  52:control-base/devices/src/remote.c **** 	g_remote.keyboard.R = (key_buffer >> 8) & 0x001;
+  53:control-base/devices/src/remote.c **** 	g_remote.keyboard.F = (key_buffer >> 9) & 0x001;
+  54:control-base/devices/src/remote.c **** 	g_remote.keyboard.G = (key_buffer >> 10) & 0x001;
+  55:control-base/devices/src/remote.c **** 	g_remote.keyboard.Z = (key_buffer >> 11) & 0x001;
+  56:control-base/devices/src/remote.c **** 	g_remote.keyboard.X = (key_buffer >> 12) & 0x001;
+  57:control-base/devices/src/remote.c **** 	g_remote.keyboard.C = (key_buffer >> 13) & 0x001;
+  58:control-base/devices/src/remote.c **** 	g_remote.keyboard.V = (key_buffer >> 14) & 0x001;
+  59:control-base/devices/src/remote.c **** 	g_remote.keyboard.B = (key_buffer >> 15) & 0x001;
+  60:control-base/devices/src/remote.c **** 
+  61:control-base/devices/src/remote.c **** 	g_remote.online_flag = 1;
+  62:control-base/devices/src/remote.c **** }
+  63:control-base/devices/src/remote.c **** 
+  64:control-base/devices/src/remote.c **** void Remote_Rx_Callback(UART_Instance_t *uart_instance)
+  65:control-base/devices/src/remote.c **** {
+  66:control-base/devices/src/remote.c **** 	Remote_Buffer_Process();
+  67:control-base/devices/src/remote.c **** 	Daemon_Reload(g_remote_daemon);
+  68:control-base/devices/src/remote.c **** }
+  69:control-base/devices/src/remote.c **** 
+  70:control-base/devices/src/remote.c **** void Remote_Timeout_Callback()
+  71:control-base/devices/src/remote.c **** {
+  29              		.loc 1 71 1 view -0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33 0000 08B5     		push	{r3, lr}
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 8
+  36              		.cfi_offset 3, -8
+  37              		.cfi_offset 14, -4
+  72:control-base/devices/src/remote.c **** 	// reinitalize the remote uart transmission
+  73:control-base/devices/src/remote.c **** 	UART_Service_Init(g_remote_uart);
+  38              		.loc 1 73 2 view .LVU1
+  39 0002 044B     		ldr	r3, .L3
+  40 0004 1868     		ldr	r0, [r3]
+  41 0006 FFF7FEFF 		bl	UART_Service_Init
+  42              	.LVL0:
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgkHrPu.s 			page 3
+
+
+  74:control-base/devices/src/remote.c **** 	g_remote.online_flag = 0;
+  43              		.loc 1 74 2 view .LVU2
+  44              		.loc 1 74 23 is_stmt 0 view .LVU3
+  45 000a 034B     		ldr	r3, .L3+4
+  46 000c 0022     		movs	r2, #0
+  47 000e 83F82820 		strb	r2, [r3, #40]
+  75:control-base/devices/src/remote.c **** }
+  48              		.loc 1 75 1 view .LVU4
+  49 0012 08BD     		pop	{r3, pc}
+  50              	.L4:
+  51              		.align	2
+  52              	.L3:
+  53 0014 00000000 		.word	g_remote_uart
+  54 0018 00000000 		.word	g_remote
+  55              		.cfi_endproc
+  56              	.LFE136:
+  58              		.section	.text.Remote_Buffer_Process,"ax",%progbits
+  59              		.align	1
+  60              		.global	Remote_Buffer_Process
+  61              		.syntax unified
+  62              		.thumb
+  63              		.thumb_func
+  65              	Remote_Buffer_Process:
+  66              	.LFB134:
+  24:control-base/devices/src/remote.c **** 	memcpy((void*) debug_buffer, remote_buffer, 18);
+  67              		.loc 1 24 1 is_stmt 1 view -0
+  68              		.cfi_startproc
+  69              		@ args = 0, pretend = 0, frame = 0
+  70              		@ frame_needed = 0, uses_anonymous_args = 0
+  71              		@ link register save eliminated.
+  72 0000 30B4     		push	{r4, r5}
+  73              	.LCFI1:
+  74              		.cfi_def_cfa_offset 8
+  75              		.cfi_offset 4, -8
+  76              		.cfi_offset 5, -4
+  25:control-base/devices/src/remote.c **** 	// controller decode
+  77              		.loc 1 25 2 view .LVU6
+  78 0002 464C     		ldr	r4, .L7
+  79 0004 464D     		ldr	r5, .L7+4
+  80 0006 A446     		mov	ip, r4
+  81 0008 BCE80F00 		ldmia	ip!, {r0, r1, r2, r3}
+  82 000c 0FC5     		stmia	r5!, {r0, r1, r2, r3}
+  83 000e DCF80030 		ldr	r3, [ip]
+  84 0012 2B80     		strh	r3, [r5]	@ movhi
+  27:control-base/devices/src/remote.c **** 	g_remote.controller.right_stick.y = (((remote_buffer[1] >> 3) | (remote_buffer[2] << 5)) & 0x07ff)
+  85              		.loc 1 27 2 view .LVU7
+  27:control-base/devices/src/remote.c **** 	g_remote.controller.right_stick.y = (((remote_buffer[1] >> 3) | (remote_buffer[2] << 5)) & 0x07ff)
+  86              		.loc 1 27 53 is_stmt 0 view .LVU8
+  87 0014 2278     		ldrb	r2, [r4]	@ zero_extendqisi2
+  27:control-base/devices/src/remote.c **** 	g_remote.controller.right_stick.y = (((remote_buffer[1] >> 3) | (remote_buffer[2] << 5)) & 0x07ff)
+  88              		.loc 1 27 73 view .LVU9
+  89 0016 6078     		ldrb	r0, [r4, #1]	@ zero_extendqisi2
+  27:control-base/devices/src/remote.c **** 	g_remote.controller.right_stick.y = (((remote_buffer[1] >> 3) | (remote_buffer[2] << 5)) & 0x07ff)
+  90              		.loc 1 27 57 view .LVU10
+  91 0018 42EA0022 		orr	r2, r2, r0, lsl #8
+  27:control-base/devices/src/remote.c **** 	g_remote.controller.right_stick.y = (((remote_buffer[1] >> 3) | (remote_buffer[2] << 5)) & 0x07ff)
+  92              		.loc 1 27 84 view .LVU11
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgkHrPu.s 			page 4
+
+
+  93 001c C2F30A02 		ubfx	r2, r2, #0, #11
+  27:control-base/devices/src/remote.c **** 	g_remote.controller.right_stick.y = (((remote_buffer[1] >> 3) | (remote_buffer[2] << 5)) & 0x07ff)
+  94              		.loc 1 27 94 view .LVU12
+  95 0020 A2F58062 		sub	r2, r2, #1024
+  27:control-base/devices/src/remote.c **** 	g_remote.controller.right_stick.y = (((remote_buffer[1] >> 3) | (remote_buffer[2] << 5)) & 0x07ff)
+  96              		.loc 1 27 36 view .LVU13
+  97 0024 3F4B     		ldr	r3, .L7+8
+  98 0026 9A80     		strh	r2, [r3, #4]	@ movhi
+  28:control-base/devices/src/remote.c **** 	g_remote.controller.left_stick.x = (((remote_buffer[2] >> 6) | (remote_buffer[3] << 2) | (remote_b
+  99              		.loc 1 28 2 is_stmt 1 view .LVU14
+  28:control-base/devices/src/remote.c **** 	g_remote.controller.left_stick.x = (((remote_buffer[2] >> 6) | (remote_buffer[3] << 2) | (remote_b
+ 100              		.loc 1 28 80 is_stmt 0 view .LVU15
+ 101 0028 A178     		ldrb	r1, [r4, #2]	@ zero_extendqisi2
+  28:control-base/devices/src/remote.c **** 	g_remote.controller.left_stick.x = (((remote_buffer[2] >> 6) | (remote_buffer[3] << 2) | (remote_b
+ 102              		.loc 1 28 64 view .LVU16
+ 103 002a 4A01     		lsls	r2, r1, #5
+ 104 002c 42EAD002 		orr	r2, r2, r0, lsr #3
+  28:control-base/devices/src/remote.c **** 	g_remote.controller.left_stick.x = (((remote_buffer[2] >> 6) | (remote_buffer[3] << 2) | (remote_b
+ 105              		.loc 1 28 91 view .LVU17
+ 106 0030 C2F30A02 		ubfx	r2, r2, #0, #11
+  28:control-base/devices/src/remote.c **** 	g_remote.controller.left_stick.x = (((remote_buffer[2] >> 6) | (remote_buffer[3] << 2) | (remote_b
+ 107              		.loc 1 28 101 view .LVU18
+ 108 0034 A2F58062 		sub	r2, r2, #1024
+  28:control-base/devices/src/remote.c **** 	g_remote.controller.left_stick.x = (((remote_buffer[2] >> 6) | (remote_buffer[3] << 2) | (remote_b
+ 109              		.loc 1 28 36 view .LVU19
+ 110 0038 DA80     		strh	r2, [r3, #6]	@ movhi
+  29:control-base/devices/src/remote.c **** 	g_remote.controller.left_stick.y = (((remote_buffer[4] >> 1) | (remote_buffer[5] << 7)) & 0x07ff) 
+ 111              		.loc 1 29 2 is_stmt 1 view .LVU20
+  29:control-base/devices/src/remote.c **** 	g_remote.controller.left_stick.y = (((remote_buffer[4] >> 1) | (remote_buffer[5] << 7)) & 0x07ff) 
+ 112              		.loc 1 29 79 is_stmt 0 view .LVU21
+ 113 003a E278     		ldrb	r2, [r4, #3]	@ zero_extendqisi2
+  29:control-base/devices/src/remote.c **** 	g_remote.controller.left_stick.y = (((remote_buffer[4] >> 1) | (remote_buffer[5] << 7)) & 0x07ff) 
+ 114              		.loc 1 29 63 view .LVU22
+ 115 003c 9200     		lsls	r2, r2, #2
+ 116 003e 42EA9112 		orr	r2, r2, r1, lsr #6
+  29:control-base/devices/src/remote.c **** 	g_remote.controller.left_stick.y = (((remote_buffer[4] >> 1) | (remote_buffer[5] << 7)) & 0x07ff) 
+ 117              		.loc 1 29 105 view .LVU23
+ 118 0042 2079     		ldrb	r0, [r4, #4]	@ zero_extendqisi2
+  29:control-base/devices/src/remote.c **** 	g_remote.controller.left_stick.y = (((remote_buffer[4] >> 1) | (remote_buffer[5] << 7)) & 0x07ff) 
+ 119              		.loc 1 29 89 view .LVU24
+ 120 0044 42EA8022 		orr	r2, r2, r0, lsl #10
+  29:control-base/devices/src/remote.c **** 	g_remote.controller.left_stick.y = (((remote_buffer[4] >> 1) | (remote_buffer[5] << 7)) & 0x07ff) 
+ 121              		.loc 1 29 117 view .LVU25
+ 122 0048 C2F30A02 		ubfx	r2, r2, #0, #11
+  29:control-base/devices/src/remote.c **** 	g_remote.controller.left_stick.y = (((remote_buffer[4] >> 1) | (remote_buffer[5] << 7)) & 0x07ff) 
+ 123              		.loc 1 29 127 view .LVU26
+ 124 004c A2F58062 		sub	r2, r2, #1024
+  29:control-base/devices/src/remote.c **** 	g_remote.controller.left_stick.y = (((remote_buffer[4] >> 1) | (remote_buffer[5] << 7)) & 0x07ff) 
+ 125              		.loc 1 29 35 view .LVU27
+ 126 0050 1A80     		strh	r2, [r3]	@ movhi
+  30:control-base/devices/src/remote.c **** 	g_remote.controller.wheel = ((remote_buffer[16] | (remote_buffer[17] << 8)) & 0x07FF) - 1024;
+ 127              		.loc 1 30 2 is_stmt 1 view .LVU28
+  30:control-base/devices/src/remote.c **** 	g_remote.controller.wheel = ((remote_buffer[16] | (remote_buffer[17] << 8)) & 0x07FF) - 1024;
+ 128              		.loc 1 30 79 is_stmt 0 view .LVU29
+ 129 0052 6179     		ldrb	r1, [r4, #5]	@ zero_extendqisi2
+  30:control-base/devices/src/remote.c **** 	g_remote.controller.wheel = ((remote_buffer[16] | (remote_buffer[17] << 8)) & 0x07FF) - 1024;
+ 130              		.loc 1 30 63 view .LVU30
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgkHrPu.s 			page 5
+
+
+ 131 0054 CA01     		lsls	r2, r1, #7
+ 132 0056 42EA5002 		orr	r2, r2, r0, lsr #1
+  30:control-base/devices/src/remote.c **** 	g_remote.controller.wheel = ((remote_buffer[16] | (remote_buffer[17] << 8)) & 0x07FF) - 1024;
+ 133              		.loc 1 30 90 view .LVU31
+ 134 005a C2F30A02 		ubfx	r2, r2, #0, #11
+  30:control-base/devices/src/remote.c **** 	g_remote.controller.wheel = ((remote_buffer[16] | (remote_buffer[17] << 8)) & 0x07FF) - 1024;
+ 135              		.loc 1 30 100 view .LVU32
+ 136 005e A2F58062 		sub	r2, r2, #1024
+  30:control-base/devices/src/remote.c **** 	g_remote.controller.wheel = ((remote_buffer[16] | (remote_buffer[17] << 8)) & 0x07FF) - 1024;
+ 137              		.loc 1 30 35 view .LVU33
+ 138 0062 5A80     		strh	r2, [r3, #2]	@ movhi
+  31:control-base/devices/src/remote.c **** 	g_remote.controller.left_switch = ((remote_buffer[5] >> 4) & 0x000C) >> 2;
+ 139              		.loc 1 31 2 is_stmt 1 view .LVU34
+  31:control-base/devices/src/remote.c **** 	g_remote.controller.left_switch = ((remote_buffer[5] >> 4) & 0x000C) >> 2;
+ 140              		.loc 1 31 45 is_stmt 0 view .LVU35
+ 141 0064 227C     		ldrb	r2, [r4, #16]	@ zero_extendqisi2
+  31:control-base/devices/src/remote.c **** 	g_remote.controller.left_switch = ((remote_buffer[5] >> 4) & 0x000C) >> 2;
+ 142              		.loc 1 31 66 view .LVU36
+ 143 0066 607C     		ldrb	r0, [r4, #17]	@ zero_extendqisi2
+  31:control-base/devices/src/remote.c **** 	g_remote.controller.left_switch = ((remote_buffer[5] >> 4) & 0x000C) >> 2;
+ 144              		.loc 1 31 50 view .LVU37
+ 145 0068 42EA0022 		orr	r2, r2, r0, lsl #8
+  31:control-base/devices/src/remote.c **** 	g_remote.controller.left_switch = ((remote_buffer[5] >> 4) & 0x000C) >> 2;
+ 146              		.loc 1 31 78 view .LVU38
+ 147 006c C2F30A02 		ubfx	r2, r2, #0, #11
+  31:control-base/devices/src/remote.c **** 	g_remote.controller.left_switch = ((remote_buffer[5] >> 4) & 0x000C) >> 2;
+ 148              		.loc 1 31 88 view .LVU39
+ 149 0070 A2F58062 		sub	r2, r2, #1024
+  31:control-base/devices/src/remote.c **** 	g_remote.controller.left_switch = ((remote_buffer[5] >> 4) & 0x000C) >> 2;
+ 150              		.loc 1 31 28 view .LVU40
+ 151 0074 9A60     		str	r2, [r3, #8]
+  32:control-base/devices/src/remote.c **** 	g_remote.controller.right_switch = ((remote_buffer[5] >> 4) & 0x0003);
+ 152              		.loc 1 32 2 is_stmt 1 view .LVU41
+  32:control-base/devices/src/remote.c **** 	g_remote.controller.right_switch = ((remote_buffer[5] >> 4) & 0x0003);
+ 153              		.loc 1 32 71 is_stmt 0 view .LVU42
+ 154 0076 8A09     		lsrs	r2, r1, #6
+  32:control-base/devices/src/remote.c **** 	g_remote.controller.right_switch = ((remote_buffer[5] >> 4) & 0x0003);
+ 155              		.loc 1 32 34 view .LVU43
+ 156 0078 1A73     		strb	r2, [r3, #12]
+  33:control-base/devices/src/remote.c **** 
+ 157              		.loc 1 33 2 is_stmt 1 view .LVU44
+  33:control-base/devices/src/remote.c **** 
+ 158              		.loc 1 33 62 is_stmt 0 view .LVU45
+ 159 007a C1F30111 		ubfx	r1, r1, #4, #2
+  33:control-base/devices/src/remote.c **** 
+ 160              		.loc 1 33 35 view .LVU46
+ 161 007e 5973     		strb	r1, [r3, #13]
+  36:control-base/devices/src/remote.c **** 	g_remote.mouse.y = remote_buffer[8] | (remote_buffer[9] << 8);
+ 162              		.loc 1 36 2 is_stmt 1 view .LVU47
+  36:control-base/devices/src/remote.c **** 	g_remote.mouse.y = remote_buffer[8] | (remote_buffer[9] << 8);
+ 163              		.loc 1 36 35 is_stmt 0 view .LVU48
+ 164 0080 A279     		ldrb	r2, [r4, #6]	@ zero_extendqisi2
+  36:control-base/devices/src/remote.c **** 	g_remote.mouse.y = remote_buffer[8] | (remote_buffer[9] << 8);
+ 165              		.loc 1 36 56 view .LVU49
+ 166 0082 E179     		ldrb	r1, [r4, #7]	@ zero_extendqisi2
+  36:control-base/devices/src/remote.c **** 	g_remote.mouse.y = remote_buffer[8] | (remote_buffer[9] << 8);
+ 167              		.loc 1 36 40 view .LVU50
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgkHrPu.s 			page 6
+
+
+ 168 0084 42EA0122 		orr	r2, r2, r1, lsl #8
+  36:control-base/devices/src/remote.c **** 	g_remote.mouse.y = remote_buffer[8] | (remote_buffer[9] << 8);
+ 169              		.loc 1 36 19 view .LVU51
+ 170 0088 1A84     		strh	r2, [r3, #32]	@ movhi
+  37:control-base/devices/src/remote.c **** 	g_remote.mouse.z = remote_buffer[10] | (remote_buffer[11] << 8);
+ 171              		.loc 1 37 2 is_stmt 1 view .LVU52
+  37:control-base/devices/src/remote.c **** 	g_remote.mouse.z = remote_buffer[10] | (remote_buffer[11] << 8);
+ 172              		.loc 1 37 34 is_stmt 0 view .LVU53
+ 173 008a 227A     		ldrb	r2, [r4, #8]	@ zero_extendqisi2
+  37:control-base/devices/src/remote.c **** 	g_remote.mouse.z = remote_buffer[10] | (remote_buffer[11] << 8);
+ 174              		.loc 1 37 54 view .LVU54
+ 175 008c 617A     		ldrb	r1, [r4, #9]	@ zero_extendqisi2
+  37:control-base/devices/src/remote.c **** 	g_remote.mouse.z = remote_buffer[10] | (remote_buffer[11] << 8);
+ 176              		.loc 1 37 38 view .LVU55
+ 177 008e 42EA0122 		orr	r2, r2, r1, lsl #8
+  37:control-base/devices/src/remote.c **** 	g_remote.mouse.z = remote_buffer[10] | (remote_buffer[11] << 8);
+ 178              		.loc 1 37 19 view .LVU56
+ 179 0092 5A84     		strh	r2, [r3, #34]	@ movhi
+  38:control-base/devices/src/remote.c **** 	g_remote.mouse.left = remote_buffer[12];
+ 180              		.loc 1 38 2 is_stmt 1 view .LVU57
+  38:control-base/devices/src/remote.c **** 	g_remote.mouse.left = remote_buffer[12];
+ 181              		.loc 1 38 34 is_stmt 0 view .LVU58
+ 182 0094 A27A     		ldrb	r2, [r4, #10]	@ zero_extendqisi2
+  38:control-base/devices/src/remote.c **** 	g_remote.mouse.left = remote_buffer[12];
+ 183              		.loc 1 38 55 view .LVU59
+ 184 0096 E17A     		ldrb	r1, [r4, #11]	@ zero_extendqisi2
+  38:control-base/devices/src/remote.c **** 	g_remote.mouse.left = remote_buffer[12];
+ 185              		.loc 1 38 39 view .LVU60
+ 186 0098 42EA0122 		orr	r2, r2, r1, lsl #8
+  38:control-base/devices/src/remote.c **** 	g_remote.mouse.left = remote_buffer[12];
+ 187              		.loc 1 38 19 view .LVU61
+ 188 009c 9A84     		strh	r2, [r3, #36]	@ movhi
+  39:control-base/devices/src/remote.c **** 	g_remote.mouse.right = remote_buffer[13];
+ 189              		.loc 1 39 2 is_stmt 1 view .LVU62
+  39:control-base/devices/src/remote.c **** 	g_remote.mouse.right = remote_buffer[13];
+ 190              		.loc 1 39 37 is_stmt 0 view .LVU63
+ 191 009e 227B     		ldrb	r2, [r4, #12]	@ zero_extendqisi2
+  39:control-base/devices/src/remote.c **** 	g_remote.mouse.right = remote_buffer[13];
+ 192              		.loc 1 39 22 view .LVU64
+ 193 00a0 83F82620 		strb	r2, [r3, #38]
+  40:control-base/devices/src/remote.c **** 
+ 194              		.loc 1 40 2 is_stmt 1 view .LVU65
+  40:control-base/devices/src/remote.c **** 
+ 195              		.loc 1 40 38 is_stmt 0 view .LVU66
+ 196 00a4 627B     		ldrb	r2, [r4, #13]	@ zero_extendqisi2
+  40:control-base/devices/src/remote.c **** 
+ 197              		.loc 1 40 23 view .LVU67
+ 198 00a6 83F82720 		strb	r2, [r3, #39]
+  43:control-base/devices/src/remote.c **** 	g_remote.keyboard.W = (key_buffer >> 0) & 0x001;
+ 199              		.loc 1 43 2 is_stmt 1 view .LVU68
+  43:control-base/devices/src/remote.c **** 	g_remote.keyboard.W = (key_buffer >> 0) & 0x001;
+ 200              		.loc 1 43 37 is_stmt 0 view .LVU69
+ 201 00aa A17B     		ldrb	r1, [r4, #14]	@ zero_extendqisi2
+  43:control-base/devices/src/remote.c **** 	g_remote.keyboard.W = (key_buffer >> 0) & 0x001;
+ 202              		.loc 1 43 58 view .LVU70
+ 203 00ac E27B     		ldrb	r2, [r4, #15]	@ zero_extendqisi2
+  43:control-base/devices/src/remote.c **** 	g_remote.keyboard.W = (key_buffer >> 0) & 0x001;
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgkHrPu.s 			page 7
+
+
+ 204              		.loc 1 43 42 view .LVU71
+ 205 00ae 41EA0221 		orr	r1, r1, r2, lsl #8
+  43:control-base/devices/src/remote.c **** 	g_remote.keyboard.W = (key_buffer >> 0) & 0x001;
+ 206              		.loc 1 43 11 view .LVU72
+ 207 00b2 0A46     		mov	r2, r1
+ 208              	.LVL1:
+  44:control-base/devices/src/remote.c **** 	g_remote.keyboard.S = (key_buffer >> 1) & 0x001;
+ 209              		.loc 1 44 2 is_stmt 1 view .LVU73
+  44:control-base/devices/src/remote.c **** 	g_remote.keyboard.S = (key_buffer >> 1) & 0x001;
+ 210              		.loc 1 44 42 is_stmt 0 view .LVU74
+ 211 00b4 01F00101 		and	r1, r1, #1
+ 212              	.LVL2:
+  44:control-base/devices/src/remote.c **** 	g_remote.keyboard.S = (key_buffer >> 1) & 0x001;
+ 213              		.loc 1 44 22 view .LVU75
+ 214 00b8 1974     		strb	r1, [r3, #16]
+  45:control-base/devices/src/remote.c **** 	g_remote.keyboard.A = (key_buffer >> 2) & 0x001;
+ 215              		.loc 1 45 2 is_stmt 1 view .LVU76
+  45:control-base/devices/src/remote.c **** 	g_remote.keyboard.A = (key_buffer >> 2) & 0x001;
+ 216              		.loc 1 45 42 is_stmt 0 view .LVU77
+ 217 00ba C2F34001 		ubfx	r1, r2, #1, #1
+  45:control-base/devices/src/remote.c **** 	g_remote.keyboard.A = (key_buffer >> 2) & 0x001;
+ 218              		.loc 1 45 22 view .LVU78
+ 219 00be 5974     		strb	r1, [r3, #17]
+  46:control-base/devices/src/remote.c **** 	g_remote.keyboard.D = (key_buffer >> 3) & 0x001;
+ 220              		.loc 1 46 2 is_stmt 1 view .LVU79
+  46:control-base/devices/src/remote.c **** 	g_remote.keyboard.D = (key_buffer >> 3) & 0x001;
+ 221              		.loc 1 46 42 is_stmt 0 view .LVU80
+ 222 00c0 C2F38001 		ubfx	r1, r2, #2, #1
+  46:control-base/devices/src/remote.c **** 	g_remote.keyboard.D = (key_buffer >> 3) & 0x001;
+ 223              		.loc 1 46 22 view .LVU81
+ 224 00c4 9974     		strb	r1, [r3, #18]
+  47:control-base/devices/src/remote.c **** 	g_remote.keyboard.Shift = (key_buffer >> 4) & 0x001;
+ 225              		.loc 1 47 2 is_stmt 1 view .LVU82
+  47:control-base/devices/src/remote.c **** 	g_remote.keyboard.Shift = (key_buffer >> 4) & 0x001;
+ 226              		.loc 1 47 42 is_stmt 0 view .LVU83
+ 227 00c6 C2F3C001 		ubfx	r1, r2, #3, #1
+  47:control-base/devices/src/remote.c **** 	g_remote.keyboard.Shift = (key_buffer >> 4) & 0x001;
+ 228              		.loc 1 47 22 view .LVU84
+ 229 00ca D974     		strb	r1, [r3, #19]
+  48:control-base/devices/src/remote.c **** 	g_remote.keyboard.Ctrl = (key_buffer >> 5) & 0x001;
+ 230              		.loc 1 48 2 is_stmt 1 view .LVU85
+  48:control-base/devices/src/remote.c **** 	g_remote.keyboard.Ctrl = (key_buffer >> 5) & 0x001;
+ 231              		.loc 1 48 46 is_stmt 0 view .LVU86
+ 232 00cc C2F30011 		ubfx	r1, r2, #4, #1
+  48:control-base/devices/src/remote.c **** 	g_remote.keyboard.Ctrl = (key_buffer >> 5) & 0x001;
+ 233              		.loc 1 48 26 view .LVU87
+ 234 00d0 9975     		strb	r1, [r3, #22]
+  49:control-base/devices/src/remote.c **** 	g_remote.keyboard.Q = (key_buffer >> 6) & 0x001;
+ 235              		.loc 1 49 2 is_stmt 1 view .LVU88
+  49:control-base/devices/src/remote.c **** 	g_remote.keyboard.Q = (key_buffer >> 6) & 0x001;
+ 236              		.loc 1 49 45 is_stmt 0 view .LVU89
+ 237 00d2 C2F34011 		ubfx	r1, r2, #5, #1
+  49:control-base/devices/src/remote.c **** 	g_remote.keyboard.Q = (key_buffer >> 6) & 0x001;
+ 238              		.loc 1 49 25 view .LVU90
+ 239 00d6 D975     		strb	r1, [r3, #23]
+  50:control-base/devices/src/remote.c **** 	g_remote.keyboard.E = (key_buffer >> 7) & 0x001;
+ 240              		.loc 1 50 2 is_stmt 1 view .LVU91
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgkHrPu.s 			page 8
+
+
+  50:control-base/devices/src/remote.c **** 	g_remote.keyboard.E = (key_buffer >> 7) & 0x001;
+ 241              		.loc 1 50 42 is_stmt 0 view .LVU92
+ 242 00d8 C2F38011 		ubfx	r1, r2, #6, #1
+  50:control-base/devices/src/remote.c **** 	g_remote.keyboard.E = (key_buffer >> 7) & 0x001;
+ 243              		.loc 1 50 22 view .LVU93
+ 244 00dc 1975     		strb	r1, [r3, #20]
+  51:control-base/devices/src/remote.c **** 	g_remote.keyboard.R = (key_buffer >> 8) & 0x001;
+ 245              		.loc 1 51 2 is_stmt 1 view .LVU94
+  51:control-base/devices/src/remote.c **** 	g_remote.keyboard.R = (key_buffer >> 8) & 0x001;
+ 246              		.loc 1 51 42 is_stmt 0 view .LVU95
+ 247 00de C2F3C011 		ubfx	r1, r2, #7, #1
+  51:control-base/devices/src/remote.c **** 	g_remote.keyboard.R = (key_buffer >> 8) & 0x001;
+ 248              		.loc 1 51 22 view .LVU96
+ 249 00e2 5975     		strb	r1, [r3, #21]
+  52:control-base/devices/src/remote.c **** 	g_remote.keyboard.F = (key_buffer >> 9) & 0x001;
+ 250              		.loc 1 52 2 is_stmt 1 view .LVU97
+  52:control-base/devices/src/remote.c **** 	g_remote.keyboard.F = (key_buffer >> 9) & 0x001;
+ 251              		.loc 1 52 42 is_stmt 0 view .LVU98
+ 252 00e4 C2F30021 		ubfx	r1, r2, #8, #1
+  52:control-base/devices/src/remote.c **** 	g_remote.keyboard.F = (key_buffer >> 9) & 0x001;
+ 253              		.loc 1 52 22 view .LVU99
+ 254 00e8 1976     		strb	r1, [r3, #24]
+  53:control-base/devices/src/remote.c **** 	g_remote.keyboard.G = (key_buffer >> 10) & 0x001;
+ 255              		.loc 1 53 2 is_stmt 1 view .LVU100
+  53:control-base/devices/src/remote.c **** 	g_remote.keyboard.G = (key_buffer >> 10) & 0x001;
+ 256              		.loc 1 53 42 is_stmt 0 view .LVU101
+ 257 00ea C2F34021 		ubfx	r1, r2, #9, #1
+  53:control-base/devices/src/remote.c **** 	g_remote.keyboard.G = (key_buffer >> 10) & 0x001;
+ 258              		.loc 1 53 22 view .LVU102
+ 259 00ee 5976     		strb	r1, [r3, #25]
+  54:control-base/devices/src/remote.c **** 	g_remote.keyboard.Z = (key_buffer >> 11) & 0x001;
+ 260              		.loc 1 54 2 is_stmt 1 view .LVU103
+  54:control-base/devices/src/remote.c **** 	g_remote.keyboard.Z = (key_buffer >> 11) & 0x001;
+ 261              		.loc 1 54 43 is_stmt 0 view .LVU104
+ 262 00f0 C2F38021 		ubfx	r1, r2, #10, #1
+  54:control-base/devices/src/remote.c **** 	g_remote.keyboard.Z = (key_buffer >> 11) & 0x001;
+ 263              		.loc 1 54 22 view .LVU105
+ 264 00f4 9976     		strb	r1, [r3, #26]
+  55:control-base/devices/src/remote.c **** 	g_remote.keyboard.X = (key_buffer >> 12) & 0x001;
+ 265              		.loc 1 55 2 is_stmt 1 view .LVU106
+  55:control-base/devices/src/remote.c **** 	g_remote.keyboard.X = (key_buffer >> 12) & 0x001;
+ 266              		.loc 1 55 43 is_stmt 0 view .LVU107
+ 267 00f6 C2F3C021 		ubfx	r1, r2, #11, #1
+  55:control-base/devices/src/remote.c **** 	g_remote.keyboard.X = (key_buffer >> 12) & 0x001;
+ 268              		.loc 1 55 22 view .LVU108
+ 269 00fa D976     		strb	r1, [r3, #27]
+  56:control-base/devices/src/remote.c **** 	g_remote.keyboard.C = (key_buffer >> 13) & 0x001;
+ 270              		.loc 1 56 2 is_stmt 1 view .LVU109
+  56:control-base/devices/src/remote.c **** 	g_remote.keyboard.C = (key_buffer >> 13) & 0x001;
+ 271              		.loc 1 56 43 is_stmt 0 view .LVU110
+ 272 00fc C2F30031 		ubfx	r1, r2, #12, #1
+  56:control-base/devices/src/remote.c **** 	g_remote.keyboard.C = (key_buffer >> 13) & 0x001;
+ 273              		.loc 1 56 22 view .LVU111
+ 274 0100 1977     		strb	r1, [r3, #28]
+  57:control-base/devices/src/remote.c **** 	g_remote.keyboard.V = (key_buffer >> 14) & 0x001;
+ 275              		.loc 1 57 2 is_stmt 1 view .LVU112
+  57:control-base/devices/src/remote.c **** 	g_remote.keyboard.V = (key_buffer >> 14) & 0x001;
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgkHrPu.s 			page 9
+
+
+ 276              		.loc 1 57 43 is_stmt 0 view .LVU113
+ 277 0102 C2F34031 		ubfx	r1, r2, #13, #1
+  57:control-base/devices/src/remote.c **** 	g_remote.keyboard.V = (key_buffer >> 14) & 0x001;
+ 278              		.loc 1 57 22 view .LVU114
+ 279 0106 5977     		strb	r1, [r3, #29]
+  58:control-base/devices/src/remote.c **** 	g_remote.keyboard.B = (key_buffer >> 15) & 0x001;
+ 280              		.loc 1 58 2 is_stmt 1 view .LVU115
+  58:control-base/devices/src/remote.c **** 	g_remote.keyboard.B = (key_buffer >> 15) & 0x001;
+ 281              		.loc 1 58 43 is_stmt 0 view .LVU116
+ 282 0108 C2F38031 		ubfx	r1, r2, #14, #1
+  58:control-base/devices/src/remote.c **** 	g_remote.keyboard.B = (key_buffer >> 15) & 0x001;
+ 283              		.loc 1 58 22 view .LVU117
+ 284 010c 9977     		strb	r1, [r3, #30]
+  59:control-base/devices/src/remote.c **** 
+ 285              		.loc 1 59 2 is_stmt 1 view .LVU118
+  59:control-base/devices/src/remote.c **** 
+ 286              		.loc 1 59 43 is_stmt 0 view .LVU119
+ 287 010e D20B     		lsrs	r2, r2, #15
+ 288              	.LVL3:
+  59:control-base/devices/src/remote.c **** 
+ 289              		.loc 1 59 22 view .LVU120
+ 290 0110 DA77     		strb	r2, [r3, #31]
+  61:control-base/devices/src/remote.c **** }
+ 291              		.loc 1 61 2 is_stmt 1 view .LVU121
+  61:control-base/devices/src/remote.c **** }
+ 292              		.loc 1 61 23 is_stmt 0 view .LVU122
+ 293 0112 0122     		movs	r2, #1
+ 294 0114 83F82820 		strb	r2, [r3, #40]
+  62:control-base/devices/src/remote.c **** 
+ 295              		.loc 1 62 1 view .LVU123
+ 296 0118 30BC     		pop	{r4, r5}
+ 297              	.LCFI2:
+ 298              		.cfi_restore 5
+ 299              		.cfi_restore 4
+ 300              		.cfi_def_cfa_offset 0
+ 301 011a 7047     		bx	lr
+ 302              	.L8:
+ 303              		.align	2
+ 304              	.L7:
+ 305 011c 00000000 		.word	remote_buffer
+ 306 0120 00000000 		.word	debug_buffer
+ 307 0124 00000000 		.word	g_remote
+ 308              		.cfi_endproc
+ 309              	.LFE134:
+ 311              		.section	.text.Remote_Rx_Callback,"ax",%progbits
+ 312              		.align	1
+ 313              		.global	Remote_Rx_Callback
+ 314              		.syntax unified
+ 315              		.thumb
+ 316              		.thumb_func
+ 318              	Remote_Rx_Callback:
+ 319              	.LVL4:
+ 320              	.LFB135:
+  65:control-base/devices/src/remote.c **** 	Remote_Buffer_Process();
+ 321              		.loc 1 65 1 is_stmt 1 view -0
+ 322              		.cfi_startproc
+ 323              		@ args = 0, pretend = 0, frame = 0
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgkHrPu.s 			page 10
+
+
+ 324              		@ frame_needed = 0, uses_anonymous_args = 0
+  65:control-base/devices/src/remote.c **** 	Remote_Buffer_Process();
+ 325              		.loc 1 65 1 is_stmt 0 view .LVU125
+ 326 0000 08B5     		push	{r3, lr}
+ 327              	.LCFI3:
+ 328              		.cfi_def_cfa_offset 8
+ 329              		.cfi_offset 3, -8
+ 330              		.cfi_offset 14, -4
+  66:control-base/devices/src/remote.c **** 	Daemon_Reload(g_remote_daemon);
+ 331              		.loc 1 66 2 is_stmt 1 view .LVU126
+ 332 0002 FFF7FEFF 		bl	Remote_Buffer_Process
+ 333              	.LVL5:
+  67:control-base/devices/src/remote.c **** }
+ 334              		.loc 1 67 2 view .LVU127
+ 335 0006 024B     		ldr	r3, .L11
+ 336 0008 1868     		ldr	r0, [r3]
+ 337 000a FFF7FEFF 		bl	Daemon_Reload
+ 338              	.LVL6:
+  68:control-base/devices/src/remote.c **** 
+ 339              		.loc 1 68 1 is_stmt 0 view .LVU128
+ 340 000e 08BD     		pop	{r3, pc}
+ 341              	.L12:
+ 342              		.align	2
+ 343              	.L11:
+ 344 0010 00000000 		.word	g_remote_daemon
+ 345              		.cfi_endproc
+ 346              	.LFE135:
+ 348              		.section	.text.Remote_Init,"ax",%progbits
+ 349              		.align	1
+ 350              		.global	Remote_Init
+ 351              		.syntax unified
+ 352              		.thumb
+ 353              		.thumb_func
+ 355              	Remote_Init:
+ 356              	.LVL7:
+ 357              	.LFB137:
+  76:control-base/devices/src/remote.c **** 
+  77:control-base/devices/src/remote.c **** Remote_t* Remote_Init(UART_HandleTypeDef *huart)
+  78:control-base/devices/src/remote.c **** {
+ 358              		.loc 1 78 1 is_stmt 1 view -0
+ 359              		.cfi_startproc
+ 360              		@ args = 0, pretend = 0, frame = 0
+ 361              		@ frame_needed = 0, uses_anonymous_args = 0
+ 362              		.loc 1 78 1 is_stmt 0 view .LVU130
+ 363 0000 08B5     		push	{r3, lr}
+ 364              	.LCFI4:
+ 365              		.cfi_def_cfa_offset 8
+ 366              		.cfi_offset 3, -8
+ 367              		.cfi_offset 14, -4
+  79:control-base/devices/src/remote.c **** 	g_remote_uart = UART_Register(huart, remote_buffer, 18, Remote_Rx_Callback);
+ 368              		.loc 1 79 2 is_stmt 1 view .LVU131
+ 369              		.loc 1 79 18 is_stmt 0 view .LVU132
+ 370 0002 084B     		ldr	r3, .L15
+ 371 0004 1222     		movs	r2, #18
+ 372 0006 0849     		ldr	r1, .L15+4
+ 373 0008 FFF7FEFF 		bl	UART_Register
+ 374              	.LVL8:
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgkHrPu.s 			page 11
+
+
+ 375              		.loc 1 79 16 discriminator 1 view .LVU133
+ 376 000c 074B     		ldr	r3, .L15+8
+ 377 000e 1860     		str	r0, [r3]
+  80:control-base/devices/src/remote.c **** 	g_remote_daemon = Daemon_Register(20, 20, Remote_Timeout_Callback);
+ 378              		.loc 1 80 2 is_stmt 1 view .LVU134
+ 379              		.loc 1 80 20 is_stmt 0 view .LVU135
+ 380 0010 074A     		ldr	r2, .L15+12
+ 381 0012 1421     		movs	r1, #20
+ 382 0014 0846     		mov	r0, r1
+ 383 0016 FFF7FEFF 		bl	Daemon_Register
+ 384              	.LVL9:
+ 385              		.loc 1 80 18 discriminator 1 view .LVU136
+ 386 001a 064B     		ldr	r3, .L15+16
+ 387 001c 1860     		str	r0, [r3]
+  81:control-base/devices/src/remote.c **** 	return &g_remote;
+ 388              		.loc 1 81 2 is_stmt 1 view .LVU137
+  82:control-base/devices/src/remote.c **** }...
+ 389              		.loc 1 82 1 is_stmt 0 view .LVU138
+ 390 001e 0648     		ldr	r0, .L15+20
+ 391 0020 08BD     		pop	{r3, pc}
+ 392              	.L16:
+ 393 0022 00BF     		.align	2
+ 394              	.L15:
+ 395 0024 00000000 		.word	Remote_Rx_Callback
+ 396 0028 00000000 		.word	remote_buffer
+ 397 002c 00000000 		.word	g_remote_uart
+ 398 0030 00000000 		.word	Remote_Timeout_Callback
+ 399 0034 00000000 		.word	g_remote_daemon
+ 400 0038 00000000 		.word	g_remote
+ 401              		.cfi_endproc
+ 402              	.LFE137:
+ 404              		.global	debug_buffer
+ 405              		.section	.bss.debug_buffer,"aw",%nobits
+ 406              		.align	2
+ 409              	debug_buffer:
+ 410 0000 00000000 		.space	18
+ 410      00000000 
+ 410      00000000 
+ 410      00000000 
+ 410      0000
+ 411              		.global	remote_buffer
+ 412              		.section	.bss.remote_buffer,"aw",%nobits
+ 413              		.align	2
+ 416              	remote_buffer:
+ 417 0000 00000000 		.space	18
+ 417      00000000 
+ 417      00000000 
+ 417      00000000 
+ 417      0000
+ 418              		.global	g_remote_daemon
+ 419              		.section	.bss.g_remote_daemon,"aw",%nobits
+ 420              		.align	2
+ 423              	g_remote_daemon:
+ 424 0000 00000000 		.space	4
+ 425              		.global	g_remote_uart
+ 426              		.section	.bss.g_remote_uart,"aw",%nobits
+ 427              		.align	2
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgkHrPu.s 			page 12
+
+
+ 430              	g_remote_uart:
+ 431 0000 00000000 		.space	4
+ 432              		.global	g_remote
+ 433              		.section	.bss.g_remote,"aw",%nobits
+ 434              		.align	2
+ 437              	g_remote:
+ 438 0000 00000000 		.space	44
+ 438      00000000 
+ 438      00000000 
+ 438      00000000 
+ 438      00000000 
+ 439              		.text
+ 440              	.Letext0:
+ 441              		.file 2 "/Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/arm-none-eabi/include/machine/_defa
+ 442              		.file 3 "/Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/arm-none-eabi/include/sys/_stdint.h
+ 443              		.file 4 "control-base/typec-board-base/Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h"
+ 444              		.file 5 "control-base/typec-board-base/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h"
+ 445              		.file 6 "control-base/typec-board-base/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h"
+ 446              		.file 7 "control-base/typec-board-base/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h"
+ 447              		.file 8 "control-base/bsp/inc/bsp_uart.h"
+ 448              		.file 9 "control-base/devices/inc/remote.h"
+ 449              		.file 10 "control-base/bsp/inc/bsp_daemon.h"
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgkHrPu.s 			page 13
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 remote.c
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgkHrPu.s:21     .text.Remote_Timeout_Callback:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgkHrPu.s:27     .text.Remote_Timeout_Callback:00000000 Remote_Timeout_Callback
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgkHrPu.s:53     .text.Remote_Timeout_Callback:00000014 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgkHrPu.s:430    .bss.g_remote_uart:00000000 g_remote_uart
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgkHrPu.s:437    .bss.g_remote:00000000 g_remote
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgkHrPu.s:59     .text.Remote_Buffer_Process:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgkHrPu.s:65     .text.Remote_Buffer_Process:00000000 Remote_Buffer_Process
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgkHrPu.s:305    .text.Remote_Buffer_Process:0000011c $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgkHrPu.s:416    .bss.remote_buffer:00000000 remote_buffer
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgkHrPu.s:409    .bss.debug_buffer:00000000 debug_buffer
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgkHrPu.s:312    .text.Remote_Rx_Callback:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgkHrPu.s:318    .text.Remote_Rx_Callback:00000000 Remote_Rx_Callback
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgkHrPu.s:344    .text.Remote_Rx_Callback:00000010 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgkHrPu.s:423    .bss.g_remote_daemon:00000000 g_remote_daemon
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgkHrPu.s:349    .text.Remote_Init:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgkHrPu.s:355    .text.Remote_Init:00000000 Remote_Init
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgkHrPu.s:395    .text.Remote_Init:00000024 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgkHrPu.s:406    .bss.debug_buffer:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgkHrPu.s:413    .bss.remote_buffer:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgkHrPu.s:420    .bss.g_remote_daemon:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgkHrPu.s:427    .bss.g_remote_uart:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgkHrPu.s:434    .bss.g_remote:00000000 $d
+
+UNDEFINED SYMBOLS
+UART_Service_Init
+Daemon_Reload
+UART_Register
+Daemon_Register

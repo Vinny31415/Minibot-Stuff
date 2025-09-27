@@ -1,0 +1,242 @@
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZ8D3AK.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"rate_limiter.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "control-base/algo/src/rate_limiter.c"
+  20              		.section	.text.rate_limiter_init,"ax",%progbits
+  21              		.align	1
+  22              		.global	rate_limiter_init
+  23              		.syntax unified
+  24              		.thumb
+  25              		.thumb_func
+  27              	rate_limiter_init:
+  28              	.LVL0:
+  29              	.LFB5:
+   1:control-base/algo/src/rate_limiter.c **** #include "rate_limiter.h"
+   2:control-base/algo/src/rate_limiter.c **** 
+   3:control-base/algo/src/rate_limiter.c **** /**
+   4:control-base/algo/src/rate_limiter.c ****  * @brief Initialize the rate limiter
+   5:control-base/algo/src/rate_limiter.c ****  * 
+   6:control-base/algo/src/rate_limiter.c ****  * @param rate_limiter The rate limiter struct
+   7:control-base/algo/src/rate_limiter.c ****  * @param rate_limit The rate limit in units per second
+   8:control-base/algo/src/rate_limiter.c ****  */
+   9:control-base/algo/src/rate_limiter.c **** void rate_limiter_init(rate_limiter_t *rate_limiter, float rate_limit)
+  10:control-base/algo/src/rate_limiter.c **** {
+  30              		.loc 1 10 1 view -0
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 0
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  34              		.loc 1 10 1 is_stmt 0 view .LVU1
+  35 0000 10B5     		push	{r4, lr}
+  36              	.LCFI0:
+  37              		.cfi_def_cfa_offset 8
+  38              		.cfi_offset 4, -8
+  39              		.cfi_offset 14, -4
+  40 0002 0446     		mov	r4, r0
+  11:control-base/algo/src/rate_limiter.c ****     rate_limiter->rate_limit = rate_limit;
+  41              		.loc 1 11 5 is_stmt 1 view .LVU2
+  42              		.loc 1 11 30 is_stmt 0 view .LVU3
+  43 0004 80ED000A 		vstr.32	s0, [r0]
+  12:control-base/algo/src/rate_limiter.c ****     rate_limiter->prev_value = 0;
+  44              		.loc 1 12 5 is_stmt 1 view .LVU4
+  45              		.loc 1 12 30 is_stmt 0 view .LVU5
+  46 0008 0023     		movs	r3, #0
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZ8D3AK.s 			page 2
+
+
+  47 000a 4360     		str	r3, [r0, #4]	@ float
+  13:control-base/algo/src/rate_limiter.c ****     rate_limiter->prev_time = xTaskGetTickCount();
+  48              		.loc 1 13 5 is_stmt 1 view .LVU6
+  49              		.loc 1 13 31 is_stmt 0 view .LVU7
+  50 000c FFF7FEFF 		bl	xTaskGetTickCount
+  51              	.LVL1:
+  52              		.loc 1 13 31 view .LVU8
+  53 0010 07EE900A 		vmov	s15, r0	@ int
+  54              		.loc 1 13 29 discriminator 1 view .LVU9
+  55 0014 F8EE677A 		vcvt.f32.u32	s15, s15
+  56 0018 C4ED027A 		vstr.32	s15, [r4, #8]
+  14:control-base/algo/src/rate_limiter.c **** }
+  57              		.loc 1 14 1 view .LVU10
+  58 001c 10BD     		pop	{r4, pc}
+  59              		.loc 1 14 1 view .LVU11
+  60              		.cfi_endproc
+  61              	.LFE5:
+  63              		.section	.text.rate_limiter_iterate,"ax",%progbits
+  64              		.align	1
+  65              		.global	rate_limiter_iterate
+  66              		.syntax unified
+  67              		.thumb
+  68              		.thumb_func
+  70              	rate_limiter_iterate:
+  71              	.LVL2:
+  72              	.LFB6:
+  15:control-base/algo/src/rate_limiter.c **** 
+  16:control-base/algo/src/rate_limiter.c **** /**
+  17:control-base/algo/src/rate_limiter.c ****  * @brief Limit the rate of change of a value
+  18:control-base/algo/src/rate_limiter.c ****  * 
+  19:control-base/algo/src/rate_limiter.c ****  * @param rate_limiter The rate limiter struct
+  20:control-base/algo/src/rate_limiter.c ****  * @param input The input value
+  21:control-base/algo/src/rate_limiter.c ****  * @return float The limited value
+  22:control-base/algo/src/rate_limiter.c ****  */
+  23:control-base/algo/src/rate_limiter.c **** float rate_limiter_iterate(rate_limiter_t *rate_limiter, float input)
+  24:control-base/algo/src/rate_limiter.c **** {
+  73              		.loc 1 24 1 is_stmt 1 view -0
+  74              		.cfi_startproc
+  75              		@ args = 0, pretend = 0, frame = 0
+  76              		@ frame_needed = 0, uses_anonymous_args = 0
+  77              		.loc 1 24 1 is_stmt 0 view .LVU13
+  78 0000 10B5     		push	{r4, lr}
+  79              	.LCFI1:
+  80              		.cfi_def_cfa_offset 8
+  81              		.cfi_offset 4, -8
+  82              		.cfi_offset 14, -4
+  83 0002 2DED028B 		vpush.64	{d8}
+  84              	.LCFI2:
+  85              		.cfi_def_cfa_offset 16
+  86              		.cfi_offset 80, -16
+  87              		.cfi_offset 81, -12
+  88 0006 0446     		mov	r4, r0
+  89 0008 B0EE408A 		vmov.f32	s16, s0
+  25:control-base/algo/src/rate_limiter.c ****     uint32_t curr_time = xTaskGetTickCount();
+  90              		.loc 1 25 5 is_stmt 1 view .LVU14
+  91              		.loc 1 25 26 is_stmt 0 view .LVU15
+  92 000c FFF7FEFF 		bl	xTaskGetTickCount
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZ8D3AK.s 			page 3
+
+
+  93              	.LVL3:
+  94              		.loc 1 25 26 view .LVU16
+  95 0010 07EE900A 		vmov	s15, r0	@ int
+  96              	.LVL4:
+  26:control-base/algo/src/rate_limiter.c ****     float dt = (curr_time - rate_limiter->prev_time) / (float)configTICK_RATE_HZ; // convert to sec
+  97              		.loc 1 26 5 is_stmt 1 view .LVU17
+  98              		.loc 1 26 27 is_stmt 0 view .LVU18
+  99 0014 F8EE677A 		vcvt.f32.u32	s15, s15
+ 100              		.loc 1 26 41 view .LVU19
+ 101 0018 94ED027A 		vldr.32	s14, [r4, #8]
+ 102              		.loc 1 26 27 view .LVU20
+ 103 001c 37EEC77A 		vsub.f32	s14, s15, s14
+ 104              		.loc 1 26 11 view .LVU21
+ 105 0020 9FED126A 		vldr.32	s12, .L10
+ 106 0024 C7EE066A 		vdiv.f32	s13, s14, s12
+ 107              	.LVL5:
+  27:control-base/algo/src/rate_limiter.c ****     float max_delta = rate_limiter->rate_limit * dt;
+ 108              		.loc 1 27 5 is_stmt 1 view .LVU22
+ 109              		.loc 1 27 35 is_stmt 0 view .LVU23
+ 110 0028 94ED007A 		vldr.32	s14, [r4]
+ 111              		.loc 1 27 11 view .LVU24
+ 112 002c 27EE267A 		vmul.f32	s14, s14, s13
+ 113              	.LVL6:
+  28:control-base/algo/src/rate_limiter.c **** 
+  29:control-base/algo/src/rate_limiter.c ****     float delta = input - rate_limiter->prev_value;
+ 114              		.loc 1 29 5 is_stmt 1 view .LVU25
+ 115              		.loc 1 29 39 is_stmt 0 view .LVU26
+ 116 0030 D4ED016A 		vldr.32	s13, [r4, #4]
+ 117              	.LVL7:
+ 118              		.loc 1 29 11 view .LVU27
+ 119 0034 38EE666A 		vsub.f32	s12, s16, s13
+ 120              	.LVL8:
+  30:control-base/algo/src/rate_limiter.c ****     if (fabsf(delta) > max_delta)
+ 121              		.loc 1 30 5 is_stmt 1 view .LVU28
+ 122              		.loc 1 30 9 is_stmt 0 view .LVU29
+ 123 0038 F0EEC65A 		vabs.f32	s11, s12
+ 124              		.loc 1 30 8 view .LVU30
+ 125 003c F4EEC75A 		vcmpe.f32	s11, s14
+ 126 0040 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 127 0044 06DD     		ble	.L4
+  31:control-base/algo/src/rate_limiter.c ****     {
+  32:control-base/algo/src/rate_limiter.c ****         input = rate_limiter->prev_value + (delta > 0 ? max_delta : -max_delta);
+ 128              		.loc 1 32 9 is_stmt 1 view .LVU31
+ 129              		.loc 1 32 67 is_stmt 0 view .LVU32
+ 130 0046 B5EEC06A 		vcmpe.f32	s12, #0
+ 131 004a F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 132 004e 0ADD     		ble	.L9
+ 133              	.LVL9:
+ 134              	.L6:
+ 135              		.loc 1 32 15 discriminator 4 view .LVU33
+ 136 0050 36EE878A 		vadd.f32	s16, s13, s14
+ 137              	.LVL10:
+ 138              	.L4:
+  33:control-base/algo/src/rate_limiter.c ****     }
+  34:control-base/algo/src/rate_limiter.c **** 
+  35:control-base/algo/src/rate_limiter.c ****     rate_limiter->prev_value = input;
+ 139              		.loc 1 35 5 is_stmt 1 view .LVU34
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZ8D3AK.s 			page 4
+
+
+ 140              		.loc 1 35 30 is_stmt 0 view .LVU35
+ 141 0054 84ED018A 		vstr.32	s16, [r4, #4]
+  36:control-base/algo/src/rate_limiter.c ****     rate_limiter->prev_time = curr_time;
+ 142              		.loc 1 36 5 is_stmt 1 view .LVU36
+ 143              		.loc 1 36 29 is_stmt 0 view .LVU37
+ 144 0058 C4ED027A 		vstr.32	s15, [r4, #8]
+ 145              	.LVL11:
+  37:control-base/algo/src/rate_limiter.c **** 
+  38:control-base/algo/src/rate_limiter.c ****     return input;
+ 146              		.loc 1 38 5 is_stmt 1 view .LVU38
+  39:control-base/algo/src/rate_limiter.c **** }...
+ 147              		.loc 1 39 1 is_stmt 0 view .LVU39
+ 148 005c B0EE480A 		vmov.f32	s0, s16
+ 149 0060 BDEC028B 		vldm	sp!, {d8}
+ 150              	.LCFI3:
+ 151              		.cfi_remember_state
+ 152              		.cfi_restore 80
+ 153              		.cfi_restore 81
+ 154              		.cfi_def_cfa_offset 8
+ 155              	.LVL12:
+ 156              		.loc 1 39 1 view .LVU40
+ 157 0064 10BD     		pop	{r4, pc}
+ 158              	.LVL13:
+ 159              	.L9:
+ 160              	.LCFI4:
+ 161              		.cfi_restore_state
+  32:control-base/algo/src/rate_limiter.c ****         input = rate_limiter->prev_value + (delta > 0 ? max_delta : -max_delta);
+ 162              		.loc 1 32 67 discriminator 2 view .LVU41
+ 163 0066 B1EE477A 		vneg.f32	s14, s14
+ 164              	.LVL14:
+  32:control-base/algo/src/rate_limiter.c ****         input = rate_limiter->prev_value + (delta > 0 ? max_delta : -max_delta);
+ 165              		.loc 1 32 67 discriminator 2 view .LVU42
+ 166 006a F1E7     		b	.L6
+ 167              	.L11:
+ 168              		.align	2
+ 169              	.L10:
+ 170 006c 00007A44 		.word	1148846080
+ 171              		.cfi_endproc
+ 172              	.LFE6:
+ 174              		.text
+ 175              	.Letext0:
+ 176              		.file 2 "/Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/arm-none-eabi/include/machine/_defa
+ 177              		.file 3 "/Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/arm-none-eabi/include/sys/_stdint.h
+ 178              		.file 4 "control-base/typec-board-base/Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM
+ 179              		.file 5 "control-base/algo/inc/rate_limiter.h"
+ 180              		.file 6 "control-base/typec-board-base/Middlewares/Third_Party/FreeRTOS/Source/include/task.h"
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZ8D3AK.s 			page 5
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 rate_limiter.c
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZ8D3AK.s:21     .text.rate_limiter_init:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZ8D3AK.s:27     .text.rate_limiter_init:00000000 rate_limiter_init
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZ8D3AK.s:64     .text.rate_limiter_iterate:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZ8D3AK.s:70     .text.rate_limiter_iterate:00000000 rate_limiter_iterate
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZ8D3AK.s:170    .text.rate_limiter_iterate:0000006c $d
+
+UNDEFINED SYMBOLS
+xTaskGetTickCount

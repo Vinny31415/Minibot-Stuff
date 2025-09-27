@@ -1,0 +1,298 @@
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccWF4EOI.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"arm_cos_f32.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c"
+  20              		.section	.text.arm_cos_f32,"ax",%progbits
+  21              		.align	1
+  22              		.global	arm_cos_f32
+  23              		.syntax unified
+  24              		.thumb
+  25              		.thumb_func
+  27              	arm_cos_f32:
+  28              	.LVL0:
+  29              	.LFB121:
+   1:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c **** /* ----------------------------------------------------------------------
+   2:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****  * Project:      CMSIS DSP Library
+   3:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****  * Title:        arm_cos_f32.c
+   4:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****  * Description:  Fast cosine calculation for floating-point values
+   5:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****  *
+   6:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****  * $Date:        23 April 2021
+   7:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****  * $Revision:    V1.9.0
+   8:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****  *
+   9:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****  * Target Processor: Cortex-M and Cortex-A cores
+  10:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****  * -------------------------------------------------------------------- */
+  11:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c **** /*
+  12:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****  * Copyright (C) 2010-2021 ARM Limited or its affiliates. All rights reserved.
+  13:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****  *
+  14:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****  * SPDX-License-Identifier: Apache-2.0
+  15:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****  *
+  16:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****  * Licensed under the Apache License, Version 2.0 (the License); you may
+  17:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****  * not use this file except in compliance with the License.
+  18:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****  * You may obtain a copy of the License at
+  19:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****  *
+  20:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****  * www.apache.org/licenses/LICENSE-2.0
+  21:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****  *
+  22:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****  * Unless required by applicable law or agreed to in writing, software
+  23:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****  * distributed under the License is distributed on an AS IS BASIS, WITHOUT
+  24:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  25:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****  * See the License for the specific language governing permissions and
+  26:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****  * limitations under the License.
+  27:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****  */
+  28:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c **** 
+  29:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c **** #include "dsp/fast_math_functions.h"
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccWF4EOI.s 			page 2
+
+
+  30:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c **** #include "arm_common_tables.h"
+  31:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c **** 
+  32:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c **** /**
+  33:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****   @ingroup groupFastMath
+  34:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****  */
+  35:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c **** 
+  36:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c **** /**
+  37:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****   @defgroup cos Cosine
+  38:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c **** 
+  39:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****   Computes the trigonometric cosine function using a combination of table lookup
+  40:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****   and linear interpolation.  There are separate functions for
+  41:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****   Q15, Q31, and floating-point data types.
+  42:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****   The input to the floating-point version is in radians while the
+  43:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****   fixed-point Q15 and Q31 have a scaled input with the range
+  44:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****   [0 +0.9999] mapping to [0 2*pi).  The fixed-point range is chosen so that a
+  45:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****   value of 2*pi wraps around to 0.
+  46:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c **** 
+  47:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****   The implementation is based on table lookup using 512 values together with linear interpolation.
+  48:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****   The steps used are:
+  49:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****    -# Calculation of the nearest integer table index
+  50:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****    -# Compute the fractional portion (fract) of the table index.
+  51:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****    -# The final result equals <code>(1.0f-fract)*a + fract*b;</code>
+  52:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c **** 
+  53:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****   where
+  54:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****   <pre>
+  55:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****      a = Table[index];
+  56:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****      b = Table[index+1];
+  57:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****   </pre>
+  58:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****  */
+  59:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c **** 
+  60:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c **** /**
+  61:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****   @addtogroup cos
+  62:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****   @{
+  63:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****  */
+  64:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c **** 
+  65:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c **** /**
+  66:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****   @brief         Fast approximation to the trigonometric cosine function for floating-point data.
+  67:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****   @param[in]     x  input value in radians
+  68:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****   @return        cos(x)
+  69:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****  */
+  70:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c **** float32_t arm_cos_f32(
+  71:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****   float32_t x)
+  72:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c **** {
+  30              		.loc 1 72 1 view -0
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 0
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  34              		@ link register save eliminated.
+  73:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****   float32_t cosVal, fract, in;                   /* Temporary input, output variables */
+  35              		.loc 1 73 3 view .LVU1
+  74:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****   uint16_t index;                                /* Index variable */
+  36              		.loc 1 74 3 view .LVU2
+  75:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****   float32_t a, b;                                /* Two nearest output values */
+  37              		.loc 1 75 3 view .LVU3
+  76:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****   int32_t n;
+  38              		.loc 1 76 3 view .LVU4
+  77:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****   float32_t findex;
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccWF4EOI.s 			page 3
+
+
+  39              		.loc 1 77 3 view .LVU5
+  78:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c **** 
+  79:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****   /* input x is in radians */
+  80:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****   /* Scale input to [0 1] range from [0 2*PI] , divide input by 2*pi, add 0.25 (pi/2) to read sine 
+  81:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****   in = x * 0.159154943092f + 0.25f;
+  40              		.loc 1 81 3 view .LVU6
+  41              		.loc 1 81 10 is_stmt 0 view .LVU7
+  42 0000 DFED227A 		vldr.32	s15, .L7
+  43 0004 20EE270A 		vmul.f32	s0, s0, s15
+  44              	.LVL1:
+  45              		.loc 1 81 6 view .LVU8
+  46 0008 F5EE007A 		vmov.f32	s15, #2.5e-1
+  47 000c 30EE270A 		vadd.f32	s0, s0, s15
+  48              	.LVL2:
+  82:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c **** 
+  83:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****   /* Calculation of floor value of input */
+  84:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****   n = (int32_t) in;
+  49              		.loc 1 84 3 is_stmt 1 view .LVU9
+  50              		.loc 1 84 5 is_stmt 0 view .LVU10
+  51 0010 FDEEC07A 		vcvt.s32.f32	s15, s0
+  52              	.LVL3:
+  85:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c **** 
+  86:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****   /* Make negative values towards -infinity */
+  87:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****   if (in < 0.0f)
+  53              		.loc 1 87 3 is_stmt 1 view .LVU11
+  54              		.loc 1 87 6 is_stmt 0 view .LVU12
+  55 0014 B5EEC00A 		vcmpe.f32	s0, #0
+  56 0018 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+  57 001c 2FD4     		bmi	.L6
+  58              	.LVL4:
+  59              	.L2:
+  88:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****   {
+  89:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****     n--;
+  90:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****   }
+  91:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c **** 
+  92:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****   /* Map input value to [0 1] */
+  93:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****   in = in - (float32_t) n;
+  60              		.loc 1 93 3 is_stmt 1 view .LVU13
+  61              		.loc 1 93 13 is_stmt 0 view .LVU14
+  62 001e F8EEE77A 		vcvt.f32.s32	s15, s15
+  63              	.LVL5:
+  64              		.loc 1 93 6 view .LVU15
+  65 0022 30EE670A 		vsub.f32	s0, s0, s15
+  66              	.LVL6:
+  94:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c **** 
+  95:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****   /* Calculation of index of the table */
+  96:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****   findex = (float32_t)FAST_MATH_TABLE_SIZE * in;
+  67              		.loc 1 96 3 is_stmt 1 view .LVU16
+  68              		.loc 1 96 10 is_stmt 0 view .LVU17
+  69 0026 DFED1A7A 		vldr.32	s15, .L7+4
+  70 002a 20EE270A 		vmul.f32	s0, s0, s15
+  71              	.LVL7:
+  97:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****   index = (uint16_t)findex;
+  72              		.loc 1 97 3 is_stmt 1 view .LVU18
+  73              		.loc 1 97 9 is_stmt 0 view .LVU19
+  74 002e FCEEC07A 		vcvt.u32.f32	s15, s0
+  75 0032 17EE903A 		vmov	r3, s15	@ int
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccWF4EOI.s 			page 4
+
+
+  76 0036 9BB2     		uxth	r3, r3
+  77              	.LVL8:
+  98:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c **** 
+  99:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****   /* when "in" is exactly 1, we need to rotate the index down to 0 */
+ 100:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****   if (index >= FAST_MATH_TABLE_SIZE) {
+  78              		.loc 1 100 3 is_stmt 1 view .LVU20
+  79              		.loc 1 100 6 is_stmt 0 view .LVU21
+  80 0038 B3F5007F 		cmp	r3, #512
+  81 003c 04D3     		bcc	.L4
+ 101:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****     index = 0;
+  82              		.loc 1 101 5 is_stmt 1 view .LVU22
+  83              	.LVL9:
+ 102:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****     findex -= (float32_t)FAST_MATH_TABLE_SIZE;
+  84              		.loc 1 102 5 view .LVU23
+  85              		.loc 1 102 12 is_stmt 0 view .LVU24
+  86 003e DFED147A 		vldr.32	s15, .L7+4
+  87 0042 30EE670A 		vsub.f32	s0, s0, s15
+  88              	.LVL10:
+ 101:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****     index = 0;
+  89              		.loc 1 101 11 view .LVU25
+  90 0046 0023     		movs	r3, #0
+  91              	.LVL11:
+  92              	.L4:
+ 103:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****   }
+ 104:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c **** 
+ 105:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****   /* fractional value calculation */
+ 106:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****   fract = findex - (float32_t) index;
+  93              		.loc 1 106 3 is_stmt 1 view .LVU26
+  94              		.loc 1 106 20 is_stmt 0 view .LVU27
+  95 0048 07EE903A 		vmov	s15, r3	@ int
+  96 004c F8EE677A 		vcvt.f32.u32	s15, s15
+  97              		.loc 1 106 9 view .LVU28
+  98 0050 70EE677A 		vsub.f32	s15, s0, s15
+  99              	.LVL12:
+ 107:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c **** 
+ 108:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****   /* Read two nearest values of input value from the cos table */
+ 109:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****   a = sinTable_f32[index];
+ 100              		.loc 1 109 3 is_stmt 1 view .LVU29
+ 101              		.loc 1 109 5 is_stmt 0 view .LVU30
+ 102 0054 0F4A     		ldr	r2, .L7+8
+ 103 0056 02EB8301 		add	r1, r2, r3, lsl #2
+ 104 005a 91ED006A 		vldr.32	s12, [r1]
+ 105              	.LVL13:
+ 110:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****   b = sinTable_f32[index+1];
+ 106              		.loc 1 110 3 is_stmt 1 view .LVU31
+ 107              		.loc 1 110 25 is_stmt 0 view .LVU32
+ 108 005e 0133     		adds	r3, r3, #1
+ 109              	.LVL14:
+ 110              		.loc 1 110 5 view .LVU33
+ 111 0060 02EB8302 		add	r2, r2, r3, lsl #2
+ 112 0064 D2ED006A 		vldr.32	s13, [r2]
+ 113              	.LVL15:
+ 111:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c **** 
+ 112:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****   /* Linear interpolation process */
+ 113:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****   cosVal = (1.0f - fract) * a + fract * b;
+ 114              		.loc 1 113 3 is_stmt 1 view .LVU34
+ 115              		.loc 1 113 18 is_stmt 0 view .LVU35
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccWF4EOI.s 			page 5
+
+
+ 116 0068 B7EE007A 		vmov.f32	s14, #1.0e+0
+ 117 006c 37EE677A 		vsub.f32	s14, s14, s15
+ 118              		.loc 1 113 27 view .LVU36
+ 119 0070 27EE067A 		vmul.f32	s14, s14, s12
+ 120              		.loc 1 113 39 view .LVU37
+ 121 0074 27EEA60A 		vmul.f32	s0, s15, s13
+ 122              	.LVL16:
+ 114:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c **** 
+ 115:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****   /* Return output value */
+ 116:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****   return (cosVal);
+ 123              		.loc 1 116 3 is_stmt 1 view .LVU38
+ 117:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c **** }
+ 124              		.loc 1 117 1 is_stmt 0 view .LVU39
+ 125 0078 37EE000A 		vadd.f32	s0, s14, s0
+ 126              	.LVL17:
+ 127              		.loc 1 117 1 view .LVU40
+ 128 007c 7047     		bx	lr
+ 129              	.LVL18:
+ 130              	.L6:
+  89:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****   }
+ 131              		.loc 1 89 5 is_stmt 1 view .LVU41
+  89:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****   }
+ 132              		.loc 1 89 6 is_stmt 0 view .LVU42
+ 133 007e 17EE903A 		vmov	r3, s15	@ int
+ 134 0082 013B     		subs	r3, r3, #1
+ 135 0084 07EE903A 		vmov	s15, r3	@ int
+ 136              	.LVL19:
+  89:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_cos_f32.c ****   }
+ 137              		.loc 1 89 6 view .LVU43
+ 138 0088 C9E7     		b	.L2
+ 139              	.L8:
+ 140 008a 00BF     		.align	2
+ 141              	.L7:
+ 142 008c 83F9223E 		.word	1042479491
+ 143 0090 00000044 		.word	1140850688
+ 144 0094 00000000 		.word	sinTable_f32
+ 145              		.cfi_endproc
+ 146              	.LFE121:
+ 148              		.text
+ 149              	.Letext0:
+ 150              		.file 2 "/Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/arm-none-eabi/include/machine/_defa
+ 151              		.file 3 "/Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/arm-none-eabi/include/sys/_stdint.h
+ 152              		.file 4 "control-base/typec-board-base/Drivers/CMSIS/DSP/Include/arm_math_types.h"
+ 153              		.file 5 "control-base/typec-board-base/Drivers/CMSIS/DSP/Include/arm_common_tables.h"
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccWF4EOI.s 			page 6
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 arm_cos_f32.c
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccWF4EOI.s:21     .text.arm_cos_f32:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccWF4EOI.s:27     .text.arm_cos_f32:00000000 arm_cos_f32
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccWF4EOI.s:142    .text.arm_cos_f32:0000008c $d
+
+UNDEFINED SYMBOLS
+sinTable_f32

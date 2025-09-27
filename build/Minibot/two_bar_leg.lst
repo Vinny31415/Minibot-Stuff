@@ -1,0 +1,461 @@
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cce1PZai.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"two_bar_leg.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "control-base/algo/src/two_bar_leg.c"
+  20              		.section	.text.Two_Bar_Init,"ax",%progbits
+  21              		.align	1
+  22              		.global	Two_Bar_Init
+  23              		.syntax unified
+  24              		.thumb
+  25              		.thumb_func
+  27              	Two_Bar_Init:
+  28              	.LVL0:
+  29              	.LFB139:
+   1:control-base/algo/src/two_bar_leg.c **** #include "two_bar_leg.h"
+   2:control-base/algo/src/two_bar_leg.c **** #include "arm_math.h"
+   3:control-base/algo/src/two_bar_leg.c **** 
+   4:control-base/algo/src/two_bar_leg.c **** 
+   5:control-base/algo/src/two_bar_leg.c **** Two_Bar_Config_t two_bar_config = {
+   6:control-base/algo/src/two_bar_leg.c ****     .thigh_length = 0.2f,
+   7:control-base/algo/src/two_bar_leg.c ****     .calf_length = 0.245f
+   8:control-base/algo/src/two_bar_leg.c **** };
+   9:control-base/algo/src/two_bar_leg.c **** 
+  10:control-base/algo/src/two_bar_leg.c **** void Two_Bar_Init(float thigh_length, float calf_length) {
+  30              		.loc 1 10 58 view -0
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 0
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  34              		@ link register save eliminated.
+  11:control-base/algo/src/two_bar_leg.c ****     two_bar_config.thigh_length = thigh_length;
+  35              		.loc 1 11 5 view .LVU1
+  36              		.loc 1 11 33 is_stmt 0 view .LVU2
+  37 0000 024B     		ldr	r3, .L2
+  38 0002 83ED000A 		vstr.32	s0, [r3]
+  12:control-base/algo/src/two_bar_leg.c ****     two_bar_config.calf_length = calf_length;
+  39              		.loc 1 12 5 is_stmt 1 view .LVU3
+  40              		.loc 1 12 32 is_stmt 0 view .LVU4
+  41 0006 C3ED010A 		vstr.32	s1, [r3, #4]
+  13:control-base/algo/src/two_bar_leg.c **** }
+  42              		.loc 1 13 1 view .LVU5
+  43 000a 7047     		bx	lr
+  44              	.L3:
+  45              		.align	2
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cce1PZai.s 			page 2
+
+
+  46              	.L2:
+  47 000c 00000000 		.word	two_bar_config
+  48              		.cfi_endproc
+  49              	.LFE139:
+  51              		.section	.text.Two_Bar_Forward_Kinematics,"ax",%progbits
+  52              		.align	1
+  53              		.global	Two_Bar_Forward_Kinematics
+  54              		.syntax unified
+  55              		.thumb
+  56              		.thumb_func
+  58              	Two_Bar_Forward_Kinematics:
+  59              	.LVL1:
+  60              	.LFB140:
+  14:control-base/algo/src/two_bar_leg.c **** 
+  15:control-base/algo/src/two_bar_leg.c **** void Two_Bar_Forward_Kinematics(Two_Bar_Kinematics_t *kinematics, float theta1, float theta2) {
+  61              		.loc 1 15 95 is_stmt 1 view -0
+  62              		.cfi_startproc
+  63              		@ args = 0, pretend = 0, frame = 0
+  64              		@ frame_needed = 0, uses_anonymous_args = 0
+  65              		.loc 1 15 95 is_stmt 0 view .LVU7
+  66 0000 10B5     		push	{r4, lr}
+  67              	.LCFI0:
+  68              		.cfi_def_cfa_offset 8
+  69              		.cfi_offset 4, -8
+  70              		.cfi_offset 14, -4
+  71 0002 2DED068B 		vpush.64	{d8, d9, d10}
+  72              	.LCFI1:
+  73              		.cfi_def_cfa_offset 32
+  74              		.cfi_offset 80, -32
+  75              		.cfi_offset 81, -28
+  76              		.cfi_offset 82, -24
+  77              		.cfi_offset 83, -20
+  78              		.cfi_offset 84, -16
+  79              		.cfi_offset 85, -12
+  80 0006 0446     		mov	r4, r0
+  81 0008 B0EE408A 		vmov.f32	s16, s0
+  82 000c B0EE609A 		vmov.f32	s18, s1
+  16:control-base/algo/src/two_bar_leg.c ****     float L1 = two_bar_config.thigh_length;
+  83              		.loc 1 16 5 is_stmt 1 view .LVU8
+  84              		.loc 1 16 11 is_stmt 0 view .LVU9
+  85 0010 1B4B     		ldr	r3, .L6
+  86 0012 93ED00AA 		vldr.32	s20, [r3]
+  87              	.LVL2:
+  17:control-base/algo/src/two_bar_leg.c ****     float L2 = two_bar_config.calf_length;
+  88              		.loc 1 17 5 is_stmt 1 view .LVU10
+  89              		.loc 1 17 11 is_stmt 0 view .LVU11
+  90 0016 D3ED019A 		vldr.32	s19, [r3, #4]
+  91              	.LVL3:
+  18:control-base/algo/src/two_bar_leg.c **** 
+  19:control-base/algo/src/two_bar_leg.c ****     kinematics->theta1 = theta1;
+  92              		.loc 1 19 5 is_stmt 1 view .LVU12
+  93              		.loc 1 19 24 is_stmt 0 view .LVU13
+  94 001a 80ED020A 		vstr.32	s0, [r0, #8]
+  20:control-base/algo/src/two_bar_leg.c ****     kinematics->theta2 = theta2;
+  95              		.loc 1 20 5 is_stmt 1 view .LVU14
+  96              		.loc 1 20 24 is_stmt 0 view .LVU15
+  97 001e C0ED030A 		vstr.32	s1, [r0, #12]
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cce1PZai.s 			page 3
+
+
+  21:control-base/algo/src/two_bar_leg.c **** 
+  22:control-base/algo/src/two_bar_leg.c ****     // Calculate end effector position
+  23:control-base/algo/src/two_bar_leg.c ****     float x_end = L1 * arm_cos_f32(theta1) + L2 * arm_cos_f32(theta2);
+  98              		.loc 1 23 5 is_stmt 1 view .LVU16
+  99              		.loc 1 23 24 is_stmt 0 view .LVU17
+ 100 0022 FFF7FEFF 		bl	arm_cos_f32
+ 101              	.LVL4:
+ 102              		.loc 1 23 22 discriminator 1 view .LVU18
+ 103 0026 60EE0A8A 		vmul.f32	s17, s0, s20
+ 104              		.loc 1 23 51 discriminator 1 view .LVU19
+ 105 002a B0EE490A 		vmov.f32	s0, s18
+ 106 002e FFF7FEFF 		bl	arm_cos_f32
+ 107              	.LVL5:
+ 108              		.loc 1 23 49 discriminator 2 view .LVU20
+ 109 0032 20EE290A 		vmul.f32	s0, s0, s19
+ 110              		.loc 1 23 11 discriminator 2 view .LVU21
+ 111 0036 78EE808A 		vadd.f32	s17, s17, s0
+ 112              	.LVL6:
+  24:control-base/algo/src/two_bar_leg.c ****     float y_end = L1 * arm_sin_f32(theta1) + L2 * arm_sin_f32(theta2);
+ 113              		.loc 1 24 5 is_stmt 1 view .LVU22
+ 114              		.loc 1 24 24 is_stmt 0 view .LVU23
+ 115 003a B0EE480A 		vmov.f32	s0, s16
+ 116 003e FFF7FEFF 		bl	arm_sin_f32
+ 117              	.LVL7:
+ 118              		.loc 1 24 22 discriminator 1 view .LVU24
+ 119 0042 20EE0A8A 		vmul.f32	s16, s0, s20
+ 120              	.LVL8:
+ 121              		.loc 1 24 51 discriminator 1 view .LVU25
+ 122 0046 B0EE490A 		vmov.f32	s0, s18
+ 123 004a FFF7FEFF 		bl	arm_sin_f32
+ 124              	.LVL9:
+ 125              		.loc 1 24 49 discriminator 2 view .LVU26
+ 126 004e 20EE290A 		vmul.f32	s0, s0, s19
+ 127              		.loc 1 24 11 discriminator 2 view .LVU27
+ 128 0052 38EE008A 		vadd.f32	s16, s16, s0
+ 129              	.LVL10:
+  25:control-base/algo/src/two_bar_leg.c ****     kinematics->theta = atan2f(y_end, x_end);
+ 130              		.loc 1 25 5 is_stmt 1 view .LVU28
+ 131              		.loc 1 25 25 is_stmt 0 view .LVU29
+ 132 0056 F0EE680A 		vmov.f32	s1, s17
+ 133 005a B0EE480A 		vmov.f32	s0, s16
+ 134 005e FFF7FEFF 		bl	atan2f
+ 135              	.LVL11:
+ 136              		.loc 1 25 23 discriminator 1 view .LVU30
+ 137 0062 84ED010A 		vstr.32	s0, [r4, #4]
+  26:control-base/algo/src/two_bar_leg.c ****     // Calculate leg length
+  27:control-base/algo/src/two_bar_leg.c ****     kinematics->leg_length = sqrtf(x_end * x_end + y_end * y_end);
+ 138              		.loc 1 27 5 is_stmt 1 view .LVU31
+ 139              		.loc 1 27 42 is_stmt 0 view .LVU32
+ 140 0066 68EEA88A 		vmul.f32	s17, s17, s17
+ 141              	.LVL12:
+ 142              		.loc 1 27 58 view .LVU33
+ 143 006a 28EE088A 		vmul.f32	s16, s16, s16
+ 144              	.LVL13:
+ 145              		.loc 1 27 30 view .LVU34
+ 146 006e 38EE880A 		vadd.f32	s0, s17, s16
+ 147 0072 FFF7FEFF 		bl	sqrtf
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cce1PZai.s 			page 4
+
+
+ 148              	.LVL14:
+ 149              		.loc 1 27 28 discriminator 1 view .LVU35
+ 150 0076 84ED000A 		vstr.32	s0, [r4]
+  28:control-base/algo/src/two_bar_leg.c **** }
+ 151              		.loc 1 28 1 view .LVU36
+ 152 007a BDEC068B 		vldm	sp!, {d8-d10}
+ 153              	.LCFI2:
+ 154              		.cfi_restore 84
+ 155              		.cfi_restore 85
+ 156              		.cfi_restore 82
+ 157              		.cfi_restore 83
+ 158              		.cfi_restore 80
+ 159              		.cfi_restore 81
+ 160              		.cfi_def_cfa_offset 8
+ 161              	.LVL15:
+ 162              		.loc 1 28 1 view .LVU37
+ 163 007e 10BD     		pop	{r4, pc}
+ 164              	.LVL16:
+ 165              	.L7:
+ 166              		.loc 1 28 1 view .LVU38
+ 167              		.align	2
+ 168              	.L6:
+ 169 0080 00000000 		.word	two_bar_config
+ 170              		.cfi_endproc
+ 171              	.LFE140:
+ 173              		.section	.text.Two_Bar_Get_Motor_Torque_From_Virtual_Force,"ax",%progbits
+ 174              		.align	1
+ 175              		.global	Two_Bar_Get_Motor_Torque_From_Virtual_Force
+ 176              		.syntax unified
+ 177              		.thumb
+ 178              		.thumb_func
+ 180              	Two_Bar_Get_Motor_Torque_From_Virtual_Force:
+ 181              	.LVL17:
+ 182              	.LFB141:
+  29:control-base/algo/src/two_bar_leg.c **** 
+  30:control-base/algo/src/two_bar_leg.c **** void Two_Bar_Get_Motor_Torque_From_Virtual_Force(Two_Bar_Kinematics_t *kinematics, Two_Bar_Virtual_
+ 183              		.loc 1 30 158 is_stmt 1 view -0
+ 184              		.cfi_startproc
+ 185              		@ args = 0, pretend = 0, frame = 0
+ 186              		@ frame_needed = 0, uses_anonymous_args = 0
+ 187              		.loc 1 30 158 is_stmt 0 view .LVU40
+ 188 0000 38B5     		push	{r3, r4, r5, lr}
+ 189              	.LCFI3:
+ 190              		.cfi_def_cfa_offset 16
+ 191              		.cfi_offset 3, -16
+ 192              		.cfi_offset 4, -12
+ 193              		.cfi_offset 5, -8
+ 194              		.cfi_offset 14, -4
+ 195 0002 2DED0A8B 		vpush.64	{d8, d9, d10, d11, d12}
+ 196              	.LCFI4:
+ 197              		.cfi_def_cfa_offset 56
+ 198              		.cfi_offset 80, -56
+ 199              		.cfi_offset 81, -52
+ 200              		.cfi_offset 82, -48
+ 201              		.cfi_offset 83, -44
+ 202              		.cfi_offset 84, -40
+ 203              		.cfi_offset 85, -36
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cce1PZai.s 			page 5
+
+
+ 204              		.cfi_offset 86, -32
+ 205              		.cfi_offset 87, -28
+ 206              		.cfi_offset 88, -24
+ 207              		.cfi_offset 89, -20
+ 208 0006 0C46     		mov	r4, r1
+ 209 0008 1546     		mov	r5, r2
+  31:control-base/algo/src/two_bar_leg.c ****     float L1 = two_bar_config.thigh_length;
+ 210              		.loc 1 31 5 is_stmt 1 view .LVU41
+ 211              		.loc 1 31 11 is_stmt 0 view .LVU42
+ 212 000a 324B     		ldr	r3, .L10
+ 213 000c 93ED00BA 		vldr.32	s22, [r3]
+ 214              	.LVL18:
+  32:control-base/algo/src/two_bar_leg.c ****     float L2 = two_bar_config.calf_length;
+ 215              		.loc 1 32 5 is_stmt 1 view .LVU43
+ 216              		.loc 1 32 11 is_stmt 0 view .LVU44
+ 217 0010 93ED01AA 		vldr.32	s20, [r3, #4]
+ 218              	.LVL19:
+  33:control-base/algo/src/two_bar_leg.c ****     float theta1 = kinematics->theta1;
+ 219              		.loc 1 33 5 is_stmt 1 view .LVU45
+ 220              		.loc 1 33 11 is_stmt 0 view .LVU46
+ 221 0014 D0ED02BA 		vldr.32	s23, [r0, #8]
+ 222              	.LVL20:
+  34:control-base/algo/src/two_bar_leg.c ****     float theta2 = kinematics->theta2;
+ 223              		.loc 1 34 5 is_stmt 1 view .LVU47
+ 224              		.loc 1 34 11 is_stmt 0 view .LVU48
+ 225 0018 D0ED03AA 		vldr.32	s21, [r0, #12]
+ 226              	.LVL21:
+  35:control-base/algo/src/two_bar_leg.c ****     float theta = kinematics->theta;
+ 227              		.loc 1 35 5 is_stmt 1 view .LVU49
+ 228              		.loc 1 35 11 is_stmt 0 view .LVU50
+ 229 001c 90ED018A 		vldr.32	s16, [r0, #4]
+ 230              	.LVL22:
+  36:control-base/algo/src/two_bar_leg.c ****     float L = kinematics->leg_length;
+ 231              		.loc 1 36 5 is_stmt 1 view .LVU51
+ 232              		.loc 1 36 11 is_stmt 0 view .LVU52
+ 233 0020 90ED00CA 		vldr.32	s24, [r0]
+ 234              	.LVL23:
+  37:control-base/algo/src/two_bar_leg.c **** 
+  38:control-base/algo/src/two_bar_leg.c ****     // fx = supportive_force * np.cos(theta) - torque / L * np.sin(theta)
+  39:control-base/algo/src/two_bar_leg.c ****     // fy = supportive_force * np.sin(theta) + torque / L * np.cos(theta)
+  40:control-base/algo/src/two_bar_leg.c **** 
+  41:control-base/algo/src/two_bar_leg.c ****     // torque1_xy = -L1 * np.sin(theta1) * fx + L1 * np.cos(theta1) * fy
+  42:control-base/algo/src/two_bar_leg.c ****     // torque2_xy = -L2 * np.sin(theta2) * fx + L2 * np.cos(theta2) * fy
+  43:control-base/algo/src/two_bar_leg.c ****     
+  44:control-base/algo/src/two_bar_leg.c ****     float fx = virtual_force->supportive_force * arm_cos_f32(theta) - virtual_force->torque / L * a
+ 235              		.loc 1 44 5 is_stmt 1 view .LVU53
+ 236              		.loc 1 44 29 is_stmt 0 view .LVU54
+ 237 0024 91ED009A 		vldr.32	s18, [r1]
+ 238              		.loc 1 44 50 view .LVU55
+ 239 0028 B0EE480A 		vmov.f32	s0, s16
+ 240 002c FFF7FEFF 		bl	arm_cos_f32
+ 241              	.LVL24:
+ 242              		.loc 1 44 48 discriminator 1 view .LVU56
+ 243 0030 29EE009A 		vmul.f32	s18, s18, s0
+ 244              		.loc 1 44 84 discriminator 1 view .LVU57
+ 245 0034 D4ED017A 		vldr.32	s15, [r4, #4]
+ 246              		.loc 1 44 93 discriminator 1 view .LVU58
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cce1PZai.s 			page 6
+
+
+ 247 0038 C7EE8C8A 		vdiv.f32	s17, s15, s24
+ 248              		.loc 1 44 99 discriminator 1 view .LVU59
+ 249 003c B0EE480A 		vmov.f32	s0, s16
+ 250 0040 FFF7FEFF 		bl	arm_sin_f32
+ 251              	.LVL25:
+ 252              		.loc 1 44 97 discriminator 2 view .LVU60
+ 253 0044 68EE808A 		vmul.f32	s17, s17, s0
+ 254              		.loc 1 44 11 discriminator 2 view .LVU61
+ 255 0048 39EE689A 		vsub.f32	s18, s18, s17
+ 256              	.LVL26:
+  45:control-base/algo/src/two_bar_leg.c ****     float fy = virtual_force->supportive_force * arm_sin_f32(theta) + virtual_force->torque / L * a
+ 257              		.loc 1 45 5 is_stmt 1 view .LVU62
+ 258              		.loc 1 45 29 is_stmt 0 view .LVU63
+ 259 004c D4ED008A 		vldr.32	s17, [r4]
+ 260              		.loc 1 45 50 view .LVU64
+ 261 0050 B0EE480A 		vmov.f32	s0, s16
+ 262 0054 FFF7FEFF 		bl	arm_sin_f32
+ 263              	.LVL27:
+ 264              		.loc 1 45 48 discriminator 1 view .LVU65
+ 265 0058 68EE808A 		vmul.f32	s17, s17, s0
+ 266              		.loc 1 45 84 discriminator 1 view .LVU66
+ 267 005c D4ED017A 		vldr.32	s15, [r4, #4]
+ 268              		.loc 1 45 93 discriminator 1 view .LVU67
+ 269 0060 C7EE8C9A 		vdiv.f32	s19, s15, s24
+ 270              		.loc 1 45 99 discriminator 1 view .LVU68
+ 271 0064 B0EE480A 		vmov.f32	s0, s16
+ 272 0068 FFF7FEFF 		bl	arm_cos_f32
+ 273              	.LVL28:
+ 274              		.loc 1 45 97 discriminator 2 view .LVU69
+ 275 006c 69EE809A 		vmul.f32	s19, s19, s0
+ 276              		.loc 1 45 11 discriminator 2 view .LVU70
+ 277 0070 78EEA98A 		vadd.f32	s17, s17, s19
+ 278              	.LVL29:
+  46:control-base/algo/src/two_bar_leg.c ****     motor_torque->torque1 = -L1 * arm_sin_f32(theta1) * fx + L1 * arm_cos_f32(theta1) * fy;
+ 279              		.loc 1 46 5 is_stmt 1 view .LVU71
+ 280              		.loc 1 46 29 is_stmt 0 view .LVU72
+ 281 0074 B1EE4B8A 		vneg.f32	s16, s22
+ 282              	.LVL30:
+ 283              		.loc 1 46 35 view .LVU73
+ 284 0078 B0EE6B0A 		vmov.f32	s0, s23
+ 285 007c FFF7FEFF 		bl	arm_sin_f32
+ 286              	.LVL31:
+ 287              		.loc 1 46 33 discriminator 1 view .LVU74
+ 288 0080 28EE008A 		vmul.f32	s16, s16, s0
+ 289              		.loc 1 46 55 discriminator 1 view .LVU75
+ 290 0084 28EE098A 		vmul.f32	s16, s16, s18
+ 291              		.loc 1 46 67 discriminator 1 view .LVU76
+ 292 0088 B0EE6B0A 		vmov.f32	s0, s23
+ 293 008c FFF7FEFF 		bl	arm_cos_f32
+ 294              	.LVL32:
+ 295              		.loc 1 46 65 discriminator 2 view .LVU77
+ 296 0090 20EE0B0A 		vmul.f32	s0, s0, s22
+ 297              		.loc 1 46 87 discriminator 2 view .LVU78
+ 298 0094 20EE280A 		vmul.f32	s0, s0, s17
+ 299              		.loc 1 46 60 discriminator 2 view .LVU79
+ 300 0098 38EE008A 		vadd.f32	s16, s16, s0
+ 301              		.loc 1 46 27 discriminator 2 view .LVU80
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cce1PZai.s 			page 7
+
+
+ 302 009c 85ED008A 		vstr.32	s16, [r5]
+  47:control-base/algo/src/two_bar_leg.c ****     motor_torque->torque2 = -L2 * arm_sin_f32(theta2) * fx + L2 * arm_cos_f32(theta2) * fy;
+ 303              		.loc 1 47 5 is_stmt 1 view .LVU81
+ 304              		.loc 1 47 29 is_stmt 0 view .LVU82
+ 305 00a0 B1EE4A8A 		vneg.f32	s16, s20
+ 306              		.loc 1 47 35 view .LVU83
+ 307 00a4 B0EE6A0A 		vmov.f32	s0, s21
+ 308 00a8 FFF7FEFF 		bl	arm_sin_f32
+ 309              	.LVL33:
+ 310              		.loc 1 47 33 discriminator 1 view .LVU84
+ 311 00ac 28EE008A 		vmul.f32	s16, s16, s0
+ 312              		.loc 1 47 55 discriminator 1 view .LVU85
+ 313 00b0 28EE098A 		vmul.f32	s16, s16, s18
+ 314              		.loc 1 47 67 discriminator 1 view .LVU86
+ 315 00b4 B0EE6A0A 		vmov.f32	s0, s21
+ 316 00b8 FFF7FEFF 		bl	arm_cos_f32
+ 317              	.LVL34:
+ 318              		.loc 1 47 65 discriminator 2 view .LVU87
+ 319 00bc 20EE0A0A 		vmul.f32	s0, s0, s20
+ 320              		.loc 1 47 87 discriminator 2 view .LVU88
+ 321 00c0 20EE280A 		vmul.f32	s0, s0, s17
+ 322              		.loc 1 47 60 discriminator 2 view .LVU89
+ 323 00c4 38EE008A 		vadd.f32	s16, s16, s0
+ 324              		.loc 1 47 27 discriminator 2 view .LVU90
+ 325 00c8 85ED018A 		vstr.32	s16, [r5, #4]
+  48:control-base/algo/src/two_bar_leg.c **** 
+  49:control-base/algo/src/two_bar_leg.c ****     // // Calculate Jacobian matrix
+  50:control-base/algo/src/two_bar_leg.c ****     // float J11 = arm_sin_f32(theta + theta1) * L1;
+  51:control-base/algo/src/two_bar_leg.c ****     // float J12 = -arm_cos_f32(theta + theta1) * L1 / L;
+  52:control-base/algo/src/two_bar_leg.c ****     // float J21 = arm_sin_f32(theta + theta2) * L2;
+  53:control-base/algo/src/two_bar_leg.c ****     // float J22 = -arm_cos_f32(theta + theta2) * L2 / L;
+  54:control-base/algo/src/two_bar_leg.c **** 
+  55:control-base/algo/src/two_bar_leg.c ****     // Calculate Tau = J * [F Tau] Transpose
+  56:control-base/algo/src/two_bar_leg.c ****     // motor_torque->torque1 = J11 * virtual_force->supportive_force + J12 * virtual_force->torque;
+  57:control-base/algo/src/two_bar_leg.c ****     // motor_torque->torque2 = J21 * virtual_force->supportive_force + J22 * virtual_force->torque;
+  58:control-base/algo/src/two_bar_leg.c **** }...
+ 326              		.loc 1 58 1 view .LVU91
+ 327 00cc BDEC0A8B 		vldm	sp!, {d8-d12}
+ 328              	.LCFI5:
+ 329              		.cfi_restore 88
+ 330              		.cfi_restore 89
+ 331              		.cfi_restore 86
+ 332              		.cfi_restore 87
+ 333              		.cfi_restore 84
+ 334              		.cfi_restore 85
+ 335              		.cfi_restore 82
+ 336              		.cfi_restore 83
+ 337              		.cfi_restore 80
+ 338              		.cfi_restore 81
+ 339              		.cfi_def_cfa_offset 16
+ 340              	.LVL35:
+ 341              		.loc 1 58 1 view .LVU92
+ 342 00d0 38BD     		pop	{r3, r4, r5, pc}
+ 343              	.LVL36:
+ 344              	.L11:
+ 345              		.loc 1 58 1 view .LVU93
+ 346 00d2 00BF     		.align	2
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cce1PZai.s 			page 8
+
+
+ 347              	.L10:
+ 348 00d4 00000000 		.word	two_bar_config
+ 349              		.cfi_endproc
+ 350              	.LFE141:
+ 352              		.global	two_bar_config
+ 353              		.section	.data.two_bar_config,"aw"
+ 354              		.align	2
+ 357              	two_bar_config:
+ 358 0000 CDCC4C3E 		.word	1045220557
+ 359 0004 48E17A3E 		.word	1048240456
+ 360              		.text
+ 361              	.Letext0:
+ 362              		.file 2 "control-base/algo/inc/two_bar_leg.h"
+ 363              		.file 3 "control-base/typec-board-base/Drivers/CMSIS/DSP/Include/arm_math_types.h"
+ 364              		.file 4 "/Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/arm-none-eabi/include/math.h"
+ 365              		.file 5 "control-base/typec-board-base/Drivers/CMSIS/DSP/Include/dsp/fast_math_functions.h"
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cce1PZai.s 			page 9
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 two_bar_leg.c
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cce1PZai.s:21     .text.Two_Bar_Init:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cce1PZai.s:27     .text.Two_Bar_Init:00000000 Two_Bar_Init
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cce1PZai.s:47     .text.Two_Bar_Init:0000000c $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cce1PZai.s:357    .data.two_bar_config:00000000 two_bar_config
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cce1PZai.s:52     .text.Two_Bar_Forward_Kinematics:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cce1PZai.s:58     .text.Two_Bar_Forward_Kinematics:00000000 Two_Bar_Forward_Kinematics
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cce1PZai.s:169    .text.Two_Bar_Forward_Kinematics:00000080 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cce1PZai.s:174    .text.Two_Bar_Get_Motor_Torque_From_Virtual_Force:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cce1PZai.s:180    .text.Two_Bar_Get_Motor_Torque_From_Virtual_Force:00000000 Two_Bar_Get_Motor_Torque_From_Virtual_Force
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cce1PZai.s:348    .text.Two_Bar_Get_Motor_Torque_From_Virtual_Force:000000d4 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cce1PZai.s:354    .data.two_bar_config:00000000 $d
+
+UNDEFINED SYMBOLS
+arm_cos_f32
+arm_sin_f32
+atan2f
+sqrtf

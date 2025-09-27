@@ -1,0 +1,178 @@
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cccyEgZQ.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"debug_task.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "Sentry/src/debug_task.c"
+  20              		.section	.text.Debug_Task_Loop,"ax",%progbits
+  21              		.align	1
+  22              		.global	Debug_Task_Loop
+  23              		.syntax unified
+  24              		.thumb
+  25              		.thumb_func
+  27              	Debug_Task_Loop:
+  28              	.LFB142:
+   1:Sentry/src/debug_task.c **** #include "debug_task.h"
+   2:Sentry/src/debug_task.c **** 
+   3:Sentry/src/debug_task.c **** #include "bsp_serial.h"
+   4:Sentry/src/debug_task.c **** #include "remote.h"
+   5:Sentry/src/debug_task.c **** #include "user_math.h"
+   6:Sentry/src/debug_task.c **** #include "imu_task.h"
+   7:Sentry/src/debug_task.c **** #include "robot.h"
+   8:Sentry/src/debug_task.c **** #include "referee_system.h"
+   9:Sentry/src/debug_task.c **** #include "jetson_orin.h"
+  10:Sentry/src/debug_task.c **** #include "bsp_daemon.h"
+  11:Sentry/src/debug_task.c **** #include "launch_task.h"
+  12:Sentry/src/debug_task.c **** #include "dji_motor.h"
+  13:Sentry/src/debug_task.c **** extern Robot_State_t g_robot_state;
+  14:Sentry/src/debug_task.c **** extern IMU_t g_imu;
+  15:Sentry/src/debug_task.c **** extern Remote_t g_remote;
+  16:Sentry/src/debug_task.c **** extern Daemon_Instance_t *g_daemon_instances[3];
+  17:Sentry/src/debug_task.c **** extern Daemon_Instance_t *g_remote_daemon;
+  18:Sentry/src/debug_task.c **** extern Daemon_Instance_t *g_referee_daemon_instance_ptr;
+  19:Sentry/src/debug_task.c **** extern float test_tmd;
+  20:Sentry/src/debug_task.c **** // #define PRINT_RUNTIME_STATS
+  21:Sentry/src/debug_task.c **** #ifdef PRINT_RUNTIME_STATS
+  22:Sentry/src/debug_task.c **** char g_debug_buffer[1024 * 2] = {0};
+  23:Sentry/src/debug_task.c **** #endif
+  24:Sentry/src/debug_task.c **** 
+  25:Sentry/src/debug_task.c **** const char *top_border = "\r\n\r\n\r\n/***** System Info *****/\r\n";
+  26:Sentry/src/debug_task.c **** const char *bottom_border = "/***** End of Info *****/\r\n";
+  27:Sentry/src/debug_task.c **** extern DJI_Motor_Handle_t *g_yaw;
+  28:Sentry/src/debug_task.c **** #define DEBUG_ENABLED
+  29:Sentry/src/debug_task.c **** 
+  30:Sentry/src/debug_task.c **** void Debug_Task_Loop(void)
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cccyEgZQ.s 			page 2
+
+
+  31:Sentry/src/debug_task.c **** {
+  29              		.loc 1 31 1 view -0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33              		@ link register save eliminated.
+  32:Sentry/src/debug_task.c **** #ifdef DEBUG_ENABLED
+  33:Sentry/src/debug_task.c **** // static uint32_t counter = 0;
+  34:Sentry/src/debug_task.c **** #ifdef PRINT_RUNTIME_STATS
+  35:Sentry/src/debug_task.c ****     if (counter % 100 == 0) // Print every 100 cycles
+  36:Sentry/src/debug_task.c ****     {
+  37:Sentry/src/debug_task.c ****         vTaskGetRunTimeStats(g_debug_buffer);
+  38:Sentry/src/debug_task.c ****         DEBUG_PRINTF(&huart6, "%s", top_border);
+  39:Sentry/src/debug_task.c ****         DEBUG_PRINTF(&huart6, "%s", g_debug_buffer);
+  40:Sentry/src/debug_task.c ****         DEBUG_PRINTF(&huart6, "%s", bottom_border);
+  41:Sentry/src/debug_task.c ****     }
+  42:Sentry/src/debug_task.c **** #endif
+  43:Sentry/src/debug_task.c ****     static uint32_t counter = 0;
+  34              		.loc 1 43 5 view .LVU1
+  44:Sentry/src/debug_task.c ****     counter++;
+  35              		.loc 1 44 5 view .LVU2
+  36              		.loc 1 44 12 is_stmt 0 view .LVU3
+  37 0000 024A     		ldr	r2, .L2
+  38 0002 1368     		ldr	r3, [r2]
+  39 0004 0133     		adds	r3, r3, #1
+  40 0006 1360     		str	r3, [r2]
+  45:Sentry/src/debug_task.c ****     if (counter > 0xFFFFFFFF)
+  41              		.loc 1 45 5 is_stmt 1 view .LVU4
+  46:Sentry/src/debug_task.c ****     {
+  47:Sentry/src/debug_task.c ****         counter = 0;
+  48:Sentry/src/debug_task.c ****     }
+  49:Sentry/src/debug_task.c ****     if (counter % 100)
+  42              		.loc 1 49 5 view .LVU5
+  50:Sentry/src/debug_task.c ****     {
+  51:Sentry/src/debug_task.c ****         // DEBUG_PRINTF(&huart1, ">yaw:%f\n", g_imu.rad.yaw);
+  52:Sentry/src/debug_task.c ****         // DEBUG_PRINTF(&huart1, ">yaw_rate:%f\n", -g_imu.bmi088_raw.gyro[0]);
+  53:Sentry/src/debug_task.c ****         // // DEBUG_PRINTF(&huart1, ">error:%f\n", g_yaw->angle_pid->error);
+  54:Sentry/src/debug_task.c ****         // DEBUG_PRINTF(&huart1, ">anglepid_output:%f\n", g_yaw->angle_pid->output);
+  55:Sentry/src/debug_task.c ****         // DEBUG_PRINTF(&huart1, ">current:%f\n", g_yaw->output_current);
+  56:Sentry/src/debug_task.c ****         // DEBUG_PRINTF(&huart1, ">target:%f\n", g_robot_state.gimbal.yaw_angle);
+  57:Sentry/src/debug_task.c ****     }
+  43              		.loc 1 57 5 view .LVU6
+  58:Sentry/src/debug_task.c ****     // DEBUG_PRINTF(&huart6, ">time:%.1f\n>ref:%f\n",(float) counter / 1000.0f * DEBUG_PERIOD,Refer
+  59:Sentry/src/debug_task.c ****     //  DEBUG_PRINTF(&huart6, ">time:%.1f\n>yaw:%f\n>pitch:%f\n>roll:%f\n", (float) counter / 1000.
+  60:Sentry/src/debug_task.c ****     //              g_imu.deg.yaw, g_imu.deg.pitch, g_imu.deg.roll);
+  61:Sentry/src/debug_task.c ****     //  DEBUG_PRINTF(&huart6, ">remote_daemon:%d\n", g_remote_daemon->counter);
+  62:Sentry/src/debug_task.c ****     //  counter++;
+  63:Sentry/src/debug_task.c ****     //  if (counter > 0xFFFFFFFF) {
+  64:Sentry/src/debug_task.c ****     //      counter = 0;
+  65:Sentry/src/debug_task.c ****     //  }
+  66:Sentry/src/debug_task.c **** #endif
+  67:Sentry/src/debug_task.c **** }...
+  44              		.loc 1 67 1 is_stmt 0 view .LVU7
+  45 0008 7047     		bx	lr
+  46              	.L3:
+  47 000a 00BF     		.align	2
+  48              	.L2:
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cccyEgZQ.s 			page 3
+
+
+  49 000c 00000000 		.word	counter.0
+  50              		.cfi_endproc
+  51              	.LFE142:
+  53              		.section	.bss.counter.0,"aw",%nobits
+  54              		.align	2
+  57              	counter.0:
+  58 0000 00000000 		.space	4
+  59              		.global	bottom_border
+  60              		.section	.rodata.str1.4,"aMS",%progbits,1
+  61              		.align	2
+  62              	.LC0:
+  63 0000 2F2A2A2A 		.ascii	"/***** End of Info *****/\015\012\000"
+  63      2A2A2045 
+  63      6E64206F 
+  63      6620496E 
+  63      666F202A 
+  64              		.section	.data.bottom_border,"aw"
+  65              		.align	2
+  68              	bottom_border:
+  69 0000 00000000 		.word	.LC0
+  70              		.global	top_border
+  71              		.section	.rodata.str1.4
+  72              		.align	2
+  73              	.LC1:
+  74 001c 0D0A0D0A 		.ascii	"\015\012\015\012\015\012/***** System Info *****/\015"
+  74      0D0A2F2A 
+  74      2A2A2A2A 
+  74      20537973 
+  74      74656D20 
+  75 003c 0A00     		.ascii	"\012\000"
+  76              		.section	.data.top_border,"aw"
+  77              		.align	2
+  80              	top_border:
+  81 0000 1C000000 		.word	.LC1
+  82              		.text
+  83              	.Letext0:
+  84              		.file 2 "/Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/arm-none-eabi/include/machine/_defa
+  85              		.file 3 "/Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/arm-none-eabi/include/sys/_stdint.h
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cccyEgZQ.s 			page 4
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 debug_task.c
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cccyEgZQ.s:21     .text.Debug_Task_Loop:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cccyEgZQ.s:27     .text.Debug_Task_Loop:00000000 Debug_Task_Loop
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cccyEgZQ.s:49     .text.Debug_Task_Loop:0000000c $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cccyEgZQ.s:57     .bss.counter.0:00000000 counter.0
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cccyEgZQ.s:54     .bss.counter.0:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cccyEgZQ.s:68     .data.bottom_border:00000000 bottom_border
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cccyEgZQ.s:61     .rodata.str1.4:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cccyEgZQ.s:65     .data.bottom_border:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cccyEgZQ.s:80     .data.top_border:00000000 top_border
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cccyEgZQ.s:77     .data.top_border:00000000 $d
+
+NO UNDEFINED SYMBOLS

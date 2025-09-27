@@ -1,0 +1,275 @@
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccc13ial.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"bsp_daemon.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "control-base/bsp/src/bsp_daemon.c"
+  20              		.section	.text.Daemon_Register,"ax",%progbits
+  21              		.align	1
+  22              		.global	Daemon_Register
+  23              		.syntax unified
+  24              		.thumb
+  25              		.thumb_func
+  27              	Daemon_Register:
+  28              	.LVL0:
+  29              	.LFB0:
+   1:control-base/bsp/src/bsp_daemon.c **** #include "bsp_daemon.h"
+   2:control-base/bsp/src/bsp_daemon.c **** #include <stdlib.h>
+   3:control-base/bsp/src/bsp_daemon.c **** 
+   4:control-base/bsp/src/bsp_daemon.c **** #define DAEMON_INSTANCE_MAX (3)
+   5:control-base/bsp/src/bsp_daemon.c **** Daemon_Instance_t *g_daemon_instances[DAEMON_INSTANCE_MAX];
+   6:control-base/bsp/src/bsp_daemon.c **** uint8_t g_daemon_instance_count = 0;
+   7:control-base/bsp/src/bsp_daemon.c **** 
+   8:control-base/bsp/src/bsp_daemon.c **** Daemon_Instance_t *Daemon_Register(uint16_t reload_value, uint16_t initial_counter, void (*callback
+   9:control-base/bsp/src/bsp_daemon.c **** {
+  30              		.loc 1 9 1 view -0
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 0
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  34              		.loc 1 9 1 is_stmt 0 view .LVU1
+  35 0000 70B5     		push	{r4, r5, r6, lr}
+  36              	.LCFI0:
+  37              		.cfi_def_cfa_offset 16
+  38              		.cfi_offset 4, -16
+  39              		.cfi_offset 5, -12
+  40              		.cfi_offset 6, -8
+  41              		.cfi_offset 14, -4
+  42 0002 0546     		mov	r5, r0
+  43 0004 0E46     		mov	r6, r1
+  44 0006 1446     		mov	r4, r2
+  10:control-base/bsp/src/bsp_daemon.c ****     Daemon_Instance_t *daemon = (Daemon_Instance_t *)malloc(sizeof(Daemon_Instance_t));
+  45              		.loc 1 10 5 is_stmt 1 view .LVU2
+  46              		.loc 1 10 54 is_stmt 0 view .LVU3
+  47 0008 0C20     		movs	r0, #12
+  48              	.LVL1:
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccc13ial.s 			page 2
+
+
+  49              		.loc 1 10 54 view .LVU4
+  50 000a FFF7FEFF 		bl	malloc
+  51              	.LVL2:
+  11:control-base/bsp/src/bsp_daemon.c **** 
+  12:control-base/bsp/src/bsp_daemon.c ****     daemon->counter = initial_counter;
+  52              		.loc 1 12 5 is_stmt 1 view .LVU5
+  53              		.loc 1 12 21 is_stmt 0 view .LVU6
+  54 000e 4680     		strh	r6, [r0, #2]	@ movhi
+  13:control-base/bsp/src/bsp_daemon.c ****     daemon->reload_value = reload_value;
+  55              		.loc 1 13 5 is_stmt 1 view .LVU7
+  56              		.loc 1 13 26 is_stmt 0 view .LVU8
+  57 0010 8580     		strh	r5, [r0, #4]	@ movhi
+  14:control-base/bsp/src/bsp_daemon.c ****     daemon->callback = callback;
+  58              		.loc 1 14 5 is_stmt 1 view .LVU9
+  59              		.loc 1 14 22 is_stmt 0 view .LVU10
+  60 0012 8460     		str	r4, [r0, #8]
+  15:control-base/bsp/src/bsp_daemon.c **** 
+  16:control-base/bsp/src/bsp_daemon.c ****     g_daemon_instances[g_daemon_instance_count++] = daemon;
+  61              		.loc 1 16 5 is_stmt 1 view .LVU11
+  62              		.loc 1 16 47 is_stmt 0 view .LVU12
+  63 0014 0349     		ldr	r1, .L3
+  64 0016 0A78     		ldrb	r2, [r1]	@ zero_extendqisi2
+  65 0018 541C     		adds	r4, r2, #1
+  66              	.LVL3:
+  67              		.loc 1 16 47 view .LVU13
+  68 001a 0C70     		strb	r4, [r1]
+  69              		.loc 1 16 51 view .LVU14
+  70 001c 0249     		ldr	r1, .L3+4
+  71 001e 41F82200 		str	r0, [r1, r2, lsl #2]
+  72              	.LVL4:
+  17:control-base/bsp/src/bsp_daemon.c ****     return daemon;
+  73              		.loc 1 17 5 is_stmt 1 view .LVU15
+  18:control-base/bsp/src/bsp_daemon.c **** }
+  74              		.loc 1 18 1 is_stmt 0 view .LVU16
+  75 0022 70BD     		pop	{r4, r5, r6, pc}
+  76              	.LVL5:
+  77              	.L4:
+  78              		.loc 1 18 1 view .LVU17
+  79              		.align	2
+  80              	.L3:
+  81 0024 00000000 		.word	g_daemon_instance_count
+  82 0028 00000000 		.word	g_daemon_instances
+  83              		.cfi_endproc
+  84              	.LFE0:
+  86              		.section	.text.Daemon_Reload,"ax",%progbits
+  87              		.align	1
+  88              		.global	Daemon_Reload
+  89              		.syntax unified
+  90              		.thumb
+  91              		.thumb_func
+  93              	Daemon_Reload:
+  94              	.LVL6:
+  95              	.LFB1:
+  19:control-base/bsp/src/bsp_daemon.c **** 
+  20:control-base/bsp/src/bsp_daemon.c **** void Daemon_Reload(Daemon_Instance_t *daemon)
+  21:control-base/bsp/src/bsp_daemon.c **** {
+  96              		.loc 1 21 1 is_stmt 1 view -0
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccc13ial.s 			page 3
+
+
+  97              		.cfi_startproc
+  98              		@ args = 0, pretend = 0, frame = 0
+  99              		@ frame_needed = 0, uses_anonymous_args = 0
+ 100              		@ link register save eliminated.
+  22:control-base/bsp/src/bsp_daemon.c ****     daemon->counter = daemon->reload_value;
+ 101              		.loc 1 22 5 view .LVU19
+ 102              		.loc 1 22 29 is_stmt 0 view .LVU20
+ 103 0000 8388     		ldrh	r3, [r0, #4]
+ 104              		.loc 1 22 21 view .LVU21
+ 105 0002 4380     		strh	r3, [r0, #2]	@ movhi
+  23:control-base/bsp/src/bsp_daemon.c **** }
+ 106              		.loc 1 23 1 view .LVU22
+ 107 0004 7047     		bx	lr
+ 108              		.cfi_endproc
+ 109              	.LFE1:
+ 111              		.section	.text.Daemon_Task_Loop,"ax",%progbits
+ 112              		.align	1
+ 113              		.global	Daemon_Task_Loop
+ 114              		.syntax unified
+ 115              		.thumb
+ 116              		.thumb_func
+ 118              	Daemon_Task_Loop:
+ 119              	.LFB2:
+  24:control-base/bsp/src/bsp_daemon.c **** 
+  25:control-base/bsp/src/bsp_daemon.c **** void Daemon_Task_Loop()
+  26:control-base/bsp/src/bsp_daemon.c **** {
+ 120              		.loc 1 26 1 is_stmt 1 view -0
+ 121              		.cfi_startproc
+ 122              		@ args = 0, pretend = 0, frame = 0
+ 123              		@ frame_needed = 0, uses_anonymous_args = 0
+ 124 0000 10B5     		push	{r4, lr}
+ 125              	.LCFI1:
+ 126              		.cfi_def_cfa_offset 8
+ 127              		.cfi_offset 4, -8
+ 128              		.cfi_offset 14, -4
+  27:control-base/bsp/src/bsp_daemon.c ****     for (int i = 0; i < g_daemon_instance_count; i++)
+ 129              		.loc 1 27 5 view .LVU24
+ 130              	.LBB2:
+ 131              		.loc 1 27 10 view .LVU25
+ 132              	.LVL7:
+ 133              		.loc 1 27 14 is_stmt 0 view .LVU26
+ 134 0002 0024     		movs	r4, #0
+ 135              		.loc 1 27 5 view .LVU27
+ 136 0004 00E0     		b	.L7
+ 137              	.LVL8:
+ 138              	.L8:
+ 139              		.loc 1 27 51 is_stmt 1 discriminator 2 view .LVU28
+ 140 0006 0134     		adds	r4, r4, #1
+ 141              	.LVL9:
+ 142              	.L7:
+ 143              		.loc 1 27 23 discriminator 1 view .LVU29
+ 144 0008 0B4B     		ldr	r3, .L12
+ 145 000a 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 146 000c A342     		cmp	r3, r4
+ 147 000e 12DD     		ble	.L11
+  28:control-base/bsp/src/bsp_daemon.c ****     {
+  29:control-base/bsp/src/bsp_daemon.c ****         g_daemon_instances[i]->counter--;
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccc13ial.s 			page 4
+
+
+ 148              		.loc 1 29 9 view .LVU30
+ 149              		.loc 1 29 27 is_stmt 0 view .LVU31
+ 150 0010 0A4A     		ldr	r2, .L12+4
+ 151 0012 52F82410 		ldr	r1, [r2, r4, lsl #2]
+ 152              		.loc 1 29 30 view .LVU32
+ 153 0016 4B88     		ldrh	r3, [r1, #2]
+ 154              		.loc 1 29 39 view .LVU33
+ 155 0018 013B     		subs	r3, r3, #1
+ 156 001a 4B80     		strh	r3, [r1, #2]	@ movhi
+  30:control-base/bsp/src/bsp_daemon.c ****         if (g_daemon_instances[i]->counter == 0)
+ 157              		.loc 1 30 9 is_stmt 1 view .LVU34
+ 158              		.loc 1 30 31 is_stmt 0 view .LVU35
+ 159 001c 52F82430 		ldr	r3, [r2, r4, lsl #2]
+ 160              		.loc 1 30 34 view .LVU36
+ 161 0020 5A88     		ldrh	r2, [r3, #2]
+ 162              		.loc 1 30 12 view .LVU37
+ 163 0022 002A     		cmp	r2, #0
+ 164 0024 EFD1     		bne	.L8
+  31:control-base/bsp/src/bsp_daemon.c ****         {
+  32:control-base/bsp/src/bsp_daemon.c ****             g_daemon_instances[i]->callback();
+ 165              		.loc 1 32 13 is_stmt 1 view .LVU38
+ 166              		.loc 1 32 34 is_stmt 0 view .LVU39
+ 167 0026 9B68     		ldr	r3, [r3, #8]
+ 168              		.loc 1 32 13 view .LVU40
+ 169 0028 9847     		blx	r3
+ 170              	.LVL10:
+  33:control-base/bsp/src/bsp_daemon.c ****             g_daemon_instances[i]->counter = g_daemon_instances[i]->reload_value;
+ 171              		.loc 1 33 13 is_stmt 1 view .LVU41
+ 172              		.loc 1 33 64 is_stmt 0 view .LVU42
+ 173 002a 044B     		ldr	r3, .L12+4
+ 174 002c 53F82430 		ldr	r3, [r3, r4, lsl #2]
+ 175              		.loc 1 33 67 view .LVU43
+ 176 0030 9A88     		ldrh	r2, [r3, #4]
+ 177              		.loc 1 33 44 view .LVU44
+ 178 0032 5A80     		strh	r2, [r3, #2]	@ movhi
+ 179 0034 E7E7     		b	.L8
+ 180              	.L11:
+ 181              	.LBE2:
+  34:control-base/bsp/src/bsp_daemon.c ****         }
+  35:control-base/bsp/src/bsp_daemon.c ****     }
+  36:control-base/bsp/src/bsp_daemon.c **** }...
+ 182              		.loc 1 36 1 view .LVU45
+ 183 0036 10BD     		pop	{r4, pc}
+ 184              	.LVL11:
+ 185              	.L13:
+ 186              		.loc 1 36 1 view .LVU46
+ 187              		.align	2
+ 188              	.L12:
+ 189 0038 00000000 		.word	g_daemon_instance_count
+ 190 003c 00000000 		.word	g_daemon_instances
+ 191              		.cfi_endproc
+ 192              	.LFE2:
+ 194              		.global	g_daemon_instance_count
+ 195              		.section	.bss.g_daemon_instance_count,"aw",%nobits
+ 198              	g_daemon_instance_count:
+ 199 0000 00       		.space	1
+ 200              		.global	g_daemon_instances
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccc13ial.s 			page 5
+
+
+ 201              		.section	.bss.g_daemon_instances,"aw",%nobits
+ 202              		.align	2
+ 205              	g_daemon_instances:
+ 206 0000 00000000 		.space	12
+ 206      00000000 
+ 206      00000000 
+ 207              		.text
+ 208              	.Letext0:
+ 209              		.file 2 "/Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/arm-none-eabi/include/machine/_defa
+ 210              		.file 3 "/Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/arm-none-eabi/include/sys/_stdint.h
+ 211              		.file 4 "control-base/bsp/inc/bsp_daemon.h"
+ 212              		.file 5 "/Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/arm-none-eabi/include/stdlib.h"
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccc13ial.s 			page 6
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 bsp_daemon.c
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccc13ial.s:21     .text.Daemon_Register:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccc13ial.s:27     .text.Daemon_Register:00000000 Daemon_Register
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccc13ial.s:81     .text.Daemon_Register:00000024 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccc13ial.s:198    .bss.g_daemon_instance_count:00000000 g_daemon_instance_count
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccc13ial.s:205    .bss.g_daemon_instances:00000000 g_daemon_instances
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccc13ial.s:87     .text.Daemon_Reload:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccc13ial.s:93     .text.Daemon_Reload:00000000 Daemon_Reload
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccc13ial.s:112    .text.Daemon_Task_Loop:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccc13ial.s:118    .text.Daemon_Task_Loop:00000000 Daemon_Task_Loop
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccc13ial.s:189    .text.Daemon_Task_Loop:00000038 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccc13ial.s:199    .bss.g_daemon_instance_count:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccc13ial.s:202    .bss.g_daemon_instances:00000000 $d
+
+UNDEFINED SYMBOLS
+malloc

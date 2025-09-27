@@ -1,0 +1,1883 @@
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"MahonyAHRS.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "control-base/algo/src/MahonyAHRS.c"
+  20              		.section	.text.invSqrt,"ax",%progbits
+  21              		.align	1
+  22              		.global	invSqrt
+  23              		.syntax unified
+  24              		.thumb
+  25              		.thumb_func
+  27              	invSqrt:
+  28              	.LVL0:
+  29              	.LFB2:
+   1:control-base/algo/src/MahonyAHRS.c **** //=================================================================================================
+   2:control-base/algo/src/MahonyAHRS.c **** // MahonyAHRS.c
+   3:control-base/algo/src/MahonyAHRS.c **** //=================================================================================================
+   4:control-base/algo/src/MahonyAHRS.c **** //
+   5:control-base/algo/src/MahonyAHRS.c **** // Madgwick's implementation of Mayhony's AHRS algorithm.
+   6:control-base/algo/src/MahonyAHRS.c **** // See: http://www.x-io.co.uk/node/8#open_source_ahrs_and_imu_algorithms
+   7:control-base/algo/src/MahonyAHRS.c **** //
+   8:control-base/algo/src/MahonyAHRS.c **** // Date			Author			Notes
+   9:control-base/algo/src/MahonyAHRS.c **** // 29/09/2011	SOH Madgwick    Initial release
+  10:control-base/algo/src/MahonyAHRS.c **** // 02/10/2011	SOH Madgwick	Optimised for reduced CPU load
+  11:control-base/algo/src/MahonyAHRS.c **** //
+  12:control-base/algo/src/MahonyAHRS.c **** //=================================================================================================
+  13:control-base/algo/src/MahonyAHRS.c **** 
+  14:control-base/algo/src/MahonyAHRS.c **** //-------------------------------------------------------------------------------------------------
+  15:control-base/algo/src/MahonyAHRS.c **** // Header files
+  16:control-base/algo/src/MahonyAHRS.c **** 
+  17:control-base/algo/src/MahonyAHRS.c **** #include "MahonyAHRS.h"
+  18:control-base/algo/src/MahonyAHRS.c **** #include <math.h>
+  19:control-base/algo/src/MahonyAHRS.c **** 
+  20:control-base/algo/src/MahonyAHRS.c **** //-------------------------------------------------------------------------------------------------
+  21:control-base/algo/src/MahonyAHRS.c **** // Definitions
+  22:control-base/algo/src/MahonyAHRS.c **** #pragma message "Ignore this if you have updated `sampleFreq` with the fusion sampling frequency de
+  23:control-base/algo/src/MahonyAHRS.c **** #define sampleFreq	1000.0f			// sample frequency in Hz
+  24:control-base/algo/src/MahonyAHRS.c **** #define twoKpDef	(2.0f * 0.5f)	// 2 * proportional gain
+  25:control-base/algo/src/MahonyAHRS.c **** #define twoKiDef	(2.0f * 0.0f)	// 2 * integral gain
+  26:control-base/algo/src/MahonyAHRS.c **** 
+  27:control-base/algo/src/MahonyAHRS.c **** //-------------------------------------------------------------------------------------------------
+  28:control-base/algo/src/MahonyAHRS.c **** // Variable definitions
+  29:control-base/algo/src/MahonyAHRS.c **** 
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 2
+
+
+  30:control-base/algo/src/MahonyAHRS.c **** volatile float twoKp = twoKpDef;											// 2 * proportional gain (Kp)
+  31:control-base/algo/src/MahonyAHRS.c **** volatile float twoKi = twoKiDef;											// 2 * integral gain (Ki)
+  32:control-base/algo/src/MahonyAHRS.c **** //volatile float q0 = 1.0f, q1 = 0.0f, q2 = 0.0f, q3 = 0.0f;					// quaternion of sensor frame rela
+  33:control-base/algo/src/MahonyAHRS.c **** volatile float integralFBx = 0.0f,  integralFBy = 0.0f, integralFBz = 0.0f;	// integral error terms
+  34:control-base/algo/src/MahonyAHRS.c **** 
+  35:control-base/algo/src/MahonyAHRS.c **** //-------------------------------------------------------------------------------------------------
+  36:control-base/algo/src/MahonyAHRS.c **** // Function declarations
+  37:control-base/algo/src/MahonyAHRS.c **** 
+  38:control-base/algo/src/MahonyAHRS.c **** float invSqrt(float x);
+  39:control-base/algo/src/MahonyAHRS.c **** 
+  40:control-base/algo/src/MahonyAHRS.c **** //=================================================================================================
+  41:control-base/algo/src/MahonyAHRS.c **** // Functions
+  42:control-base/algo/src/MahonyAHRS.c **** 
+  43:control-base/algo/src/MahonyAHRS.c **** //-------------------------------------------------------------------------------------------------
+  44:control-base/algo/src/MahonyAHRS.c **** // AHRS algorithm update
+  45:control-base/algo/src/MahonyAHRS.c **** 
+  46:control-base/algo/src/MahonyAHRS.c **** void MahonyAHRSupdate(float q[4], float gx, float gy, float gz, float ax, float ay, float az, float
+  47:control-base/algo/src/MahonyAHRS.c **** 	float recipNorm;
+  48:control-base/algo/src/MahonyAHRS.c ****     float q0q0, q0q1, q0q2, q0q3, q1q1, q1q2, q1q3, q2q2, q2q3, q3q3;  
+  49:control-base/algo/src/MahonyAHRS.c **** 	float hx, hy, bx, bz;
+  50:control-base/algo/src/MahonyAHRS.c **** 	float halfvx, halfvy, halfvz, halfwx, halfwy, halfwz;
+  51:control-base/algo/src/MahonyAHRS.c **** 	float halfex, halfey, halfez;
+  52:control-base/algo/src/MahonyAHRS.c **** 	float qa, qb, qc;
+  53:control-base/algo/src/MahonyAHRS.c **** 
+  54:control-base/algo/src/MahonyAHRS.c **** 	// Use IMU algorithm if magnetometer measurement invalid (avoids NaN in magnetometer normalisation
+  55:control-base/algo/src/MahonyAHRS.c **** 	if((mx == 0.0f) && (my == 0.0f) && (mz == 0.0f)) {
+  56:control-base/algo/src/MahonyAHRS.c **** 		MahonyAHRSupdateIMU(q, gx, gy, gz, ax, ay, az);
+  57:control-base/algo/src/MahonyAHRS.c **** 		return;
+  58:control-base/algo/src/MahonyAHRS.c **** 	}
+  59:control-base/algo/src/MahonyAHRS.c **** 
+  60:control-base/algo/src/MahonyAHRS.c **** 	// Compute feedback only if accelerometer measurement valid (avoids NaN in accelerometer normalisa
+  61:control-base/algo/src/MahonyAHRS.c **** 	if(!((ax == 0.0f) && (ay == 0.0f) && (az == 0.0f))) {
+  62:control-base/algo/src/MahonyAHRS.c **** 
+  63:control-base/algo/src/MahonyAHRS.c **** 		// Normalise accelerometer measurement
+  64:control-base/algo/src/MahonyAHRS.c **** 		recipNorm = invSqrt(ax * ax + ay * ay + az * az);
+  65:control-base/algo/src/MahonyAHRS.c **** 		ax *= recipNorm;
+  66:control-base/algo/src/MahonyAHRS.c **** 		ay *= recipNorm;
+  67:control-base/algo/src/MahonyAHRS.c **** 		az *= recipNorm;     
+  68:control-base/algo/src/MahonyAHRS.c **** 
+  69:control-base/algo/src/MahonyAHRS.c **** 		// Normalise magnetometer measurement
+  70:control-base/algo/src/MahonyAHRS.c **** 		recipNorm = invSqrt(mx * mx + my * my + mz * mz);
+  71:control-base/algo/src/MahonyAHRS.c **** 		mx *= recipNorm;
+  72:control-base/algo/src/MahonyAHRS.c **** 		my *= recipNorm;
+  73:control-base/algo/src/MahonyAHRS.c **** 		mz *= recipNorm;   
+  74:control-base/algo/src/MahonyAHRS.c **** 
+  75:control-base/algo/src/MahonyAHRS.c ****         // Auxiliary variables to avoid repeated arithmetic
+  76:control-base/algo/src/MahonyAHRS.c ****         q0q0 = q[0] * q[0];
+  77:control-base/algo/src/MahonyAHRS.c ****         q0q1 = q[0] * q[1];
+  78:control-base/algo/src/MahonyAHRS.c ****         q0q2 = q[0] * q[2];
+  79:control-base/algo/src/MahonyAHRS.c ****         q0q3 = q[0] * q[3];
+  80:control-base/algo/src/MahonyAHRS.c ****         q1q1 = q[1] * q[1];
+  81:control-base/algo/src/MahonyAHRS.c ****         q1q2 = q[1] * q[2];
+  82:control-base/algo/src/MahonyAHRS.c ****         q1q3 = q[1] * q[3];
+  83:control-base/algo/src/MahonyAHRS.c ****         q2q2 = q[2] * q[2];
+  84:control-base/algo/src/MahonyAHRS.c ****         q2q3 = q[2] * q[3];
+  85:control-base/algo/src/MahonyAHRS.c ****         q3q3 = q[3] * q[3];   
+  86:control-base/algo/src/MahonyAHRS.c **** 
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 3
+
+
+  87:control-base/algo/src/MahonyAHRS.c ****         // Reference direction of Earth's magnetic field
+  88:control-base/algo/src/MahonyAHRS.c ****         hx = 2.0f * (mx * (0.5f - q2q2 - q3q3) + my * (q1q2 - q0q3) + mz * (q1q3 + q0q2));
+  89:control-base/algo/src/MahonyAHRS.c ****         hy = 2.0f * (mx * (q1q2 + q0q3) + my * (0.5f - q1q1 - q3q3) + mz * (q2q3 - q0q1));
+  90:control-base/algo/src/MahonyAHRS.c ****         bx = sqrt(hx * hx + hy * hy);
+  91:control-base/algo/src/MahonyAHRS.c ****         bz = 2.0f * (mx * (q1q3 - q0q2) + my * (q2q3 + q0q1) + mz * (0.5f - q1q1 - q2q2));
+  92:control-base/algo/src/MahonyAHRS.c **** 
+  93:control-base/algo/src/MahonyAHRS.c **** 		// Estimated direction of gravity and magnetic field
+  94:control-base/algo/src/MahonyAHRS.c **** 		halfvx = q1q3 - q0q2;
+  95:control-base/algo/src/MahonyAHRS.c **** 		halfvy = q0q1 + q2q3;
+  96:control-base/algo/src/MahonyAHRS.c **** 		halfvz = q0q0 - 0.5f + q3q3;
+  97:control-base/algo/src/MahonyAHRS.c ****         halfwx = bx * (0.5f - q2q2 - q3q3) + bz * (q1q3 - q0q2);
+  98:control-base/algo/src/MahonyAHRS.c ****         halfwy = bx * (q1q2 - q0q3) + bz * (q0q1 + q2q3);
+  99:control-base/algo/src/MahonyAHRS.c ****         halfwz = bx * (q0q2 + q1q3) + bz * (0.5f - q1q1 - q2q2);  
+ 100:control-base/algo/src/MahonyAHRS.c **** 	
+ 101:control-base/algo/src/MahonyAHRS.c **** 		// Error is sum of cross product between estimated direction and measured direction of field vect
+ 102:control-base/algo/src/MahonyAHRS.c **** 		halfex = (ay * halfvz - az * halfvy) + (my * halfwz - mz * halfwy);
+ 103:control-base/algo/src/MahonyAHRS.c **** 		halfey = (az * halfvx - ax * halfvz) + (mz * halfwx - mx * halfwz);
+ 104:control-base/algo/src/MahonyAHRS.c **** 		halfez = (ax * halfvy - ay * halfvx) + (mx * halfwy - my * halfwx);
+ 105:control-base/algo/src/MahonyAHRS.c **** 
+ 106:control-base/algo/src/MahonyAHRS.c **** 		// Compute and apply integral feedback if enabled
+ 107:control-base/algo/src/MahonyAHRS.c **** 		if(twoKi > 0.0f) {
+ 108:control-base/algo/src/MahonyAHRS.c **** 			integralFBx += twoKi * halfex * (1.0f / sampleFreq);	// integral error scaled by Ki
+ 109:control-base/algo/src/MahonyAHRS.c **** 			integralFBy += twoKi * halfey * (1.0f / sampleFreq);
+ 110:control-base/algo/src/MahonyAHRS.c **** 			integralFBz += twoKi * halfez * (1.0f / sampleFreq);
+ 111:control-base/algo/src/MahonyAHRS.c **** 			gx += integralFBx;	// apply integral feedback
+ 112:control-base/algo/src/MahonyAHRS.c **** 			gy += integralFBy;
+ 113:control-base/algo/src/MahonyAHRS.c **** 			gz += integralFBz;
+ 114:control-base/algo/src/MahonyAHRS.c **** 		}
+ 115:control-base/algo/src/MahonyAHRS.c **** 		else {
+ 116:control-base/algo/src/MahonyAHRS.c **** 			integralFBx = 0.0f;	// prevent integral windup
+ 117:control-base/algo/src/MahonyAHRS.c **** 			integralFBy = 0.0f;
+ 118:control-base/algo/src/MahonyAHRS.c **** 			integralFBz = 0.0f;
+ 119:control-base/algo/src/MahonyAHRS.c **** 		}
+ 120:control-base/algo/src/MahonyAHRS.c **** 
+ 121:control-base/algo/src/MahonyAHRS.c **** 		// Apply proportional feedback
+ 122:control-base/algo/src/MahonyAHRS.c **** 		gx += twoKp * halfex;
+ 123:control-base/algo/src/MahonyAHRS.c **** 		gy += twoKp * halfey;
+ 124:control-base/algo/src/MahonyAHRS.c **** 		gz += twoKp * halfez;
+ 125:control-base/algo/src/MahonyAHRS.c **** 	}
+ 126:control-base/algo/src/MahonyAHRS.c **** 	
+ 127:control-base/algo/src/MahonyAHRS.c **** 	// Integrate rate of change of quaternion
+ 128:control-base/algo/src/MahonyAHRS.c **** 	gx *= (0.5f * (1.0f / sampleFreq));		// pre-multiply common factors
+ 129:control-base/algo/src/MahonyAHRS.c **** 	gy *= (0.5f * (1.0f / sampleFreq));
+ 130:control-base/algo/src/MahonyAHRS.c **** 	gz *= (0.5f * (1.0f / sampleFreq));
+ 131:control-base/algo/src/MahonyAHRS.c **** 	qa = q[0];
+ 132:control-base/algo/src/MahonyAHRS.c **** 	qb = q[1];
+ 133:control-base/algo/src/MahonyAHRS.c **** 	qc = q[2];
+ 134:control-base/algo/src/MahonyAHRS.c **** 	q[0] += (-qb * gx - qc * gy - q[3] * gz);
+ 135:control-base/algo/src/MahonyAHRS.c **** 	q[1] += (qa * gx + qc * gz - q[3] * gy);
+ 136:control-base/algo/src/MahonyAHRS.c **** 	q[2] += (qa * gy - qb * gz + q[3] * gx);
+ 137:control-base/algo/src/MahonyAHRS.c **** 	q[3] += (qa * gz + qb * gy - qc * gx); 
+ 138:control-base/algo/src/MahonyAHRS.c **** 	
+ 139:control-base/algo/src/MahonyAHRS.c **** 	// Normalise quaternion
+ 140:control-base/algo/src/MahonyAHRS.c **** 	recipNorm = invSqrt(q[0] * q[0] + q[1] * q[1] + q[2] * q[2] + q[3] * q[3]);
+ 141:control-base/algo/src/MahonyAHRS.c **** 	q[0] *= recipNorm;
+ 142:control-base/algo/src/MahonyAHRS.c **** 	q[1] *= recipNorm;
+ 143:control-base/algo/src/MahonyAHRS.c **** 	q[2] *= recipNorm;
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 4
+
+
+ 144:control-base/algo/src/MahonyAHRS.c **** 	q[3] *= recipNorm;
+ 145:control-base/algo/src/MahonyAHRS.c **** }
+ 146:control-base/algo/src/MahonyAHRS.c **** 
+ 147:control-base/algo/src/MahonyAHRS.c **** //-------------------------------------------------------------------------------------------------
+ 148:control-base/algo/src/MahonyAHRS.c **** // IMU algorithm update
+ 149:control-base/algo/src/MahonyAHRS.c **** 
+ 150:control-base/algo/src/MahonyAHRS.c **** void MahonyAHRSupdateIMU(float q[4], float gx, float gy, float gz, float ax, float ay, float az) {
+ 151:control-base/algo/src/MahonyAHRS.c **** 	float recipNorm;
+ 152:control-base/algo/src/MahonyAHRS.c **** 	float halfvx, halfvy, halfvz;
+ 153:control-base/algo/src/MahonyAHRS.c **** 	float halfex, halfey, halfez;
+ 154:control-base/algo/src/MahonyAHRS.c **** 	float qa, qb, qc;
+ 155:control-base/algo/src/MahonyAHRS.c **** 
+ 156:control-base/algo/src/MahonyAHRS.c **** 	// Compute feedback only if accelerometer measurement valid (avoids NaN in accelerometer normalisa
+ 157:control-base/algo/src/MahonyAHRS.c **** 	if(!((ax == 0.0f) && (ay == 0.0f) && (az == 0.0f))) {
+ 158:control-base/algo/src/MahonyAHRS.c **** 
+ 159:control-base/algo/src/MahonyAHRS.c **** 		// Normalise accelerometer measurement
+ 160:control-base/algo/src/MahonyAHRS.c **** 		recipNorm = invSqrt(ax * ax + ay * ay + az * az);
+ 161:control-base/algo/src/MahonyAHRS.c **** 		ax *= recipNorm;
+ 162:control-base/algo/src/MahonyAHRS.c **** 		ay *= recipNorm;
+ 163:control-base/algo/src/MahonyAHRS.c **** 		az *= recipNorm;        
+ 164:control-base/algo/src/MahonyAHRS.c **** 
+ 165:control-base/algo/src/MahonyAHRS.c **** 		// Estimated direction of gravity and vector perpendicular to magnetic flux
+ 166:control-base/algo/src/MahonyAHRS.c **** 		halfvx = q[1] * q[3] - q[0] * q[2];
+ 167:control-base/algo/src/MahonyAHRS.c **** 		halfvy = q[0] * q[1] + q[2] * q[3];
+ 168:control-base/algo/src/MahonyAHRS.c **** 		halfvz = q[0] * q[0] - 0.5f + q[3] * q[3];
+ 169:control-base/algo/src/MahonyAHRS.c **** 	
+ 170:control-base/algo/src/MahonyAHRS.c **** 		// Error is sum of cross product between estimated and measured direction of gravity
+ 171:control-base/algo/src/MahonyAHRS.c **** 		halfex = (ay * halfvz - az * halfvy);
+ 172:control-base/algo/src/MahonyAHRS.c **** 		halfey = (az * halfvx - ax * halfvz);
+ 173:control-base/algo/src/MahonyAHRS.c **** 		halfez = (ax * halfvy - ay * halfvx);
+ 174:control-base/algo/src/MahonyAHRS.c **** 
+ 175:control-base/algo/src/MahonyAHRS.c **** 		// Compute and apply integral feedback if enabled
+ 176:control-base/algo/src/MahonyAHRS.c **** 		if(twoKi > 0.0f) {
+ 177:control-base/algo/src/MahonyAHRS.c **** 			integralFBx += twoKi * halfex * (1.0f / sampleFreq);	// integral error scaled by Ki
+ 178:control-base/algo/src/MahonyAHRS.c **** 			integralFBy += twoKi * halfey * (1.0f / sampleFreq);
+ 179:control-base/algo/src/MahonyAHRS.c **** 			integralFBz += twoKi * halfez * (1.0f / sampleFreq);
+ 180:control-base/algo/src/MahonyAHRS.c **** 			gx += integralFBx;	// apply integral feedback
+ 181:control-base/algo/src/MahonyAHRS.c **** 			gy += integralFBy;
+ 182:control-base/algo/src/MahonyAHRS.c **** 			gz += integralFBz;
+ 183:control-base/algo/src/MahonyAHRS.c **** 		}
+ 184:control-base/algo/src/MahonyAHRS.c **** 		else {
+ 185:control-base/algo/src/MahonyAHRS.c **** 			integralFBx = 0.0f;	// prevent integral windup
+ 186:control-base/algo/src/MahonyAHRS.c **** 			integralFBy = 0.0f;
+ 187:control-base/algo/src/MahonyAHRS.c **** 			integralFBz = 0.0f;
+ 188:control-base/algo/src/MahonyAHRS.c **** 		}
+ 189:control-base/algo/src/MahonyAHRS.c **** 
+ 190:control-base/algo/src/MahonyAHRS.c **** 		// Apply proportional feedback
+ 191:control-base/algo/src/MahonyAHRS.c **** 		gx += twoKp * halfex;
+ 192:control-base/algo/src/MahonyAHRS.c **** 		gy += twoKp * halfey;
+ 193:control-base/algo/src/MahonyAHRS.c **** 		gz += twoKp * halfez;
+ 194:control-base/algo/src/MahonyAHRS.c **** 	}
+ 195:control-base/algo/src/MahonyAHRS.c **** 	
+ 196:control-base/algo/src/MahonyAHRS.c **** 	// Integrate rate of change of quaternion
+ 197:control-base/algo/src/MahonyAHRS.c **** 	gx *= (0.5f * (1.0f / sampleFreq));		// pre-multiply common factors
+ 198:control-base/algo/src/MahonyAHRS.c **** 	gy *= (0.5f * (1.0f / sampleFreq));
+ 199:control-base/algo/src/MahonyAHRS.c **** 	gz *= (0.5f * (1.0f / sampleFreq));
+ 200:control-base/algo/src/MahonyAHRS.c **** 	qa = q[0];
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 5
+
+
+ 201:control-base/algo/src/MahonyAHRS.c **** 	qb = q[1];
+ 202:control-base/algo/src/MahonyAHRS.c **** 	qc = q[2];
+ 203:control-base/algo/src/MahonyAHRS.c **** 	q[0] += (-qb * gx - qc * gy - q[3] * gz);
+ 204:control-base/algo/src/MahonyAHRS.c **** 	q[1] += (qa * gx + qc * gz - q[3] * gy);
+ 205:control-base/algo/src/MahonyAHRS.c **** 	q[2] += (qa * gy - qb * gz + q[3] * gx);
+ 206:control-base/algo/src/MahonyAHRS.c **** 	q[3] += (qa * gz + qb * gy - qc * gx); 
+ 207:control-base/algo/src/MahonyAHRS.c **** 	
+ 208:control-base/algo/src/MahonyAHRS.c **** 	// Normalise quaternion
+ 209:control-base/algo/src/MahonyAHRS.c **** 	recipNorm = invSqrt(q[0] * q[0] + q[1] * q[1] + q[2] * q[2] + q[3] * q[3]);
+ 210:control-base/algo/src/MahonyAHRS.c **** 	q[0] *= recipNorm;
+ 211:control-base/algo/src/MahonyAHRS.c **** 	q[1] *= recipNorm;
+ 212:control-base/algo/src/MahonyAHRS.c **** 	q[2] *= recipNorm;
+ 213:control-base/algo/src/MahonyAHRS.c **** 	q[3] *= recipNorm;
+ 214:control-base/algo/src/MahonyAHRS.c **** }
+ 215:control-base/algo/src/MahonyAHRS.c **** 
+ 216:control-base/algo/src/MahonyAHRS.c **** //-------------------------------------------------------------------------------------------------
+ 217:control-base/algo/src/MahonyAHRS.c **** // Fast inverse square-root
+ 218:control-base/algo/src/MahonyAHRS.c **** // See: http://en.wikipedia.org/wiki/Fast_inverse_square_root
+ 219:control-base/algo/src/MahonyAHRS.c **** 
+ 220:control-base/algo/src/MahonyAHRS.c **** // float invSqrt(float x) {
+ 221:control-base/algo/src/MahonyAHRS.c **** // 	float halfx = 0.5f * x;
+ 222:control-base/algo/src/MahonyAHRS.c **** // 	float y = x;
+ 223:control-base/algo/src/MahonyAHRS.c **** // 	long i = *(long*)&y;
+ 224:control-base/algo/src/MahonyAHRS.c **** // 	i = 0x5f3759df - (i>>1);
+ 225:control-base/algo/src/MahonyAHRS.c **** // 	y = *(float*)&i;
+ 226:control-base/algo/src/MahonyAHRS.c **** // 	y = y * (1.5f - (halfx * y * y));
+ 227:control-base/algo/src/MahonyAHRS.c **** // 	return y;
+ 228:control-base/algo/src/MahonyAHRS.c **** // }
+ 229:control-base/algo/src/MahonyAHRS.c **** 
+ 230:control-base/algo/src/MahonyAHRS.c **** typedef union FloatLongUnion{
+ 231:control-base/algo/src/MahonyAHRS.c ****     float f;
+ 232:control-base/algo/src/MahonyAHRS.c ****     long l;
+ 233:control-base/algo/src/MahonyAHRS.c **** } FloatLongUnion;
+ 234:control-base/algo/src/MahonyAHRS.c **** 
+ 235:control-base/algo/src/MahonyAHRS.c **** float invSqrt(float x) {
+  30              		.loc 1 235 24 view -0
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 0
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  34              		@ link register save eliminated.
+ 236:control-base/algo/src/MahonyAHRS.c ****     FloatLongUnion u;
+  35              		.loc 1 236 5 view .LVU1
+ 237:control-base/algo/src/MahonyAHRS.c ****     u.f = x;
+  36              		.loc 1 237 5 view .LVU2
+ 238:control-base/algo/src/MahonyAHRS.c ****     float halfx = 0.5f * x;
+  37              		.loc 1 238 5 view .LVU3
+  38              		.loc 1 238 11 is_stmt 0 view .LVU4
+  39 0000 F6EE007A 		vmov.f32	s15, #5.0e-1
+  40 0004 60EE277A 		vmul.f32	s15, s0, s15
+  41              	.LVL1:
+ 239:control-base/algo/src/MahonyAHRS.c ****     u.l = 0x5f3759df - (u.l >> 1);
+  42              		.loc 1 239 5 is_stmt 1 view .LVU5
+ 240:control-base/algo/src/MahonyAHRS.c ****     float y = u.f;
+  43              		.loc 1 240 5 view .LVU6
+  44 0008 084B     		ldr	r3, .L2
+  45 000a 10EE102A 		vmov	r2, s0	@ int
+  46 000e A3EB6203 		sub	r3, r3, r2, asr #1
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 6
+
+
+  47 0012 00EE103A 		vmov	s0, r3	@ int
+  48              	.LVL2:
+ 241:control-base/algo/src/MahonyAHRS.c ****     y = y * (1.5f - (halfx * y * y));
+  49              		.loc 1 241 5 view .LVU7
+  50              		.loc 1 241 28 is_stmt 0 view .LVU8
+  51 0016 67EE807A 		vmul.f32	s15, s15, s0
+  52              	.LVL3:
+  53              		.loc 1 241 32 view .LVU9
+  54 001a 67EE807A 		vmul.f32	s15, s15, s0
+  55              		.loc 1 241 19 view .LVU10
+  56 001e B7EE087A 		vmov.f32	s14, #1.5e+0
+  57 0022 77EE677A 		vsub.f32	s15, s14, s15
+  58              	.LVL4:
+ 242:control-base/algo/src/MahonyAHRS.c ****     return y;
+  59              		.loc 1 242 5 is_stmt 1 view .LVU11
+ 243:control-base/algo/src/MahonyAHRS.c **** }
+  60              		.loc 1 243 1 is_stmt 0 view .LVU12
+  61 0026 27EE800A 		vmul.f32	s0, s15, s0
+  62              	.LVL5:
+  63              		.loc 1 243 1 view .LVU13
+  64 002a 7047     		bx	lr
+  65              	.L3:
+  66              		.align	2
+  67              	.L2:
+  68 002c DF59375F 		.word	1597463007
+  69              		.cfi_endproc
+  70              	.LFE2:
+  72              		.section	.text.MahonyAHRSupdateIMU,"ax",%progbits
+  73              		.align	1
+  74              		.global	MahonyAHRSupdateIMU
+  75              		.syntax unified
+  76              		.thumb
+  77              		.thumb_func
+  79              	MahonyAHRSupdateIMU:
+  80              	.LVL6:
+  81              	.LFB1:
+ 150:control-base/algo/src/MahonyAHRS.c **** 	float recipNorm;
+  82              		.loc 1 150 98 is_stmt 1 view -0
+  83              		.cfi_startproc
+  84              		@ args = 0, pretend = 0, frame = 0
+  85              		@ frame_needed = 0, uses_anonymous_args = 0
+ 150:control-base/algo/src/MahonyAHRS.c **** 	float recipNorm;
+  86              		.loc 1 150 98 is_stmt 0 view .LVU15
+  87 0000 10B5     		push	{r4, lr}
+  88              	.LCFI0:
+  89              		.cfi_def_cfa_offset 8
+  90              		.cfi_offset 4, -8
+  91              		.cfi_offset 14, -4
+  92 0002 2DED068B 		vpush.64	{d8, d9, d10}
+  93              	.LCFI1:
+  94              		.cfi_def_cfa_offset 32
+  95              		.cfi_offset 80, -32
+  96              		.cfi_offset 81, -28
+  97              		.cfi_offset 82, -24
+  98              		.cfi_offset 83, -20
+  99              		.cfi_offset 84, -16
+ 100              		.cfi_offset 85, -12
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 7
+
+
+ 101 0006 0446     		mov	r4, r0
+ 102 0008 B0EE409A 		vmov.f32	s18, s0
+ 103 000c F0EE609A 		vmov.f32	s19, s1
+ 104 0010 B0EE418A 		vmov.f32	s16, s2
+ 105 0014 F0EE618A 		vmov.f32	s17, s3
+ 106 0018 B0EE42AA 		vmov.f32	s20, s4
+ 107 001c F0EE62AA 		vmov.f32	s21, s5
+ 151:control-base/algo/src/MahonyAHRS.c **** 	float halfvx, halfvy, halfvz;
+ 108              		.loc 1 151 2 is_stmt 1 view .LVU16
+ 152:control-base/algo/src/MahonyAHRS.c **** 	float halfex, halfey, halfez;
+ 109              		.loc 1 152 2 view .LVU17
+ 153:control-base/algo/src/MahonyAHRS.c **** 	float qa, qb, qc;
+ 110              		.loc 1 153 2 view .LVU18
+ 154:control-base/algo/src/MahonyAHRS.c **** 
+ 111              		.loc 1 154 2 view .LVU19
+ 157:control-base/algo/src/MahonyAHRS.c **** 
+ 112              		.loc 1 157 2 view .LVU20
+ 157:control-base/algo/src/MahonyAHRS.c **** 
+ 113              		.loc 1 157 4 is_stmt 0 view .LVU21
+ 114 0020 F5EE401A 		vcmp.f32	s3, #0
+ 115 0024 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 116 0028 0AD1     		bne	.L5
+ 157:control-base/algo/src/MahonyAHRS.c **** 
+ 117              		.loc 1 157 20 discriminator 1 view .LVU22
+ 118 002a B5EE402A 		vcmp.f32	s4, #0
+ 119 002e F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 120 0032 05D1     		bne	.L5
+ 157:control-base/algo/src/MahonyAHRS.c **** 
+ 121              		.loc 1 157 5 discriminator 2 view .LVU23
+ 122 0034 F5EE402A 		vcmp.f32	s5, #0
+ 123 0038 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 124 003c 00F09380 		beq	.L6
+ 125              	.L5:
+ 160:control-base/algo/src/MahonyAHRS.c **** 		ax *= recipNorm;
+ 126              		.loc 1 160 3 is_stmt 1 view .LVU24
+ 160:control-base/algo/src/MahonyAHRS.c **** 		ax *= recipNorm;
+ 127              		.loc 1 160 26 is_stmt 0 view .LVU25
+ 128 0040 68EEA87A 		vmul.f32	s15, s17, s17
+ 160:control-base/algo/src/MahonyAHRS.c **** 		ax *= recipNorm;
+ 129              		.loc 1 160 36 view .LVU26
+ 130 0044 2AEE0A7A 		vmul.f32	s14, s20, s20
+ 160:control-base/algo/src/MahonyAHRS.c **** 		ax *= recipNorm;
+ 131              		.loc 1 160 31 view .LVU27
+ 132 0048 77EE877A 		vadd.f32	s15, s15, s14
+ 160:control-base/algo/src/MahonyAHRS.c **** 		ax *= recipNorm;
+ 133              		.loc 1 160 46 view .LVU28
+ 134 004c 2AEEAA0A 		vmul.f32	s0, s21, s21
+ 135              	.LVL7:
+ 160:control-base/algo/src/MahonyAHRS.c **** 		ax *= recipNorm;
+ 136              		.loc 1 160 15 view .LVU29
+ 137 0050 37EE800A 		vadd.f32	s0, s15, s0
+ 138 0054 FFF7FEFF 		bl	invSqrt
+ 139              	.LVL8:
+ 161:control-base/algo/src/MahonyAHRS.c **** 		ay *= recipNorm;
+ 140              		.loc 1 161 3 is_stmt 1 view .LVU30
+ 161:control-base/algo/src/MahonyAHRS.c **** 		ay *= recipNorm;
+ 141              		.loc 1 161 6 is_stmt 0 view .LVU31
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 8
+
+
+ 142 0058 68EE808A 		vmul.f32	s17, s17, s0
+ 143              	.LVL9:
+ 162:control-base/algo/src/MahonyAHRS.c **** 		az *= recipNorm;        
+ 144              		.loc 1 162 3 is_stmt 1 view .LVU32
+ 162:control-base/algo/src/MahonyAHRS.c **** 		az *= recipNorm;        
+ 145              		.loc 1 162 6 is_stmt 0 view .LVU33
+ 146 005c 2AEE00AA 		vmul.f32	s20, s20, s0
+ 147              	.LVL10:
+ 163:control-base/algo/src/MahonyAHRS.c **** 
+ 148              		.loc 1 163 3 is_stmt 1 view .LVU34
+ 163:control-base/algo/src/MahonyAHRS.c **** 
+ 149              		.loc 1 163 6 is_stmt 0 view .LVU35
+ 150 0060 6AEE80AA 		vmul.f32	s21, s21, s0
+ 151              	.LVL11:
+ 166:control-base/algo/src/MahonyAHRS.c **** 		halfvy = q[0] * q[1] + q[2] * q[3];
+ 152              		.loc 1 166 3 is_stmt 1 view .LVU36
+ 166:control-base/algo/src/MahonyAHRS.c **** 		halfvy = q[0] * q[1] + q[2] * q[3];
+ 153              		.loc 1 166 13 is_stmt 0 view .LVU37
+ 154 0064 94ED017A 		vldr.32	s14, [r4, #4]
+ 166:control-base/algo/src/MahonyAHRS.c **** 		halfvy = q[0] * q[1] + q[2] * q[3];
+ 155              		.loc 1 166 20 view .LVU38
+ 156 0068 D4ED036A 		vldr.32	s13, [r4, #12]
+ 166:control-base/algo/src/MahonyAHRS.c **** 		halfvy = q[0] * q[1] + q[2] * q[3];
+ 157              		.loc 1 166 17 view .LVU39
+ 158 006c 27EE266A 		vmul.f32	s12, s14, s13
+ 166:control-base/algo/src/MahonyAHRS.c **** 		halfvy = q[0] * q[1] + q[2] * q[3];
+ 159              		.loc 1 166 27 view .LVU40
+ 160 0070 D4ED007A 		vldr.32	s15, [r4]
+ 166:control-base/algo/src/MahonyAHRS.c **** 		halfvy = q[0] * q[1] + q[2] * q[3];
+ 161              		.loc 1 166 34 view .LVU41
+ 162 0074 D4ED025A 		vldr.32	s11, [r4, #8]
+ 166:control-base/algo/src/MahonyAHRS.c **** 		halfvy = q[0] * q[1] + q[2] * q[3];
+ 163              		.loc 1 166 31 view .LVU42
+ 164 0078 27EEA55A 		vmul.f32	s10, s15, s11
+ 166:control-base/algo/src/MahonyAHRS.c **** 		halfvy = q[0] * q[1] + q[2] * q[3];
+ 165              		.loc 1 166 10 view .LVU43
+ 166 007c 36EE456A 		vsub.f32	s12, s12, s10
+ 167              	.LVL12:
+ 167:control-base/algo/src/MahonyAHRS.c **** 		halfvz = q[0] * q[0] - 0.5f + q[3] * q[3];
+ 168              		.loc 1 167 3 is_stmt 1 view .LVU44
+ 167:control-base/algo/src/MahonyAHRS.c **** 		halfvz = q[0] * q[0] - 0.5f + q[3] * q[3];
+ 169              		.loc 1 167 17 is_stmt 0 view .LVU45
+ 170 0080 27EE277A 		vmul.f32	s14, s14, s15
+ 167:control-base/algo/src/MahonyAHRS.c **** 		halfvz = q[0] * q[0] - 0.5f + q[3] * q[3];
+ 171              		.loc 1 167 31 view .LVU46
+ 172 0084 66EEA55A 		vmul.f32	s11, s13, s11
+ 167:control-base/algo/src/MahonyAHRS.c **** 		halfvz = q[0] * q[0] - 0.5f + q[3] * q[3];
+ 173              		.loc 1 167 10 view .LVU47
+ 174 0088 37EE257A 		vadd.f32	s14, s14, s11
+ 175              	.LVL13:
+ 168:control-base/algo/src/MahonyAHRS.c **** 	
+ 176              		.loc 1 168 3 is_stmt 1 view .LVU48
+ 168:control-base/algo/src/MahonyAHRS.c **** 	
+ 177              		.loc 1 168 17 is_stmt 0 view .LVU49
+ 178 008c 67EEA77A 		vmul.f32	s15, s15, s15
+ 168:control-base/algo/src/MahonyAHRS.c **** 	
+ 179              		.loc 1 168 24 view .LVU50
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 9
+
+
+ 180 0090 F6EE005A 		vmov.f32	s11, #5.0e-1
+ 181 0094 77EEE57A 		vsub.f32	s15, s15, s11
+ 168:control-base/algo/src/MahonyAHRS.c **** 	
+ 182              		.loc 1 168 38 view .LVU51
+ 183 0098 66EEA66A 		vmul.f32	s13, s13, s13
+ 168:control-base/algo/src/MahonyAHRS.c **** 	
+ 184              		.loc 1 168 10 view .LVU52
+ 185 009c 77EEA67A 		vadd.f32	s15, s15, s13
+ 186              	.LVL14:
+ 171:control-base/algo/src/MahonyAHRS.c **** 		halfey = (az * halfvx - ax * halfvz);
+ 187              		.loc 1 171 3 is_stmt 1 view .LVU53
+ 171:control-base/algo/src/MahonyAHRS.c **** 		halfey = (az * halfvx - ax * halfvz);
+ 188              		.loc 1 171 16 is_stmt 0 view .LVU54
+ 189 00a0 6AEE275A 		vmul.f32	s11, s20, s15
+ 171:control-base/algo/src/MahonyAHRS.c **** 		halfey = (az * halfvx - ax * halfvz);
+ 190              		.loc 1 171 30 view .LVU55
+ 191 00a4 6AEE876A 		vmul.f32	s13, s21, s14
+ 171:control-base/algo/src/MahonyAHRS.c **** 		halfey = (az * halfvx - ax * halfvz);
+ 192              		.loc 1 171 10 view .LVU56
+ 193 00a8 75EEE65A 		vsub.f32	s11, s11, s13
+ 194              	.LVL15:
+ 172:control-base/algo/src/MahonyAHRS.c **** 		halfez = (ax * halfvy - ay * halfvx);
+ 195              		.loc 1 172 3 is_stmt 1 view .LVU57
+ 172:control-base/algo/src/MahonyAHRS.c **** 		halfez = (ax * halfvy - ay * halfvx);
+ 196              		.loc 1 172 16 is_stmt 0 view .LVU58
+ 197 00ac 6AEE86AA 		vmul.f32	s21, s21, s12
+ 198              	.LVL16:
+ 172:control-base/algo/src/MahonyAHRS.c **** 		halfez = (ax * halfvy - ay * halfvx);
+ 199              		.loc 1 172 30 view .LVU59
+ 200 00b0 68EEA77A 		vmul.f32	s15, s17, s15
+ 201              	.LVL17:
+ 172:control-base/algo/src/MahonyAHRS.c **** 		halfez = (ax * halfvy - ay * halfvx);
+ 202              		.loc 1 172 10 view .LVU60
+ 203 00b4 7AEEE7AA 		vsub.f32	s21, s21, s15
+ 204              	.LVL18:
+ 173:control-base/algo/src/MahonyAHRS.c **** 
+ 205              		.loc 1 173 3 is_stmt 1 view .LVU61
+ 173:control-base/algo/src/MahonyAHRS.c **** 
+ 206              		.loc 1 173 16 is_stmt 0 view .LVU62
+ 207 00b8 68EE878A 		vmul.f32	s17, s17, s14
+ 208              	.LVL19:
+ 173:control-base/algo/src/MahonyAHRS.c **** 
+ 209              		.loc 1 173 30 view .LVU63
+ 210 00bc 2AEE06AA 		vmul.f32	s20, s20, s12
+ 211              	.LVL20:
+ 173:control-base/algo/src/MahonyAHRS.c **** 
+ 212              		.loc 1 173 10 view .LVU64
+ 213 00c0 78EECA8A 		vsub.f32	s17, s17, s20
+ 214              	.LVL21:
+ 176:control-base/algo/src/MahonyAHRS.c **** 			integralFBx += twoKi * halfex * (1.0f / sampleFreq);	// integral error scaled by Ki
+ 215              		.loc 1 176 3 is_stmt 1 view .LVU65
+ 176:control-base/algo/src/MahonyAHRS.c **** 			integralFBx += twoKi * halfex * (1.0f / sampleFreq);	// integral error scaled by Ki
+ 216              		.loc 1 176 12 is_stmt 0 view .LVU66
+ 217 00c4 614B     		ldr	r3, .L13
+ 218 00c6 D3ED007A 		vldr.32	s15, [r3]
+ 176:control-base/algo/src/MahonyAHRS.c **** 			integralFBx += twoKi * halfex * (1.0f / sampleFreq);	// integral error scaled by Ki
+ 219              		.loc 1 176 5 view .LVU67
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 10
+
+
+ 220 00ca F5EEC07A 		vcmpe.f32	s15, #0
+ 221 00ce F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 222 00d2 40F3B380 		ble	.L11
+ 177:control-base/algo/src/MahonyAHRS.c **** 			integralFBy += twoKi * halfey * (1.0f / sampleFreq);
+ 223              		.loc 1 177 4 is_stmt 1 view .LVU68
+ 177:control-base/algo/src/MahonyAHRS.c **** 			integralFBy += twoKi * halfey * (1.0f / sampleFreq);
+ 224              		.loc 1 177 25 is_stmt 0 view .LVU69
+ 225 00d6 D3ED007A 		vldr.32	s15, [r3]
+ 226 00da 67EEA57A 		vmul.f32	s15, s15, s11
+ 177:control-base/algo/src/MahonyAHRS.c **** 			integralFBy += twoKi * halfey * (1.0f / sampleFreq);
+ 227              		.loc 1 177 34 view .LVU70
+ 228 00de 9FED5C7A 		vldr.32	s14, .L13+4
+ 229              	.LVL22:
+ 177:control-base/algo/src/MahonyAHRS.c **** 			integralFBy += twoKi * halfey * (1.0f / sampleFreq);
+ 230              		.loc 1 177 34 view .LVU71
+ 231 00e2 67EE877A 		vmul.f32	s15, s15, s14
+ 177:control-base/algo/src/MahonyAHRS.c **** 			integralFBy += twoKi * halfey * (1.0f / sampleFreq);
+ 232              		.loc 1 177 16 view .LVU72
+ 233 00e6 5B49     		ldr	r1, .L13+8
+ 234 00e8 D1ED006A 		vldr.32	s13, [r1]
+ 235 00ec 76EEA77A 		vadd.f32	s15, s13, s15
+ 236 00f0 C1ED007A 		vstr.32	s15, [r1]
+ 237              	.LVL23:
+ 178:control-base/algo/src/MahonyAHRS.c **** 			integralFBz += twoKi * halfez * (1.0f / sampleFreq);
+ 238              		.loc 1 178 4 is_stmt 1 view .LVU73
+ 178:control-base/algo/src/MahonyAHRS.c **** 			integralFBz += twoKi * halfez * (1.0f / sampleFreq);
+ 239              		.loc 1 178 25 is_stmt 0 view .LVU74
+ 240 00f4 D3ED007A 		vldr.32	s15, [r3]
+ 241 00f8 67EEAA7A 		vmul.f32	s15, s15, s21
+ 178:control-base/algo/src/MahonyAHRS.c **** 			integralFBz += twoKi * halfez * (1.0f / sampleFreq);
+ 242              		.loc 1 178 34 view .LVU75
+ 243 00fc 67EE877A 		vmul.f32	s15, s15, s14
+ 178:control-base/algo/src/MahonyAHRS.c **** 			integralFBz += twoKi * halfez * (1.0f / sampleFreq);
+ 244              		.loc 1 178 16 view .LVU76
+ 245 0100 554A     		ldr	r2, .L13+12
+ 246 0102 D2ED006A 		vldr.32	s13, [r2]
+ 247 0106 76EEA77A 		vadd.f32	s15, s13, s15
+ 248 010a C2ED007A 		vstr.32	s15, [r2]
+ 179:control-base/algo/src/MahonyAHRS.c **** 			gx += integralFBx;	// apply integral feedback
+ 249              		.loc 1 179 4 is_stmt 1 view .LVU77
+ 179:control-base/algo/src/MahonyAHRS.c **** 			gx += integralFBx;	// apply integral feedback
+ 250              		.loc 1 179 25 is_stmt 0 view .LVU78
+ 251 010e D3ED007A 		vldr.32	s15, [r3]
+ 252 0112 67EEA87A 		vmul.f32	s15, s15, s17
+ 179:control-base/algo/src/MahonyAHRS.c **** 			gx += integralFBx;	// apply integral feedback
+ 253              		.loc 1 179 34 view .LVU79
+ 254 0116 67EE877A 		vmul.f32	s15, s15, s14
+ 179:control-base/algo/src/MahonyAHRS.c **** 			gx += integralFBx;	// apply integral feedback
+ 255              		.loc 1 179 16 view .LVU80
+ 256 011a 504B     		ldr	r3, .L13+16
+ 257 011c 93ED007A 		vldr.32	s14, [r3]
+ 258 0120 77EE277A 		vadd.f32	s15, s14, s15
+ 259 0124 C3ED007A 		vstr.32	s15, [r3]
+ 180:control-base/algo/src/MahonyAHRS.c **** 			gy += integralFBy;
+ 260              		.loc 1 180 4 is_stmt 1 view .LVU81
+ 261 0128 D1ED007A 		vldr.32	s15, [r1]
+ 180:control-base/algo/src/MahonyAHRS.c **** 			gy += integralFBy;
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 11
+
+
+ 262              		.loc 1 180 7 is_stmt 0 view .LVU82
+ 263 012c 39EE279A 		vadd.f32	s18, s18, s15
+ 264              	.LVL24:
+ 181:control-base/algo/src/MahonyAHRS.c **** 			gz += integralFBz;
+ 265              		.loc 1 181 4 is_stmt 1 view .LVU83
+ 266 0130 D2ED007A 		vldr.32	s15, [r2]
+ 181:control-base/algo/src/MahonyAHRS.c **** 			gz += integralFBz;
+ 267              		.loc 1 181 7 is_stmt 0 view .LVU84
+ 268 0134 79EEA79A 		vadd.f32	s19, s19, s15
+ 269              	.LVL25:
+ 182:control-base/algo/src/MahonyAHRS.c **** 		}
+ 270              		.loc 1 182 4 is_stmt 1 view .LVU85
+ 271 0138 D3ED007A 		vldr.32	s15, [r3]
+ 182:control-base/algo/src/MahonyAHRS.c **** 		}
+ 272              		.loc 1 182 7 is_stmt 0 view .LVU86
+ 273 013c 38EE278A 		vadd.f32	s16, s16, s15
+ 274              	.LVL26:
+ 275              	.L9:
+ 191:control-base/algo/src/MahonyAHRS.c **** 		gy += twoKp * halfey;
+ 276              		.loc 1 191 3 is_stmt 1 view .LVU87
+ 191:control-base/algo/src/MahonyAHRS.c **** 		gy += twoKp * halfey;
+ 277              		.loc 1 191 15 is_stmt 0 view .LVU88
+ 278 0140 474B     		ldr	r3, .L13+20
+ 279 0142 D3ED007A 		vldr.32	s15, [r3]
+ 280 0146 67EEA57A 		vmul.f32	s15, s15, s11
+ 191:control-base/algo/src/MahonyAHRS.c **** 		gy += twoKp * halfey;
+ 281              		.loc 1 191 6 view .LVU89
+ 282 014a 39EE279A 		vadd.f32	s18, s18, s15
+ 283              	.LVL27:
+ 192:control-base/algo/src/MahonyAHRS.c **** 		gz += twoKp * halfez;
+ 284              		.loc 1 192 3 is_stmt 1 view .LVU90
+ 192:control-base/algo/src/MahonyAHRS.c **** 		gz += twoKp * halfez;
+ 285              		.loc 1 192 15 is_stmt 0 view .LVU91
+ 286 014e D3ED007A 		vldr.32	s15, [r3]
+ 287 0152 67EEAAAA 		vmul.f32	s21, s15, s21
+ 288              	.LVL28:
+ 192:control-base/algo/src/MahonyAHRS.c **** 		gz += twoKp * halfez;
+ 289              		.loc 1 192 6 view .LVU92
+ 290 0156 79EEAA9A 		vadd.f32	s19, s19, s21
+ 291              	.LVL29:
+ 193:control-base/algo/src/MahonyAHRS.c **** 	}
+ 292              		.loc 1 193 3 is_stmt 1 view .LVU93
+ 193:control-base/algo/src/MahonyAHRS.c **** 	}
+ 293              		.loc 1 193 15 is_stmt 0 view .LVU94
+ 294 015a D3ED007A 		vldr.32	s15, [r3]
+ 295 015e 67EEA87A 		vmul.f32	s15, s15, s17
+ 193:control-base/algo/src/MahonyAHRS.c **** 	}
+ 296              		.loc 1 193 6 view .LVU95
+ 297 0162 38EE278A 		vadd.f32	s16, s16, s15
+ 298              	.LVL30:
+ 299              	.L6:
+ 197:control-base/algo/src/MahonyAHRS.c **** 	gy *= (0.5f * (1.0f / sampleFreq));
+ 300              		.loc 1 197 2 is_stmt 1 view .LVU96
+ 197:control-base/algo/src/MahonyAHRS.c **** 	gy *= (0.5f * (1.0f / sampleFreq));
+ 301              		.loc 1 197 5 is_stmt 0 view .LVU97
+ 302 0166 DFED3F7A 		vldr.32	s15, .L13+24
+ 303 016a 29EE270A 		vmul.f32	s0, s18, s15
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 12
+
+
+ 304              	.LVL31:
+ 198:control-base/algo/src/MahonyAHRS.c **** 	gz *= (0.5f * (1.0f / sampleFreq));
+ 305              		.loc 1 198 2 is_stmt 1 view .LVU98
+ 198:control-base/algo/src/MahonyAHRS.c **** 	gz *= (0.5f * (1.0f / sampleFreq));
+ 306              		.loc 1 198 5 is_stmt 0 view .LVU99
+ 307 016e 69EEA70A 		vmul.f32	s1, s19, s15
+ 308              	.LVL32:
+ 199:control-base/algo/src/MahonyAHRS.c **** 	qa = q[0];
+ 309              		.loc 1 199 2 is_stmt 1 view .LVU100
+ 199:control-base/algo/src/MahonyAHRS.c **** 	qa = q[0];
+ 310              		.loc 1 199 5 is_stmt 0 view .LVU101
+ 311 0172 28EE271A 		vmul.f32	s2, s16, s15
+ 312              	.LVL33:
+ 200:control-base/algo/src/MahonyAHRS.c **** 	qb = q[1];
+ 313              		.loc 1 200 2 is_stmt 1 view .LVU102
+ 200:control-base/algo/src/MahonyAHRS.c **** 	qb = q[1];
+ 314              		.loc 1 200 5 is_stmt 0 view .LVU103
+ 315 0176 D4ED006A 		vldr.32	s13, [r4]
+ 316              	.LVL34:
+ 201:control-base/algo/src/MahonyAHRS.c **** 	qc = q[2];
+ 317              		.loc 1 201 2 is_stmt 1 view .LVU104
+ 201:control-base/algo/src/MahonyAHRS.c **** 	qc = q[2];
+ 318              		.loc 1 201 5 is_stmt 0 view .LVU105
+ 319 017a 94ED017A 		vldr.32	s14, [r4, #4]
+ 320              	.LVL35:
+ 202:control-base/algo/src/MahonyAHRS.c **** 	q[0] += (-qb * gx - qc * gy - q[3] * gz);
+ 321              		.loc 1 202 2 is_stmt 1 view .LVU106
+ 202:control-base/algo/src/MahonyAHRS.c **** 	q[0] += (-qb * gx - qc * gy - q[3] * gz);
+ 322              		.loc 1 202 5 is_stmt 0 view .LVU107
+ 323 017e D4ED027A 		vldr.32	s15, [r4, #8]
+ 324              	.LVL36:
+ 203:control-base/algo/src/MahonyAHRS.c **** 	q[1] += (qa * gx + qc * gz - q[3] * gy);
+ 325              		.loc 1 203 2 is_stmt 1 view .LVU108
+ 203:control-base/algo/src/MahonyAHRS.c **** 	q[1] += (qa * gx + qc * gz - q[3] * gy);
+ 326              		.loc 1 203 15 is_stmt 0 view .LVU109
+ 327 0182 27EE409A 		vnmul.f32	s18, s14, s0
+ 203:control-base/algo/src/MahonyAHRS.c **** 	q[1] += (qa * gx + qc * gz - q[3] * gy);
+ 328              		.loc 1 203 25 view .LVU110
+ 329 0186 20EEA76A 		vmul.f32	s12, s1, s15
+ 203:control-base/algo/src/MahonyAHRS.c **** 	q[1] += (qa * gx + qc * gz - q[3] * gy);
+ 330              		.loc 1 203 20 view .LVU111
+ 331 018a 39EE469A 		vsub.f32	s18, s18, s12
+ 203:control-base/algo/src/MahonyAHRS.c **** 	q[1] += (qa * gx + qc * gz - q[3] * gy);
+ 332              		.loc 1 203 33 view .LVU112
+ 333 018e D4ED039A 		vldr.32	s19, [r4, #12]
+ 203:control-base/algo/src/MahonyAHRS.c **** 	q[1] += (qa * gx + qc * gz - q[3] * gy);
+ 334              		.loc 1 203 37 view .LVU113
+ 335 0192 29EE816A 		vmul.f32	s12, s19, s2
+ 203:control-base/algo/src/MahonyAHRS.c **** 	q[1] += (qa * gx + qc * gz - q[3] * gy);
+ 336              		.loc 1 203 30 view .LVU114
+ 337 0196 39EE469A 		vsub.f32	s18, s18, s12
+ 203:control-base/algo/src/MahonyAHRS.c **** 	q[1] += (qa * gx + qc * gz - q[3] * gy);
+ 338              		.loc 1 203 7 view .LVU115
+ 339 019a 39EE269A 		vadd.f32	s18, s18, s13
+ 340 019e 84ED009A 		vstr.32	s18, [r4]
+ 204:control-base/algo/src/MahonyAHRS.c **** 	q[2] += (qa * gy - qb * gz + q[3] * gx);
+ 341              		.loc 1 204 2 is_stmt 1 view .LVU116
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 13
+
+
+ 204:control-base/algo/src/MahonyAHRS.c **** 	q[2] += (qa * gy - qb * gz + q[3] * gx);
+ 342              		.loc 1 204 14 is_stmt 0 view .LVU117
+ 343 01a2 60EE268A 		vmul.f32	s17, s0, s13
+ 204:control-base/algo/src/MahonyAHRS.c **** 	q[2] += (qa * gy - qb * gz + q[3] * gx);
+ 344              		.loc 1 204 24 view .LVU118
+ 345 01a6 21EE276A 		vmul.f32	s12, s2, s15
+ 204:control-base/algo/src/MahonyAHRS.c **** 	q[2] += (qa * gy - qb * gz + q[3] * gx);
+ 346              		.loc 1 204 19 view .LVU119
+ 347 01aa 78EE868A 		vadd.f32	s17, s17, s12
+ 204:control-base/algo/src/MahonyAHRS.c **** 	q[2] += (qa * gy - qb * gz + q[3] * gx);
+ 348              		.loc 1 204 36 view .LVU120
+ 349 01ae 29EEA06A 		vmul.f32	s12, s19, s1
+ 204:control-base/algo/src/MahonyAHRS.c **** 	q[2] += (qa * gy - qb * gz + q[3] * gx);
+ 350              		.loc 1 204 29 view .LVU121
+ 351 01b2 78EEC68A 		vsub.f32	s17, s17, s12
+ 204:control-base/algo/src/MahonyAHRS.c **** 	q[2] += (qa * gy - qb * gz + q[3] * gx);
+ 352              		.loc 1 204 7 view .LVU122
+ 353 01b6 78EE878A 		vadd.f32	s17, s17, s14
+ 354 01ba C4ED018A 		vstr.32	s17, [r4, #4]
+ 205:control-base/algo/src/MahonyAHRS.c **** 	q[3] += (qa * gz + qb * gy - qc * gx); 
+ 355              		.loc 1 205 2 is_stmt 1 view .LVU123
+ 205:control-base/algo/src/MahonyAHRS.c **** 	q[3] += (qa * gz + qb * gy - qc * gx); 
+ 356              		.loc 1 205 14 is_stmt 0 view .LVU124
+ 357 01be 20EEA68A 		vmul.f32	s16, s1, s13
+ 205:control-base/algo/src/MahonyAHRS.c **** 	q[3] += (qa * gz + qb * gy - qc * gx); 
+ 358              		.loc 1 205 24 view .LVU125
+ 359 01c2 21EE076A 		vmul.f32	s12, s2, s14
+ 205:control-base/algo/src/MahonyAHRS.c **** 	q[3] += (qa * gz + qb * gy - qc * gx); 
+ 360              		.loc 1 205 19 view .LVU126
+ 361 01c6 38EE468A 		vsub.f32	s16, s16, s12
+ 205:control-base/algo/src/MahonyAHRS.c **** 	q[3] += (qa * gz + qb * gy - qc * gx); 
+ 362              		.loc 1 205 36 view .LVU127
+ 363 01ca 29EE806A 		vmul.f32	s12, s19, s0
+ 205:control-base/algo/src/MahonyAHRS.c **** 	q[3] += (qa * gz + qb * gy - qc * gx); 
+ 364              		.loc 1 205 29 view .LVU128
+ 365 01ce 38EE068A 		vadd.f32	s16, s16, s12
+ 205:control-base/algo/src/MahonyAHRS.c **** 	q[3] += (qa * gz + qb * gy - qc * gx); 
+ 366              		.loc 1 205 7 view .LVU129
+ 367 01d2 38EE278A 		vadd.f32	s16, s16, s15
+ 368 01d6 84ED028A 		vstr.32	s16, [r4, #8]
+ 206:control-base/algo/src/MahonyAHRS.c **** 	
+ 369              		.loc 1 206 2 is_stmt 1 view .LVU130
+ 206:control-base/algo/src/MahonyAHRS.c **** 	
+ 370              		.loc 1 206 14 is_stmt 0 view .LVU131
+ 371 01da 21EE261A 		vmul.f32	s2, s2, s13
+ 372              	.LVL37:
+ 206:control-base/algo/src/MahonyAHRS.c **** 	
+ 373              		.loc 1 206 24 view .LVU132
+ 374 01de 60EE870A 		vmul.f32	s1, s1, s14
+ 375              	.LVL38:
+ 206:control-base/algo/src/MahonyAHRS.c **** 	
+ 376              		.loc 1 206 19 view .LVU133
+ 377 01e2 31EE201A 		vadd.f32	s2, s2, s1
+ 206:control-base/algo/src/MahonyAHRS.c **** 	
+ 378              		.loc 1 206 34 view .LVU134
+ 379 01e6 20EE270A 		vmul.f32	s0, s0, s15
+ 380              	.LVL39:
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 14
+
+
+ 206:control-base/algo/src/MahonyAHRS.c **** 	
+ 381              		.loc 1 206 29 view .LVU135
+ 382 01ea 31EE401A 		vsub.f32	s2, s2, s0
+ 206:control-base/algo/src/MahonyAHRS.c **** 	
+ 383              		.loc 1 206 7 view .LVU136
+ 384 01ee 79EE819A 		vadd.f32	s19, s19, s2
+ 385 01f2 C4ED039A 		vstr.32	s19, [r4, #12]
+ 209:control-base/algo/src/MahonyAHRS.c **** 	q[0] *= recipNorm;
+ 386              		.loc 1 209 2 is_stmt 1 view .LVU137
+ 209:control-base/algo/src/MahonyAHRS.c **** 	q[0] *= recipNorm;
+ 387              		.loc 1 209 27 is_stmt 0 view .LVU138
+ 388 01f6 69EE097A 		vmul.f32	s15, s18, s18
+ 389              	.LVL40:
+ 209:control-base/algo/src/MahonyAHRS.c **** 	q[0] *= recipNorm;
+ 390              		.loc 1 209 41 view .LVU139
+ 391 01fa 28EEA87A 		vmul.f32	s14, s17, s17
+ 392              	.LVL41:
+ 209:control-base/algo/src/MahonyAHRS.c **** 	q[0] *= recipNorm;
+ 393              		.loc 1 209 34 view .LVU140
+ 394 01fe 77EE877A 		vadd.f32	s15, s15, s14
+ 209:control-base/algo/src/MahonyAHRS.c **** 	q[0] *= recipNorm;
+ 395              		.loc 1 209 55 view .LVU141
+ 396 0202 28EE087A 		vmul.f32	s14, s16, s16
+ 209:control-base/algo/src/MahonyAHRS.c **** 	q[0] *= recipNorm;
+ 397              		.loc 1 209 48 view .LVU142
+ 398 0206 77EE877A 		vadd.f32	s15, s15, s14
+ 209:control-base/algo/src/MahonyAHRS.c **** 	q[0] *= recipNorm;
+ 399              		.loc 1 209 69 view .LVU143
+ 400 020a 29EEA90A 		vmul.f32	s0, s19, s19
+ 209:control-base/algo/src/MahonyAHRS.c **** 	q[0] *= recipNorm;
+ 401              		.loc 1 209 14 view .LVU144
+ 402 020e 37EE800A 		vadd.f32	s0, s15, s0
+ 403 0212 FFF7FEFF 		bl	invSqrt
+ 404              	.LVL42:
+ 210:control-base/algo/src/MahonyAHRS.c **** 	q[1] *= recipNorm;
+ 405              		.loc 1 210 2 is_stmt 1 view .LVU145
+ 210:control-base/algo/src/MahonyAHRS.c **** 	q[1] *= recipNorm;
+ 406              		.loc 1 210 7 is_stmt 0 view .LVU146
+ 407 0216 29EE009A 		vmul.f32	s18, s18, s0
+ 408 021a 84ED009A 		vstr.32	s18, [r4]
+ 211:control-base/algo/src/MahonyAHRS.c **** 	q[2] *= recipNorm;
+ 409              		.loc 1 211 2 is_stmt 1 view .LVU147
+ 211:control-base/algo/src/MahonyAHRS.c **** 	q[2] *= recipNorm;
+ 410              		.loc 1 211 7 is_stmt 0 view .LVU148
+ 411 021e 68EE808A 		vmul.f32	s17, s17, s0
+ 412 0222 C4ED018A 		vstr.32	s17, [r4, #4]
+ 212:control-base/algo/src/MahonyAHRS.c **** 	q[3] *= recipNorm;
+ 413              		.loc 1 212 2 is_stmt 1 view .LVU149
+ 212:control-base/algo/src/MahonyAHRS.c **** 	q[3] *= recipNorm;
+ 414              		.loc 1 212 7 is_stmt 0 view .LVU150
+ 415 0226 28EE008A 		vmul.f32	s16, s16, s0
+ 416 022a 84ED028A 		vstr.32	s16, [r4, #8]
+ 213:control-base/algo/src/MahonyAHRS.c **** }
+ 417              		.loc 1 213 2 is_stmt 1 view .LVU151
+ 213:control-base/algo/src/MahonyAHRS.c **** }
+ 418              		.loc 1 213 7 is_stmt 0 view .LVU152
+ 419 022e 69EE809A 		vmul.f32	s19, s19, s0
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 15
+
+
+ 420 0232 C4ED039A 		vstr.32	s19, [r4, #12]
+ 214:control-base/algo/src/MahonyAHRS.c **** 
+ 421              		.loc 1 214 1 view .LVU153
+ 422 0236 BDEC068B 		vldm	sp!, {d8-d10}
+ 423              	.LCFI2:
+ 424              		.cfi_remember_state
+ 425              		.cfi_restore 84
+ 426              		.cfi_restore 85
+ 427              		.cfi_restore 82
+ 428              		.cfi_restore 83
+ 429              		.cfi_restore 80
+ 430              		.cfi_restore 81
+ 431              		.cfi_def_cfa_offset 8
+ 432 023a 10BD     		pop	{r4, pc}
+ 433              	.LVL43:
+ 434              	.L11:
+ 435              	.LCFI3:
+ 436              		.cfi_restore_state
+ 185:control-base/algo/src/MahonyAHRS.c **** 			integralFBy = 0.0f;
+ 437              		.loc 1 185 4 is_stmt 1 view .LVU154
+ 185:control-base/algo/src/MahonyAHRS.c **** 			integralFBy = 0.0f;
+ 438              		.loc 1 185 16 is_stmt 0 view .LVU155
+ 439 023c 0023     		movs	r3, #0
+ 440 023e 054A     		ldr	r2, .L13+8
+ 441 0240 1360     		str	r3, [r2]	@ float
+ 442              	.LVL44:
+ 186:control-base/algo/src/MahonyAHRS.c **** 			integralFBz = 0.0f;
+ 443              		.loc 1 186 4 is_stmt 1 view .LVU156
+ 186:control-base/algo/src/MahonyAHRS.c **** 			integralFBz = 0.0f;
+ 444              		.loc 1 186 16 is_stmt 0 view .LVU157
+ 445 0242 054A     		ldr	r2, .L13+12
+ 446 0244 1360     		str	r3, [r2]	@ float
+ 187:control-base/algo/src/MahonyAHRS.c **** 		}
+ 447              		.loc 1 187 4 is_stmt 1 view .LVU158
+ 187:control-base/algo/src/MahonyAHRS.c **** 		}
+ 448              		.loc 1 187 16 is_stmt 0 view .LVU159
+ 449 0246 054A     		ldr	r2, .L13+16
+ 450 0248 1360     		str	r3, [r2]	@ float
+ 451 024a 79E7     		b	.L9
+ 452              	.L14:
+ 453              		.align	2
+ 454              	.L13:
+ 455 024c 00000000 		.word	twoKi
+ 456 0250 6F12833A 		.word	981668463
+ 457 0254 00000000 		.word	integralFBx
+ 458 0258 00000000 		.word	integralFBy
+ 459 025c 00000000 		.word	integralFBz
+ 460 0260 00000000 		.word	twoKp
+ 461 0264 6F12033A 		.word	973279855
+ 462              		.cfi_endproc
+ 463              	.LFE1:
+ 465              		.section	.text.MahonyAHRSupdate,"ax",%progbits
+ 466              		.align	1
+ 467              		.global	MahonyAHRSupdate
+ 468              		.syntax unified
+ 469              		.thumb
+ 470              		.thumb_func
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 16
+
+
+ 472              	MahonyAHRSupdate:
+ 473              	.LVL45:
+ 474              	.LFB0:
+  46:control-base/algo/src/MahonyAHRS.c **** 	float recipNorm;
+ 475              		.loc 1 46 125 is_stmt 1 view -0
+ 476              		.cfi_startproc
+ 477              		@ args = 0, pretend = 0, frame = 24
+ 478              		@ frame_needed = 0, uses_anonymous_args = 0
+  46:control-base/algo/src/MahonyAHRS.c **** 	float recipNorm;
+ 479              		.loc 1 46 125 is_stmt 0 view .LVU161
+ 480 0000 10B5     		push	{r4, lr}
+ 481              	.LCFI4:
+ 482              		.cfi_def_cfa_offset 8
+ 483              		.cfi_offset 4, -8
+ 484              		.cfi_offset 14, -4
+ 485 0002 2DED108B 		vpush.64	{d8, d9, d10, d11, d12, d13, d14, d15}
+ 486              	.LCFI5:
+ 487              		.cfi_def_cfa_offset 72
+ 488              		.cfi_offset 80, -72
+ 489              		.cfi_offset 81, -68
+ 490              		.cfi_offset 82, -64
+ 491              		.cfi_offset 83, -60
+ 492              		.cfi_offset 84, -56
+ 493              		.cfi_offset 85, -52
+ 494              		.cfi_offset 86, -48
+ 495              		.cfi_offset 87, -44
+ 496              		.cfi_offset 88, -40
+ 497              		.cfi_offset 89, -36
+ 498              		.cfi_offset 90, -32
+ 499              		.cfi_offset 91, -28
+ 500              		.cfi_offset 92, -24
+ 501              		.cfi_offset 93, -20
+ 502              		.cfi_offset 94, -16
+ 503              		.cfi_offset 95, -12
+ 504 0006 86B0     		sub	sp, sp, #24
+ 505              	.LCFI6:
+ 506              		.cfi_def_cfa_offset 96
+ 507 0008 0446     		mov	r4, r0
+ 508 000a B0EE40AA 		vmov.f32	s20, s0
+ 509 000e F0EE60AA 		vmov.f32	s21, s1
+ 510 0012 B0EE418A 		vmov.f32	s16, s2
+ 511 0016 F0EE618A 		vmov.f32	s17, s3
+ 512 001a B0EE42BA 		vmov.f32	s22, s4
+ 513 001e B0EE62CA 		vmov.f32	s24, s5
+ 514 0022 B0EE439A 		vmov.f32	s18, s6
+ 515 0026 F0EE63BA 		vmov.f32	s23, s7
+ 516 002a F0EE449A 		vmov.f32	s19, s8
+  47:control-base/algo/src/MahonyAHRS.c ****     float q0q0, q0q1, q0q2, q0q3, q1q1, q1q2, q1q3, q2q2, q2q3, q3q3;  
+ 517              		.loc 1 47 2 is_stmt 1 view .LVU162
+  48:control-base/algo/src/MahonyAHRS.c **** 	float hx, hy, bx, bz;
+ 518              		.loc 1 48 5 view .LVU163
+  49:control-base/algo/src/MahonyAHRS.c **** 	float halfvx, halfvy, halfvz, halfwx, halfwy, halfwz;
+ 519              		.loc 1 49 2 view .LVU164
+  50:control-base/algo/src/MahonyAHRS.c **** 	float halfex, halfey, halfez;
+ 520              		.loc 1 50 2 view .LVU165
+  51:control-base/algo/src/MahonyAHRS.c **** 	float qa, qb, qc;
+ 521              		.loc 1 51 2 view .LVU166
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 17
+
+
+  52:control-base/algo/src/MahonyAHRS.c **** 
+ 522              		.loc 1 52 2 view .LVU167
+  55:control-base/algo/src/MahonyAHRS.c **** 		MahonyAHRSupdateIMU(q, gx, gy, gz, ax, ay, az);
+ 523              		.loc 1 55 2 view .LVU168
+  55:control-base/algo/src/MahonyAHRS.c **** 		MahonyAHRSupdateIMU(q, gx, gy, gz, ax, ay, az);
+ 524              		.loc 1 55 4 is_stmt 0 view .LVU169
+ 525 002e B5EE403A 		vcmp.f32	s6, #0
+ 526 0032 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 527 0036 0AD1     		bne	.L16
+  55:control-base/algo/src/MahonyAHRS.c **** 		MahonyAHRSupdateIMU(q, gx, gy, gz, ax, ay, az);
+ 528              		.loc 1 55 18 discriminator 1 view .LVU170
+ 529 0038 F5EE403A 		vcmp.f32	s7, #0
+ 530 003c F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 531 0040 05D1     		bne	.L16
+  55:control-base/algo/src/MahonyAHRS.c **** 		MahonyAHRSupdateIMU(q, gx, gy, gz, ax, ay, az);
+ 532              		.loc 1 55 34 discriminator 2 view .LVU171
+ 533 0042 B5EE404A 		vcmp.f32	s8, #0
+ 534 0046 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 535 004a 00F0B181 		beq	.L26
+ 536              	.L16:
+  61:control-base/algo/src/MahonyAHRS.c **** 
+ 537              		.loc 1 61 2 is_stmt 1 view .LVU172
+  61:control-base/algo/src/MahonyAHRS.c **** 
+ 538              		.loc 1 61 4 is_stmt 0 view .LVU173
+ 539 004e F5EE408A 		vcmp.f32	s17, #0
+ 540 0052 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 541 0056 0AD1     		bne	.L18
+  61:control-base/algo/src/MahonyAHRS.c **** 
+ 542              		.loc 1 61 20 discriminator 1 view .LVU174
+ 543 0058 B5EE40BA 		vcmp.f32	s22, #0
+ 544 005c F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 545 0060 05D1     		bne	.L18
+  61:control-base/algo/src/MahonyAHRS.c **** 
+ 546              		.loc 1 61 5 discriminator 2 view .LVU175
+ 547 0062 B5EE40CA 		vcmp.f32	s24, #0
+ 548 0066 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 549 006a 00F03581 		beq	.L19
+ 550              	.L18:
+  64:control-base/algo/src/MahonyAHRS.c **** 		ax *= recipNorm;
+ 551              		.loc 1 64 3 is_stmt 1 view .LVU176
+  64:control-base/algo/src/MahonyAHRS.c **** 		ax *= recipNorm;
+ 552              		.loc 1 64 26 is_stmt 0 view .LVU177
+ 553 006e 68EEA87A 		vmul.f32	s15, s17, s17
+  64:control-base/algo/src/MahonyAHRS.c **** 		ax *= recipNorm;
+ 554              		.loc 1 64 36 view .LVU178
+ 555 0072 2BEE0B7A 		vmul.f32	s14, s22, s22
+  64:control-base/algo/src/MahonyAHRS.c **** 		ax *= recipNorm;
+ 556              		.loc 1 64 31 view .LVU179
+ 557 0076 77EE877A 		vadd.f32	s15, s15, s14
+  64:control-base/algo/src/MahonyAHRS.c **** 		ax *= recipNorm;
+ 558              		.loc 1 64 46 view .LVU180
+ 559 007a 2CEE0C0A 		vmul.f32	s0, s24, s24
+ 560              	.LVL46:
+  64:control-base/algo/src/MahonyAHRS.c **** 		ax *= recipNorm;
+ 561              		.loc 1 64 15 view .LVU181
+ 562 007e 37EE800A 		vadd.f32	s0, s15, s0
+ 563 0082 FFF7FEFF 		bl	invSqrt
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 18
+
+
+ 564              	.LVL47:
+  65:control-base/algo/src/MahonyAHRS.c **** 		ay *= recipNorm;
+ 565              		.loc 1 65 3 is_stmt 1 view .LVU182
+  65:control-base/algo/src/MahonyAHRS.c **** 		ay *= recipNorm;
+ 566              		.loc 1 65 6 is_stmt 0 view .LVU183
+ 567 0086 68EE805A 		vmul.f32	s11, s17, s0
+ 568 008a CDED025A 		vstr.32	s11, [sp, #8]
+ 569              	.LVL48:
+  66:control-base/algo/src/MahonyAHRS.c **** 		az *= recipNorm;     
+ 570              		.loc 1 66 3 is_stmt 1 view .LVU184
+  66:control-base/algo/src/MahonyAHRS.c **** 		az *= recipNorm;     
+ 571              		.loc 1 66 6 is_stmt 0 view .LVU185
+ 572 008e 2BEE005A 		vmul.f32	s10, s22, s0
+ 573 0092 8DED035A 		vstr.32	s10, [sp, #12]
+ 574              	.LVL49:
+  67:control-base/algo/src/MahonyAHRS.c **** 
+ 575              		.loc 1 67 3 is_stmt 1 view .LVU186
+  67:control-base/algo/src/MahonyAHRS.c **** 
+ 576              		.loc 1 67 6 is_stmt 0 view .LVU187
+ 577 0096 6CEE004A 		vmul.f32	s9, s24, s0
+ 578 009a CDED044A 		vstr.32	s9, [sp, #16]
+ 579              	.LVL50:
+  70:control-base/algo/src/MahonyAHRS.c **** 		mx *= recipNorm;
+ 580              		.loc 1 70 3 is_stmt 1 view .LVU188
+  70:control-base/algo/src/MahonyAHRS.c **** 		mx *= recipNorm;
+ 581              		.loc 1 70 26 is_stmt 0 view .LVU189
+ 582 009e 69EE097A 		vmul.f32	s15, s18, s18
+  70:control-base/algo/src/MahonyAHRS.c **** 		mx *= recipNorm;
+ 583              		.loc 1 70 36 view .LVU190
+ 584 00a2 2BEEAB7A 		vmul.f32	s14, s23, s23
+  70:control-base/algo/src/MahonyAHRS.c **** 		mx *= recipNorm;
+ 585              		.loc 1 70 31 view .LVU191
+ 586 00a6 77EE877A 		vadd.f32	s15, s15, s14
+  70:control-base/algo/src/MahonyAHRS.c **** 		mx *= recipNorm;
+ 587              		.loc 1 70 46 view .LVU192
+ 588 00aa 29EEA90A 		vmul.f32	s0, s19, s19
+ 589              	.LVL51:
+  70:control-base/algo/src/MahonyAHRS.c **** 		mx *= recipNorm;
+ 590              		.loc 1 70 15 view .LVU193
+ 591 00ae 37EE800A 		vadd.f32	s0, s15, s0
+ 592 00b2 FFF7FEFF 		bl	invSqrt
+ 593              	.LVL52:
+  71:control-base/algo/src/MahonyAHRS.c **** 		my *= recipNorm;
+ 594              		.loc 1 71 3 is_stmt 1 view .LVU194
+  71:control-base/algo/src/MahonyAHRS.c **** 		my *= recipNorm;
+ 595              		.loc 1 71 6 is_stmt 0 view .LVU195
+ 596 00b6 29EE009A 		vmul.f32	s18, s18, s0
+ 597              	.LVL53:
+  72:control-base/algo/src/MahonyAHRS.c **** 		mz *= recipNorm;   
+ 598              		.loc 1 72 3 is_stmt 1 view .LVU196
+  72:control-base/algo/src/MahonyAHRS.c **** 		mz *= recipNorm;   
+ 599              		.loc 1 72 6 is_stmt 0 view .LVU197
+ 600 00ba 6BEE80BA 		vmul.f32	s23, s23, s0
+ 601              	.LVL54:
+  73:control-base/algo/src/MahonyAHRS.c **** 
+ 602              		.loc 1 73 3 is_stmt 1 view .LVU198
+  73:control-base/algo/src/MahonyAHRS.c **** 
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 19
+
+
+ 603              		.loc 1 73 6 is_stmt 0 view .LVU199
+ 604 00be 69EE809A 		vmul.f32	s19, s19, s0
+ 605              	.LVL55:
+  76:control-base/algo/src/MahonyAHRS.c ****         q0q1 = q[0] * q[1];
+ 606              		.loc 1 76 9 is_stmt 1 view .LVU200
+  76:control-base/algo/src/MahonyAHRS.c ****         q0q1 = q[0] * q[1];
+ 607              		.loc 1 76 17 is_stmt 0 view .LVU201
+ 608 00c2 D4ED007A 		vldr.32	s15, [r4]
+  76:control-base/algo/src/MahonyAHRS.c ****         q0q1 = q[0] * q[1];
+ 609              		.loc 1 76 14 view .LVU202
+ 610 00c6 27EEA77A 		vmul.f32	s14, s15, s15
+ 611 00ca 8DED057A 		vstr.32	s14, [sp, #20]
+ 612              	.LVL56:
+  77:control-base/algo/src/MahonyAHRS.c ****         q0q2 = q[0] * q[2];
+ 613              		.loc 1 77 9 is_stmt 1 view .LVU203
+  77:control-base/algo/src/MahonyAHRS.c ****         q0q2 = q[0] * q[2];
+ 614              		.loc 1 77 24 is_stmt 0 view .LVU204
+ 615 00ce 94ED01BA 		vldr.32	s22, [r4, #4]
+  77:control-base/algo/src/MahonyAHRS.c ****         q0q2 = q[0] * q[2];
+ 616              		.loc 1 77 14 view .LVU205
+ 617 00d2 27EE8BFA 		vmul.f32	s30, s15, s22
+ 618              	.LVL57:
+  78:control-base/algo/src/MahonyAHRS.c ****         q0q3 = q[0] * q[3];
+ 619              		.loc 1 78 9 is_stmt 1 view .LVU206
+  78:control-base/algo/src/MahonyAHRS.c ****         q0q3 = q[0] * q[3];
+ 620              		.loc 1 78 24 is_stmt 0 view .LVU207
+ 621 00d6 D4ED028A 		vldr.32	s17, [r4, #8]
+  78:control-base/algo/src/MahonyAHRS.c ****         q0q3 = q[0] * q[3];
+ 622              		.loc 1 78 14 view .LVU208
+ 623 00da 67EEA8FA 		vmul.f32	s31, s15, s17
+ 624              	.LVL58:
+  79:control-base/algo/src/MahonyAHRS.c ****         q1q1 = q[1] * q[1];
+ 625              		.loc 1 79 9 is_stmt 1 view .LVU209
+  79:control-base/algo/src/MahonyAHRS.c ****         q1q1 = q[1] * q[1];
+ 626              		.loc 1 79 24 is_stmt 0 view .LVU210
+ 627 00de 94ED03DA 		vldr.32	s26, [r4, #12]
+  79:control-base/algo/src/MahonyAHRS.c ****         q1q1 = q[1] * q[1];
+ 628              		.loc 1 79 14 view .LVU211
+ 629 00e2 67EE8D7A 		vmul.f32	s15, s15, s26
+ 630              	.LVL59:
+  80:control-base/algo/src/MahonyAHRS.c ****         q1q2 = q[1] * q[2];
+ 631              		.loc 1 80 9 is_stmt 1 view .LVU212
+  80:control-base/algo/src/MahonyAHRS.c ****         q1q2 = q[1] * q[2];
+ 632              		.loc 1 80 14 is_stmt 0 view .LVU213
+ 633 00e6 6BEE0BCA 		vmul.f32	s25, s22, s22
+ 634              	.LVL60:
+  81:control-base/algo/src/MahonyAHRS.c ****         q1q3 = q[1] * q[3];
+ 635              		.loc 1 81 9 is_stmt 1 view .LVU214
+  81:control-base/algo/src/MahonyAHRS.c ****         q1q3 = q[1] * q[3];
+ 636              		.loc 1 81 14 is_stmt 0 view .LVU215
+ 637 00ea 6BEE286A 		vmul.f32	s13, s22, s17
+ 638              	.LVL61:
+  82:control-base/algo/src/MahonyAHRS.c ****         q2q2 = q[2] * q[2];
+ 639              		.loc 1 82 9 is_stmt 1 view .LVU216
+  82:control-base/algo/src/MahonyAHRS.c ****         q2q2 = q[2] * q[2];
+ 640              		.loc 1 82 14 is_stmt 0 view .LVU217
+ 641 00ee 2BEE0DBA 		vmul.f32	s22, s22, s26
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 20
+
+
+ 642              	.LVL62:
+  83:control-base/algo/src/MahonyAHRS.c ****         q2q3 = q[2] * q[3];
+ 643              		.loc 1 83 9 is_stmt 1 view .LVU218
+  83:control-base/algo/src/MahonyAHRS.c ****         q2q3 = q[2] * q[3];
+ 644              		.loc 1 83 14 is_stmt 0 view .LVU219
+ 645 00f2 68EEA8EA 		vmul.f32	s29, s17, s17
+ 646              	.LVL63:
+  84:control-base/algo/src/MahonyAHRS.c ****         q3q3 = q[3] * q[3];   
+ 647              		.loc 1 84 9 is_stmt 1 view .LVU220
+  84:control-base/algo/src/MahonyAHRS.c ****         q3q3 = q[3] * q[3];   
+ 648              		.loc 1 84 14 is_stmt 0 view .LVU221
+ 649 00f6 68EE8D8A 		vmul.f32	s17, s17, s26
+ 650              	.LVL64:
+  85:control-base/algo/src/MahonyAHRS.c **** 
+ 651              		.loc 1 85 9 is_stmt 1 view .LVU222
+  85:control-base/algo/src/MahonyAHRS.c **** 
+ 652              		.loc 1 85 14 is_stmt 0 view .LVU223
+ 653 00fa 2DEE0DDA 		vmul.f32	s26, s26, s26
+ 654              	.LVL65:
+  88:control-base/algo/src/MahonyAHRS.c ****         hy = 2.0f * (mx * (q1q2 + q0q3) + my * (0.5f - q1q1 - q3q3) + mz * (q2q3 - q0q1));
+ 655              		.loc 1 88 9 is_stmt 1 view .LVU224
+  88:control-base/algo/src/MahonyAHRS.c ****         hy = 2.0f * (mx * (q1q2 + q0q3) + my * (0.5f - q1q1 - q3q3) + mz * (q2q3 - q0q1));
+ 656              		.loc 1 88 33 is_stmt 0 view .LVU225
+ 657 00fe B6EE00EA 		vmov.f32	s28, #5.0e-1
+ 658 0102 3EEE6ECA 		vsub.f32	s24, s28, s29
+  88:control-base/algo/src/MahonyAHRS.c ****         hy = 2.0f * (mx * (q1q2 + q0q3) + my * (0.5f - q1q1 - q3q3) + mz * (q2q3 - q0q1));
+ 659              		.loc 1 88 40 view .LVU226
+ 660 0106 3CEE4DCA 		vsub.f32	s24, s24, s26
+  88:control-base/algo/src/MahonyAHRS.c ****         hy = 2.0f * (mx * (q1q2 + q0q3) + my * (0.5f - q1q1 - q3q3) + mz * (q2q3 - q0q1));
+ 661              		.loc 1 88 25 view .LVU227
+ 662 010a 2CEE097A 		vmul.f32	s14, s24, s18
+ 663              	.LVL66:
+  88:control-base/algo/src/MahonyAHRS.c ****         hy = 2.0f * (mx * (q1q2 + q0q3) + my * (0.5f - q1q1 - q3q3) + mz * (q2q3 - q0q1));
+ 664              		.loc 1 88 61 view .LVU228
+ 665 010e 76EEE7DA 		vsub.f32	s27, s13, s15
+  88:control-base/algo/src/MahonyAHRS.c ****         hy = 2.0f * (mx * (q1q2 + q0q3) + my * (0.5f - q1q1 - q3q3) + mz * (q2q3 - q0q1));
+ 666              		.loc 1 88 53 view .LVU229
+ 667 0112 2DEEAB6A 		vmul.f32	s12, s27, s23
+  88:control-base/algo/src/MahonyAHRS.c ****         hy = 2.0f * (mx * (q1q2 + q0q3) + my * (0.5f - q1q1 - q3q3) + mz * (q2q3 - q0q1));
+ 668              		.loc 1 88 48 view .LVU230
+ 669 0116 37EE067A 		vadd.f32	s14, s14, s12
+  88:control-base/algo/src/MahonyAHRS.c ****         hy = 2.0f * (mx * (q1q2 + q0q3) + my * (0.5f - q1q1 - q3q3) + mz * (q2q3 - q0q1));
+ 670              		.loc 1 88 82 view .LVU231
+ 671 011a 3FEE8B6A 		vadd.f32	s12, s31, s22
+  88:control-base/algo/src/MahonyAHRS.c ****         hy = 2.0f * (mx * (q1q2 + q0q3) + my * (0.5f - q1q1 - q3q3) + mz * (q2q3 - q0q1));
+ 672              		.loc 1 88 74 view .LVU232
+ 673 011e 8DED016A 		vstr.32	s12, [sp, #4]
+ 674 0122 26EE296A 		vmul.f32	s12, s12, s19
+  88:control-base/algo/src/MahonyAHRS.c ****         hy = 2.0f * (mx * (q1q2 + q0q3) + my * (0.5f - q1q1 - q3q3) + mz * (q2q3 - q0q1));
+ 675              		.loc 1 88 69 view .LVU233
+ 676 0126 37EE067A 		vadd.f32	s14, s14, s12
+  88:control-base/algo/src/MahonyAHRS.c ****         hy = 2.0f * (mx * (q1q2 + q0q3) + my * (0.5f - q1q1 - q3q3) + mz * (q2q3 - q0q1));
+ 677              		.loc 1 88 12 view .LVU234
+ 678 012a 37EE077A 		vadd.f32	s14, s14, s14
+ 679              	.LVL67:
+  89:control-base/algo/src/MahonyAHRS.c ****         bx = sqrt(hx * hx + hy * hy);
+ 680              		.loc 1 89 9 is_stmt 1 view .LVU235
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 21
+
+
+  89:control-base/algo/src/MahonyAHRS.c ****         bx = sqrt(hx * hx + hy * hy);
+ 681              		.loc 1 89 33 is_stmt 0 view .LVU236
+ 682 012e 77EEA67A 		vadd.f32	s15, s15, s13
+ 683              	.LVL68:
+  89:control-base/algo/src/MahonyAHRS.c ****         bx = sqrt(hx * hx + hy * hy);
+ 684              		.loc 1 89 25 view .LVU237
+ 685 0132 67EE897A 		vmul.f32	s15, s15, s18
+  89:control-base/algo/src/MahonyAHRS.c ****         bx = sqrt(hx * hx + hy * hy);
+ 686              		.loc 1 89 54 view .LVU238
+ 687 0136 7EEE6CCA 		vsub.f32	s25, s28, s25
+ 688              	.LVL69:
+  89:control-base/algo/src/MahonyAHRS.c ****         bx = sqrt(hx * hx + hy * hy);
+ 689              		.loc 1 89 61 view .LVU239
+ 690 013a 7CEECD6A 		vsub.f32	s13, s25, s26
+ 691              	.LVL70:
+  89:control-base/algo/src/MahonyAHRS.c ****         bx = sqrt(hx * hx + hy * hy);
+ 692              		.loc 1 89 46 view .LVU240
+ 693 013e 66EEAB6A 		vmul.f32	s13, s13, s23
+  89:control-base/algo/src/MahonyAHRS.c ****         bx = sqrt(hx * hx + hy * hy);
+ 694              		.loc 1 89 41 view .LVU241
+ 695 0142 77EEA67A 		vadd.f32	s15, s15, s13
+  89:control-base/algo/src/MahonyAHRS.c ****         bx = sqrt(hx * hx + hy * hy);
+ 696              		.loc 1 89 82 view .LVU242
+ 697 0146 78EECF6A 		vsub.f32	s13, s17, s30
+  89:control-base/algo/src/MahonyAHRS.c ****         bx = sqrt(hx * hx + hy * hy);
+ 698              		.loc 1 89 74 view .LVU243
+ 699 014a 66EEA96A 		vmul.f32	s13, s13, s19
+  89:control-base/algo/src/MahonyAHRS.c ****         bx = sqrt(hx * hx + hy * hy);
+ 700              		.loc 1 89 69 view .LVU244
+ 701 014e 77EEA67A 		vadd.f32	s15, s15, s13
+  89:control-base/algo/src/MahonyAHRS.c ****         bx = sqrt(hx * hx + hy * hy);
+ 702              		.loc 1 89 12 view .LVU245
+ 703 0152 77EEA77A 		vadd.f32	s15, s15, s15
+ 704              	.LVL71:
+  90:control-base/algo/src/MahonyAHRS.c ****         bz = 2.0f * (mx * (q1q3 - q0q2) + my * (q2q3 + q0q1) + mz * (0.5f - q1q1 - q2q2));
+ 705              		.loc 1 90 9 is_stmt 1 view .LVU246
+  90:control-base/algo/src/MahonyAHRS.c ****         bz = 2.0f * (mx * (q1q3 - q0q2) + my * (q2q3 + q0q1) + mz * (0.5f - q1q1 - q2q2));
+ 706              		.loc 1 90 22 is_stmt 0 view .LVU247
+ 707 0156 27EE077A 		vmul.f32	s14, s14, s14
+ 708              	.LVL72:
+  90:control-base/algo/src/MahonyAHRS.c ****         bz = 2.0f * (mx * (q1q3 - q0q2) + my * (q2q3 + q0q1) + mz * (0.5f - q1q1 - q2q2));
+ 709              		.loc 1 90 32 view .LVU248
+ 710 015a 67EEA77A 		vmul.f32	s15, s15, s15
+ 711              	.LVL73:
+  90:control-base/algo/src/MahonyAHRS.c ****         bz = 2.0f * (mx * (q1q3 - q0q2) + my * (q2q3 + q0q1) + mz * (0.5f - q1q1 - q2q2));
+ 712              		.loc 1 90 14 view .LVU249
+ 713 015e 77EE277A 		vadd.f32	s15, s14, s15
+ 714 0162 17EE900A 		vmov	r0, s15
+ 715 0166 FFF7FEFF 		bl	__aeabi_f2d
+ 716              	.LVL74:
+  90:control-base/algo/src/MahonyAHRS.c ****         bz = 2.0f * (mx * (q1q3 - q0q2) + my * (q2q3 + q0q1) + mz * (0.5f - q1q1 - q2q2));
+ 717              		.loc 1 90 14 view .LVU250
+ 718 016a 41EC100B 		vmov	d0, r0, r1
+ 719 016e FFF7FEFF 		bl	sqrt
+ 720              	.LVL75:
+ 721 0172 51EC100B 		vmov	r0, r1, d0
+  90:control-base/algo/src/MahonyAHRS.c ****         bz = 2.0f * (mx * (q1q3 - q0q2) + my * (q2q3 + q0q1) + mz * (0.5f - q1q1 - q2q2));
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 22
+
+
+ 722              		.loc 1 90 12 discriminator 1 view .LVU251
+ 723 0176 FFF7FEFF 		bl	__aeabi_d2f
+ 724              	.LVL76:
+ 725 017a 07EE100A 		vmov	s14, r0
+ 726              	.LVL77:
+  91:control-base/algo/src/MahonyAHRS.c **** 
+ 727              		.loc 1 91 9 is_stmt 1 view .LVU252
+  91:control-base/algo/src/MahonyAHRS.c **** 
+ 728              		.loc 1 91 33 is_stmt 0 view .LVU253
+ 729 017e 3BEE6FBA 		vsub.f32	s22, s22, s31
+ 730              	.LVL78:
+  91:control-base/algo/src/MahonyAHRS.c **** 
+ 731              		.loc 1 91 25 view .LVU254
+ 732 0182 6BEE097A 		vmul.f32	s15, s22, s18
+  91:control-base/algo/src/MahonyAHRS.c **** 
+ 733              		.loc 1 91 54 view .LVU255
+ 734 0186 7FEE288A 		vadd.f32	s17, s30, s17
+ 735              	.LVL79:
+  91:control-base/algo/src/MahonyAHRS.c **** 
+ 736              		.loc 1 91 46 view .LVU256
+ 737 018a 68EEAB6A 		vmul.f32	s13, s17, s23
+  91:control-base/algo/src/MahonyAHRS.c **** 
+ 738              		.loc 1 91 41 view .LVU257
+ 739 018e 77EEA67A 		vadd.f32	s15, s15, s13
+  91:control-base/algo/src/MahonyAHRS.c **** 
+ 740              		.loc 1 91 82 view .LVU258
+ 741 0192 7CEEEECA 		vsub.f32	s25, s25, s29
+  91:control-base/algo/src/MahonyAHRS.c **** 
+ 742              		.loc 1 91 67 view .LVU259
+ 743 0196 6CEEA96A 		vmul.f32	s13, s25, s19
+  91:control-base/algo/src/MahonyAHRS.c **** 
+ 744              		.loc 1 91 62 view .LVU260
+ 745 019a 77EEA67A 		vadd.f32	s15, s15, s13
+  91:control-base/algo/src/MahonyAHRS.c **** 
+ 746              		.loc 1 91 12 view .LVU261
+ 747 019e 77EEA77A 		vadd.f32	s15, s15, s15
+ 748              	.LVL80:
+  94:control-base/algo/src/MahonyAHRS.c **** 		halfvy = q0q1 + q2q3;
+ 749              		.loc 1 94 3 is_stmt 1 view .LVU262
+  95:control-base/algo/src/MahonyAHRS.c **** 		halfvz = q0q0 - 0.5f + q3q3;
+ 750              		.loc 1 95 3 view .LVU263
+  96:control-base/algo/src/MahonyAHRS.c ****         halfwx = bx * (0.5f - q2q2 - q3q3) + bz * (q1q3 - q0q2);
+ 751              		.loc 1 96 3 view .LVU264
+  96:control-base/algo/src/MahonyAHRS.c ****         halfwx = bx * (0.5f - q2q2 - q3q3) + bz * (q1q3 - q0q2);
+ 752              		.loc 1 96 17 is_stmt 0 view .LVU265
+ 753 01a2 DDED056A 		vldr.32	s13, [sp, #20]
+ 754 01a6 76EECE6A 		vsub.f32	s13, s13, s28
+  96:control-base/algo/src/MahonyAHRS.c ****         halfwx = bx * (0.5f - q2q2 - q3q3) + bz * (q1q3 - q0q2);
+ 755              		.loc 1 96 10 view .LVU266
+ 756 01aa 76EE8D6A 		vadd.f32	s13, s13, s26
+ 757              	.LVL81:
+  97:control-base/algo/src/MahonyAHRS.c ****         halfwy = bx * (q1q2 - q0q3) + bz * (q0q1 + q2q3);
+ 758              		.loc 1 97 9 is_stmt 1 view .LVU267
+  97:control-base/algo/src/MahonyAHRS.c ****         halfwy = bx * (q1q2 - q0q3) + bz * (q0q1 + q2q3);
+ 759              		.loc 1 97 21 is_stmt 0 view .LVU268
+ 760 01ae 2CEE07CA 		vmul.f32	s24, s24, s14
+ 761              	.LVL82:
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 23
+
+
+  97:control-base/algo/src/MahonyAHRS.c ****         halfwy = bx * (q1q2 - q0q3) + bz * (q0q1 + q2q3);
+ 762              		.loc 1 97 49 view .LVU269
+ 763 01b2 2BEE276A 		vmul.f32	s12, s22, s15
+  97:control-base/algo/src/MahonyAHRS.c ****         halfwy = bx * (q1q2 - q0q3) + bz * (q0q1 + q2q3);
+ 764              		.loc 1 97 16 view .LVU270
+ 765 01b6 3CEE06CA 		vadd.f32	s24, s24, s12
+ 766              	.LVL83:
+  98:control-base/algo/src/MahonyAHRS.c ****         halfwz = bx * (q0q2 + q1q3) + bz * (0.5f - q1q1 - q2q2);  
+ 767              		.loc 1 98 9 is_stmt 1 view .LVU271
+  98:control-base/algo/src/MahonyAHRS.c ****         halfwz = bx * (q0q2 + q1q3) + bz * (0.5f - q1q1 - q2q2);  
+ 768              		.loc 1 98 21 is_stmt 0 view .LVU272
+ 769 01ba 6DEE87DA 		vmul.f32	s27, s27, s14
+ 770              	.LVL84:
+  98:control-base/algo/src/MahonyAHRS.c ****         halfwz = bx * (q0q2 + q1q3) + bz * (0.5f - q1q1 - q2q2);  
+ 771              		.loc 1 98 42 view .LVU273
+ 772 01be 28EEA76A 		vmul.f32	s12, s17, s15
+  98:control-base/algo/src/MahonyAHRS.c ****         halfwz = bx * (q0q2 + q1q3) + bz * (0.5f - q1q1 - q2q2);  
+ 773              		.loc 1 98 16 view .LVU274
+ 774 01c2 7DEE86DA 		vadd.f32	s27, s27, s12
+ 775              	.LVL85:
+  99:control-base/algo/src/MahonyAHRS.c **** 	
+ 776              		.loc 1 99 9 is_stmt 1 view .LVU275
+  99:control-base/algo/src/MahonyAHRS.c **** 	
+ 777              		.loc 1 99 21 is_stmt 0 view .LVU276
+ 778 01c6 9DED016A 		vldr.32	s12, [sp, #4]
+ 779 01ca 26EE077A 		vmul.f32	s14, s12, s14
+  99:control-base/algo/src/MahonyAHRS.c **** 	
+ 780              		.loc 1 99 42 view .LVU277
+ 781 01ce 6CEEA7CA 		vmul.f32	s25, s25, s15
+  99:control-base/algo/src/MahonyAHRS.c **** 	
+ 782              		.loc 1 99 16 view .LVU278
+ 783 01d2 77EE2C7A 		vadd.f32	s15, s14, s25
+ 784              	.LVL86:
+ 102:control-base/algo/src/MahonyAHRS.c **** 		halfey = (az * halfvx - ax * halfvz) + (mz * halfwx - mx * halfwz);
+ 785              		.loc 1 102 3 is_stmt 1 view .LVU279
+ 102:control-base/algo/src/MahonyAHRS.c **** 		halfey = (az * halfvx - ax * halfvz) + (mz * halfwx - mx * halfwz);
+ 786              		.loc 1 102 16 is_stmt 0 view .LVU280
+ 787 01d6 9DED035A 		vldr.32	s10, [sp, #12]
+ 788 01da 25EE266A 		vmul.f32	s12, s10, s13
+ 102:control-base/algo/src/MahonyAHRS.c **** 		halfey = (az * halfvx - ax * halfvz) + (mz * halfwx - mx * halfwz);
+ 789              		.loc 1 102 30 view .LVU281
+ 790 01de DDED044A 		vldr.32	s9, [sp, #16]
+ 791 01e2 28EEA47A 		vmul.f32	s14, s17, s9
+ 102:control-base/algo/src/MahonyAHRS.c **** 		halfey = (az * halfvx - ax * halfvz) + (mz * halfwx - mx * halfwz);
+ 792              		.loc 1 102 25 view .LVU282
+ 793 01e6 36EE476A 		vsub.f32	s12, s12, s14
+ 102:control-base/algo/src/MahonyAHRS.c **** 		halfey = (az * halfvx - ax * halfvz) + (mz * halfwx - mx * halfwz);
+ 794              		.loc 1 102 46 view .LVU283
+ 795 01ea 2BEEA77A 		vmul.f32	s14, s23, s15
+ 102:control-base/algo/src/MahonyAHRS.c **** 		halfey = (az * halfvx - ax * halfvz) + (mz * halfwx - mx * halfwz);
+ 796              		.loc 1 102 60 view .LVU284
+ 797 01ee 69EEAD5A 		vmul.f32	s11, s19, s27
+ 102:control-base/algo/src/MahonyAHRS.c **** 		halfey = (az * halfvx - ax * halfvz) + (mz * halfwx - mx * halfwz);
+ 798              		.loc 1 102 55 view .LVU285
+ 799 01f2 37EE657A 		vsub.f32	s14, s14, s11
+ 102:control-base/algo/src/MahonyAHRS.c **** 		halfey = (az * halfvx - ax * halfvz) + (mz * halfwx - mx * halfwz);
+ 800              		.loc 1 102 10 view .LVU286
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 24
+
+
+ 801 01f6 36EE076A 		vadd.f32	s12, s12, s14
+ 802              	.LVL87:
+ 103:control-base/algo/src/MahonyAHRS.c **** 		halfez = (ax * halfvy - ay * halfvx) + (mx * halfwy - my * halfwx);
+ 803              		.loc 1 103 3 is_stmt 1 view .LVU287
+ 103:control-base/algo/src/MahonyAHRS.c **** 		halfez = (ax * halfvy - ay * halfvx) + (mx * halfwy - my * halfwx);
+ 804              		.loc 1 103 16 is_stmt 0 view .LVU288
+ 805 01fa 2BEE247A 		vmul.f32	s14, s22, s9
+ 103:control-base/algo/src/MahonyAHRS.c **** 		halfez = (ax * halfvy - ay * halfvx) + (mx * halfwy - my * halfwx);
+ 806              		.loc 1 103 30 view .LVU289
+ 807 01fe DDED025A 		vldr.32	s11, [sp, #8]
+ 808 0202 65EEA66A 		vmul.f32	s13, s11, s13
+ 809              	.LVL88:
+ 103:control-base/algo/src/MahonyAHRS.c **** 		halfez = (ax * halfvy - ay * halfvx) + (mx * halfwy - my * halfwx);
+ 810              		.loc 1 103 25 view .LVU290
+ 811 0206 37EE667A 		vsub.f32	s14, s14, s13
+ 103:control-base/algo/src/MahonyAHRS.c **** 		halfez = (ax * halfvy - ay * halfvx) + (mx * halfwy - my * halfwx);
+ 812              		.loc 1 103 46 view .LVU291
+ 813 020a 69EE8C9A 		vmul.f32	s19, s19, s24
+ 814              	.LVL89:
+ 103:control-base/algo/src/MahonyAHRS.c **** 		halfez = (ax * halfvy - ay * halfvx) + (mx * halfwy - my * halfwx);
+ 815              		.loc 1 103 60 view .LVU292
+ 816 020e 69EE277A 		vmul.f32	s15, s18, s15
+ 817              	.LVL90:
+ 103:control-base/algo/src/MahonyAHRS.c **** 		halfez = (ax * halfvy - ay * halfvx) + (mx * halfwy - my * halfwx);
+ 818              		.loc 1 103 55 view .LVU293
+ 819 0212 79EEE79A 		vsub.f32	s19, s19, s15
+ 103:control-base/algo/src/MahonyAHRS.c **** 		halfez = (ax * halfvy - ay * halfvx) + (mx * halfwy - my * halfwx);
+ 820              		.loc 1 103 10 view .LVU294
+ 821 0216 37EE297A 		vadd.f32	s14, s14, s19
+ 822              	.LVL91:
+ 104:control-base/algo/src/MahonyAHRS.c **** 
+ 823              		.loc 1 104 3 is_stmt 1 view .LVU295
+ 104:control-base/algo/src/MahonyAHRS.c **** 
+ 824              		.loc 1 104 16 is_stmt 0 view .LVU296
+ 825 021a 68EEA58A 		vmul.f32	s17, s17, s11
+ 826              	.LVL92:
+ 104:control-base/algo/src/MahonyAHRS.c **** 
+ 827              		.loc 1 104 30 view .LVU297
+ 828 021e 2BEE05BA 		vmul.f32	s22, s22, s10
+ 829              	.LVL93:
+ 104:control-base/algo/src/MahonyAHRS.c **** 
+ 830              		.loc 1 104 25 view .LVU298
+ 831 0222 78EECB8A 		vsub.f32	s17, s17, s22
+ 104:control-base/algo/src/MahonyAHRS.c **** 
+ 832              		.loc 1 104 46 view .LVU299
+ 833 0226 29EE2D9A 		vmul.f32	s18, s18, s27
+ 834              	.LVL94:
+ 104:control-base/algo/src/MahonyAHRS.c **** 
+ 835              		.loc 1 104 60 view .LVU300
+ 836 022a 6BEE8CBA 		vmul.f32	s23, s23, s24
+ 837              	.LVL95:
+ 104:control-base/algo/src/MahonyAHRS.c **** 
+ 838              		.loc 1 104 55 view .LVU301
+ 839 022e 39EE6B9A 		vsub.f32	s18, s18, s23
+ 104:control-base/algo/src/MahonyAHRS.c **** 
+ 840              		.loc 1 104 10 view .LVU302
+ 841 0232 78EE898A 		vadd.f32	s17, s17, s18
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 25
+
+
+ 842              	.LVL96:
+ 107:control-base/algo/src/MahonyAHRS.c **** 			integralFBx += twoKi * halfex * (1.0f / sampleFreq);	// integral error scaled by Ki
+ 843              		.loc 1 107 3 is_stmt 1 view .LVU303
+ 107:control-base/algo/src/MahonyAHRS.c **** 			integralFBx += twoKi * halfex * (1.0f / sampleFreq);	// integral error scaled by Ki
+ 844              		.loc 1 107 12 is_stmt 0 view .LVU304
+ 845 0236 644B     		ldr	r3, .L27
+ 846 0238 D3ED007A 		vldr.32	s15, [r3]
+ 107:control-base/algo/src/MahonyAHRS.c **** 			integralFBx += twoKi * halfex * (1.0f / sampleFreq);	// integral error scaled by Ki
+ 847              		.loc 1 107 5 view .LVU305
+ 848 023c F5EEC07A 		vcmpe.f32	s15, #0
+ 849 0240 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 850 0244 40F3B780 		ble	.L24
+ 108:control-base/algo/src/MahonyAHRS.c **** 			integralFBy += twoKi * halfey * (1.0f / sampleFreq);
+ 851              		.loc 1 108 4 is_stmt 1 view .LVU306
+ 108:control-base/algo/src/MahonyAHRS.c **** 			integralFBy += twoKi * halfey * (1.0f / sampleFreq);
+ 852              		.loc 1 108 25 is_stmt 0 view .LVU307
+ 853 0248 D3ED007A 		vldr.32	s15, [r3]
+ 854 024c 67EE867A 		vmul.f32	s15, s15, s12
+ 108:control-base/algo/src/MahonyAHRS.c **** 			integralFBy += twoKi * halfey * (1.0f / sampleFreq);
+ 855              		.loc 1 108 34 view .LVU308
+ 856 0250 DFED5E6A 		vldr.32	s13, .L27+4
+ 857 0254 67EEA67A 		vmul.f32	s15, s15, s13
+ 108:control-base/algo/src/MahonyAHRS.c **** 			integralFBy += twoKi * halfey * (1.0f / sampleFreq);
+ 858              		.loc 1 108 16 view .LVU309
+ 859 0258 5D49     		ldr	r1, .L27+8
+ 860 025a D1ED005A 		vldr.32	s11, [r1]
+ 861 025e 75EEA77A 		vadd.f32	s15, s11, s15
+ 862 0262 C1ED007A 		vstr.32	s15, [r1]
+ 109:control-base/algo/src/MahonyAHRS.c **** 			integralFBz += twoKi * halfez * (1.0f / sampleFreq);
+ 863              		.loc 1 109 4 is_stmt 1 view .LVU310
+ 109:control-base/algo/src/MahonyAHRS.c **** 			integralFBz += twoKi * halfez * (1.0f / sampleFreq);
+ 864              		.loc 1 109 25 is_stmt 0 view .LVU311
+ 865 0266 D3ED007A 		vldr.32	s15, [r3]
+ 866 026a 67EE877A 		vmul.f32	s15, s15, s14
+ 109:control-base/algo/src/MahonyAHRS.c **** 			integralFBz += twoKi * halfez * (1.0f / sampleFreq);
+ 867              		.loc 1 109 34 view .LVU312
+ 868 026e 67EEA67A 		vmul.f32	s15, s15, s13
+ 109:control-base/algo/src/MahonyAHRS.c **** 			integralFBz += twoKi * halfez * (1.0f / sampleFreq);
+ 869              		.loc 1 109 16 view .LVU313
+ 870 0272 584A     		ldr	r2, .L27+12
+ 871 0274 D2ED005A 		vldr.32	s11, [r2]
+ 872 0278 75EEA77A 		vadd.f32	s15, s11, s15
+ 873 027c C2ED007A 		vstr.32	s15, [r2]
+ 110:control-base/algo/src/MahonyAHRS.c **** 			gx += integralFBx;	// apply integral feedback
+ 874              		.loc 1 110 4 is_stmt 1 view .LVU314
+ 110:control-base/algo/src/MahonyAHRS.c **** 			gx += integralFBx;	// apply integral feedback
+ 875              		.loc 1 110 25 is_stmt 0 view .LVU315
+ 876 0280 D3ED007A 		vldr.32	s15, [r3]
+ 877 0284 67EEA87A 		vmul.f32	s15, s15, s17
+ 110:control-base/algo/src/MahonyAHRS.c **** 			gx += integralFBx;	// apply integral feedback
+ 878              		.loc 1 110 34 view .LVU316
+ 879 0288 67EEA67A 		vmul.f32	s15, s15, s13
+ 110:control-base/algo/src/MahonyAHRS.c **** 			gx += integralFBx;	// apply integral feedback
+ 880              		.loc 1 110 16 view .LVU317
+ 881 028c 524B     		ldr	r3, .L27+16
+ 882 028e D3ED006A 		vldr.32	s13, [r3]
+ 883 0292 76EEA77A 		vadd.f32	s15, s13, s15
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 26
+
+
+ 884 0296 C3ED007A 		vstr.32	s15, [r3]
+ 111:control-base/algo/src/MahonyAHRS.c **** 			gy += integralFBy;
+ 885              		.loc 1 111 4 is_stmt 1 view .LVU318
+ 886 029a D1ED007A 		vldr.32	s15, [r1]
+ 111:control-base/algo/src/MahonyAHRS.c **** 			gy += integralFBy;
+ 887              		.loc 1 111 7 is_stmt 0 view .LVU319
+ 888 029e 3AEE27AA 		vadd.f32	s20, s20, s15
+ 889              	.LVL97:
+ 112:control-base/algo/src/MahonyAHRS.c **** 			gz += integralFBz;
+ 890              		.loc 1 112 4 is_stmt 1 view .LVU320
+ 891 02a2 D2ED007A 		vldr.32	s15, [r2]
+ 112:control-base/algo/src/MahonyAHRS.c **** 			gz += integralFBz;
+ 892              		.loc 1 112 7 is_stmt 0 view .LVU321
+ 893 02a6 7AEEA7AA 		vadd.f32	s21, s21, s15
+ 894              	.LVL98:
+ 113:control-base/algo/src/MahonyAHRS.c **** 		}
+ 895              		.loc 1 113 4 is_stmt 1 view .LVU322
+ 896 02aa D3ED007A 		vldr.32	s15, [r3]
+ 113:control-base/algo/src/MahonyAHRS.c **** 		}
+ 897              		.loc 1 113 7 is_stmt 0 view .LVU323
+ 898 02ae 38EE278A 		vadd.f32	s16, s16, s15
+ 899              	.LVL99:
+ 900              	.L22:
+ 122:control-base/algo/src/MahonyAHRS.c **** 		gy += twoKp * halfey;
+ 901              		.loc 1 122 3 is_stmt 1 view .LVU324
+ 122:control-base/algo/src/MahonyAHRS.c **** 		gy += twoKp * halfey;
+ 902              		.loc 1 122 15 is_stmt 0 view .LVU325
+ 903 02b2 4A4B     		ldr	r3, .L27+20
+ 904 02b4 D3ED007A 		vldr.32	s15, [r3]
+ 905 02b8 67EE867A 		vmul.f32	s15, s15, s12
+ 122:control-base/algo/src/MahonyAHRS.c **** 		gy += twoKp * halfey;
+ 906              		.loc 1 122 6 view .LVU326
+ 907 02bc 3AEE27AA 		vadd.f32	s20, s20, s15
+ 908              	.LVL100:
+ 123:control-base/algo/src/MahonyAHRS.c **** 		gz += twoKp * halfez;
+ 909              		.loc 1 123 3 is_stmt 1 view .LVU327
+ 123:control-base/algo/src/MahonyAHRS.c **** 		gz += twoKp * halfez;
+ 910              		.loc 1 123 15 is_stmt 0 view .LVU328
+ 911 02c0 D3ED007A 		vldr.32	s15, [r3]
+ 912 02c4 27EE877A 		vmul.f32	s14, s15, s14
+ 913              	.LVL101:
+ 123:control-base/algo/src/MahonyAHRS.c **** 		gz += twoKp * halfez;
+ 914              		.loc 1 123 6 view .LVU329
+ 915 02c8 7AEE87AA 		vadd.f32	s21, s21, s14
+ 916              	.LVL102:
+ 124:control-base/algo/src/MahonyAHRS.c **** 	}
+ 917              		.loc 1 124 3 is_stmt 1 view .LVU330
+ 124:control-base/algo/src/MahonyAHRS.c **** 	}
+ 918              		.loc 1 124 15 is_stmt 0 view .LVU331
+ 919 02cc D3ED007A 		vldr.32	s15, [r3]
+ 920 02d0 67EEA87A 		vmul.f32	s15, s15, s17
+ 124:control-base/algo/src/MahonyAHRS.c **** 	}
+ 921              		.loc 1 124 6 view .LVU332
+ 922 02d4 38EE278A 		vadd.f32	s16, s16, s15
+ 923              	.LVL103:
+ 924              	.L19:
+ 128:control-base/algo/src/MahonyAHRS.c **** 	gy *= (0.5f * (1.0f / sampleFreq));
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 27
+
+
+ 925              		.loc 1 128 2 is_stmt 1 view .LVU333
+ 128:control-base/algo/src/MahonyAHRS.c **** 	gy *= (0.5f * (1.0f / sampleFreq));
+ 926              		.loc 1 128 5 is_stmt 0 view .LVU334
+ 927 02d8 DFED417A 		vldr.32	s15, .L27+24
+ 928 02dc 2AEE27AA 		vmul.f32	s20, s20, s15
+ 929              	.LVL104:
+ 129:control-base/algo/src/MahonyAHRS.c **** 	gz *= (0.5f * (1.0f / sampleFreq));
+ 930              		.loc 1 129 2 is_stmt 1 view .LVU335
+ 129:control-base/algo/src/MahonyAHRS.c **** 	gz *= (0.5f * (1.0f / sampleFreq));
+ 931              		.loc 1 129 5 is_stmt 0 view .LVU336
+ 932 02e0 6AEEA7AA 		vmul.f32	s21, s21, s15
+ 933              	.LVL105:
+ 130:control-base/algo/src/MahonyAHRS.c **** 	qa = q[0];
+ 934              		.loc 1 130 2 is_stmt 1 view .LVU337
+ 130:control-base/algo/src/MahonyAHRS.c **** 	qa = q[0];
+ 935              		.loc 1 130 5 is_stmt 0 view .LVU338
+ 936 02e4 28EE278A 		vmul.f32	s16, s16, s15
+ 937              	.LVL106:
+ 131:control-base/algo/src/MahonyAHRS.c **** 	qb = q[1];
+ 938              		.loc 1 131 2 is_stmt 1 view .LVU339
+ 131:control-base/algo/src/MahonyAHRS.c **** 	qb = q[1];
+ 939              		.loc 1 131 5 is_stmt 0 view .LVU340
+ 940 02e8 94ED006A 		vldr.32	s12, [r4]
+ 941              	.LVL107:
+ 132:control-base/algo/src/MahonyAHRS.c **** 	qc = q[2];
+ 942              		.loc 1 132 2 is_stmt 1 view .LVU341
+ 132:control-base/algo/src/MahonyAHRS.c **** 	qc = q[2];
+ 943              		.loc 1 132 5 is_stmt 0 view .LVU342
+ 944 02ec D4ED016A 		vldr.32	s13, [r4, #4]
+ 945              	.LVL108:
+ 133:control-base/algo/src/MahonyAHRS.c **** 	q[0] += (-qb * gx - qc * gy - q[3] * gz);
+ 946              		.loc 1 133 2 is_stmt 1 view .LVU343
+ 133:control-base/algo/src/MahonyAHRS.c **** 	q[0] += (-qb * gx - qc * gy - q[3] * gz);
+ 947              		.loc 1 133 5 is_stmt 0 view .LVU344
+ 948 02f0 94ED027A 		vldr.32	s14, [r4, #8]
+ 949              	.LVL109:
+ 134:control-base/algo/src/MahonyAHRS.c **** 	q[1] += (qa * gx + qc * gz - q[3] * gy);
+ 950              		.loc 1 134 2 is_stmt 1 view .LVU345
+ 134:control-base/algo/src/MahonyAHRS.c **** 	q[1] += (qa * gx + qc * gz - q[3] * gy);
+ 951              		.loc 1 134 15 is_stmt 0 view .LVU346
+ 952 02f4 66EECA9A 		vnmul.f32	s19, s13, s20
+ 134:control-base/algo/src/MahonyAHRS.c **** 	q[1] += (qa * gx + qc * gz - q[3] * gy);
+ 953              		.loc 1 134 25 view .LVU347
+ 954 02f8 6AEE877A 		vmul.f32	s15, s21, s14
+ 134:control-base/algo/src/MahonyAHRS.c **** 	q[1] += (qa * gx + qc * gz - q[3] * gy);
+ 955              		.loc 1 134 20 view .LVU348
+ 956 02fc 79EEE79A 		vsub.f32	s19, s19, s15
+ 134:control-base/algo/src/MahonyAHRS.c **** 	q[1] += (qa * gx + qc * gz - q[3] * gy);
+ 957              		.loc 1 134 33 view .LVU349
+ 958 0300 D4ED037A 		vldr.32	s15, [r4, #12]
+ 134:control-base/algo/src/MahonyAHRS.c **** 	q[1] += (qa * gx + qc * gz - q[3] * gy);
+ 959              		.loc 1 134 37 view .LVU350
+ 960 0304 67EE885A 		vmul.f32	s11, s15, s16
+ 134:control-base/algo/src/MahonyAHRS.c **** 	q[1] += (qa * gx + qc * gz - q[3] * gy);
+ 961              		.loc 1 134 30 view .LVU351
+ 962 0308 79EEE59A 		vsub.f32	s19, s19, s11
+ 134:control-base/algo/src/MahonyAHRS.c **** 	q[1] += (qa * gx + qc * gz - q[3] * gy);
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 28
+
+
+ 963              		.loc 1 134 7 view .LVU352
+ 964 030c 79EE869A 		vadd.f32	s19, s19, s12
+ 965 0310 C4ED009A 		vstr.32	s19, [r4]
+ 135:control-base/algo/src/MahonyAHRS.c **** 	q[2] += (qa * gy - qb * gz + q[3] * gx);
+ 966              		.loc 1 135 2 is_stmt 1 view .LVU353
+ 135:control-base/algo/src/MahonyAHRS.c **** 	q[2] += (qa * gy - qb * gz + q[3] * gx);
+ 967              		.loc 1 135 14 is_stmt 0 view .LVU354
+ 968 0314 2AEE069A 		vmul.f32	s18, s20, s12
+ 135:control-base/algo/src/MahonyAHRS.c **** 	q[2] += (qa * gy - qb * gz + q[3] * gx);
+ 969              		.loc 1 135 24 view .LVU355
+ 970 0318 68EE075A 		vmul.f32	s11, s16, s14
+ 135:control-base/algo/src/MahonyAHRS.c **** 	q[2] += (qa * gy - qb * gz + q[3] * gx);
+ 971              		.loc 1 135 19 view .LVU356
+ 972 031c 39EE259A 		vadd.f32	s18, s18, s11
+ 135:control-base/algo/src/MahonyAHRS.c **** 	q[2] += (qa * gy - qb * gz + q[3] * gx);
+ 973              		.loc 1 135 36 view .LVU357
+ 974 0320 67EEAA5A 		vmul.f32	s11, s15, s21
+ 135:control-base/algo/src/MahonyAHRS.c **** 	q[2] += (qa * gy - qb * gz + q[3] * gx);
+ 975              		.loc 1 135 29 view .LVU358
+ 976 0324 39EE659A 		vsub.f32	s18, s18, s11
+ 135:control-base/algo/src/MahonyAHRS.c **** 	q[2] += (qa * gy - qb * gz + q[3] * gx);
+ 977              		.loc 1 135 7 view .LVU359
+ 978 0328 39EE269A 		vadd.f32	s18, s18, s13
+ 979 032c 84ED019A 		vstr.32	s18, [r4, #4]
+ 136:control-base/algo/src/MahonyAHRS.c **** 	q[3] += (qa * gz + qb * gy - qc * gx); 
+ 980              		.loc 1 136 2 is_stmt 1 view .LVU360
+ 136:control-base/algo/src/MahonyAHRS.c **** 	q[3] += (qa * gz + qb * gy - qc * gx); 
+ 981              		.loc 1 136 14 is_stmt 0 view .LVU361
+ 982 0330 6AEE868A 		vmul.f32	s17, s21, s12
+ 136:control-base/algo/src/MahonyAHRS.c **** 	q[3] += (qa * gz + qb * gy - qc * gx); 
+ 983              		.loc 1 136 24 view .LVU362
+ 984 0334 68EE265A 		vmul.f32	s11, s16, s13
+ 136:control-base/algo/src/MahonyAHRS.c **** 	q[3] += (qa * gz + qb * gy - qc * gx); 
+ 985              		.loc 1 136 19 view .LVU363
+ 986 0338 78EEE58A 		vsub.f32	s17, s17, s11
+ 136:control-base/algo/src/MahonyAHRS.c **** 	q[3] += (qa * gz + qb * gy - qc * gx); 
+ 987              		.loc 1 136 36 view .LVU364
+ 988 033c 67EE8A5A 		vmul.f32	s11, s15, s20
+ 136:control-base/algo/src/MahonyAHRS.c **** 	q[3] += (qa * gz + qb * gy - qc * gx); 
+ 989              		.loc 1 136 29 view .LVU365
+ 990 0340 78EEA58A 		vadd.f32	s17, s17, s11
+ 136:control-base/algo/src/MahonyAHRS.c **** 	q[3] += (qa * gz + qb * gy - qc * gx); 
+ 991              		.loc 1 136 7 view .LVU366
+ 992 0344 78EE878A 		vadd.f32	s17, s17, s14
+ 993 0348 C4ED028A 		vstr.32	s17, [r4, #8]
+ 137:control-base/algo/src/MahonyAHRS.c **** 	
+ 994              		.loc 1 137 2 is_stmt 1 view .LVU367
+ 137:control-base/algo/src/MahonyAHRS.c **** 	
+ 995              		.loc 1 137 14 is_stmt 0 view .LVU368
+ 996 034c 28EE068A 		vmul.f32	s16, s16, s12
+ 997              	.LVL110:
+ 137:control-base/algo/src/MahonyAHRS.c **** 	
+ 998              		.loc 1 137 24 view .LVU369
+ 999 0350 6AEEA6AA 		vmul.f32	s21, s21, s13
+ 1000              	.LVL111:
+ 137:control-base/algo/src/MahonyAHRS.c **** 	
+ 1001              		.loc 1 137 19 view .LVU370
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 29
+
+
+ 1002 0354 38EE2A8A 		vadd.f32	s16, s16, s21
+ 137:control-base/algo/src/MahonyAHRS.c **** 	
+ 1003              		.loc 1 137 34 view .LVU371
+ 1004 0358 2AEE07AA 		vmul.f32	s20, s20, s14
+ 1005              	.LVL112:
+ 137:control-base/algo/src/MahonyAHRS.c **** 	
+ 1006              		.loc 1 137 29 view .LVU372
+ 1007 035c 38EE4A8A 		vsub.f32	s16, s16, s20
+ 137:control-base/algo/src/MahonyAHRS.c **** 	
+ 1008              		.loc 1 137 7 view .LVU373
+ 1009 0360 37EE888A 		vadd.f32	s16, s15, s16
+ 1010 0364 84ED038A 		vstr.32	s16, [r4, #12]
+ 140:control-base/algo/src/MahonyAHRS.c **** 	q[0] *= recipNorm;
+ 1011              		.loc 1 140 2 is_stmt 1 view .LVU374
+ 140:control-base/algo/src/MahonyAHRS.c **** 	q[0] *= recipNorm;
+ 1012              		.loc 1 140 27 is_stmt 0 view .LVU375
+ 1013 0368 69EEA97A 		vmul.f32	s15, s19, s19
+ 140:control-base/algo/src/MahonyAHRS.c **** 	q[0] *= recipNorm;
+ 1014              		.loc 1 140 41 view .LVU376
+ 1015 036c 29EE097A 		vmul.f32	s14, s18, s18
+ 1016              	.LVL113:
+ 140:control-base/algo/src/MahonyAHRS.c **** 	q[0] *= recipNorm;
+ 1017              		.loc 1 140 34 view .LVU377
+ 1018 0370 77EE877A 		vadd.f32	s15, s15, s14
+ 140:control-base/algo/src/MahonyAHRS.c **** 	q[0] *= recipNorm;
+ 1019              		.loc 1 140 55 view .LVU378
+ 1020 0374 28EEA87A 		vmul.f32	s14, s17, s17
+ 140:control-base/algo/src/MahonyAHRS.c **** 	q[0] *= recipNorm;
+ 1021              		.loc 1 140 48 view .LVU379
+ 1022 0378 77EE877A 		vadd.f32	s15, s15, s14
+ 140:control-base/algo/src/MahonyAHRS.c **** 	q[0] *= recipNorm;
+ 1023              		.loc 1 140 69 view .LVU380
+ 1024 037c 28EE080A 		vmul.f32	s0, s16, s16
+ 140:control-base/algo/src/MahonyAHRS.c **** 	q[0] *= recipNorm;
+ 1025              		.loc 1 140 14 view .LVU381
+ 1026 0380 37EE800A 		vadd.f32	s0, s15, s0
+ 1027 0384 FFF7FEFF 		bl	invSqrt
+ 1028              	.LVL114:
+ 141:control-base/algo/src/MahonyAHRS.c **** 	q[1] *= recipNorm;
+ 1029              		.loc 1 141 2 is_stmt 1 view .LVU382
+ 141:control-base/algo/src/MahonyAHRS.c **** 	q[1] *= recipNorm;
+ 1030              		.loc 1 141 7 is_stmt 0 view .LVU383
+ 1031 0388 69EE809A 		vmul.f32	s19, s19, s0
+ 1032 038c C4ED009A 		vstr.32	s19, [r4]
+ 142:control-base/algo/src/MahonyAHRS.c **** 	q[2] *= recipNorm;
+ 1033              		.loc 1 142 2 is_stmt 1 view .LVU384
+ 142:control-base/algo/src/MahonyAHRS.c **** 	q[2] *= recipNorm;
+ 1034              		.loc 1 142 7 is_stmt 0 view .LVU385
+ 1035 0390 29EE009A 		vmul.f32	s18, s18, s0
+ 1036 0394 84ED019A 		vstr.32	s18, [r4, #4]
+ 143:control-base/algo/src/MahonyAHRS.c **** 	q[3] *= recipNorm;
+ 1037              		.loc 1 143 2 is_stmt 1 view .LVU386
+ 143:control-base/algo/src/MahonyAHRS.c **** 	q[3] *= recipNorm;
+ 1038              		.loc 1 143 7 is_stmt 0 view .LVU387
+ 1039 0398 68EE808A 		vmul.f32	s17, s17, s0
+ 1040 039c C4ED028A 		vstr.32	s17, [r4, #8]
+ 144:control-base/algo/src/MahonyAHRS.c **** }
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 30
+
+
+ 1041              		.loc 1 144 2 is_stmt 1 view .LVU388
+ 144:control-base/algo/src/MahonyAHRS.c **** }
+ 1042              		.loc 1 144 7 is_stmt 0 view .LVU389
+ 1043 03a0 28EE008A 		vmul.f32	s16, s16, s0
+ 1044 03a4 84ED038A 		vstr.32	s16, [r4, #12]
+ 1045              	.LVL115:
+ 1046              	.L15:
+ 145:control-base/algo/src/MahonyAHRS.c **** 
+ 1047              		.loc 1 145 1 view .LVU390
+ 1048 03a8 06B0     		add	sp, sp, #24
+ 1049              	.LCFI7:
+ 1050              		.cfi_remember_state
+ 1051              		.cfi_def_cfa_offset 72
+ 1052              		@ sp needed
+ 1053 03aa BDEC108B 		vldm	sp!, {d8-d15}
+ 1054              	.LCFI8:
+ 1055              		.cfi_restore 94
+ 1056              		.cfi_restore 95
+ 1057              		.cfi_restore 92
+ 1058              		.cfi_restore 93
+ 1059              		.cfi_restore 90
+ 1060              		.cfi_restore 91
+ 1061              		.cfi_restore 88
+ 1062              		.cfi_restore 89
+ 1063              		.cfi_restore 86
+ 1064              		.cfi_restore 87
+ 1065              		.cfi_restore 84
+ 1066              		.cfi_restore 85
+ 1067              		.cfi_restore 82
+ 1068              		.cfi_restore 83
+ 1069              		.cfi_restore 80
+ 1070              		.cfi_restore 81
+ 1071              		.cfi_def_cfa_offset 8
+ 1072 03ae 10BD     		pop	{r4, pc}
+ 1073              	.LVL116:
+ 1074              	.L26:
+ 1075              	.LCFI9:
+ 1076              		.cfi_restore_state
+  56:control-base/algo/src/MahonyAHRS.c **** 		return;
+ 1077              		.loc 1 56 3 is_stmt 1 view .LVU391
+ 1078 03b0 FFF7FEFF 		bl	MahonyAHRSupdateIMU
+ 1079              	.LVL117:
+  57:control-base/algo/src/MahonyAHRS.c **** 	}
+ 1080              		.loc 1 57 3 view .LVU392
+ 1081 03b4 F8E7     		b	.L15
+ 1082              	.LVL118:
+ 1083              	.L24:
+ 116:control-base/algo/src/MahonyAHRS.c **** 			integralFBy = 0.0f;
+ 1084              		.loc 1 116 4 view .LVU393
+ 116:control-base/algo/src/MahonyAHRS.c **** 			integralFBy = 0.0f;
+ 1085              		.loc 1 116 16 is_stmt 0 view .LVU394
+ 1086 03b6 0023     		movs	r3, #0
+ 1087 03b8 054A     		ldr	r2, .L27+8
+ 1088 03ba 1360     		str	r3, [r2]	@ float
+ 117:control-base/algo/src/MahonyAHRS.c **** 			integralFBz = 0.0f;
+ 1089              		.loc 1 117 4 is_stmt 1 view .LVU395
+ 117:control-base/algo/src/MahonyAHRS.c **** 			integralFBz = 0.0f;
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 31
+
+
+ 1090              		.loc 1 117 16 is_stmt 0 view .LVU396
+ 1091 03bc 054A     		ldr	r2, .L27+12
+ 1092 03be 1360     		str	r3, [r2]	@ float
+ 118:control-base/algo/src/MahonyAHRS.c **** 		}
+ 1093              		.loc 1 118 4 is_stmt 1 view .LVU397
+ 118:control-base/algo/src/MahonyAHRS.c **** 		}
+ 1094              		.loc 1 118 16 is_stmt 0 view .LVU398
+ 1095 03c0 054A     		ldr	r2, .L27+16
+ 1096 03c2 1360     		str	r3, [r2]	@ float
+ 1097 03c4 75E7     		b	.L22
+ 1098              	.L28:
+ 1099 03c6 00BF     		.align	2
+ 1100              	.L27:
+ 1101 03c8 00000000 		.word	twoKi
+ 1102 03cc 6F12833A 		.word	981668463
+ 1103 03d0 00000000 		.word	integralFBx
+ 1104 03d4 00000000 		.word	integralFBy
+ 1105 03d8 00000000 		.word	integralFBz
+ 1106 03dc 00000000 		.word	twoKp
+ 1107 03e0 6F12033A 		.word	973279855
+ 1108              		.cfi_endproc
+ 1109              	.LFE0:
+ 1111              		.global	integralFBz
+ 1112              		.section	.bss.integralFBz,"aw",%nobits
+ 1113              		.align	2
+ 1116              	integralFBz:
+ 1117 0000 00000000 		.space	4
+ 1118              		.global	integralFBy
+ 1119              		.section	.bss.integralFBy,"aw",%nobits
+ 1120              		.align	2
+ 1123              	integralFBy:
+ 1124 0000 00000000 		.space	4
+ 1125              		.global	integralFBx
+ 1126              		.section	.bss.integralFBx,"aw",%nobits
+ 1127              		.align	2
+ 1130              	integralFBx:
+ 1131 0000 00000000 		.space	4
+ 1132              		.global	twoKi
+ 1133              		.section	.bss.twoKi,"aw",%nobits
+ 1134              		.align	2
+ 1137              	twoKi:
+ 1138 0000 00000000 		.space	4
+ 1139              		.global	twoKp
+ 1140              		.section	.data.twoKp,"aw"
+ 1141              		.align	2
+ 1144              	twoKp:
+ 1145 0000 0000803F 		.word	1065353216
+ 1146              		.text
+ 1147              	.Letext0:
+ 1148              		.file 2 "control-base/algo/inc/MahonyAHRS.h"
+ 1149              		.file 3 "/Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/arm-none-eabi/include/math.h"
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 32
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 MahonyAHRS.c
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s:21     .text.invSqrt:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s:27     .text.invSqrt:00000000 invSqrt
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s:68     .text.invSqrt:0000002c $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s:73     .text.MahonyAHRSupdateIMU:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s:79     .text.MahonyAHRSupdateIMU:00000000 MahonyAHRSupdateIMU
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s:455    .text.MahonyAHRSupdateIMU:0000024c $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s:1137   .bss.twoKi:00000000 twoKi
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s:1130   .bss.integralFBx:00000000 integralFBx
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s:1123   .bss.integralFBy:00000000 integralFBy
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s:1116   .bss.integralFBz:00000000 integralFBz
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s:1144   .data.twoKp:00000000 twoKp
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s:466    .text.MahonyAHRSupdate:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s:472    .text.MahonyAHRSupdate:00000000 MahonyAHRSupdate
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s:1101   .text.MahonyAHRSupdate:000003c8 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s:1113   .bss.integralFBz:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s:1120   .bss.integralFBy:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s:1127   .bss.integralFBx:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s:1134   .bss.twoKi:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s:1141   .data.twoKp:00000000 $d
+
+UNDEFINED SYMBOLS
+__aeabi_f2d
+sqrt
+__aeabi_d2f

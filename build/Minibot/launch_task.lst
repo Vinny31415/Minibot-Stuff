@@ -1,0 +1,93 @@
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc6xVN6f.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"launch_task.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "Minibot/src/launch_task.c"
+  20              		.section	.text.Launch_Task_Init,"ax",%progbits
+  21              		.align	1
+  22              		.global	Launch_Task_Init
+  23              		.syntax unified
+  24              		.thumb
+  25              		.thumb_func
+  27              	Launch_Task_Init:
+  28              	.LFB142:
+   1:Minibot/src/launch_task.c **** #include "launch_task.h"
+   2:Minibot/src/launch_task.c **** 
+   3:Minibot/src/launch_task.c **** #include "dji_motor.h"
+   4:Minibot/src/launch_task.c **** #include "robot.h"
+   5:Minibot/src/launch_task.c **** #include "remote.h"
+   6:Minibot/src/launch_task.c **** #include "imu_task.h"
+   7:Minibot/src/launch_task.c **** #include "user_math.h"
+   8:Minibot/src/launch_task.c **** #include "referee_system.h"
+   9:Minibot/src/launch_task.c **** 
+  10:Minibot/src/launch_task.c **** extern Robot_State_t g_robot_state;
+  11:Minibot/src/launch_task.c **** extern Remote_t g_remote;
+  12:Minibot/src/launch_task.c **** 
+  13:Minibot/src/launch_task.c **** void Launch_Task_Init()
+  14:Minibot/src/launch_task.c **** {
+  29              		.loc 1 14 1 view -0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33              		@ link register save eliminated.
+  15:Minibot/src/launch_task.c ****     // Init Launch Hardware
+  16:Minibot/src/launch_task.c **** }
+  34              		.loc 1 16 1 view .LVU1
+  35 0000 7047     		bx	lr
+  36              		.cfi_endproc
+  37              	.LFE142:
+  39              		.section	.text.Launch_Ctrl_Loop,"ax",%progbits
+  40              		.align	1
+  41              		.global	Launch_Ctrl_Loop
+  42              		.syntax unified
+  43              		.thumb
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc6xVN6f.s 			page 2
+
+
+  44              		.thumb_func
+  46              	Launch_Ctrl_Loop:
+  47              	.LFB143:
+  17:Minibot/src/launch_task.c **** 
+  18:Minibot/src/launch_task.c **** void Launch_Ctrl_Loop()
+  19:Minibot/src/launch_task.c **** {
+  48              		.loc 1 19 1 view -0
+  49              		.cfi_startproc
+  50              		@ args = 0, pretend = 0, frame = 0
+  51              		@ frame_needed = 0, uses_anonymous_args = 0
+  52              		@ link register save eliminated.
+  20:Minibot/src/launch_task.c ****     // Control loop for launch
+  21:Minibot/src/launch_task.c **** }
+  53              		.loc 1 21 1 view .LVU3
+  54 0000 7047     		bx	lr
+  55              		.cfi_endproc
+  56              	.LFE143:
+  58              		.text
+  59              	.Letext0:
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc6xVN6f.s 			page 3
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 launch_task.c
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc6xVN6f.s:21     .text.Launch_Task_Init:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc6xVN6f.s:27     .text.Launch_Task_Init:00000000 Launch_Task_Init
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc6xVN6f.s:40     .text.Launch_Ctrl_Loop:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc6xVN6f.s:46     .text.Launch_Ctrl_Loop:00000000 Launch_Ctrl_Loop
+
+NO UNDEFINED SYMBOLS

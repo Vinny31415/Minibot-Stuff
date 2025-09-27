@@ -1,0 +1,750 @@
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrTSYde.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"gimbal_task.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "Sentry/src/gimbal_task.c"
+  20              		.section	.text.Gimbal_Task_Init,"ax",%progbits
+  21              		.align	1
+  22              		.global	Gimbal_Task_Init
+  23              		.syntax unified
+  24              		.thumb
+  25              		.thumb_func
+  27              	Gimbal_Task_Init:
+  28              	.LFB142:
+   1:Sentry/src/gimbal_task.c **** #include "gimbal_task.h"
+   2:Sentry/src/gimbal_task.c **** 
+   3:Sentry/src/gimbal_task.c **** #include "robot.h"
+   4:Sentry/src/gimbal_task.c **** #include "remote.h"
+   5:Sentry/src/gimbal_task.c **** #include "user_math.h"
+   6:Sentry/src/gimbal_task.c **** #include "dji_motor.h"
+   7:Sentry/src/gimbal_task.c **** #include "imu_task.h"
+   8:Sentry/src/gimbal_task.c **** #include "jetson_orin.h"
+   9:Sentry/src/gimbal_task.c **** #include "dm_motor.h"
+  10:Sentry/src/gimbal_task.c **** 
+  11:Sentry/src/gimbal_task.c **** extern Robot_State_t g_robot_state;
+  12:Sentry/src/gimbal_task.c **** extern Remote_t g_remote;
+  13:Sentry/src/gimbal_task.c **** DJI_Motor_Handle_t *g_yaw;
+  14:Sentry/src/gimbal_task.c **** DM_Motor_Handle_t *g_pitch;
+  15:Sentry/src/gimbal_task.c **** uint16_t lost_target_yaw_counter = 0;
+  16:Sentry/src/gimbal_task.c **** uint16_t initiate_scanning_counter = 0;
+  17:Sentry/src/gimbal_task.c **** void Gimbal_Task_Init()
+  18:Sentry/src/gimbal_task.c **** {
+  29              		.loc 1 18 1 view -0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 208
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33 0000 30B5     		push	{r4, r5, lr}
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 12
+  36              		.cfi_offset 4, -12
+  37              		.cfi_offset 5, -8
+  38              		.cfi_offset 14, -4
+  39 0002 B5B0     		sub	sp, sp, #212
+  40              	.LCFI1:
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrTSYde.s 			page 2
+
+
+  41              		.cfi_def_cfa_offset 224
+  19:Sentry/src/gimbal_task.c ****     Motor_Config_t yaw_motor_config = {
+  42              		.loc 1 19 5 view .LVU1
+  43              		.loc 1 19 20 is_stmt 0 view .LVU2
+  44 0004 07AD     		add	r5, sp, #28
+  45 0006 B422     		movs	r2, #180
+  46 0008 0021     		movs	r1, #0
+  47 000a 2846     		mov	r0, r5
+  48 000c FFF7FEFF 		bl	memset
+  49              	.LVL0:
+  50 0010 0123     		movs	r3, #1
+  51 0012 8DF81C30 		strb	r3, [sp, #28]
+  52 0016 8DF82230 		strb	r3, [sp, #34]
+  53 001a 41F2FD72 		movw	r2, #6141
+  54 001e ADF82420 		strh	r2, [sp, #36]	@ movhi
+  55 0022 1F22     		movs	r2, #31
+  56 0024 8DF82720 		strb	r2, [sp, #39]
+  57 0028 8DF82930 		strb	r3, [sp, #41]
+  58 002c 8DF82A30 		strb	r3, [sp, #42]
+  59 0030 194A     		ldr	r2, .L3
+  60 0032 0B92     		str	r2, [sp, #44]
+  61 0034 283A     		subs	r2, r2, #40
+  62 0036 0C92     		str	r2, [sp, #48]
+  63 0038 184A     		ldr	r2, .L3+4
+  64 003a 0D92     		str	r2, [sp, #52]	@ float
+  65 003c 184A     		ldr	r2, .L3+8
+  66 003e 0F92     		str	r2, [sp, #60]	@ float
+  67 0040 184A     		ldr	r2, .L3+12
+  68 0042 1592     		str	r2, [sp, #84]	@ float
+  69 0044 1849     		ldr	r1, .L3+16
+  70 0046 1A91     		str	r1, [sp, #104]	@ float
+  71 0048 1849     		ldr	r1, .L3+20
+  72 004a 1C91     		str	r1, [sp, #112]	@ float
+  73 004c 1D92     		str	r2, [sp, #116]	@ float
+  74 004e 1E92     		str	r2, [sp, #120]	@ float
+  75 0050 174A     		ldr	r2, .L3+24
+  76 0052 1F92     		str	r2, [sp, #124]	@ float
+  77 0054 174A     		ldr	r2, .L3+28
+  78 0056 2292     		str	r2, [sp, #136]	@ float
+  20:Sentry/src/gimbal_task.c ****         .can_bus = 1,
+  21:Sentry/src/gimbal_task.c ****         .speed_controller_id = 1,
+  22:Sentry/src/gimbal_task.c ****         .offset = 6141,
+  23:Sentry/src/gimbal_task.c ****         .control_mode = POSITION_CONTROL_SPINTOP,
+  24:Sentry/src/gimbal_task.c ****         .motor_reversal = MOTOR_REVERSAL_NORMAL,
+  25:Sentry/src/gimbal_task.c ****         .use_external_feedback = 1,
+  26:Sentry/src/gimbal_task.c ****         .external_feedback_dir = 1,
+  27:Sentry/src/gimbal_task.c ****         .external_angle_feedback_ptr = &g_imu.rad.yaw,
+  28:Sentry/src/gimbal_task.c ****         .external_velocity_feedback_ptr = &(g_imu.bmi088_raw.gyro[2]),
+  29:Sentry/src/gimbal_task.c ****         .angle_pid =
+  30:Sentry/src/gimbal_task.c ****             {
+  31:Sentry/src/gimbal_task.c ****                 .kp = 45.0f,
+  32:Sentry/src/gimbal_task.c ****                 .kd = 2000.0f,
+  33:Sentry/src/gimbal_task.c ****                 .output_limit = 1000, // max vel
+  34:Sentry/src/gimbal_task.c ****             },
+  35:Sentry/src/gimbal_task.c ****         .velocity_pid =
+  36:Sentry/src/gimbal_task.c ****             {
+  37:Sentry/src/gimbal_task.c ****                 .kp = 12000.0f,
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrTSYde.s 			page 3
+
+
+  38:Sentry/src/gimbal_task.c ****                 .ki = 0.0f,
+  39:Sentry/src/gimbal_task.c ****                 .kd = 5000.0f,
+  40:Sentry/src/gimbal_task.c ****                 .kf = 1000.0f,
+  41:Sentry/src/gimbal_task.c ****                 .feedforward_limit = 13000.0f,
+  42:Sentry/src/gimbal_task.c ****                 .integral_limit = 1000.0f,
+  43:Sentry/src/gimbal_task.c ****                 .output_limit = GM6020_MAX_CURRENT_INT,
+  44:Sentry/src/gimbal_task.c ****             },
+  45:Sentry/src/gimbal_task.c ****     };
+  46:Sentry/src/gimbal_task.c **** 
+  47:Sentry/src/gimbal_task.c ****     DM_Motor_Config_t pitch_motor_config = {
+  79              		.loc 1 47 5 is_stmt 1 view .LVU3
+  80              		.loc 1 47 23 is_stmt 0 view .LVU4
+  81 0058 0021     		movs	r1, #0
+  82 005a 0091     		str	r1, [sp]
+  83 005c 0191     		str	r1, [sp, #4]
+  84 005e 0291     		str	r1, [sp, #8]
+  85 0060 0391     		str	r1, [sp, #12]
+  86 0062 0491     		str	r1, [sp, #16]
+  87 0064 0591     		str	r1, [sp, #20]
+  88 0066 0691     		str	r1, [sp, #24]
+  89 0068 0222     		movs	r2, #2
+  90 006a 8DF80020 		strb	r2, [sp]
+  91 006e 5122     		movs	r2, #81
+  92 0070 0192     		str	r2, [sp, #4]
+  93 0072 0293     		str	r3, [sp, #8]
+  94 0074 104B     		ldr	r3, .L3+32
+  95 0076 0593     		str	r3, [sp, #20]	@ float
+  96 0078 4FF07E53 		mov	r3, #1065353216
+  97 007c 0693     		str	r3, [sp, #24]	@ float
+  48:Sentry/src/gimbal_task.c ****         .can_bus = 2,
+  49:Sentry/src/gimbal_task.c ****         .control_mode = DM_MOTOR_MIT,
+  50:Sentry/src/gimbal_task.c ****         .rx_id = 0x51,
+  51:Sentry/src/gimbal_task.c ****         .tx_id = 0x01,
+  52:Sentry/src/gimbal_task.c ****         .disable_behavior = DM_MOTOR_ZERO_CURRENT,
+  53:Sentry/src/gimbal_task.c ****         .kp = 10.0f,
+  54:Sentry/src/gimbal_task.c ****         .kd = 1.0f,
+  55:Sentry/src/gimbal_task.c ****     };
+  56:Sentry/src/gimbal_task.c ****     g_yaw = DJI_Motor_Init(&yaw_motor_config, GM6020);
+  98              		.loc 1 56 5 is_stmt 1 view .LVU5
+  99              		.loc 1 56 13 is_stmt 0 view .LVU6
+ 100 007e 2846     		mov	r0, r5
+ 101 0080 FFF7FEFF 		bl	DJI_Motor_Init
+ 102              	.LVL1:
+ 103              		.loc 1 56 11 discriminator 1 view .LVU7
+ 104 0084 0D4B     		ldr	r3, .L3+36
+ 105 0086 1860     		str	r0, [r3]
+  57:Sentry/src/gimbal_task.c ****     g_pitch = DM_Motor_Init(&pitch_motor_config);
+ 106              		.loc 1 57 5 is_stmt 1 view .LVU8
+ 107              		.loc 1 57 15 is_stmt 0 view .LVU9
+ 108 0088 6846     		mov	r0, sp
+ 109 008a FFF7FEFF 		bl	DM_Motor_Init
+ 110              	.LVL2:
+ 111              		.loc 1 57 13 discriminator 1 view .LVU10
+ 112 008e 0C4B     		ldr	r3, .L3+40
+ 113 0090 1860     		str	r0, [r3]
+  58:Sentry/src/gimbal_task.c **** }
+ 114              		.loc 1 58 1 view .LVU11
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrTSYde.s 			page 4
+
+
+ 115 0092 35B0     		add	sp, sp, #212
+ 116              	.LCFI2:
+ 117              		.cfi_def_cfa_offset 12
+ 118              		@ sp needed
+ 119 0094 30BD     		pop	{r4, r5, pc}
+ 120              	.L4:
+ 121 0096 00BF     		.align	2
+ 122              	.L3:
+ 123 0098 44000000 		.word	g_imu+68
+ 124 009c 00003442 		.word	1110704128
+ 125 00a0 0000FA44 		.word	1157234688
+ 126 00a4 00007A44 		.word	1148846080
+ 127 00a8 00803B46 		.word	1178304512
+ 128 00ac 00409C45 		.word	1167867904
+ 129 00b0 00204B46 		.word	1179328512
+ 130 00b4 00007A46 		.word	1182400512
+ 131 00b8 00002041 		.word	1092616192
+ 132 00bc 00000000 		.word	g_yaw
+ 133 00c0 00000000 		.word	g_pitch
+ 134              		.cfi_endproc
+ 135              	.LFE142:
+ 137              		.section	.text.Gimbal_Ctrl_Loop,"ax",%progbits
+ 138              		.align	1
+ 139              		.global	Gimbal_Ctrl_Loop
+ 140              		.syntax unified
+ 141              		.thumb
+ 142              		.thumb_func
+ 144              	Gimbal_Ctrl_Loop:
+ 145              	.LFB143:
+  59:Sentry/src/gimbal_task.c **** 
+  60:Sentry/src/gimbal_task.c **** 
+  61:Sentry/src/gimbal_task.c **** void Gimbal_Ctrl_Loop()
+  62:Sentry/src/gimbal_task.c **** {
+ 146              		.loc 1 62 1 is_stmt 1 view -0
+ 147              		.cfi_startproc
+ 148              		@ args = 0, pretend = 0, frame = 0
+ 149              		@ frame_needed = 0, uses_anonymous_args = 0
+ 150 0000 38B5     		push	{r3, r4, r5, lr}
+ 151              	.LCFI3:
+ 152              		.cfi_def_cfa_offset 16
+ 153              		.cfi_offset 3, -16
+ 154              		.cfi_offset 4, -12
+ 155              		.cfi_offset 5, -8
+ 156              		.cfi_offset 14, -4
+  63:Sentry/src/gimbal_task.c ****     // if (g_robot_state.launch.IS_AUTO_AIMING_ENABLED) {
+  64:Sentry/src/gimbal_task.c ****     //     if (g_orin_data.receiving.auto_aiming.yaw != 0 || g_orin_data.receiving.auto_aiming.pitc
+  65:Sentry/src/gimbal_task.c ****     //     {
+  66:Sentry/src/gimbal_task.c ****     //         float imu_yaw_delta = g_imu.rad.yaw + g_orin_data.receiving.auto_aiming.yaw / 180.0f
+  67:Sentry/src/gimbal_task.c ****     //         float imu_pitch_delta = g_imu.rad.pitch + g_orin_data.receiving.auto_aiming.pitch / 
+  68:Sentry/src/gimbal_task.c ****     //         __SLEW_RATE_LIMIT(g_robot_state.gimbal.yaw_angle, imu_yaw_delta, 0.2);
+  69:Sentry/src/gimbal_task.c ****     //         __SLEW_RATE_LIMIT(g_robot_state.gimbal.pitch_angle, imu_pitch_delta, 0.2);
+  70:Sentry/src/gimbal_task.c ****     //     }
+  71:Sentry/src/gimbal_task.c ****     // }
+  72:Sentry/src/gimbal_task.c ****     if (g_remote.controller.right_switch == UP)
+ 157              		.loc 1 72 5 view .LVU13
+ 158              		.loc 1 72 28 is_stmt 0 view .LVU14
+ 159 0002 704B     		ldr	r3, .L23
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrTSYde.s 			page 5
+
+
+ 160 0004 5B7B     		ldrb	r3, [r3, #13]	@ zero_extendqisi2
+ 161              		.loc 1 72 8 view .LVU15
+ 162 0006 012B     		cmp	r3, #1
+ 163 0008 26D0     		beq	.L22
+  73:Sentry/src/gimbal_task.c ****     {
+  74:Sentry/src/gimbal_task.c ****         if (g_orin_data.receiving.auto_aiming.yaw == 0) {
+  75:Sentry/src/gimbal_task.c ****             lost_target_yaw_counter++;
+  76:Sentry/src/gimbal_task.c ****             if (initiate_scanning_counter < 10000) { // overflow
+  77:Sentry/src/gimbal_task.c ****                 initiate_scanning_counter++;
+  78:Sentry/src/gimbal_task.c ****             }
+  79:Sentry/src/gimbal_task.c ****         }
+  80:Sentry/src/gimbal_task.c ****         if (lost_target_yaw_counter > 500 && initiate_scanning_counter > 750 && g_orin_data.nav_onl
+  81:Sentry/src/gimbal_task.c ****             g_robot_state.gimbal.yaw_angle += (2*PI/24);
+  82:Sentry/src/gimbal_task.c ****             g_robot_state.gimbal.pitch_angle = -0.1f; // reset pitch to current pitch
+  83:Sentry/src/gimbal_task.c ****             lost_target_yaw_counter = 0;
+  84:Sentry/src/gimbal_task.c ****         }
+  85:Sentry/src/gimbal_task.c ****         // g_robot_state.gimbal.yaw_angle += g_orin_data.receiving.navigation.yaw_angular_rate * 0.
+  86:Sentry/src/gimbal_task.c ****         // Handled in jetson_orin.c
+  87:Sentry/src/gimbal_task.c ****         if (g_orin_data.new_data_flag == 1)
+  88:Sentry/src/gimbal_task.c ****         {
+  89:Sentry/src/gimbal_task.c ****             if (g_orin_data.receiving.auto_aiming.yaw == 0) { // no target detected
+  90:Sentry/src/gimbal_task.c **** 
+  91:Sentry/src/gimbal_task.c ****                 ;
+  92:Sentry/src/gimbal_task.c ****             } else {
+  93:Sentry/src/gimbal_task.c ****                 initiate_scanning_counter = 0;
+  94:Sentry/src/gimbal_task.c ****                 g_robot_state.gimbal.yaw_angle = g_imu.rad.yaw + g_orin_data.receiving.auto_aiming.
+  95:Sentry/src/gimbal_task.c ****                 g_robot_state.gimbal.pitch_angle = g_imu.rad.pitch + g_orin_data.receiving.auto_aim
+  96:Sentry/src/gimbal_task.c ****             }
+  97:Sentry/src/gimbal_task.c ****             g_orin_data.new_data_flag = 0;
+  98:Sentry/src/gimbal_task.c ****         }
+  99:Sentry/src/gimbal_task.c ****     } else {
+ 100:Sentry/src/gimbal_task.c ****         g_robot_state.gimbal.yaw_angle -= g_remote.controller.right_stick.x/660.0f * 0.01f;
+ 164              		.loc 1 100 9 is_stmt 1 view .LVU16
+ 165              		.loc 1 100 29 is_stmt 0 view .LVU17
+ 166 000a 6F4B     		ldr	r3, .L23+4
+ 167 000c D3ED0A7A 		vldr.32	s15, [r3, #40]
+ 168              		.loc 1 100 74 view .LVU18
+ 169 0010 6C4A     		ldr	r2, .L23
+ 170 0012 B2F90410 		ldrsh	r1, [r2, #4]
+ 171 0016 06EE901A 		vmov	s13, r1	@ int
+ 172              		.loc 1 100 76 view .LVU19
+ 173 001a F8EEE66A 		vcvt.f32.s32	s13, s13
+ 174 001e DFED6B5A 		vldr.32	s11, .L23+8
+ 175 0022 86EEA57A 		vdiv.f32	s14, s13, s11
+ 176              		.loc 1 100 84 view .LVU20
+ 177 0026 9FED6A6A 		vldr.32	s12, .L23+12
+ 178 002a 27EE067A 		vmul.f32	s14, s14, s12
+ 179              		.loc 1 100 40 view .LVU21
+ 180 002e 77EEC77A 		vsub.f32	s15, s15, s14
+ 181 0032 C3ED0A7A 		vstr.32	s15, [r3, #40]
+ 101:Sentry/src/gimbal_task.c ****         g_robot_state.gimbal.pitch_angle += g_remote.controller.right_stick.y / 660.0f * 0.01f;
+ 182              		.loc 1 101 9 is_stmt 1 view .LVU22
+ 183              		.loc 1 101 29 is_stmt 0 view .LVU23
+ 184 0036 D3ED097A 		vldr.32	s15, [r3, #36]
+ 185              		.loc 1 101 76 view .LVU24
+ 186 003a B2F90620 		ldrsh	r2, [r2, #6]
+ 187 003e 06EE902A 		vmov	s13, r2	@ int
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrTSYde.s 			page 6
+
+
+ 188              		.loc 1 101 79 view .LVU25
+ 189 0042 F8EEE66A 		vcvt.f32.s32	s13, s13
+ 190 0046 86EEA57A 		vdiv.f32	s14, s13, s11
+ 191              		.loc 1 101 88 view .LVU26
+ 192 004a 27EE067A 		vmul.f32	s14, s14, s12
+ 193              		.loc 1 101 42 view .LVU27
+ 194 004e 77EE877A 		vadd.f32	s15, s15, s14
+ 195 0052 C3ED097A 		vstr.32	s15, [r3, #36]
+ 196 0056 67E0     		b	.L11
+ 197              	.L22:
+  74:Sentry/src/gimbal_task.c ****             lost_target_yaw_counter++;
+ 198              		.loc 1 74 9 is_stmt 1 view .LVU28
+  74:Sentry/src/gimbal_task.c ****             lost_target_yaw_counter++;
+ 199              		.loc 1 74 46 is_stmt 0 view .LVU29
+ 200 0058 5E4B     		ldr	r3, .L23+16
+ 201 005a D3ED1A7A 		vldr.32	s15, [r3, #104]
+  74:Sentry/src/gimbal_task.c ****             lost_target_yaw_counter++;
+ 202              		.loc 1 74 12 view .LVU30
+ 203 005e F5EE407A 		vcmp.f32	s15, #0
+ 204 0062 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 205 0066 0CD1     		bne	.L7
+  75:Sentry/src/gimbal_task.c ****             if (initiate_scanning_counter < 10000) { // overflow
+ 206              		.loc 1 75 13 is_stmt 1 view .LVU31
+  75:Sentry/src/gimbal_task.c ****             if (initiate_scanning_counter < 10000) { // overflow
+ 207              		.loc 1 75 36 is_stmt 0 view .LVU32
+ 208 0068 5B4A     		ldr	r2, .L23+20
+ 209 006a 1388     		ldrh	r3, [r2]
+ 210 006c 0133     		adds	r3, r3, #1
+ 211 006e 1380     		strh	r3, [r2]	@ movhi
+  76:Sentry/src/gimbal_task.c ****                 initiate_scanning_counter++;
+ 212              		.loc 1 76 13 is_stmt 1 view .LVU33
+  76:Sentry/src/gimbal_task.c ****                 initiate_scanning_counter++;
+ 213              		.loc 1 76 43 is_stmt 0 view .LVU34
+ 214 0070 5A4B     		ldr	r3, .L23+24
+ 215 0072 1B88     		ldrh	r3, [r3]
+  76:Sentry/src/gimbal_task.c ****                 initiate_scanning_counter++;
+ 216              		.loc 1 76 16 view .LVU35
+ 217 0074 42F20F72 		movw	r2, #9999
+ 218 0078 9342     		cmp	r3, r2
+ 219 007a 02D8     		bhi	.L7
+  77:Sentry/src/gimbal_task.c ****             }
+ 220              		.loc 1 77 17 is_stmt 1 view .LVU36
+  77:Sentry/src/gimbal_task.c ****             }
+ 221              		.loc 1 77 42 is_stmt 0 view .LVU37
+ 222 007c 0133     		adds	r3, r3, #1
+ 223 007e 574A     		ldr	r2, .L23+24
+ 224 0080 1380     		strh	r3, [r2]	@ movhi
+ 225              	.L7:
+  80:Sentry/src/gimbal_task.c ****             g_robot_state.gimbal.yaw_angle += (2*PI/24);
+ 226              		.loc 1 80 9 is_stmt 1 view .LVU38
+  80:Sentry/src/gimbal_task.c ****             g_robot_state.gimbal.yaw_angle += (2*PI/24);
+ 227              		.loc 1 80 37 is_stmt 0 view .LVU39
+ 228 0082 554B     		ldr	r3, .L23+20
+ 229 0084 1B88     		ldrh	r3, [r3]
+  80:Sentry/src/gimbal_task.c ****             g_robot_state.gimbal.yaw_angle += (2*PI/24);
+ 230              		.loc 1 80 12 view .LVU40
+ 231 0086 B3F5FA7F 		cmp	r3, #500
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrTSYde.s 			page 7
+
+
+ 232 008a 17D9     		bls	.L8
+  80:Sentry/src/gimbal_task.c ****             g_robot_state.gimbal.yaw_angle += (2*PI/24);
+ 233              		.loc 1 80 72 discriminator 1 view .LVU41
+ 234 008c 534B     		ldr	r3, .L23+24
+ 235 008e 1A88     		ldrh	r2, [r3]
+  80:Sentry/src/gimbal_task.c ****             g_robot_state.gimbal.yaw_angle += (2*PI/24);
+ 236              		.loc 1 80 43 discriminator 1 view .LVU42
+ 237 0090 40F2EE23 		movw	r3, #750
+ 238 0094 9A42     		cmp	r2, r3
+ 239 0096 11D9     		bls	.L8
+  80:Sentry/src/gimbal_task.c ****             g_robot_state.gimbal.yaw_angle += (2*PI/24);
+ 240              		.loc 1 80 92 discriminator 2 view .LVU43
+ 241 0098 4E4B     		ldr	r3, .L23+16
+ 242 009a 93F89630 		ldrb	r3, [r3, #150]	@ zero_extendqisi2
+  80:Sentry/src/gimbal_task.c ****             g_robot_state.gimbal.yaw_angle += (2*PI/24);
+ 243              		.loc 1 80 78 discriminator 2 view .LVU44
+ 244 009e 6BB9     		cbnz	r3, .L8
+  81:Sentry/src/gimbal_task.c ****             g_robot_state.gimbal.pitch_angle = -0.1f; // reset pitch to current pitch
+ 245              		.loc 1 81 13 is_stmt 1 view .LVU45
+  81:Sentry/src/gimbal_task.c ****             g_robot_state.gimbal.pitch_angle = -0.1f; // reset pitch to current pitch
+ 246              		.loc 1 81 33 is_stmt 0 view .LVU46
+ 247 00a0 494B     		ldr	r3, .L23+4
+ 248 00a2 93ED0A7A 		vldr.32	s14, [r3, #40]
+  81:Sentry/src/gimbal_task.c ****             g_robot_state.gimbal.pitch_angle = -0.1f; // reset pitch to current pitch
+ 249              		.loc 1 81 44 view .LVU47
+ 250 00a6 DFED4E6A 		vldr.32	s13, .L23+28
+ 251 00aa 37EE267A 		vadd.f32	s14, s14, s13
+ 252 00ae 83ED0A7A 		vstr.32	s14, [r3, #40]
+  82:Sentry/src/gimbal_task.c ****             lost_target_yaw_counter = 0;
+ 253              		.loc 1 82 13 is_stmt 1 view .LVU48
+  82:Sentry/src/gimbal_task.c ****             lost_target_yaw_counter = 0;
+ 254              		.loc 1 82 46 is_stmt 0 view .LVU49
+ 255 00b2 4C4A     		ldr	r2, .L23+32
+ 256 00b4 5A62     		str	r2, [r3, #36]	@ float
+  83:Sentry/src/gimbal_task.c ****         }
+ 257              		.loc 1 83 13 is_stmt 1 view .LVU50
+  83:Sentry/src/gimbal_task.c ****         }
+ 258              		.loc 1 83 37 is_stmt 0 view .LVU51
+ 259 00b6 484B     		ldr	r3, .L23+20
+ 260 00b8 0022     		movs	r2, #0
+ 261 00ba 1A80     		strh	r2, [r3]	@ movhi
+ 262              	.L8:
+  87:Sentry/src/gimbal_task.c ****         {
+ 263              		.loc 1 87 9 is_stmt 1 view .LVU52
+  87:Sentry/src/gimbal_task.c ****         {
+ 264              		.loc 1 87 24 is_stmt 0 view .LVU53
+ 265 00bc 454B     		ldr	r3, .L23+16
+ 266 00be 93F89430 		ldrb	r3, [r3, #148]	@ zero_extendqisi2
+  87:Sentry/src/gimbal_task.c ****         {
+ 267              		.loc 1 87 12 view .LVU54
+ 268 00c2 012B     		cmp	r3, #1
+ 269 00c4 30D1     		bne	.L11
+  89:Sentry/src/gimbal_task.c **** 
+ 270              		.loc 1 89 13 is_stmt 1 view .LVU55
+  89:Sentry/src/gimbal_task.c **** 
+ 271              		.loc 1 89 16 is_stmt 0 view .LVU56
+ 272 00c6 F5EE407A 		vcmp.f32	s15, #0
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrTSYde.s 			page 8
+
+
+ 273 00ca F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 274 00ce 1FD0     		beq	.L10
+  93:Sentry/src/gimbal_task.c ****                 g_robot_state.gimbal.yaw_angle = g_imu.rad.yaw + g_orin_data.receiving.auto_aiming.
+ 275              		.loc 1 93 17 is_stmt 1 view .LVU57
+  93:Sentry/src/gimbal_task.c ****                 g_robot_state.gimbal.yaw_angle = g_imu.rad.yaw + g_orin_data.receiving.auto_aiming.
+ 276              		.loc 1 93 43 is_stmt 0 view .LVU58
+ 277 00d0 424B     		ldr	r3, .L23+24
+ 278 00d2 0022     		movs	r2, #0
+ 279 00d4 1A80     		strh	r2, [r3]	@ movhi
+  94:Sentry/src/gimbal_task.c ****                 g_robot_state.gimbal.pitch_angle = g_imu.rad.pitch + g_orin_data.receiving.auto_aim
+ 280              		.loc 1 94 17 is_stmt 1 view .LVU59
+  94:Sentry/src/gimbal_task.c ****                 g_robot_state.gimbal.pitch_angle = g_imu.rad.pitch + g_orin_data.receiving.auto_aim
+ 281              		.loc 1 94 59 is_stmt 0 view .LVU60
+ 282 00d6 444A     		ldr	r2, .L23+36
+ 283 00d8 92ED117A 		vldr.32	s14, [r2, #68]
+  94:Sentry/src/gimbal_task.c ****                 g_robot_state.gimbal.pitch_angle = g_imu.rad.pitch + g_orin_data.receiving.auto_aim
+ 284              		.loc 1 94 104 view .LVU61
+ 285 00dc DFED435A 		vldr.32	s11, .L23+40
+ 286 00e0 C7EEA56A 		vdiv.f32	s13, s15, s11
+  94:Sentry/src/gimbal_task.c ****                 g_robot_state.gimbal.pitch_angle = g_imu.rad.pitch + g_orin_data.receiving.auto_aim
+ 287              		.loc 1 94 113 view .LVU62
+ 288 00e4 9FED426A 		vldr.32	s12, .L23+44
+ 289 00e8 66EE867A 		vmul.f32	s15, s13, s12
+  94:Sentry/src/gimbal_task.c ****                 g_robot_state.gimbal.pitch_angle = g_imu.rad.pitch + g_orin_data.receiving.auto_aim
+ 290              		.loc 1 94 64 view .LVU63
+ 291 00ec 77EE277A 		vadd.f32	s15, s14, s15
+  94:Sentry/src/gimbal_task.c ****                 g_robot_state.gimbal.pitch_angle = g_imu.rad.pitch + g_orin_data.receiving.auto_aim
+ 292              		.loc 1 94 48 view .LVU64
+ 293 00f0 354B     		ldr	r3, .L23+4
+ 294 00f2 C3ED0A7A 		vstr.32	s15, [r3, #40]
+  95:Sentry/src/gimbal_task.c ****             }
+ 295              		.loc 1 95 17 is_stmt 1 view .LVU65
+  95:Sentry/src/gimbal_task.c ****             }
+ 296              		.loc 1 95 61 is_stmt 0 view .LVU66
+ 297 00f6 D2ED127A 		vldr.32	s15, [r2, #72]
+  95:Sentry/src/gimbal_task.c ****             }
+ 298              		.loc 1 95 103 view .LVU67
+ 299 00fa 364A     		ldr	r2, .L23+16
+ 300 00fc D2ED1B6A 		vldr.32	s13, [r2, #108]
+  95:Sentry/src/gimbal_task.c ****             }
+ 301              		.loc 1 95 110 view .LVU68
+ 302 0100 86EEA57A 		vdiv.f32	s14, s13, s11
+  95:Sentry/src/gimbal_task.c ****             }
+ 303              		.loc 1 95 119 view .LVU69
+ 304 0104 27EE067A 		vmul.f32	s14, s14, s12
+  95:Sentry/src/gimbal_task.c ****             }
+ 305              		.loc 1 95 68 view .LVU70
+ 306 0108 77EE877A 		vadd.f32	s15, s15, s14
+  95:Sentry/src/gimbal_task.c ****             }
+ 307              		.loc 1 95 50 view .LVU71
+ 308 010c C3ED097A 		vstr.32	s15, [r3, #36]
+ 309              	.L10:
+  97:Sentry/src/gimbal_task.c ****         }
+ 310              		.loc 1 97 13 is_stmt 1 view .LVU72
+  97:Sentry/src/gimbal_task.c ****         }
+ 311              		.loc 1 97 39 is_stmt 0 view .LVU73
+ 312 0110 304B     		ldr	r3, .L23+16
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrTSYde.s 			page 9
+
+
+ 313 0112 0022     		movs	r2, #0
+ 314 0114 83F89420 		strb	r2, [r3, #148]
+ 315 0118 06E0     		b	.L11
+ 316              	.L12:
+ 102:Sentry/src/gimbal_task.c ****     }
+ 103:Sentry/src/gimbal_task.c **** 
+ 104:Sentry/src/gimbal_task.c ****     // hardware limits for gimbal pitch (prevent self collision)
+ 105:Sentry/src/gimbal_task.c ****     __MAP_ANGLE_TO_UNIT_CIRCLE(g_robot_state.gimbal.yaw_angle);
+ 317              		.loc 1 105 5 is_stmt 1 discriminator 2 view .LVU74
+ 318 011a 9FED367A 		vldr.32	s14, .L23+48
+ 319 011e 77EEC77A 		vsub.f32	s15, s15, s14
+ 320 0122 294B     		ldr	r3, .L23+4
+ 321 0124 C3ED0A7A 		vstr.32	s15, [r3, #40]
+ 322              	.L11:
+ 323              		.loc 1 105 5 discriminator 1 view .LVU75
+ 324 0128 274B     		ldr	r3, .L23+4
+ 325 012a D3ED0A7A 		vldr.32	s15, [r3, #40]
+ 326 012e 9FED307A 		vldr.32	s14, .L23+44
+ 327 0132 F4EEC77A 		vcmpe.f32	s15, s14
+ 328 0136 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 329 013a EEDA     		bge	.L12
+ 330 013c 06E0     		b	.L13
+ 331              	.L14:
+ 332              		.loc 1 105 5 discriminator 4 view .LVU76
+ 333 013e DFED2D7A 		vldr.32	s15, .L23+48
+ 334 0142 30EE270A 		vadd.f32	s0, s0, s15
+ 335 0146 204B     		ldr	r3, .L23+4
+ 336 0148 83ED0A0A 		vstr.32	s0, [r3, #40]
+ 337              	.L13:
+ 338              		.loc 1 105 5 discriminator 3 view .LVU77
+ 339 014c 1E4B     		ldr	r3, .L23+4
+ 340 014e 93ED0A0A 		vldr.32	s0, [r3, #40]
+ 341 0152 DFED297A 		vldr.32	s15, .L23+52
+ 342 0156 B4EEE70A 		vcmpe.f32	s0, s15
+ 343 015a F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 344 015e EED4     		bmi	.L14
+ 345              		.loc 1 105 5 view .LVU78
+ 346              		.loc 1 105 63 view .LVU79
+ 106:Sentry/src/gimbal_task.c ****     // __MAX_LIMIT(g_robot_state.gimbal.pitch_angle, -0.4f, 0.4f);
+ 107:Sentry/src/gimbal_task.c **** 
+ 108:Sentry/src/gimbal_task.c ****     // Control loop for gimbal
+ 109:Sentry/src/gimbal_task.c ****     // DJI_Motor_Set_Angle(g_pitch, g_robot_state.gimbal.pitch_angle);
+ 110:Sentry/src/gimbal_task.c ****     DJI_Motor_Set_Angle(g_yaw, g_robot_state.gimbal.yaw_angle);
+ 347              		.loc 1 110 5 view .LVU80
+ 348 0160 264B     		ldr	r3, .L23+56
+ 349 0162 1868     		ldr	r0, [r3]
+ 350 0164 FFF7FEFF 		bl	DJI_Motor_Set_Angle
+ 351              	.LVL3:
+ 111:Sentry/src/gimbal_task.c ****     __MAX_LIMIT(g_robot_state.gimbal.pitch_angle, -0.45f, 0.4f);
+ 352              		.loc 1 111 5 view .LVU81
+ 353              		.loc 1 111 5 view .LVU82
+ 354 0168 174B     		ldr	r3, .L23+4
+ 355 016a D3ED097A 		vldr.32	s15, [r3, #36]
+ 356 016e 9FED247A 		vldr.32	s14, .L23+60
+ 357 0172 F4EEC77A 		vcmpe.f32	s15, s14
+ 358 0176 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 359 017a 01DD     		ble	.L15
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrTSYde.s 			page 10
+
+
+ 360              		.loc 1 111 5 is_stmt 0 discriminator 1 view .LVU83
+ 361 017c F0EE477A 		vmov.f32	s15, s14
+ 362              	.L15:
+ 363              		.loc 1 111 5 discriminator 4 view .LVU84
+ 364 0180 114B     		ldr	r3, .L23+4
+ 365 0182 C3ED097A 		vstr.32	s15, [r3, #36]
+ 366              		.loc 1 111 5 is_stmt 1 view .LVU85
+ 367              		.loc 1 111 5 is_stmt 0 discriminator 4 view .LVU86
+ 368 0186 9FED1F7A 		vldr.32	s14, .L23+64
+ 369 018a F4EEC77A 		vcmpe.f32	s15, s14
+ 370 018e F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 371 0192 01D5     		bpl	.L17
+ 372              		.loc 1 111 5 discriminator 5 view .LVU87
+ 373 0194 F0EE477A 		vmov.f32	s15, s14
+ 374              	.L17:
+ 375              		.loc 1 111 5 discriminator 8 view .LVU88
+ 376 0198 0B4D     		ldr	r5, .L23+4
+ 377 019a C5ED097A 		vstr.32	s15, [r5, #36]
+ 378              		.loc 1 111 5 is_stmt 1 view .LVU89
+ 379              		.loc 1 111 64 view .LVU90
+ 112:Sentry/src/gimbal_task.c ****     
+ 113:Sentry/src/gimbal_task.c ****     DM_Motor_Enable_Motor(g_pitch);
+ 380              		.loc 1 113 5 view .LVU91
+ 381 019e 1A4C     		ldr	r4, .L23+68
+ 382 01a0 2068     		ldr	r0, [r4]
+ 383 01a2 FFF7FEFF 		bl	DM_Motor_Enable_Motor
+ 384              	.LVL4:
+ 114:Sentry/src/gimbal_task.c ****     DM_Motor_Ctrl_MIT_PD(g_pitch, g_robot_state.gimbal.pitch_angle, 0.0f, 0.0f, 20.0f, 8.5f);
+ 385              		.loc 1 114 5 view .LVU92
+ 386 01a6 DFED190A 		vldr.32	s1, .L23+72
+ 387 01aa B2EE012A 		vmov.f32	s4, #8.5e+0
+ 388 01ae F3EE041A 		vmov.f32	s3, #2.0e+1
+ 389 01b2 B0EE601A 		vmov.f32	s2, s1
+ 390 01b6 95ED090A 		vldr.32	s0, [r5, #36]
+ 391 01ba 2068     		ldr	r0, [r4]
+ 392 01bc FFF7FEFF 		bl	DM_Motor_Ctrl_MIT_PD
+ 393              	.LVL5:
+ 115:Sentry/src/gimbal_task.c **** }
+ 394              		.loc 1 115 1 is_stmt 0 view .LVU93
+ 395 01c0 38BD     		pop	{r3, r4, r5, pc}
+ 396              	.L24:
+ 397 01c2 00BF     		.align	2
+ 398              	.L23:
+ 399 01c4 00000000 		.word	g_remote
+ 400 01c8 00000000 		.word	g_robot_state
+ 401 01cc 00002544 		.word	1143275520
+ 402 01d0 0AD7233C 		.word	1008981770
+ 403 01d4 00000000 		.word	g_orin_data
+ 404 01d8 00000000 		.word	lost_target_yaw_counter
+ 405 01dc 00000000 		.word	initiate_scanning_counter
+ 406 01e0 910A863E 		.word	1048971921
+ 407 01e4 CDCCCCBD 		.word	-1110651699
+ 408 01e8 00000000 		.word	g_imu
+ 409 01ec 00003443 		.word	1127481344
+ 410 01f0 DA0F4940 		.word	1078530010
+ 411 01f4 DA0FC940 		.word	1086918618
+ 412 01f8 DA0F49C0 		.word	-1068953638
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrTSYde.s 			page 11
+
+
+ 413 01fc 00000000 		.word	g_yaw
+ 414 0200 CDCCCC3E 		.word	1053609165
+ 415 0204 6666E6BE 		.word	-1092196762
+ 416 0208 00000000 		.word	g_pitch
+ 417 020c 00000000 		.word	0
+ 418              		.cfi_endproc
+ 419              	.LFE143:
+ 421              		.section	.text._Gimbal_Target_Reset,"ax",%progbits
+ 422              		.align	1
+ 423              		.global	_Gimbal_Target_Reset
+ 424              		.syntax unified
+ 425              		.thumb
+ 426              		.thumb_func
+ 428              	_Gimbal_Target_Reset:
+ 429              	.LFB144:
+ 116:Sentry/src/gimbal_task.c **** 
+ 117:Sentry/src/gimbal_task.c **** void _Gimbal_Target_Reset()
+ 118:Sentry/src/gimbal_task.c **** {
+ 430              		.loc 1 118 1 is_stmt 1 view -0
+ 431              		.cfi_startproc
+ 432              		@ args = 0, pretend = 0, frame = 0
+ 433              		@ frame_needed = 0, uses_anonymous_args = 0
+ 434              		@ link register save eliminated.
+ 119:Sentry/src/gimbal_task.c ****     g_robot_state.gimbal.yaw_angle = g_imu.rad.yaw;
+ 435              		.loc 1 119 5 view .LVU95
+ 436              		.loc 1 119 47 is_stmt 0 view .LVU96
+ 437 0000 024B     		ldr	r3, .L26
+ 438 0002 5A6C     		ldr	r2, [r3, #68]	@ float
+ 439              		.loc 1 119 36 view .LVU97
+ 440 0004 024B     		ldr	r3, .L26+4
+ 441 0006 9A62     		str	r2, [r3, #40]	@ float
+ 120:Sentry/src/gimbal_task.c **** }
+ 442              		.loc 1 120 1 view .LVU98
+ 443 0008 7047     		bx	lr
+ 444              	.L27:
+ 445 000a 00BF     		.align	2
+ 446              	.L26:
+ 447 000c 00000000 		.word	g_imu
+ 448 0010 00000000 		.word	g_robot_state
+ 449              		.cfi_endproc
+ 450              	.LFE144:
+ 452              		.section	.text.Gimbal_Task_Disable,"ax",%progbits
+ 453              		.align	1
+ 454              		.global	Gimbal_Task_Disable
+ 455              		.syntax unified
+ 456              		.thumb
+ 457              		.thumb_func
+ 459              	Gimbal_Task_Disable:
+ 460              	.LFB145:
+ 121:Sentry/src/gimbal_task.c **** 
+ 122:Sentry/src/gimbal_task.c **** void Gimbal_Task_Disable()
+ 123:Sentry/src/gimbal_task.c **** {
+ 461              		.loc 1 123 1 is_stmt 1 view -0
+ 462              		.cfi_startproc
+ 463              		@ args = 0, pretend = 0, frame = 0
+ 464              		@ frame_needed = 0, uses_anonymous_args = 0
+ 465 0000 08B5     		push	{r3, lr}
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrTSYde.s 			page 12
+
+
+ 466              	.LCFI4:
+ 467              		.cfi_def_cfa_offset 8
+ 468              		.cfi_offset 3, -8
+ 469              		.cfi_offset 14, -4
+ 124:Sentry/src/gimbal_task.c ****     _Gimbal_Target_Reset();
+ 470              		.loc 1 124 5 view .LVU100
+ 471 0002 FFF7FEFF 		bl	_Gimbal_Target_Reset
+ 472              	.LVL6:
+ 125:Sentry/src/gimbal_task.c **** }...
+ 473              		.loc 1 125 1 is_stmt 0 view .LVU101
+ 474 0006 08BD     		pop	{r3, pc}
+ 475              		.cfi_endproc
+ 476              	.LFE145:
+ 478              		.global	initiate_scanning_counter
+ 479              		.section	.bss.initiate_scanning_counter,"aw",%nobits
+ 480              		.align	1
+ 483              	initiate_scanning_counter:
+ 484 0000 0000     		.space	2
+ 485              		.global	lost_target_yaw_counter
+ 486              		.section	.bss.lost_target_yaw_counter,"aw",%nobits
+ 487              		.align	1
+ 490              	lost_target_yaw_counter:
+ 491 0000 0000     		.space	2
+ 492              		.global	g_pitch
+ 493              		.section	.bss.g_pitch,"aw",%nobits
+ 494              		.align	2
+ 497              	g_pitch:
+ 498 0000 00000000 		.space	4
+ 499              		.global	g_yaw
+ 500              		.section	.bss.g_yaw,"aw",%nobits
+ 501              		.align	2
+ 504              	g_yaw:
+ 505 0000 00000000 		.space	4
+ 506              		.text
+ 507              	.Letext0:
+ 508              		.file 2 "/Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/arm-none-eabi/include/machine/_defa
+ 509              		.file 3 "/Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/arm-none-eabi/include/sys/_stdint.h
+ 510              		.file 4 "Sentry/inc/robot.h"
+ 511              		.file 5 "control-base/typec-board-base/Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h"
+ 512              		.file 6 "control-base/typec-board-base/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_can.h"
+ 513              		.file 7 "control-base/devices/inc/remote.h"
+ 514              		.file 8 "control-base/bsp/inc/bsp_can.h"
+ 515              		.file 9 "control-base/algo/inc/pid.h"
+ 516              		.file 10 "control-base/devices/inc/motor.h"
+ 517              		.file 11 "control-base/devices/inc/dji_motor.h"
+ 518              		.file 12 "control-base/devices/inc/bmi088driver.h"
+ 519              		.file 13 "control-base/devices/inc/ist8310driver.h"
+ 520              		.file 14 "control-base/devices/inc/imu_task.h"
+ 521              		.file 15 "control-base/devices/inc/jetson_orin.h"
+ 522              		.file 16 "control-base/devices/inc/dm_motor.h"
+ 523              		.file 17 "<built-in>"
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrTSYde.s 			page 13
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 gimbal_task.c
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrTSYde.s:21     .text.Gimbal_Task_Init:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrTSYde.s:27     .text.Gimbal_Task_Init:00000000 Gimbal_Task_Init
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrTSYde.s:123    .text.Gimbal_Task_Init:00000098 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrTSYde.s:504    .bss.g_yaw:00000000 g_yaw
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrTSYde.s:497    .bss.g_pitch:00000000 g_pitch
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrTSYde.s:138    .text.Gimbal_Ctrl_Loop:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrTSYde.s:144    .text.Gimbal_Ctrl_Loop:00000000 Gimbal_Ctrl_Loop
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrTSYde.s:399    .text.Gimbal_Ctrl_Loop:000001c4 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrTSYde.s:490    .bss.lost_target_yaw_counter:00000000 lost_target_yaw_counter
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrTSYde.s:483    .bss.initiate_scanning_counter:00000000 initiate_scanning_counter
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrTSYde.s:422    .text._Gimbal_Target_Reset:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrTSYde.s:428    .text._Gimbal_Target_Reset:00000000 _Gimbal_Target_Reset
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrTSYde.s:447    .text._Gimbal_Target_Reset:0000000c $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrTSYde.s:453    .text.Gimbal_Task_Disable:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrTSYde.s:459    .text.Gimbal_Task_Disable:00000000 Gimbal_Task_Disable
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrTSYde.s:480    .bss.initiate_scanning_counter:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrTSYde.s:487    .bss.lost_target_yaw_counter:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrTSYde.s:494    .bss.g_pitch:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrTSYde.s:501    .bss.g_yaw:00000000 $d
+
+UNDEFINED SYMBOLS
+memset
+DJI_Motor_Init
+DM_Motor_Init
+g_imu
+DJI_Motor_Set_Angle
+DM_Motor_Enable_Motor
+DM_Motor_Ctrl_MIT_PD
+g_remote
+g_robot_state
+g_orin_data

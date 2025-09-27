@@ -1,0 +1,332 @@
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccCrWGGr.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"pid.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "control-base/algo/src/pid.c"
+  20              		.section	.text.PID_Init,"ax",%progbits
+  21              		.align	1
+  22              		.global	PID_Init
+  23              		.syntax unified
+  24              		.thumb
+  25              		.thumb_func
+  27              	PID_Init:
+  28              	.LVL0:
+  29              	.LFB0:
+   1:control-base/algo/src/pid.c **** #include "pid.h"
+   2:control-base/algo/src/pid.c **** #include <math.h>
+   3:control-base/algo/src/pid.c **** #include "user_math.h"
+   4:control-base/algo/src/pid.c **** 
+   5:control-base/algo/src/pid.c **** void PID_Init(PID_t *pid, float kp, float ki, float kd, float output_limit, float integral_limit, f
+   6:control-base/algo/src/pid.c **** void PID_Reset(PID_t *pid);
+   7:control-base/algo/src/pid.c **** float PID(PID_t *pid, float error);
+   8:control-base/algo/src/pid.c **** 
+   9:control-base/algo/src/pid.c **** void PID_Init(PID_t *pid, float kp, float ki, float kd, float output_limit, float integral_limit, f
+  10:control-base/algo/src/pid.c **** {
+  30              		.loc 1 10 1 view -0
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 0
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  34              		@ link register save eliminated.
+  11:control-base/algo/src/pid.c ****     pid->kp = kp;
+  35              		.loc 1 11 5 view .LVU1
+  36              		.loc 1 11 13 is_stmt 0 view .LVU2
+  37 0000 80ED000A 		vstr.32	s0, [r0]
+  12:control-base/algo/src/pid.c ****     pid->kd = kd;
+  38              		.loc 1 12 5 is_stmt 1 view .LVU3
+  39              		.loc 1 12 13 is_stmt 0 view .LVU4
+  40 0004 80ED021A 		vstr.32	s2, [r0, #8]
+  13:control-base/algo/src/pid.c ****     pid->ki = ki;
+  41              		.loc 1 13 5 is_stmt 1 view .LVU5
+  42              		.loc 1 13 13 is_stmt 0 view .LVU6
+  43 0008 C0ED010A 		vstr.32	s1, [r0, #4]
+  14:control-base/algo/src/pid.c ****     pid->prev_error = 0;
+  44              		.loc 1 14 5 is_stmt 1 view .LVU7
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccCrWGGr.s 			page 2
+
+
+  45              		.loc 1 14 21 is_stmt 0 view .LVU8
+  46 000c 0023     		movs	r3, #0
+  47 000e C362     		str	r3, [r0, #44]	@ float
+  15:control-base/algo/src/pid.c ****     pid->i_out = 0;
+  48              		.loc 1 15 5 is_stmt 1 view .LVU9
+  49              		.loc 1 15 16 is_stmt 0 view .LVU10
+  50 0010 8361     		str	r3, [r0, #24]	@ float
+  16:control-base/algo/src/pid.c ****     pid->integral_limit = integral_limit;
+  51              		.loc 1 16 5 is_stmt 1 view .LVU11
+  52              		.loc 1 16 25 is_stmt 0 view .LVU12
+  53 0012 80ED042A 		vstr.32	s4, [r0, #16]
+  17:control-base/algo/src/pid.c ****     pid->output_limit = output_limit;
+  54              		.loc 1 17 5 is_stmt 1 view .LVU13
+  55              		.loc 1 17 23 is_stmt 0 view .LVU14
+  56 0016 C0ED081A 		vstr.32	s3, [r0, #32]
+  18:control-base/algo/src/pid.c ****     pid->dead_zone = dead_zone;
+  57              		.loc 1 18 5 is_stmt 1 view .LVU15
+  58              		.loc 1 18 20 is_stmt 0 view .LVU16
+  59 001a C0ED092A 		vstr.32	s5, [r0, #36]
+  19:control-base/algo/src/pid.c **** }
+  60              		.loc 1 19 1 view .LVU17
+  61 001e 7047     		bx	lr
+  62              		.cfi_endproc
+  63              	.LFE0:
+  65              		.section	.text.PID_Reset,"ax",%progbits
+  66              		.align	1
+  67              		.global	PID_Reset
+  68              		.syntax unified
+  69              		.thumb
+  70              		.thumb_func
+  72              	PID_Reset:
+  73              	.LVL1:
+  74              	.LFB1:
+  20:control-base/algo/src/pid.c **** 
+  21:control-base/algo/src/pid.c **** void PID_Reset(PID_t *pid)
+  22:control-base/algo/src/pid.c **** {
+  75              		.loc 1 22 1 is_stmt 1 view -0
+  76              		.cfi_startproc
+  77              		@ args = 0, pretend = 0, frame = 0
+  78              		@ frame_needed = 0, uses_anonymous_args = 0
+  79              		@ link register save eliminated.
+  23:control-base/algo/src/pid.c ****     pid->prev_error = 0;
+  80              		.loc 1 23 5 view .LVU19
+  81              		.loc 1 23 21 is_stmt 0 view .LVU20
+  82 0000 0023     		movs	r3, #0
+  83 0002 C362     		str	r3, [r0, #44]	@ float
+  24:control-base/algo/src/pid.c ****     pid->i_out = 0;
+  84              		.loc 1 24 5 is_stmt 1 view .LVU21
+  85              		.loc 1 24 16 is_stmt 0 view .LVU22
+  86 0004 8361     		str	r3, [r0, #24]	@ float
+  25:control-base/algo/src/pid.c ****     pid->output = 0;
+  87              		.loc 1 25 5 is_stmt 1 view .LVU23
+  88              		.loc 1 25 17 is_stmt 0 view .LVU24
+  89 0006 0363     		str	r3, [r0, #48]	@ float
+  26:control-base/algo/src/pid.c **** }
+  90              		.loc 1 26 1 view .LVU25
+  91 0008 7047     		bx	lr
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccCrWGGr.s 			page 3
+
+
+  92              		.cfi_endproc
+  93              	.LFE1:
+  95              		.section	.text.PID,"ax",%progbits
+  96              		.align	1
+  97              		.global	PID
+  98              		.syntax unified
+  99              		.thumb
+ 100              		.thumb_func
+ 102              	PID:
+ 103              	.LVL2:
+ 104              	.LFB2:
+  27:control-base/algo/src/pid.c **** 
+  28:control-base/algo/src/pid.c **** float PID(PID_t *pid, float error)
+  29:control-base/algo/src/pid.c **** {
+ 105              		.loc 1 29 1 is_stmt 1 view -0
+ 106              		.cfi_startproc
+ 107              		@ args = 0, pretend = 0, frame = 0
+ 108              		@ frame_needed = 0, uses_anonymous_args = 0
+ 109              		@ link register save eliminated.
+  30:control-base/algo/src/pid.c ****     if (fabs(error) < pid->dead_zone) error = 0;
+ 110              		.loc 1 30 5 view .LVU27
+ 111              		.loc 1 30 9 is_stmt 0 view .LVU28
+ 112 0000 B0EEC07A 		vabs.f32	s14, s0
+ 113              		.loc 1 30 26 view .LVU29
+ 114 0004 D0ED097A 		vldr.32	s15, [r0, #36]
+ 115              		.loc 1 30 8 view .LVU30
+ 116 0008 B4EEE77A 		vcmpe.f32	s14, s15
+ 117 000c F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 118 0010 01D5     		bpl	.L4
+ 119              		.loc 1 30 45 discriminator 1 view .LVU31
+ 120 0012 9FED360A 		vldr.32	s0, .L25
+ 121              	.LVL3:
+ 122              	.L4:
+  31:control-base/algo/src/pid.c ****     pid->i_out += error * pid->ki;
+ 123              		.loc 1 31 5 is_stmt 1 view .LVU32
+ 124              		.loc 1 31 8 is_stmt 0 view .LVU33
+ 125 0016 D0ED066A 		vldr.32	s13, [r0, #24]
+ 126              		.loc 1 31 30 view .LVU34
+ 127 001a D0ED017A 		vldr.32	s15, [r0, #4]
+ 128              		.loc 1 31 25 view .LVU35
+ 129 001e 67EE807A 		vmul.f32	s15, s15, s0
+ 130              		.loc 1 31 16 view .LVU36
+ 131 0022 76EEA76A 		vadd.f32	s13, s13, s15
+ 132 0026 C0ED066A 		vstr.32	s13, [r0, #24]
+  32:control-base/algo/src/pid.c ****     pid->f_out = pid->kf * pid->ref;
+ 133              		.loc 1 32 5 is_stmt 1 view .LVU37
+ 134              		.loc 1 32 21 is_stmt 0 view .LVU38
+ 135 002a 90ED037A 		vldr.32	s14, [r0, #12]
+ 136              		.loc 1 32 31 view .LVU39
+ 137 002e D0ED0A7A 		vldr.32	s15, [r0, #40]
+ 138              		.loc 1 32 26 view .LVU40
+ 139 0032 27EE277A 		vmul.f32	s14, s14, s15
+ 140              		.loc 1 32 16 view .LVU41
+ 141 0036 80ED077A 		vstr.32	s14, [r0, #28]
+  33:control-base/algo/src/pid.c ****     __MAX_LIMIT(pid->i_out, -pid->integral_limit, pid->integral_limit);
+ 142              		.loc 1 33 5 is_stmt 1 view .LVU42
+ 143              		.loc 1 33 5 view .LVU43
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccCrWGGr.s 			page 4
+
+
+ 144 003a D0ED047A 		vldr.32	s15, [r0, #16]
+ 145 003e F4EEE76A 		vcmpe.f32	s13, s15
+ 146 0042 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 147 0046 01DD     		ble	.L5
+ 148              		.loc 1 33 5 is_stmt 0 discriminator 1 view .LVU44
+ 149 0048 F0EE676A 		vmov.f32	s13, s15
+ 150              	.L5:
+ 151              		.loc 1 33 5 discriminator 4 view .LVU45
+ 152 004c C0ED066A 		vstr.32	s13, [r0, #24]
+ 153              		.loc 1 33 5 is_stmt 1 view .LVU46
+ 154              		.loc 1 33 5 is_stmt 0 discriminator 4 view .LVU47
+ 155 0050 F1EE677A 		vneg.f32	s15, s15
+ 156 0054 F4EEE67A 		vcmpe.f32	s15, s13
+ 157 0058 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 158 005c 01DD     		ble	.L7
+ 159              		.loc 1 33 5 discriminator 5 view .LVU48
+ 160 005e F0EE676A 		vmov.f32	s13, s15
+ 161              	.L7:
+ 162              		.loc 1 33 5 discriminator 8 view .LVU49
+ 163 0062 C0ED066A 		vstr.32	s13, [r0, #24]
+ 164              		.loc 1 33 5 is_stmt 1 view .LVU50
+ 165              		.loc 1 33 71 view .LVU51
+  34:control-base/algo/src/pid.c ****     __MAX_LIMIT(pid->f_out, -pid->feedforward_limit, pid->feedforward_limit);
+ 166              		.loc 1 34 5 view .LVU52
+ 167              		.loc 1 34 5 view .LVU53
+ 168 0066 D0ED057A 		vldr.32	s15, [r0, #20]
+ 169 006a B4EEE77A 		vcmpe.f32	s14, s15
+ 170 006e F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 171 0072 01DD     		ble	.L9
+ 172              		.loc 1 34 5 is_stmt 0 discriminator 1 view .LVU54
+ 173 0074 B0EE677A 		vmov.f32	s14, s15
+ 174              	.L9:
+ 175              		.loc 1 34 5 discriminator 4 view .LVU55
+ 176 0078 80ED077A 		vstr.32	s14, [r0, #28]
+ 177              		.loc 1 34 5 is_stmt 1 view .LVU56
+ 178              		.loc 1 34 5 is_stmt 0 discriminator 4 view .LVU57
+ 179 007c F1EE677A 		vneg.f32	s15, s15
+ 180 0080 F4EEC77A 		vcmpe.f32	s15, s14
+ 181 0084 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 182 0088 01DD     		ble	.L11
+ 183              		.loc 1 34 5 discriminator 5 view .LVU58
+ 184 008a B0EE677A 		vmov.f32	s14, s15
+ 185              	.L11:
+ 186              		.loc 1 34 5 discriminator 8 view .LVU59
+ 187 008e 80ED077A 		vstr.32	s14, [r0, #28]
+ 188              		.loc 1 34 5 is_stmt 1 view .LVU60
+ 189              		.loc 1 34 77 view .LVU61
+  35:control-base/algo/src/pid.c ****     pid->output = pid->kp * error + pid->i_out + pid->kd * (error - pid->prev_error) + pid->f_out;
+ 190              		.loc 1 35 5 view .LVU62
+ 191              		.loc 1 35 22 is_stmt 0 view .LVU63
+ 192 0092 D0ED007A 		vldr.32	s15, [r0]
+ 193              		.loc 1 35 27 view .LVU64
+ 194 0096 67EE807A 		vmul.f32	s15, s15, s0
+ 195              		.loc 1 35 35 view .LVU65
+ 196 009a 77EEA67A 		vadd.f32	s15, s15, s13
+ 197              		.loc 1 35 53 view .LVU66
+ 198 009e D0ED026A 		vldr.32	s13, [r0, #8]
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccCrWGGr.s 			page 5
+
+
+ 199              		.loc 1 35 72 view .LVU67
+ 200 00a2 90ED0B6A 		vldr.32	s12, [r0, #44]
+ 201              		.loc 1 35 67 view .LVU68
+ 202 00a6 30EE466A 		vsub.f32	s12, s0, s12
+ 203              		.loc 1 35 58 view .LVU69
+ 204 00aa 66EE866A 		vmul.f32	s13, s13, s12
+ 205              		.loc 1 35 48 view .LVU70
+ 206 00ae 77EEA67A 		vadd.f32	s15, s15, s13
+ 207              		.loc 1 35 86 view .LVU71
+ 208 00b2 77EE877A 		vadd.f32	s15, s15, s14
+ 209              		.loc 1 35 17 view .LVU72
+ 210 00b6 C0ED0C7A 		vstr.32	s15, [r0, #48]
+  36:control-base/algo/src/pid.c ****     
+  37:control-base/algo/src/pid.c ****     pid->prev_error = error;
+ 211              		.loc 1 37 5 is_stmt 1 view .LVU73
+ 212              		.loc 1 37 21 is_stmt 0 view .LVU74
+ 213 00ba 80ED0B0A 		vstr.32	s0, [r0, #44]
+  38:control-base/algo/src/pid.c ****     
+  39:control-base/algo/src/pid.c ****     if (pid->output >= pid->output_limit)
+ 214              		.loc 1 39 5 is_stmt 1 view .LVU75
+ 215              		.loc 1 39 27 is_stmt 0 view .LVU76
+ 216 00be 90ED087A 		vldr.32	s14, [r0, #32]
+ 217              		.loc 1 39 8 view .LVU77
+ 218 00c2 F4EEC77A 		vcmpe.f32	s15, s14
+ 219 00c6 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 220 00ca 04DB     		blt	.L24
+  40:control-base/algo/src/pid.c ****     {
+  41:control-base/algo/src/pid.c ****         pid->output =  pid->output_limit;
+ 221              		.loc 1 41 9 is_stmt 1 view .LVU78
+ 222              		.loc 1 41 21 is_stmt 0 view .LVU79
+ 223 00cc 80ED0C7A 		vstr.32	s14, [r0, #48]
+ 224              	.L15:
+  42:control-base/algo/src/pid.c ****     } else if (pid->output <= -pid->output_limit)
+  43:control-base/algo/src/pid.c ****     {
+  44:control-base/algo/src/pid.c ****         pid->output = -pid->output_limit;
+  45:control-base/algo/src/pid.c ****     }
+  46:control-base/algo/src/pid.c **** 
+  47:control-base/algo/src/pid.c ****     return pid->output;
+ 225              		.loc 1 47 5 is_stmt 1 view .LVU80
+  48:control-base/algo/src/pid.c **** }
+ 226              		.loc 1 48 1 is_stmt 0 view .LVU81
+ 227 00d0 90ED0C0A 		vldr.32	s0, [r0, #48]
+ 228              	.LVL4:
+ 229              		.loc 1 48 1 view .LVU82
+ 230 00d4 7047     		bx	lr
+ 231              	.LVL5:
+ 232              	.L24:
+  42:control-base/algo/src/pid.c ****     } else if (pid->output <= -pid->output_limit)
+ 233              		.loc 1 42 12 is_stmt 1 view .LVU83
+  42:control-base/algo/src/pid.c ****     } else if (pid->output <= -pid->output_limit)
+ 234              		.loc 1 42 31 is_stmt 0 view .LVU84
+ 235 00d6 B1EE477A 		vneg.f32	s14, s14
+  42:control-base/algo/src/pid.c ****     } else if (pid->output <= -pid->output_limit)
+ 236              		.loc 1 42 15 view .LVU85
+ 237 00da F4EEC77A 		vcmpe.f32	s15, s14
+ 238 00de F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 239 00e2 F5D8     		bhi	.L15
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccCrWGGr.s 			page 6
+
+
+  44:control-base/algo/src/pid.c ****     }
+ 240              		.loc 1 44 9 is_stmt 1 view .LVU86
+  44:control-base/algo/src/pid.c ****     }
+ 241              		.loc 1 44 21 is_stmt 0 view .LVU87
+ 242 00e4 80ED0C7A 		vstr.32	s14, [r0, #48]
+ 243 00e8 F2E7     		b	.L15
+ 244              	.L26:
+ 245 00ea 00BF     		.align	2
+ 246              	.L25:
+ 247 00ec 00000000 		.word	0
+ 248              		.cfi_endproc
+ 249              	.LFE2:
+ 251              		.text
+ 252              	.Letext0:
+ 253              		.file 2 "control-base/algo/inc/pid.h"
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccCrWGGr.s 			page 7
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 pid.c
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccCrWGGr.s:21     .text.PID_Init:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccCrWGGr.s:27     .text.PID_Init:00000000 PID_Init
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccCrWGGr.s:66     .text.PID_Reset:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccCrWGGr.s:72     .text.PID_Reset:00000000 PID_Reset
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccCrWGGr.s:96     .text.PID:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccCrWGGr.s:102    .text.PID:00000000 PID
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccCrWGGr.s:247    .text.PID:000000ec $d
+
+NO UNDEFINED SYMBOLS

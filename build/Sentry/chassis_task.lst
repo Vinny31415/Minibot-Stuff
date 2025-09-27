@@ -1,0 +1,1315 @@
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cclyejfx.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"chassis_task.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "Sentry/src/chassis_task.c"
+  20              		.section	.text.Chassis_Task_Init,"ax",%progbits
+  21              		.align	1
+  22              		.global	Chassis_Task_Init
+  23              		.syntax unified
+  24              		.thumb
+  25              		.thumb_func
+  27              	Chassis_Task_Init:
+  28              	.LFB142:
+   1:Sentry/src/chassis_task.c **** #include "chassis_task.h"
+   2:Sentry/src/chassis_task.c **** 
+   3:Sentry/src/chassis_task.c **** #include "motor.h"
+   4:Sentry/src/chassis_task.c **** #include "robot.h"
+   5:Sentry/src/chassis_task.c **** #include "remote.h"
+   6:Sentry/src/chassis_task.c **** #include "dji_motor.h"
+   7:Sentry/src/chassis_task.c **** #include "omni_locomotion.h"
+   8:Sentry/src/chassis_task.c **** #include "rate_limiter.h"
+   9:Sentry/src/chassis_task.c **** #include "pid.h"
+  10:Sentry/src/chassis_task.c **** #include "imu_task.h"
+  11:Sentry/src/chassis_task.c **** #include "jetson_orin.h"
+  12:Sentry/src/chassis_task.c **** #include <math.h>
+  13:Sentry/src/chassis_task.c **** #include <stdint.h>
+  14:Sentry/src/chassis_task.c **** #include "dm_motor.h"
+  15:Sentry/src/chassis_task.c **** #include "supercap.h"
+  16:Sentry/src/chassis_task.c **** 
+  17:Sentry/src/chassis_task.c **** extern DM_Motor_Handle_t *g_pitch;
+  18:Sentry/src/chassis_task.c **** uint8_t spintop_safe = 0;
+  19:Sentry/src/chassis_task.c **** extern Robot_State_t g_robot_state;
+  20:Sentry/src/chassis_task.c **** extern Remote_t g_remote;
+  21:Sentry/src/chassis_task.c **** extern DJI_Motor_Handle_t *g_yaw; // for reading gimbal angle
+  22:Sentry/src/chassis_task.c **** float gimbal_angle_difference;
+  23:Sentry/src/chassis_task.c **** DJI_Motor_Handle_t *motors[4];
+  24:Sentry/src/chassis_task.c **** uint8_t drive_esc_id_array[4] = {1, 2, 3, 4};
+  25:Sentry/src/chassis_task.c **** Motor_Reversal_t drive_motor_reversal_array[4] = {
+  26:Sentry/src/chassis_task.c ****     MOTOR_REVERSAL_NORMAL,
+  27:Sentry/src/chassis_task.c ****     MOTOR_REVERSAL_NORMAL,
+  28:Sentry/src/chassis_task.c ****     MOTOR_REVERSAL_NORMAL,
+  29:Sentry/src/chassis_task.c ****     MOTOR_REVERSAL_NORMAL
+  30:Sentry/src/chassis_task.c **** };
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cclyejfx.s 			page 2
+
+
+  31:Sentry/src/chassis_task.c **** 
+  32:Sentry/src/chassis_task.c **** omni_physical_constants_t physical_constants;
+  33:Sentry/src/chassis_task.c **** omni_chassis_state_t chassis_state;
+  34:Sentry/src/chassis_task.c **** 
+  35:Sentry/src/chassis_task.c **** rate_limiter_t wheel_rate_limiters[4];
+  36:Sentry/src/chassis_task.c **** PID_t g_follow_gimbal_angle_pid;                      // chassis following gimbal
+  37:Sentry/src/chassis_task.c **** 
+  38:Sentry/src/chassis_task.c **** pose_2d_t sentry_pose;
+  39:Sentry/src/chassis_task.c **** motor_data_t motor_data_odom;
+  40:Sentry/src/chassis_task.c **** 
+  41:Sentry/src/chassis_task.c **** uint16_t last_hp;
+  42:Sentry/src/chassis_task.c **** uint16_t is_hit_counter = 0;
+  43:Sentry/src/chassis_task.c **** 
+  44:Sentry/src/chassis_task.c **** 
+  45:Sentry/src/chassis_task.c **** 
+  46:Sentry/src/chassis_task.c **** void Chassis_Task_Init()
+  47:Sentry/src/chassis_task.c **** {
+  29              		.loc 1 47 1 view -0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 280
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33 0000 30B5     		push	{r4, r5, lr}
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 12
+  36              		.cfi_offset 4, -12
+  37              		.cfi_offset 5, -8
+  38              		.cfi_offset 14, -4
+  39 0002 2DED028B 		vpush.64	{d8}
+  40              	.LCFI1:
+  41              		.cfi_def_cfa_offset 20
+  42              		.cfi_offset 80, -20
+  43              		.cfi_offset 81, -16
+  44 0006 C7B0     		sub	sp, sp, #284
+  45              	.LCFI2:
+  46              		.cfi_def_cfa_offset 304
+  48:Sentry/src/chassis_task.c ****     // Init chassis hardware
+  49:Sentry/src/chassis_task.c ****     Motor_Config_t drive_motor_config = {
+  47              		.loc 1 49 5 view .LVU1
+  48              		.loc 1 49 20 is_stmt 0 view .LVU2
+  49 0008 B422     		movs	r2, #180
+  50 000a 0021     		movs	r1, #0
+  51 000c 19A8     		add	r0, sp, #100
+  52 000e FFF7FEFF 		bl	memset
+  53              	.LVL0:
+  54 0012 0123     		movs	r3, #1
+  55 0014 8DF86430 		strb	r3, [sp, #100]
+  56 0018 8DF86F30 		strb	r3, [sp, #111]
+  57 001c 334B     		ldr	r3, .L7
+  58 001e 2C93     		str	r3, [sp, #176]	@ float
+  59 0020 334B     		ldr	r3, .L7+4
+  60 0022 2F93     		str	r3, [sp, #188]	@ float
+  61 0024 334B     		ldr	r3, .L7+8
+  62 0026 3093     		str	r3, [sp, #192]	@ float
+  63 0028 334B     		ldr	r3, .L7+12
+  64 002a 3493     		str	r3, [sp, #208]	@ float
+  50:Sentry/src/chassis_task.c ****         .can_bus = 1,
+  51:Sentry/src/chassis_task.c ****         .control_mode = VELOCITY_CONTROL,
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cclyejfx.s 			page 3
+
+
+  52:Sentry/src/chassis_task.c ****         .velocity_pid = {
+  53:Sentry/src/chassis_task.c ****             .kp = 300.0f,
+  54:Sentry/src/chassis_task.c ****             .kf = 100.0f,
+  55:Sentry/src/chassis_task.c ****             .output_limit = M3508_MAX_CURRENT_INT,
+  56:Sentry/src/chassis_task.c ****             .integral_limit = 3000.0f,
+  57:Sentry/src/chassis_task.c ****     }};
+  58:Sentry/src/chassis_task.c **** 
+  59:Sentry/src/chassis_task.c ****     for (int i = 0; i < 4; i++) {
+  65              		.loc 1 59 5 is_stmt 1 view .LVU3
+  66              	.LBB2:
+  67              		.loc 1 59 10 view .LVU4
+  68              	.LVL1:
+  69              		.loc 1 59 14 is_stmt 0 view .LVU5
+  70 002c 0024     		movs	r4, #0
+  71              		.loc 1 59 5 view .LVU6
+  72 002e 12E0     		b	.L2
+  73              	.LVL2:
+  74              	.L3:
+  60:Sentry/src/chassis_task.c ****         // configure drive motor
+  61:Sentry/src/chassis_task.c ****         drive_motor_config.speed_controller_id = drive_esc_id_array[i];
+  75              		.loc 1 61 9 is_stmt 1 view .LVU7
+  76              		.loc 1 61 68 is_stmt 0 view .LVU8
+  77 0030 324B     		ldr	r3, .L7+16
+  78 0032 1B5D     		ldrb	r3, [r3, r4]	@ zero_extendqisi2
+  79              		.loc 1 61 48 view .LVU9
+  80 0034 8DF86A30 		strb	r3, [sp, #106]
+  62:Sentry/src/chassis_task.c ****         drive_motor_config.motor_reversal = drive_motor_reversal_array[i];
+  81              		.loc 1 62 9 is_stmt 1 view .LVU10
+  82              		.loc 1 62 71 is_stmt 0 view .LVU11
+  83 0038 314B     		ldr	r3, .L7+20
+  84 003a 1B5D     		ldrb	r3, [r3, r4]	@ zero_extendqisi2
+  85              		.loc 1 62 43 view .LVU12
+  86 003c 8DF86E30 		strb	r3, [sp, #110]
+  63:Sentry/src/chassis_task.c ****         motors[i] = DJI_Motor_Init(&drive_motor_config, M3508_PLANETARY);
+  87              		.loc 1 63 9 is_stmt 1 view .LVU13
+  88              		.loc 1 63 21 is_stmt 0 view .LVU14
+  89 0040 0321     		movs	r1, #3
+  90 0042 19A8     		add	r0, sp, #100
+  91 0044 FFF7FEFF 		bl	DJI_Motor_Init
+  92              	.LVL3:
+  93              		.loc 1 63 19 discriminator 1 view .LVU15
+  94 0048 2E4B     		ldr	r3, .L7+24
+  95 004a 43F82400 		str	r0, [r3, r4, lsl #2]
+  64:Sentry/src/chassis_task.c ****         DJI_Motor_Set_Control_Mode(motors[i], VELOCITY_CONTROL);
+  96              		.loc 1 64 9 is_stmt 1 view .LVU16
+  97 004e 0121     		movs	r1, #1
+  98 0050 FFF7FEFF 		bl	DJI_Motor_Set_Control_Mode
+  99              	.LVL4:
+  59:Sentry/src/chassis_task.c ****         // configure drive motor
+ 100              		.loc 1 59 29 discriminator 3 view .LVU17
+ 101 0054 0134     		adds	r4, r4, #1
+ 102              	.LVL5:
+ 103              	.L2:
+  59:Sentry/src/chassis_task.c ****         // configure drive motor
+ 104              		.loc 1 59 23 discriminator 1 view .LVU18
+ 105 0056 032C     		cmp	r4, #3
+ 106 0058 EADD     		ble	.L3
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cclyejfx.s 			page 4
+
+
+ 107              	.LBE2:
+  65:Sentry/src/chassis_task.c ****     }
+  66:Sentry/src/chassis_task.c **** 
+  67:Sentry/src/chassis_task.c ****     pose_2d_t init_pose = {
+ 108              		.loc 1 67 5 view .LVU19
+ 109              		.loc 1 67 15 is_stmt 0 view .LVU20
+ 110 005a 13A9     		add	r1, sp, #76
+ 111 005c 0024     		movs	r4, #0
+ 112              	.LVL6:
+ 113              		.loc 1 67 15 view .LVU21
+ 114 005e 1394     		str	r4, [sp, #76]
+ 115 0060 4C60     		str	r4, [r1, #4]
+ 116 0062 8C60     		str	r4, [r1, #8]
+ 117 0064 CC60     		str	r4, [r1, #12]
+ 118 0066 0C61     		str	r4, [r1, #16]
+ 119 0068 4C61     		str	r4, [r1, #20]
+  68:Sentry/src/chassis_task.c ****         .x = INIT_X_POS,
+  69:Sentry/src/chassis_task.c ****         .y = INIT_Y_POS,
+  70:Sentry/src/chassis_task.c ****         .theta = INIT_THETA
+  71:Sentry/src/chassis_task.c ****     };
+  72:Sentry/src/chassis_task.c **** 
+  73:Sentry/src/chassis_task.c ****     // Initialize the omni chassis state
+  74:Sentry/src/chassis_task.c ****     physical_constants = omni_init(
+ 120              		.loc 1 74 5 is_stmt 1 view .LVU22
+ 121              		.loc 1 74 26 is_stmt 0 view .LVU23
+ 122 006a F0EE001A 		vmov.f32	s3, #2.0e+0
+ 123 006e 9FED261A 		vldr.32	s2, .L7+28
+ 124 0072 DFED260A 		vldr.32	s1, .L7+32
+ 125 0076 9FED260A 		vldr.32	s0, .L7+36
+ 126 007a 6846     		mov	r0, sp
+ 127 007c FFF7FEFF 		bl	omni_init
+ 128              	.LVL7:
+ 129 0080 4422     		movs	r2, #68
+ 130 0082 6946     		mov	r1, sp
+ 131 0084 2348     		ldr	r0, .L7+40
+ 132 0086 FFF7FEFF 		bl	memcpy
+ 133              	.LVL8:
+  75:Sentry/src/chassis_task.c ****         CHASSIS_WHEEL_DIAMETER,
+  76:Sentry/src/chassis_task.c ****         CHASSIS_RADIUS,
+  77:Sentry/src/chassis_task.c ****         CHASSIS_MOUNTING_ANGLE,
+  78:Sentry/src/chassis_task.c ****         CHASSIS_MAX_SPEED,
+  79:Sentry/src/chassis_task.c ****         &init_pose
+  80:Sentry/src/chassis_task.c ****     );
+  81:Sentry/src/chassis_task.c **** 
+  82:Sentry/src/chassis_task.c ****     chassis_state.v_x = 0.0f;
+ 134              		.loc 1 82 5 is_stmt 1 view .LVU24
+ 135              		.loc 1 82 23 is_stmt 0 view .LVU25
+ 136 008a 234B     		ldr	r3, .L7+44
+ 137 008c 0022     		movs	r2, #0
+ 138 008e 1A60     		str	r2, [r3]	@ float
+  83:Sentry/src/chassis_task.c ****     chassis_state.v_y = 0.0f;
+ 139              		.loc 1 83 5 is_stmt 1 view .LVU26
+ 140              		.loc 1 83 23 is_stmt 0 view .LVU27
+ 141 0090 5A60     		str	r2, [r3, #4]	@ float
+  84:Sentry/src/chassis_task.c ****     chassis_state.omega = 0.0f;
+ 142              		.loc 1 84 5 is_stmt 1 view .LVU28
+ 143              		.loc 1 84 25 is_stmt 0 view .LVU29
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cclyejfx.s 			page 5
+
+
+ 144 0092 9A60     		str	r2, [r3, #8]	@ float
+  85:Sentry/src/chassis_task.c **** 
+  86:Sentry/src/chassis_task.c ****     for (int i = 0; i < 4; i++) {
+ 145              		.loc 1 86 5 is_stmt 1 view .LVU30
+ 146              	.LBB3:
+ 147              		.loc 1 86 10 view .LVU31
+ 148              	.LVL9:
+ 149              		.loc 1 86 5 is_stmt 0 view .LVU32
+ 150 0094 09E0     		b	.L4
+ 151              	.LVL10:
+ 152              	.L5:
+  87:Sentry/src/chassis_task.c ****         // configure rate limiters
+  88:Sentry/src/chassis_task.c ****         rate_limiter_init(&wheel_rate_limiters[i], MAX_ABC);
+ 153              		.loc 1 88 9 is_stmt 1 view .LVU33
+ 154 0096 04EB4400 		add	r0, r4, r4, lsl #1
+ 155 009a 9FED200A 		vldr.32	s0, .L7+48
+ 156 009e 204B     		ldr	r3, .L7+52
+ 157 00a0 03EB8000 		add	r0, r3, r0, lsl #2
+ 158 00a4 FFF7FEFF 		bl	rate_limiter_init
+ 159              	.LVL11:
+  86:Sentry/src/chassis_task.c ****         // configure rate limiters
+ 160              		.loc 1 86 29 discriminator 3 view .LVU34
+ 161 00a8 0134     		adds	r4, r4, #1
+ 162              	.LVL12:
+ 163              	.L4:
+  86:Sentry/src/chassis_task.c ****         // configure rate limiters
+ 164              		.loc 1 86 23 discriminator 1 view .LVU35
+ 165 00aa 032C     		cmp	r4, #3
+ 166 00ac F3DD     		ble	.L5
+ 167              	.LBE3:
+  89:Sentry/src/chassis_task.c ****     }
+  90:Sentry/src/chassis_task.c **** 
+  91:Sentry/src/chassis_task.c ****     // Init PID
+  92:Sentry/src/chassis_task.c ****     PID_Init(&g_follow_gimbal_angle_pid, 20, 0, 2500, 2*PI*30, 0, 0);
+ 168              		.loc 1 92 5 view .LVU36
+ 169 00ae 9FED1D8A 		vldr.32	s16, .L7+56
+ 170 00b2 F0EE482A 		vmov.f32	s5, s16
+ 171 00b6 B0EE482A 		vmov.f32	s4, s16
+ 172 00ba DFED1B1A 		vldr.32	s3, .L7+60
+ 173 00be 9FED1B1A 		vldr.32	s2, .L7+64
+ 174 00c2 F0EE480A 		vmov.f32	s1, s16
+ 175 00c6 B3EE040A 		vmov.f32	s0, #2.0e+1
+ 176 00ca 1948     		ldr	r0, .L7+68
+ 177 00cc FFF7FEFF 		bl	PID_Init
+ 178              	.LVL13:
+  93:Sentry/src/chassis_task.c ****     sentry_pose.x = 0;
+ 179              		.loc 1 93 5 view .LVU37
+ 180              		.loc 1 93 19 is_stmt 0 view .LVU38
+ 181 00d0 184B     		ldr	r3, .L7+72
+ 182 00d2 83ED008A 		vstr.32	s16, [r3]
+  94:Sentry/src/chassis_task.c ****     sentry_pose.y = 0;
+ 183              		.loc 1 94 5 is_stmt 1 view .LVU39
+ 184              		.loc 1 94 19 is_stmt 0 view .LVU40
+ 185 00d6 83ED018A 		vstr.32	s16, [r3, #4]
+  95:Sentry/src/chassis_task.c **** 
+  96:Sentry/src/chassis_task.c ****     last_hp = Referee_System.Robot_State.Remaining_HP;
+ 186              		.loc 1 96 5 is_stmt 1 view .LVU41
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cclyejfx.s 			page 6
+
+
+ 187              		.loc 1 96 41 is_stmt 0 view .LVU42
+ 188 00da 174B     		ldr	r3, .L7+76
+ 189 00dc B3F85321 		ldrh	r2, [r3, #339]	@ unaligned
+ 190              		.loc 1 96 13 view .LVU43
+ 191 00e0 164B     		ldr	r3, .L7+80
+ 192 00e2 1A80     		strh	r2, [r3]	@ movhi
+  97:Sentry/src/chassis_task.c **** }
+ 193              		.loc 1 97 1 view .LVU44
+ 194 00e4 47B0     		add	sp, sp, #284
+ 195              	.LCFI3:
+ 196              		.cfi_def_cfa_offset 20
+ 197              		@ sp needed
+ 198 00e6 BDEC028B 		vldm	sp!, {d8}
+ 199              	.LCFI4:
+ 200              		.cfi_restore 80
+ 201              		.cfi_restore 81
+ 202              		.cfi_def_cfa_offset 12
+ 203 00ea 30BD     		pop	{r4, r5, pc}
+ 204              	.LVL14:
+ 205              	.L8:
+ 206              		.loc 1 97 1 view .LVU45
+ 207              		.align	2
+ 208              	.L7:
+ 209 00ec 00009643 		.word	1133903872
+ 210 00f0 0000C842 		.word	1120403456
+ 211 00f4 00803B45 		.word	1161527296
+ 212 00f8 00007A46 		.word	1182400512
+ 213 00fc 00000000 		.word	drive_esc_id_array
+ 214 0100 00000000 		.word	drive_motor_reversal_array
+ 215 0104 00000000 		.word	motors
+ 216 0108 DB0F493F 		.word	1061752795
+ 217 010c E17A943E 		.word	1049918177
+ 218 0110 9A99193E 		.word	1041865114
+ 219 0114 00000000 		.word	physical_constants
+ 220 0118 00000000 		.word	chassis_state
+ 221 011c 0000C843 		.word	1137180672
+ 222 0120 00000000 		.word	wheel_rate_limiters
+ 223 0124 00000000 		.word	0
+ 224 0128 DD7E3C43 		.word	1128038109
+ 225 012c 00401C45 		.word	1159479296
+ 226 0130 00000000 		.word	g_follow_gimbal_angle_pid
+ 227 0134 00000000 		.word	sentry_pose
+ 228 0138 00000000 		.word	Referee_System
+ 229 013c 00000000 		.word	last_hp
+ 230              		.cfi_endproc
+ 231              	.LFE142:
+ 233              		.section	.text.Chassis_Process_Target_Velocity,"ax",%progbits
+ 234              		.align	1
+ 235              		.global	Chassis_Process_Target_Velocity
+ 236              		.syntax unified
+ 237              		.thumb
+ 238              		.thumb_func
+ 240              	Chassis_Process_Target_Velocity:
+ 241              	.LFB143:
+  98:Sentry/src/chassis_task.c **** 
+  99:Sentry/src/chassis_task.c **** void Chassis_Process_Target_Velocity()
+ 100:Sentry/src/chassis_task.c **** {
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cclyejfx.s 			page 7
+
+
+ 242              		.loc 1 100 1 is_stmt 1 view -0
+ 243              		.cfi_startproc
+ 244              		@ args = 0, pretend = 0, frame = 0
+ 245              		@ frame_needed = 0, uses_anonymous_args = 0
+ 246 0000 10B5     		push	{r4, lr}
+ 247              	.LCFI5:
+ 248              		.cfi_def_cfa_offset 8
+ 249              		.cfi_offset 4, -8
+ 250              		.cfi_offset 14, -4
+ 101:Sentry/src/chassis_task.c ****     // static float time_for_omega = 0.0f;
+ 102:Sentry/src/chassis_task.c ****     // time_for_omega += 0.001f;
+ 103:Sentry/src/chassis_task.c ****     if (g_remote.controller.right_switch == UP)
+ 251              		.loc 1 103 5 view .LVU47
+ 252              		.loc 1 103 28 is_stmt 0 view .LVU48
+ 253 0002 874B     		ldr	r3, .L31+8
+ 254 0004 5B7B     		ldrb	r3, [r3, #13]	@ zero_extendqisi2
+ 255              		.loc 1 103 8 view .LVU49
+ 256 0006 012B     		cmp	r3, #1
+ 257 0008 70D0     		beq	.L30
+ 104:Sentry/src/chassis_task.c ****     {
+ 105:Sentry/src/chassis_task.c ****         __FIRST_ORDER_FILTER(chassis_state.v_x_in_gimbal, -g_orin_data.receiving.navigation.y_vel, 
+ 106:Sentry/src/chassis_task.c ****         __FIRST_ORDER_FILTER(chassis_state.v_y_in_gimbal, g_orin_data.receiving.navigation.x_vel, 0
+ 107:Sentry/src/chassis_task.c ****     } else {
+ 108:Sentry/src/chassis_task.c ****         __FIRST_ORDER_FILTER(chassis_state.v_x_in_gimbal, g_remote.controller.left_stick.x / 660.0f
+ 258              		.loc 1 108 9 is_stmt 1 view .LVU50
+ 259              		.loc 1 108 9 view .LVU51
+ 260 000a 854B     		ldr	r3, .L31+8
+ 261 000c B3F90020 		ldrsh	r2, [r3]
+ 262 0010 07EE102A 		vmov	s14, r2	@ int
+ 263 0014 B8EEC77A 		vcvt.f32.s32	s14, s14
+ 264 0018 9FED825A 		vldr.32	s10, .L31+12
+ 265 001c C7EE057A 		vdiv.f32	s15, s14, s10
+ 266 0020 F1EE005A 		vmov.f32	s11, #4.0e+0
+ 267 0024 67EEA57A 		vmul.f32	s15, s15, s11
+ 268 0028 9FED7F6A 		vldr.32	s12, .L31+16
+ 269 002c 67EE867A 		vmul.f32	s15, s15, s12
+ 270 0030 7E4C     		ldr	r4, .L31+20
+ 271 0032 94ED037A 		vldr.32	s14, [r4, #12]
+ 272 0036 DFED7E6A 		vldr.32	s13, .L31+24
+ 273 003a 27EE267A 		vmul.f32	s14, s14, s13
+ 274 003e 77EE877A 		vadd.f32	s15, s15, s14
+ 275 0042 C4ED037A 		vstr.32	s15, [r4, #12]
+ 276              		.loc 1 108 9 view .LVU52
+ 277              		.loc 1 108 115 view .LVU53
+ 109:Sentry/src/chassis_task.c ****         __FIRST_ORDER_FILTER(chassis_state.v_y_in_gimbal, g_remote.controller.left_stick.y / 660.0f
+ 278              		.loc 1 109 9 view .LVU54
+ 279              		.loc 1 109 9 view .LVU55
+ 280 0046 B3F90220 		ldrsh	r2, [r3, #2]
+ 281 004a 07EE102A 		vmov	s14, r2	@ int
+ 282 004e B8EEC77A 		vcvt.f32.s32	s14, s14
+ 283 0052 C7EE057A 		vdiv.f32	s15, s14, s10
+ 284 0056 67EEA57A 		vmul.f32	s15, s15, s11
+ 285 005a 67EE867A 		vmul.f32	s15, s15, s12
+ 286 005e 94ED047A 		vldr.32	s14, [r4, #16]
+ 287 0062 27EE267A 		vmul.f32	s14, s14, s13
+ 288 0066 77EE877A 		vadd.f32	s15, s15, s14
+ 289 006a C4ED047A 		vstr.32	s15, [r4, #16]
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cclyejfx.s 			page 8
+
+
+ 290              		.loc 1 109 9 view .LVU56
+ 291              		.loc 1 109 115 view .LVU57
+ 110:Sentry/src/chassis_task.c ****         // chassis_state.v_x_in_gimbal = g_remote.controller.left_stick.x / 660.0f * 4.0f;
+ 111:Sentry/src/chassis_task.c ****         // chassis_state.v_y_in_gimbal = g_remote.controller.left_stick.y / 660.0f * 4.0f;
+ 112:Sentry/src/chassis_task.c ****         chassis_state.omega_in_gimbal = g_remote.controller.wheel * MAX_ANGLUAR_SPEED;
+ 292              		.loc 1 112 9 view .LVU58
+ 293              		.loc 1 112 67 is_stmt 0 view .LVU59
+ 294 006e 9868     		ldr	r0, [r3, #8]
+ 295 0070 FFF7FEFF 		bl	__aeabi_i2d
+ 296              	.LVL15:
+ 297 0074 68A3     		adr	r3, .L31
+ 298 0076 D3E90023 		ldrd	r2, [r3]
+ 299 007a FFF7FEFF 		bl	__aeabi_dmul
+ 300              	.LVL16:
+ 301 007e FFF7FEFF 		bl	__aeabi_d2f
+ 302              	.LVL17:
+ 303              		.loc 1 112 39 view .LVU60
+ 304 0082 6061     		str	r0, [r4, #20]	@ float
+ 305              	.L11:
+ 113:Sentry/src/chassis_task.c ****     }
+ 114:Sentry/src/chassis_task.c **** 
+ 115:Sentry/src/chassis_task.c ****     float chassis_omega_new_target = 0;
+ 306              		.loc 1 115 5 is_stmt 1 view .LVU61
+ 307              	.LVL18:
+ 116:Sentry/src/chassis_task.c ****     const float hit_timeout = 5; // seconds
+ 308              		.loc 1 116 5 view .LVU62
+ 117:Sentry/src/chassis_task.c **** 
+ 118:Sentry/src/chassis_task.c ****     // If the robot is hit, increase spintop rate
+ 119:Sentry/src/chassis_task.c ****     if(Referee_System.Robot_State.Remaining_HP - last_hp < -5) {
+ 309              		.loc 1 119 5 view .LVU63
+ 310              		.loc 1 119 34 is_stmt 0 view .LVU64
+ 311 0084 6B4B     		ldr	r3, .L31+28
+ 312 0086 B3F85321 		ldrh	r2, [r3, #339]	@ unaligned
+ 313 008a 93B2     		uxth	r3, r2
+ 314              		.loc 1 119 48 view .LVU65
+ 315 008c 6A49     		ldr	r1, .L31+32
+ 316 008e 0988     		ldrh	r1, [r1]
+ 317 0090 5B1A     		subs	r3, r3, r1
+ 318              		.loc 1 119 7 view .LVU66
+ 319 0092 13F1050F 		cmn	r3, #5
+ 320 0096 03DA     		bge	.L12
+ 120:Sentry/src/chassis_task.c ****         is_hit_counter = 500 * hit_timeout;
+ 321              		.loc 1 120 9 is_stmt 1 view .LVU67
+ 322              		.loc 1 120 24 is_stmt 0 view .LVU68
+ 323 0098 684B     		ldr	r3, .L31+36
+ 324 009a 40F6C411 		movw	r1, #2500
+ 325 009e 1980     		strh	r1, [r3]	@ movhi
+ 326              	.L12:
+ 121:Sentry/src/chassis_task.c ****     }
+ 122:Sentry/src/chassis_task.c **** 
+ 123:Sentry/src/chassis_task.c ****     //TODO：Adjust the data type to reflect the actual value.
+ 124:Sentry/src/chassis_task.c ****     last_hp = Referee_System.Robot_State.Remaining_HP;
+ 327              		.loc 1 124 5 is_stmt 1 view .LVU69
+ 328              		.loc 1 124 13 is_stmt 0 view .LVU70
+ 329 00a0 654B     		ldr	r3, .L31+32
+ 330 00a2 1A80     		strh	r2, [r3]	@ movhi
+ 125:Sentry/src/chassis_task.c ****     
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cclyejfx.s 			page 9
+
+
+ 126:Sentry/src/chassis_task.c ****     // Counter for hit timeout
+ 127:Sentry/src/chassis_task.c ****     if (is_hit_counter > 0) {
+ 331              		.loc 1 127 5 is_stmt 1 view .LVU71
+ 332              		.loc 1 127 24 is_stmt 0 view .LVU72
+ 333 00a4 654B     		ldr	r3, .L31+36
+ 334 00a6 1B88     		ldrh	r3, [r3]
+ 335              		.loc 1 127 8 view .LVU73
+ 336 00a8 13B1     		cbz	r3, .L13
+ 128:Sentry/src/chassis_task.c ****         is_hit_counter--;
+ 337              		.loc 1 128 9 is_stmt 1 view .LVU74
+ 338              		.loc 1 128 23 is_stmt 0 view .LVU75
+ 339 00aa 013B     		subs	r3, r3, #1
+ 340 00ac 634A     		ldr	r2, .L31+36
+ 341 00ae 1380     		strh	r3, [r2]	@ movhi
+ 342              	.L13:
+ 129:Sentry/src/chassis_task.c ****     }
+ 130:Sentry/src/chassis_task.c ****     spintop_safe = g_pitch->stats->pos > -0.4f;
+ 343              		.loc 1 130 5 is_stmt 1 view .LVU76
+ 344              		.loc 1 130 27 is_stmt 0 view .LVU77
+ 345 00b0 634B     		ldr	r3, .L31+40
+ 346 00b2 1B68     		ldr	r3, [r3]
+ 347 00b4 5B6A     		ldr	r3, [r3, #36]
+ 348              		.loc 1 130 34 view .LVU78
+ 349 00b6 93ED027A 		vldr.32	s14, [r3, #8]
+ 350              		.loc 1 130 40 view .LVU79
+ 351 00ba DFED627A 		vldr.32	s15, .L31+44
+ 352 00be B4EEE77A 		vcmpe.f32	s14, s15
+ 353 00c2 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 354 00c6 CCBF     		ite	gt
+ 355 00c8 0123     		movgt	r3, #1
+ 356 00ca 0023     		movle	r3, #0
+ 357              		.loc 1 130 18 view .LVU80
+ 358 00cc 5E4A     		ldr	r2, .L31+48
+ 359 00ce 1370     		strb	r3, [r2]
+ 131:Sentry/src/chassis_task.c ****     if (spintop_safe && (g_robot_state.chassis.IS_SPINTOP_ENABLED || g_remote.controller.left_switc
+ 360              		.loc 1 131 5 is_stmt 1 view .LVU81
+ 361              		.loc 1 131 8 is_stmt 0 view .LVU82
+ 362 00d0 33B1     		cbz	r3, .L14
+ 363              		.loc 1 131 47 discriminator 1 view .LVU83
+ 364 00d2 5E4B     		ldr	r3, .L31+52
+ 365 00d4 1B7C     		ldrb	r3, [r3, #16]	@ zero_extendqisi2
+ 366              		.loc 1 131 22 discriminator 1 view .LVU84
+ 367 00d6 43BB     		cbnz	r3, .L15
+ 368              		.loc 1 131 89 discriminator 2 view .LVU85
+ 369 00d8 514B     		ldr	r3, .L31+8
+ 370 00da 1B7B     		ldrb	r3, [r3, #12]	@ zero_extendqisi2
+ 371              		.loc 1 131 67 discriminator 2 view .LVU86
+ 372 00dc 012B     		cmp	r3, #1
+ 373 00de 24D0     		beq	.L15
+ 374              	.L14:
+ 132:Sentry/src/chassis_task.c ****         g_yaw->spintop_feedforward_gain = 200.0f;
+ 133:Sentry/src/chassis_task.c ****         g_yaw->spintop_velocity = chassis_state.omega; //feedforward spintop
+ 134:Sentry/src/chassis_task.c ****         if (is_hit_counter > 0 && g_supercap.Vo > 15.0f) {
+ 135:Sentry/src/chassis_task.c ****             chassis_omega_new_target = 15.5 * PI; // 8 * PI rad/s
+ 136:Sentry/src/chassis_task.c ****         }
+ 137:Sentry/src/chassis_task.c ****         else if (is_hit_counter > 0)
+ 138:Sentry/src/chassis_task.c ****         {
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cclyejfx.s 			page 10
+
+
+ 139:Sentry/src/chassis_task.c ****             chassis_omega_new_target = 6.5 * PI; // 8 * PI rad/s
+ 140:Sentry/src/chassis_task.c ****         }
+ 141:Sentry/src/chassis_task.c ****         else {  //Decrease spintop rate if not hit for a while
+ 142:Sentry/src/chassis_task.c ****             chassis_omega_new_target = 4.5 * PI; // 2 * PI rad/s
+ 143:Sentry/src/chassis_task.c ****         }
+ 144:Sentry/src/chassis_task.c ****         __FIRST_ORDER_FILTER(chassis_state.omega, chassis_omega_new_target, 0.001f);
+ 145:Sentry/src/chassis_task.c **** 
+ 146:Sentry/src/chassis_task.c ****         // float frenquncy = 0.1f;
+ 147:Sentry/src/chassis_task.c ****         // speed_up_spintop_rate = 8 * PI * sin(2*PI*frenquncy*time_for_omega);
+ 148:Sentry/src/chassis_task.c ****         // __FIRST_ORDER_FILTER(chassis_state.omega, chassis_omega_new_target, 0.001f);
+ 149:Sentry/src/chassis_task.c ****        
+ 150:Sentry/src/chassis_task.c ****     } else {
+ 151:Sentry/src/chassis_task.c ****         g_yaw->spintop_feedforward_gain = 0;
+ 375              		.loc 1 151 9 is_stmt 1 view .LVU87
+ 376              		.loc 1 151 14 is_stmt 0 view .LVU88
+ 377 00e0 5B4B     		ldr	r3, .L31+56
+ 378 00e2 1B68     		ldr	r3, [r3]
+ 379              		.loc 1 151 41 view .LVU89
+ 380 00e4 0022     		movs	r2, #0
+ 381 00e6 DA62     		str	r2, [r3, #44]	@ float
+ 152:Sentry/src/chassis_task.c ****         g_yaw->spintop_velocity = 0; //feedforward spintop
+ 382              		.loc 1 152 9 is_stmt 1 view .LVU90
+ 383              		.loc 1 152 33 is_stmt 0 view .LVU91
+ 384 00e8 9A62     		str	r2, [r3, #40]	@ float
+ 153:Sentry/src/chassis_task.c ****         // chassis_state.omega = g_robot_state.chassis.omega * MAX_ANGLUAR_SPEED;
+ 154:Sentry/src/chassis_task.c ****         __MAP_ANGLE_TO_UNIT_CIRCLE(gimbal_angle_difference);
+ 385              		.loc 1 154 9 is_stmt 1 view .LVU92
+ 386              		.loc 1 154 9 view .LVU93
+ 387 00ea 52E0     		b	.L19
+ 388              	.LVL19:
+ 389              	.L30:
+ 105:Sentry/src/chassis_task.c ****         __FIRST_ORDER_FILTER(chassis_state.v_y_in_gimbal, g_orin_data.receiving.navigation.x_vel, 0
+ 390              		.loc 1 105 9 view .LVU94
+ 105:Sentry/src/chassis_task.c ****         __FIRST_ORDER_FILTER(chassis_state.v_y_in_gimbal, g_orin_data.receiving.navigation.x_vel, 0
+ 391              		.loc 1 105 9 view .LVU95
+ 392 00ec 594A     		ldr	r2, .L31+60
+ 393 00ee D2ED1E7A 		vldr.32	s15, [r2, #120]
+ 394 00f2 9FED596A 		vldr.32	s12, .L31+64
+ 395 00f6 67EEC67A 		vnmul.f32	s15, s15, s12
+ 396 00fa 4C4B     		ldr	r3, .L31+20
+ 397 00fc 93ED037A 		vldr.32	s14, [r3, #12]
+ 398 0100 DFED566A 		vldr.32	s13, .L31+68
+ 399 0104 27EE267A 		vmul.f32	s14, s14, s13
+ 400 0108 77EE877A 		vadd.f32	s15, s15, s14
+ 401 010c C3ED037A 		vstr.32	s15, [r3, #12]
+ 105:Sentry/src/chassis_task.c ****         __FIRST_ORDER_FILTER(chassis_state.v_y_in_gimbal, g_orin_data.receiving.navigation.x_vel, 0
+ 402              		.loc 1 105 9 view .LVU96
+ 105:Sentry/src/chassis_task.c ****         __FIRST_ORDER_FILTER(chassis_state.v_y_in_gimbal, g_orin_data.receiving.navigation.x_vel, 0
+ 403              		.loc 1 105 106 view .LVU97
+ 106:Sentry/src/chassis_task.c ****     } else {
+ 404              		.loc 1 106 9 view .LVU98
+ 106:Sentry/src/chassis_task.c ****     } else {
+ 405              		.loc 1 106 9 view .LVU99
+ 406 0110 D2ED1D7A 		vldr.32	s15, [r2, #116]
+ 407 0114 67EE867A 		vmul.f32	s15, s15, s12
+ 408 0118 93ED047A 		vldr.32	s14, [r3, #16]
+ 409 011c 27EE267A 		vmul.f32	s14, s14, s13
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cclyejfx.s 			page 11
+
+
+ 410 0120 77EE877A 		vadd.f32	s15, s15, s14
+ 411 0124 C3ED047A 		vstr.32	s15, [r3, #16]
+ 106:Sentry/src/chassis_task.c ****     } else {
+ 412              		.loc 1 106 9 view .LVU100
+ 106:Sentry/src/chassis_task.c ****     } else {
+ 413              		.loc 1 106 105 view .LVU101
+ 414 0128 ACE7     		b	.L11
+ 415              	.LVL20:
+ 416              	.L15:
+ 132:Sentry/src/chassis_task.c ****         g_yaw->spintop_velocity = chassis_state.omega; //feedforward spintop
+ 417              		.loc 1 132 9 view .LVU102
+ 132:Sentry/src/chassis_task.c ****         g_yaw->spintop_velocity = chassis_state.omega; //feedforward spintop
+ 418              		.loc 1 132 14 is_stmt 0 view .LVU103
+ 419 012a 494B     		ldr	r3, .L31+56
+ 420 012c 1B68     		ldr	r3, [r3]
+ 132:Sentry/src/chassis_task.c ****         g_yaw->spintop_velocity = chassis_state.omega; //feedforward spintop
+ 421              		.loc 1 132 41 view .LVU104
+ 422 012e 4C4A     		ldr	r2, .L31+72
+ 423 0130 DA62     		str	r2, [r3, #44]	@ float
+ 133:Sentry/src/chassis_task.c ****         if (is_hit_counter > 0 && g_supercap.Vo > 15.0f) {
+ 424              		.loc 1 133 9 is_stmt 1 view .LVU105
+ 133:Sentry/src/chassis_task.c ****         if (is_hit_counter > 0 && g_supercap.Vo > 15.0f) {
+ 425              		.loc 1 133 48 is_stmt 0 view .LVU106
+ 426 0132 3E4A     		ldr	r2, .L31+20
+ 427 0134 92ED027A 		vldr.32	s14, [r2, #8]
+ 133:Sentry/src/chassis_task.c ****         if (is_hit_counter > 0 && g_supercap.Vo > 15.0f) {
+ 428              		.loc 1 133 33 view .LVU107
+ 429 0138 83ED0A7A 		vstr.32	s14, [r3, #40]
+ 134:Sentry/src/chassis_task.c ****             chassis_omega_new_target = 15.5 * PI; // 8 * PI rad/s
+ 430              		.loc 1 134 9 is_stmt 1 view .LVU108
+ 134:Sentry/src/chassis_task.c ****             chassis_omega_new_target = 15.5 * PI; // 8 * PI rad/s
+ 431              		.loc 1 134 28 is_stmt 0 view .LVU109
+ 432 013c 3F4B     		ldr	r3, .L31+36
+ 433 013e 1B88     		ldrh	r3, [r3]
+ 134:Sentry/src/chassis_task.c ****             chassis_omega_new_target = 15.5 * PI; // 8 * PI rad/s
+ 434              		.loc 1 134 12 view .LVU110
+ 435 0140 4BB1     		cbz	r3, .L16
+ 134:Sentry/src/chassis_task.c ****             chassis_omega_new_target = 15.5 * PI; // 8 * PI rad/s
+ 436              		.loc 1 134 45 discriminator 1 view .LVU111
+ 437 0142 484A     		ldr	r2, .L31+76
+ 438 0144 D2ED046A 		vldr.32	s13, [r2, #16]
+ 134:Sentry/src/chassis_task.c ****             chassis_omega_new_target = 15.5 * PI; // 8 * PI rad/s
+ 439              		.loc 1 134 32 discriminator 1 view .LVU112
+ 440 0148 F2EE0E7A 		vmov.f32	s15, #1.5e+1
+ 441 014c F4EEE76A 		vcmpe.f32	s13, s15
+ 442 0150 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 443 0154 10DC     		bgt	.L25
+ 444              	.L16:
+ 137:Sentry/src/chassis_task.c ****         {
+ 445              		.loc 1 137 14 is_stmt 1 view .LVU113
+ 137:Sentry/src/chassis_task.c ****         {
+ 446              		.loc 1 137 17 is_stmt 0 view .LVU114
+ 447 0156 93B1     		cbz	r3, .L26
+ 139:Sentry/src/chassis_task.c ****         }
+ 448              		.loc 1 139 38 view .LVU115
+ 449 0158 DFED437A 		vldr.32	s15, .L31+80
+ 450              	.L17:
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cclyejfx.s 			page 12
+
+
+ 451              	.LVL21:
+ 144:Sentry/src/chassis_task.c **** 
+ 452              		.loc 1 144 9 is_stmt 1 view .LVU116
+ 144:Sentry/src/chassis_task.c **** 
+ 453              		.loc 1 144 9 view .LVU117
+ 454 015c DFED436A 		vldr.32	s13, .L31+84
+ 455 0160 67EEA67A 		vmul.f32	s15, s15, s13
+ 456              	.LVL22:
+ 144:Sentry/src/chassis_task.c **** 
+ 457              		.loc 1 144 9 is_stmt 0 view .LVU118
+ 458 0164 DFED426A 		vldr.32	s13, .L31+88
+ 459 0168 27EE267A 		vmul.f32	s14, s14, s13
+ 460 016c 77EE877A 		vadd.f32	s15, s15, s14
+ 461 0170 2E4B     		ldr	r3, .L31+20
+ 462 0172 C3ED027A 		vstr.32	s15, [r3, #8]
+ 144:Sentry/src/chassis_task.c **** 
+ 463              		.loc 1 144 9 is_stmt 1 view .LVU119
+ 144:Sentry/src/chassis_task.c **** 
+ 464              		.loc 1 144 84 view .LVU120
+ 144:Sentry/src/chassis_task.c **** 
+ 465              		.loc 1 144 9 is_stmt 0 view .LVU121
+ 466 0176 4DE0     		b	.L9
+ 467              	.LVL23:
+ 468              	.L25:
+ 135:Sentry/src/chassis_task.c ****         }
+ 469              		.loc 1 135 38 view .LVU122
+ 470 0178 DFED3E7A 		vldr.32	s15, .L31+92
+ 471 017c EEE7     		b	.L17
+ 472              	.L26:
+ 142:Sentry/src/chassis_task.c ****         }
+ 473              		.loc 1 142 38 view .LVU123
+ 474 017e DFED3E7A 		vldr.32	s15, .L31+96
+ 475 0182 EBE7     		b	.L17
+ 476              	.L20:
+ 477              		.loc 1 154 9 is_stmt 1 discriminator 2 view .LVU124
+ 478 0184 9FED3D7A 		vldr.32	s14, .L31+100
+ 479 0188 77EEC77A 		vsub.f32	s15, s15, s14
+ 480 018c 3C4B     		ldr	r3, .L31+104
+ 481 018e C3ED007A 		vstr.32	s15, [r3]
+ 482              	.L19:
+ 483              		.loc 1 154 9 discriminator 1 view .LVU125
+ 484 0192 3B4B     		ldr	r3, .L31+104
+ 485 0194 D3ED007A 		vldr.32	s15, [r3]
+ 486 0198 9FED3A7A 		vldr.32	s14, .L31+108
+ 487 019c F4EEC77A 		vcmpe.f32	s15, s14
+ 488 01a0 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 489 01a4 EEDA     		bge	.L20
+ 490 01a6 06E0     		b	.L21
+ 491              	.L22:
+ 492              		.loc 1 154 9 discriminator 4 view .LVU126
+ 493 01a8 DFED347A 		vldr.32	s15, .L31+100
+ 494 01ac 30EE270A 		vadd.f32	s0, s0, s15
+ 495 01b0 334B     		ldr	r3, .L31+104
+ 496 01b2 83ED000A 		vstr.32	s0, [r3]
+ 497              	.L21:
+ 498              		.loc 1 154 9 discriminator 3 view .LVU127
+ 499 01b6 324B     		ldr	r3, .L31+104
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cclyejfx.s 			page 13
+
+
+ 500 01b8 93ED000A 		vldr.32	s0, [r3]
+ 501 01bc DFED327A 		vldr.32	s15, .L31+112
+ 502 01c0 B4EEE70A 		vcmpe.f32	s0, s15
+ 503 01c4 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 504 01c8 EED4     		bmi	.L22
+ 505              		.loc 1 154 9 view .LVU128
+ 506              		.loc 1 154 60 view .LVU129
+ 155:Sentry/src/chassis_task.c ****         chassis_omega_new_target = PID(&g_follow_gimbal_angle_pid, gimbal_angle_difference);
+ 507              		.loc 1 155 9 view .LVU130
+ 508              		.loc 1 155 36 is_stmt 0 view .LVU131
+ 509 01ca 3048     		ldr	r0, .L31+116
+ 510 01cc FFF7FEFF 		bl	PID
+ 511              	.LVL24:
+ 156:Sentry/src/chassis_task.c ****         __MAX_LIMIT(chassis_omega_new_target, -6*2*PI, 6*2*PI);
+ 512              		.loc 1 156 9 is_stmt 1 view .LVU132
+ 513              		.loc 1 156 9 view .LVU133
+ 514 01d0 DFED2F7A 		vldr.32	s15, .L31+120
+ 515 01d4 B4EEE70A 		vcmpe.f32	s0, s15
+ 516 01d8 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 517 01dc 09DC     		bgt	.L27
+ 518              		.loc 1 156 9 view .LVU134
+ 519              		.loc 1 156 9 is_stmt 0 discriminator 4 view .LVU135
+ 520 01de DFED2D7A 		vldr.32	s15, .L31+124
+ 521 01e2 B4EEE70A 		vcmpe.f32	s0, s15
+ 522 01e6 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 523 01ea 04D5     		bpl	.L23
+ 524              		.loc 1 156 9 discriminator 5 view .LVU136
+ 525 01ec B0EE670A 		vmov.f32	s0, s15
+ 526              	.LVL25:
+ 527              		.loc 1 156 9 discriminator 5 view .LVU137
+ 528 01f0 01E0     		b	.L23
+ 529              	.LVL26:
+ 530              	.L27:
+ 531              		.loc 1 156 9 discriminator 1 view .LVU138
+ 532 01f2 9FED270A 		vldr.32	s0, .L31+120
+ 533              	.LVL27:
+ 534              	.L23:
+ 535              		.loc 1 156 9 is_stmt 1 view .LVU139
+ 536              		.loc 1 156 63 view .LVU140
+ 157:Sentry/src/chassis_task.c ****         // chassis_omega_new_target = -g_remote.controller.right_stick.x/660.0f * 6 * PI;
+ 158:Sentry/src/chassis_task.c ****         __FIRST_ORDER_FILTER(chassis_state.omega, chassis_omega_new_target, 0.001f);
+ 537              		.loc 1 158 9 view .LVU141
+ 538              		.loc 1 158 9 view .LVU142
+ 539 01f6 DFED1D7A 		vldr.32	s15, .L31+84
+ 540 01fa 20EE270A 		vmul.f32	s0, s0, s15
+ 541              	.LVL28:
+ 542              		.loc 1 158 9 is_stmt 0 view .LVU143
+ 543 01fe 0B4B     		ldr	r3, .L31+20
+ 544 0200 D3ED027A 		vldr.32	s15, [r3, #8]
+ 545 0204 9FED1A7A 		vldr.32	s14, .L31+88
+ 546 0208 67EE877A 		vmul.f32	s15, s15, s14
+ 547 020c 30EE270A 		vadd.f32	s0, s0, s15
+ 548 0210 83ED020A 		vstr.32	s0, [r3, #8]
+ 549              		.loc 1 158 9 is_stmt 1 view .LVU144
+ 550              		.loc 1 158 84 view .LVU145
+ 551              	.LVL29:
+ 552              	.L9:
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cclyejfx.s 			page 14
+
+
+ 159:Sentry/src/chassis_task.c ****     }
+ 160:Sentry/src/chassis_task.c ****     // __FIRST_ORDER_FILTER(chassis_state.omega, chassis_omega_new_target, 0.003f);
+ 161:Sentry/src/chassis_task.c **** 
+ 162:Sentry/src/chassis_task.c **** }
+ 553              		.loc 1 162 1 is_stmt 0 view .LVU146
+ 554 0214 10BD     		pop	{r4, pc}
+ 555              	.L32:
+ 556 0216 00BF     		.align	3
+ 557              	.L31:
+ 558 0218 1F85EB51 		.word	1374389535
+ 559 021c B81E1940 		.word	1075388088
+ 560 0220 00000000 		.word	g_remote
+ 561 0224 00002544 		.word	1143275520
+ 562 0228 0AD7233C 		.word	1008981770
+ 563 022c 00000000 		.word	chassis_state
+ 564 0230 A4707D3F 		.word	1065185444
+ 565 0234 00000000 		.word	Referee_System
+ 566 0238 00000000 		.word	last_hp
+ 567 023c 00000000 		.word	is_hit_counter
+ 568 0240 00000000 		.word	g_pitch
+ 569 0244 CDCCCCBE 		.word	-1093874483
+ 570 0248 00000000 		.word	spintop_safe
+ 571 024c 00000000 		.word	g_robot_state
+ 572 0250 00000000 		.word	g_yaw
+ 573 0254 00000000 		.word	g_orin_data
+ 574 0258 0AD7A33C 		.word	1017370378
+ 575 025c 48E17A3F 		.word	1065017672
+ 576 0260 00004843 		.word	1128792064
+ 577 0264 00000000 		.word	g_supercap
+ 578 0268 E25CA341 		.word	1101225186
+ 579 026c 6F12833A 		.word	981668463
+ 580 0270 77BE7F3F 		.word	1065336439
+ 581 0274 5CC74242 		.word	1111672668
+ 582 0278 D6316241 		.word	1096954326
+ 583 027c DB0FC940 		.word	1086918619
+ 584 0280 00000000 		.word	gimbal_angle_difference
+ 585 0284 DB0F4940 		.word	1078530011
+ 586 0288 DB0F49C0 		.word	-1068953637
+ 587 028c 00000000 		.word	g_follow_gimbal_angle_pid
+ 588 0290 E4CB1642 		.word	1108790244
+ 589 0294 E4CB16C2 		.word	-1038693404
+ 590              		.cfi_endproc
+ 591              	.LFE143:
+ 593              		.section	.text.Chassis_Ctrl_Loop,"ax",%progbits
+ 594              		.align	1
+ 595              		.global	Chassis_Ctrl_Loop
+ 596              		.syntax unified
+ 597              		.thumb
+ 598              		.thumb_func
+ 600              	Chassis_Ctrl_Loop:
+ 601              	.LFB144:
+ 163:Sentry/src/chassis_task.c **** 
+ 164:Sentry/src/chassis_task.c **** void Chassis_Ctrl_Loop()
+ 165:Sentry/src/chassis_task.c **** {
+ 602              		.loc 1 165 1 is_stmt 1 view -0
+ 603              		.cfi_startproc
+ 604              		@ args = 0, pretend = 0, frame = 16
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cclyejfx.s 			page 15
+
+
+ 605              		@ frame_needed = 0, uses_anonymous_args = 0
+ 606 0000 2DE9F04F 		push	{r4, r5, r6, r7, r8, r9, r10, fp, lr}
+ 607              	.LCFI6:
+ 608              		.cfi_def_cfa_offset 36
+ 609              		.cfi_offset 4, -36
+ 610              		.cfi_offset 5, -32
+ 611              		.cfi_offset 6, -28
+ 612              		.cfi_offset 7, -24
+ 613              		.cfi_offset 8, -20
+ 614              		.cfi_offset 9, -16
+ 615              		.cfi_offset 10, -12
+ 616              		.cfi_offset 11, -8
+ 617              		.cfi_offset 14, -4
+ 618 0004 2DED028B 		vpush.64	{d8}
+ 619              	.LCFI7:
+ 620              		.cfi_def_cfa_offset 44
+ 621              		.cfi_offset 80, -44
+ 622              		.cfi_offset 81, -40
+ 623 0008 85B0     		sub	sp, sp, #20
+ 624              	.LCFI8:
+ 625              		.cfi_def_cfa_offset 64
+ 166:Sentry/src/chassis_task.c ****     //TODO: change this, for odom only
+ 167:Sentry/src/chassis_task.c ****     gimbal_angle_difference = DJI_Motor_Get_Absolute_Angle(g_yaw);
+ 626              		.loc 1 167 5 view .LVU148
+ 627              		.loc 1 167 31 is_stmt 0 view .LVU149
+ 628 000a 574B     		ldr	r3, .L35
+ 629 000c 1868     		ldr	r0, [r3]
+ 630 000e FFF7FEFF 		bl	DJI_Motor_Get_Absolute_Angle
+ 631              	.LVL30:
+ 632              		.loc 1 167 29 discriminator 1 view .LVU150
+ 633 0012 564D     		ldr	r5, .L35+4
+ 634 0014 85ED000A 		vstr.32	s0, [r5]
+ 168:Sentry/src/chassis_task.c ****     Chassis_Process_Target_Velocity();
+ 635              		.loc 1 168 5 is_stmt 1 view .LVU151
+ 636 0018 FFF7FEFF 		bl	Chassis_Process_Target_Velocity
+ 637              	.LVL31:
+ 169:Sentry/src/chassis_task.c ****     
+ 170:Sentry/src/chassis_task.c ****     chassis_state.v_x = chassis_state.v_x_in_gimbal * cos(gimbal_angle_difference) - chassis_state.
+ 638              		.loc 1 170 5 view .LVU152
+ 639              		.loc 1 170 38 is_stmt 0 view .LVU153
+ 640 001c 544C     		ldr	r4, .L35+8
+ 641 001e E068     		ldr	r0, [r4, #12]	@ float
+ 642 0020 FFF7FEFF 		bl	__aeabi_f2d
+ 643              	.LVL32:
+ 644 0024 0646     		mov	r6, r0
+ 645 0026 0F46     		mov	r7, r1
+ 646              		.loc 1 170 55 view .LVU154
+ 647 0028 2868     		ldr	r0, [r5]	@ float
+ 648 002a FFF7FEFF 		bl	__aeabi_f2d
+ 649              	.LVL33:
+ 650 002e 41EC180B 		vmov	d8, r0, r1
+ 651 0032 B0EE480A 		vmov.f32	s0, s16
+ 652 0036 F0EE680A 		vmov.f32	s1, s17
+ 653 003a FFF7FEFF 		bl	cos
+ 654              	.LVL34:
+ 655 003e 53EC102B 		vmov	r2, r3, d0
+ 656              		.loc 1 170 53 discriminator 1 view .LVU155
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cclyejfx.s 			page 16
+
+
+ 657 0042 8DED000B 		vstr.64	d0, [sp]
+ 658 0046 3046     		mov	r0, r6
+ 659 0048 3946     		mov	r1, r7
+ 660 004a FFF7FEFF 		bl	__aeabi_dmul
+ 661              	.LVL35:
+ 662 004e CDE90201 		strd	r0, [sp, #8]
+ 663              		.loc 1 170 99 discriminator 1 view .LVU156
+ 664 0052 2069     		ldr	r0, [r4, #16]	@ float
+ 665 0054 FFF7FEFF 		bl	__aeabi_f2d
+ 666              	.LVL36:
+ 667 0058 8246     		mov	r10, r0
+ 668 005a 8B46     		mov	fp, r1
+ 669              		.loc 1 170 116 discriminator 1 view .LVU157
+ 670 005c B0EE480A 		vmov.f32	s0, s16
+ 671 0060 F0EE680A 		vmov.f32	s1, s17
+ 672 0064 FFF7FEFF 		bl	sin
+ 673              	.LVL37:
+ 674 0068 59EC108B 		vmov	r8, r9, d0
+ 675              		.loc 1 170 114 discriminator 2 view .LVU158
+ 676 006c 4246     		mov	r2, r8
+ 677 006e 4B46     		mov	r3, r9
+ 678 0070 5046     		mov	r0, r10
+ 679 0072 5946     		mov	r1, fp
+ 680 0074 FFF7FEFF 		bl	__aeabi_dmul
+ 681              	.LVL38:
+ 682 0078 0246     		mov	r2, r0
+ 683 007a 0B46     		mov	r3, r1
+ 684              		.loc 1 170 84 discriminator 2 view .LVU159
+ 685 007c DDE90201 		ldrd	r0, [sp, #8]
+ 686 0080 FFF7FEFF 		bl	__aeabi_dsub
+ 687              	.LVL39:
+ 688 0084 FFF7FEFF 		bl	__aeabi_d2f
+ 689              	.LVL40:
+ 690              		.loc 1 170 23 discriminator 2 view .LVU160
+ 691 0088 2060     		str	r0, [r4]	@ float
+ 171:Sentry/src/chassis_task.c ****     chassis_state.v_y = chassis_state.v_x_in_gimbal * sin(gimbal_angle_difference) + chassis_state.
+ 692              		.loc 1 171 5 is_stmt 1 view .LVU161
+ 693              		.loc 1 171 53 is_stmt 0 discriminator 1 view .LVU162
+ 694 008a 4246     		mov	r2, r8
+ 695 008c 4B46     		mov	r3, r9
+ 696 008e 3046     		mov	r0, r6
+ 697 0090 3946     		mov	r1, r7
+ 698 0092 FFF7FEFF 		bl	__aeabi_dmul
+ 699              	.LVL41:
+ 700 0096 0646     		mov	r6, r0
+ 701 0098 0F46     		mov	r7, r1
+ 702              		.loc 1 171 114 discriminator 2 view .LVU163
+ 703 009a 5246     		mov	r2, r10
+ 704 009c 5B46     		mov	r3, fp
+ 705 009e DDE90001 		ldrd	r0, [sp]
+ 706 00a2 FFF7FEFF 		bl	__aeabi_dmul
+ 707              	.LVL42:
+ 708 00a6 0246     		mov	r2, r0
+ 709 00a8 0B46     		mov	r3, r1
+ 710              		.loc 1 171 84 discriminator 2 view .LVU164
+ 711 00aa 3046     		mov	r0, r6
+ 712 00ac 3946     		mov	r1, r7
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cclyejfx.s 			page 17
+
+
+ 713 00ae FFF7FEFF 		bl	__aeabi_dadd
+ 714              	.LVL43:
+ 715 00b2 FFF7FEFF 		bl	__aeabi_d2f
+ 716              	.LVL44:
+ 717              		.loc 1 171 23 discriminator 2 view .LVU165
+ 718 00b6 6060     		str	r0, [r4, #4]	@ float
+ 172:Sentry/src/chassis_task.c ****     // chassis_state.v_x = g_robot_state.input.vx;
+ 173:Sentry/src/chassis_task.c ****     // chassis_state.v_y = g_robot_state.input.vy;
+ 174:Sentry/src/chassis_task.c **** 
+ 175:Sentry/src/chassis_task.c ****     // Control loop for the chassis
+ 176:Sentry/src/chassis_task.c ****     omni_calculate_kinematics(&chassis_state, &physical_constants);
+ 719              		.loc 1 176 5 is_stmt 1 view .LVU166
+ 720 00b8 2E4F     		ldr	r7, .L35+12
+ 721 00ba 3946     		mov	r1, r7
+ 722 00bc 2046     		mov	r0, r4
+ 723 00be FFF7FEFF 		bl	omni_calculate_kinematics
+ 724              	.LVL45:
+ 177:Sentry/src/chassis_task.c ****     // omni_desaturate_wheel_speeds(&chassis_state, &physical_constants);
+ 178:Sentry/src/chassis_task.c ****     omni_convert_to_rpm(&chassis_state);
+ 725              		.loc 1 178 5 view .LVU167
+ 726 00c2 2046     		mov	r0, r4
+ 727 00c4 FFF7FEFF 		bl	omni_convert_to_rpm
+ 728              	.LVL46:
+ 179:Sentry/src/chassis_task.c **** 
+ 180:Sentry/src/chassis_task.c ****     // use rate limiter to limit acceleration of the wheels
+ 181:Sentry/src/chassis_task.c ****     // chassis_state.phi_dot_1 = rate_limiter_iterate(&wheel_rate_limiters[0], chassis_state.phi_do
+ 182:Sentry/src/chassis_task.c ****     // chassis_state.phi_dot_2 = rate_limiter_iterate(&wheel_rate_limiters[1], chassis_state.phi_do
+ 183:Sentry/src/chassis_task.c ****     // chassis_state.phi_dot_3 = rate_limiter_iterate(&wheel_rate_limiters[2], chassis_state.phi_do
+ 184:Sentry/src/chassis_task.c ****     // chassis_state.phi_dot_4 = rate_limiter_iterate(&wheel_rate_limiters[3], chassis_state.phi_do
+ 185:Sentry/src/chassis_task.c **** 
+ 186:Sentry/src/chassis_task.c ****     // set the velocities of the wheels
+ 187:Sentry/src/chassis_task.c ****     DJI_Motor_Set_Velocity(motors[0], chassis_state.phi_dot_1);
+ 729              		.loc 1 187 5 view .LVU168
+ 730 00c8 2B4E     		ldr	r6, .L35+16
+ 731 00ca 94ED060A 		vldr.32	s0, [r4, #24]
+ 732 00ce 3068     		ldr	r0, [r6]
+ 733 00d0 FFF7FEFF 		bl	DJI_Motor_Set_Velocity
+ 734              	.LVL47:
+ 188:Sentry/src/chassis_task.c ****     DJI_Motor_Set_Velocity(motors[1], chassis_state.phi_dot_2);
+ 735              		.loc 1 188 5 view .LVU169
+ 736 00d4 94ED070A 		vldr.32	s0, [r4, #28]
+ 737 00d8 7068     		ldr	r0, [r6, #4]
+ 738 00da FFF7FEFF 		bl	DJI_Motor_Set_Velocity
+ 739              	.LVL48:
+ 189:Sentry/src/chassis_task.c ****     DJI_Motor_Set_Velocity(motors[2], chassis_state.phi_dot_3);
+ 740              		.loc 1 189 5 view .LVU170
+ 741 00de 94ED080A 		vldr.32	s0, [r4, #32]
+ 742 00e2 B068     		ldr	r0, [r6, #8]
+ 743 00e4 FFF7FEFF 		bl	DJI_Motor_Set_Velocity
+ 744              	.LVL49:
+ 190:Sentry/src/chassis_task.c ****     DJI_Motor_Set_Velocity(motors[3], chassis_state.phi_dot_4);
+ 745              		.loc 1 190 5 view .LVU171
+ 746 00e8 94ED090A 		vldr.32	s0, [r4, #36]
+ 747 00ec F068     		ldr	r0, [r6, #12]
+ 748 00ee FFF7FEFF 		bl	DJI_Motor_Set_Velocity
+ 749              	.LVL50:
+ 191:Sentry/src/chassis_task.c **** 
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cclyejfx.s 			page 18
+
+
+ 192:Sentry/src/chassis_task.c ****     motor_data_odom.front_left = DJI_Motor_Get_Total_Angle(motors[0]) * physical_constants.R;
+ 750              		.loc 1 192 5 view .LVU172
+ 751              		.loc 1 192 34 is_stmt 0 view .LVU173
+ 752 00f2 3068     		ldr	r0, [r6]
+ 753 00f4 FFF7FEFF 		bl	DJI_Motor_Get_Total_Angle
+ 754              	.LVL51:
+ 755              		.loc 1 192 91 discriminator 1 view .LVU174
+ 756 00f8 D7ED007A 		vldr.32	s15, [r7]
+ 757              		.loc 1 192 71 discriminator 1 view .LVU175
+ 758 00fc 20EE270A 		vmul.f32	s0, s0, s15
+ 759              		.loc 1 192 32 discriminator 1 view .LVU176
+ 760 0100 1E4C     		ldr	r4, .L35+20
+ 761 0102 84ED000A 		vstr.32	s0, [r4]
+ 193:Sentry/src/chassis_task.c ****     motor_data_odom.back_left = DJI_Motor_Get_Total_Angle(motors[1]) * physical_constants.R;
+ 762              		.loc 1 193 5 is_stmt 1 view .LVU177
+ 763              		.loc 1 193 33 is_stmt 0 view .LVU178
+ 764 0106 7068     		ldr	r0, [r6, #4]
+ 765 0108 FFF7FEFF 		bl	DJI_Motor_Get_Total_Angle
+ 766              	.LVL52:
+ 767              		.loc 1 193 90 discriminator 1 view .LVU179
+ 768 010c D7ED007A 		vldr.32	s15, [r7]
+ 769              		.loc 1 193 70 discriminator 1 view .LVU180
+ 770 0110 20EE270A 		vmul.f32	s0, s0, s15
+ 771              		.loc 1 193 31 discriminator 1 view .LVU181
+ 772 0114 84ED010A 		vstr.32	s0, [r4, #4]
+ 194:Sentry/src/chassis_task.c ****     motor_data_odom.back_right = DJI_Motor_Get_Total_Angle(motors[2]) * physical_constants.R;
+ 773              		.loc 1 194 5 is_stmt 1 view .LVU182
+ 774              		.loc 1 194 34 is_stmt 0 view .LVU183
+ 775 0118 B068     		ldr	r0, [r6, #8]
+ 776 011a FFF7FEFF 		bl	DJI_Motor_Get_Total_Angle
+ 777              	.LVL53:
+ 778              		.loc 1 194 91 discriminator 1 view .LVU184
+ 779 011e D7ED007A 		vldr.32	s15, [r7]
+ 780              		.loc 1 194 71 discriminator 1 view .LVU185
+ 781 0122 20EE270A 		vmul.f32	s0, s0, s15
+ 782              		.loc 1 194 32 discriminator 1 view .LVU186
+ 783 0126 84ED020A 		vstr.32	s0, [r4, #8]
+ 195:Sentry/src/chassis_task.c ****     motor_data_odom.front_right = DJI_Motor_Get_Total_Angle(motors[3]) * physical_constants.R;
+ 784              		.loc 1 195 5 is_stmt 1 view .LVU187
+ 785              		.loc 1 195 35 is_stmt 0 view .LVU188
+ 786 012a F068     		ldr	r0, [r6, #12]
+ 787 012c FFF7FEFF 		bl	DJI_Motor_Get_Total_Angle
+ 788              	.LVL54:
+ 789              		.loc 1 195 92 discriminator 1 view .LVU189
+ 790 0130 D7ED007A 		vldr.32	s15, [r7]
+ 791              		.loc 1 195 72 discriminator 1 view .LVU190
+ 792 0134 20EE270A 		vmul.f32	s0, s0, s15
+ 793              		.loc 1 195 33 discriminator 1 view .LVU191
+ 794 0138 84ED030A 		vstr.32	s0, [r4, #12]
+ 196:Sentry/src/chassis_task.c ****     Update_Omni_Odometry(&sentry_pose, &physical_constants, &motor_data_odom, g_imu.rad.yaw + PI/2 
+ 795              		.loc 1 196 5 is_stmt 1 view .LVU192
+ 796              		.loc 1 196 88 is_stmt 0 view .LVU193
+ 797 013c 104B     		ldr	r3, .L35+24
+ 798 013e D3ED110A 		vldr.32	s1, [r3, #68]
+ 799              		.loc 1 196 93 view .LVU194
+ 800 0142 DFED107A 		vldr.32	s15, .L35+28
+ 801 0146 70EEA77A 		vadd.f32	s15, s1, s15
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cclyejfx.s 			page 19
+
+
+ 802              		.loc 1 196 5 view .LVU195
+ 803 014a 95ED000A 		vldr.32	s0, [r5]
+ 804 014e 37EEC00A 		vsub.f32	s0, s15, s0
+ 805 0152 2246     		mov	r2, r4
+ 806 0154 3946     		mov	r1, r7
+ 807 0156 0C48     		ldr	r0, .L35+32
+ 808 0158 FFF7FEFF 		bl	Update_Omni_Odometry
+ 809              	.LVL55:
+ 197:Sentry/src/chassis_task.c **** }...
+ 810              		.loc 1 197 1 view .LVU196
+ 811 015c 05B0     		add	sp, sp, #20
+ 812              	.LCFI9:
+ 813              		.cfi_def_cfa_offset 44
+ 814              		@ sp needed
+ 815 015e BDEC028B 		vldm	sp!, {d8}
+ 816              	.LCFI10:
+ 817              		.cfi_restore 80
+ 818              		.cfi_restore 81
+ 819              		.cfi_def_cfa_offset 36
+ 820 0162 BDE8F08F 		pop	{r4, r5, r6, r7, r8, r9, r10, fp, pc}
+ 821              	.L36:
+ 822 0166 00BF     		.align	2
+ 823              	.L35:
+ 824 0168 00000000 		.word	g_yaw
+ 825 016c 00000000 		.word	gimbal_angle_difference
+ 826 0170 00000000 		.word	chassis_state
+ 827 0174 00000000 		.word	physical_constants
+ 828 0178 00000000 		.word	motors
+ 829 017c 00000000 		.word	motor_data_odom
+ 830 0180 00000000 		.word	g_imu
+ 831 0184 DB0FC93F 		.word	1070141403
+ 832 0188 00000000 		.word	sentry_pose
+ 833              		.cfi_endproc
+ 834              	.LFE144:
+ 836              		.global	is_hit_counter
+ 837              		.section	.bss.is_hit_counter,"aw",%nobits
+ 838              		.align	1
+ 841              	is_hit_counter:
+ 842 0000 0000     		.space	2
+ 843              		.global	last_hp
+ 844              		.section	.bss.last_hp,"aw",%nobits
+ 845              		.align	1
+ 848              	last_hp:
+ 849 0000 0000     		.space	2
+ 850              		.global	motor_data_odom
+ 851              		.section	.bss.motor_data_odom,"aw",%nobits
+ 852              		.align	2
+ 855              	motor_data_odom:
+ 856 0000 00000000 		.space	16
+ 856      00000000 
+ 856      00000000 
+ 856      00000000 
+ 857              		.global	sentry_pose
+ 858              		.section	.bss.sentry_pose,"aw",%nobits
+ 859              		.align	2
+ 862              	sentry_pose:
+ 863 0000 00000000 		.space	24
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cclyejfx.s 			page 20
+
+
+ 863      00000000 
+ 863      00000000 
+ 863      00000000 
+ 863      00000000 
+ 864              		.global	g_follow_gimbal_angle_pid
+ 865              		.section	.bss.g_follow_gimbal_angle_pid,"aw",%nobits
+ 866              		.align	2
+ 869              	g_follow_gimbal_angle_pid:
+ 870 0000 00000000 		.space	52
+ 870      00000000 
+ 870      00000000 
+ 870      00000000 
+ 870      00000000 
+ 871              		.global	wheel_rate_limiters
+ 872              		.section	.bss.wheel_rate_limiters,"aw",%nobits
+ 873              		.align	2
+ 876              	wheel_rate_limiters:
+ 877 0000 00000000 		.space	48
+ 877      00000000 
+ 877      00000000 
+ 877      00000000 
+ 877      00000000 
+ 878              		.global	chassis_state
+ 879              		.section	.bss.chassis_state,"aw",%nobits
+ 880              		.align	2
+ 883              	chassis_state:
+ 884 0000 00000000 		.space	40
+ 884      00000000 
+ 884      00000000 
+ 884      00000000 
+ 884      00000000 
+ 885              		.global	physical_constants
+ 886              		.section	.bss.physical_constants,"aw",%nobits
+ 887              		.align	2
+ 890              	physical_constants:
+ 891 0000 00000000 		.space	68
+ 891      00000000 
+ 891      00000000 
+ 891      00000000 
+ 891      00000000 
+ 892              		.global	drive_motor_reversal_array
+ 893              		.section	.bss.drive_motor_reversal_array,"aw",%nobits
+ 894              		.align	2
+ 897              	drive_motor_reversal_array:
+ 898 0000 00000000 		.space	4
+ 899              		.global	drive_esc_id_array
+ 900              		.section	.data.drive_esc_id_array,"aw"
+ 901              		.align	2
+ 904              	drive_esc_id_array:
+ 905 0000 01020304 		.ascii	"\001\002\003\004"
+ 906              		.global	motors
+ 907              		.section	.bss.motors,"aw",%nobits
+ 908              		.align	2
+ 911              	motors:
+ 912 0000 00000000 		.space	16
+ 912      00000000 
+ 912      00000000 
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cclyejfx.s 			page 21
+
+
+ 912      00000000 
+ 913              		.global	gimbal_angle_difference
+ 914              		.section	.bss.gimbal_angle_difference,"aw",%nobits
+ 915              		.align	2
+ 918              	gimbal_angle_difference:
+ 919 0000 00000000 		.space	4
+ 920              		.global	spintop_safe
+ 921              		.section	.bss.spintop_safe,"aw",%nobits
+ 924              	spintop_safe:
+ 925 0000 00       		.space	1
+ 926              		.text
+ 927              	.Letext0:
+ 928              		.file 2 "control-base/algo/inc/pid.h"
+ 929              		.file 3 "/Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/arm-none-eabi/include/machine/_defa
+ 930              		.file 4 "/Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/arm-none-eabi/include/sys/_stdint.h
+ 931              		.file 5 "control-base/devices/inc/motor.h"
+ 932              		.file 6 "Sentry/inc/robot.h"
+ 933              		.file 7 "control-base/typec-board-base/Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h"
+ 934              		.file 8 "control-base/typec-board-base/Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h"
+ 935              		.file 9 "control-base/typec-board-base/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h"
+ 936              		.file 10 "control-base/typec-board-base/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h"
+ 937              		.file 11 "control-base/typec-board-base/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_can.h"
+ 938              		.file 12 "control-base/typec-board-base/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h"
+ 939              		.file 13 "control-base/devices/inc/remote.h"
+ 940              		.file 14 "control-base/bsp/inc/bsp_can.h"
+ 941              		.file 15 "control-base/devices/inc/dji_motor.h"
+ 942              		.file 16 "control-base/algo/inc/omni_locomotion.h"
+ 943              		.file 17 "control-base/algo/inc/rate_limiter.h"
+ 944              		.file 18 "control-base/devices/inc/bmi088driver.h"
+ 945              		.file 19 "control-base/devices/inc/ist8310driver.h"
+ 946              		.file 20 "control-base/devices/inc/imu_task.h"
+ 947              		.file 21 "control-base/devices/inc/supercap.h"
+ 948              		.file 22 "control-base/devices/inc/referee_system.h"
+ 949              		.file 23 "control-base/devices/inc/jetson_orin.h"
+ 950              		.file 24 "control-base/devices/inc/dm_motor.h"
+ 951              		.file 25 "/Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/arm-none-eabi/include/math.h"
+ 952              		.file 26 "<built-in>"
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cclyejfx.s 			page 22
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 chassis_task.c
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cclyejfx.s:21     .text.Chassis_Task_Init:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cclyejfx.s:27     .text.Chassis_Task_Init:00000000 Chassis_Task_Init
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cclyejfx.s:209    .text.Chassis_Task_Init:000000ec $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cclyejfx.s:904    .data.drive_esc_id_array:00000000 drive_esc_id_array
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cclyejfx.s:897    .bss.drive_motor_reversal_array:00000000 drive_motor_reversal_array
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cclyejfx.s:911    .bss.motors:00000000 motors
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cclyejfx.s:890    .bss.physical_constants:00000000 physical_constants
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cclyejfx.s:883    .bss.chassis_state:00000000 chassis_state
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cclyejfx.s:876    .bss.wheel_rate_limiters:00000000 wheel_rate_limiters
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cclyejfx.s:869    .bss.g_follow_gimbal_angle_pid:00000000 g_follow_gimbal_angle_pid
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cclyejfx.s:862    .bss.sentry_pose:00000000 sentry_pose
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cclyejfx.s:848    .bss.last_hp:00000000 last_hp
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cclyejfx.s:234    .text.Chassis_Process_Target_Velocity:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cclyejfx.s:240    .text.Chassis_Process_Target_Velocity:00000000 Chassis_Process_Target_Velocity
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cclyejfx.s:558    .text.Chassis_Process_Target_Velocity:00000218 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cclyejfx.s:841    .bss.is_hit_counter:00000000 is_hit_counter
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cclyejfx.s:924    .bss.spintop_safe:00000000 spintop_safe
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cclyejfx.s:918    .bss.gimbal_angle_difference:00000000 gimbal_angle_difference
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cclyejfx.s:594    .text.Chassis_Ctrl_Loop:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cclyejfx.s:600    .text.Chassis_Ctrl_Loop:00000000 Chassis_Ctrl_Loop
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cclyejfx.s:824    .text.Chassis_Ctrl_Loop:00000168 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cclyejfx.s:855    .bss.motor_data_odom:00000000 motor_data_odom
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cclyejfx.s:838    .bss.is_hit_counter:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cclyejfx.s:845    .bss.last_hp:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cclyejfx.s:852    .bss.motor_data_odom:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cclyejfx.s:859    .bss.sentry_pose:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cclyejfx.s:866    .bss.g_follow_gimbal_angle_pid:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cclyejfx.s:873    .bss.wheel_rate_limiters:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cclyejfx.s:880    .bss.chassis_state:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cclyejfx.s:887    .bss.physical_constants:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cclyejfx.s:894    .bss.drive_motor_reversal_array:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cclyejfx.s:901    .data.drive_esc_id_array:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cclyejfx.s:908    .bss.motors:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cclyejfx.s:915    .bss.gimbal_angle_difference:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cclyejfx.s:925    .bss.spintop_safe:00000000 $d
+
+UNDEFINED SYMBOLS
+memset
+DJI_Motor_Init
+DJI_Motor_Set_Control_Mode
+omni_init
+memcpy
+rate_limiter_init
+PID_Init
+Referee_System
+__aeabi_i2d
+__aeabi_dmul
+__aeabi_d2f
+PID
+g_remote
+g_pitch
+g_robot_state
+g_yaw
+g_orin_data
+g_supercap
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cclyejfx.s 			page 23
+
+
+DJI_Motor_Get_Absolute_Angle
+__aeabi_f2d
+cos
+sin
+__aeabi_dsub
+__aeabi_dadd
+omni_calculate_kinematics
+omni_convert_to_rpm
+DJI_Motor_Set_Velocity
+DJI_Motor_Get_Total_Angle
+Update_Omni_Odometry
+g_imu

@@ -1,0 +1,98 @@
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccJGQ5Wb.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"chassis_task.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "Minibot/src/chassis_task.c"
+  20              		.section	.text.Chassis_Task_Init,"ax",%progbits
+  21              		.align	1
+  22              		.global	Chassis_Task_Init
+  23              		.syntax unified
+  24              		.thumb
+  25              		.thumb_func
+  27              	Chassis_Task_Init:
+  28              	.LFB134:
+   1:Minibot/src/chassis_task.c **** #include "chassis_task.h"
+   2:Minibot/src/chassis_task.c **** 
+   3:Minibot/src/chassis_task.c **** #include "robot.h"
+   4:Minibot/src/chassis_task.c **** #include "remote.h"
+   5:Minibot/src/chassis_task.c **** 
+   6:Minibot/src/chassis_task.c **** extern Robot_State_t g_robot_state;
+   7:Minibot/src/chassis_task.c **** extern Remote_t g_remote;
+   8:Minibot/src/chassis_task.c **** 
+   9:Minibot/src/chassis_task.c **** float chassis_rad;
+  10:Minibot/src/chassis_task.c **** 
+  11:Minibot/src/chassis_task.c **** void Chassis_Task_Init()
+  12:Minibot/src/chassis_task.c **** {
+  29              		.loc 1 12 1 view -0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33              		@ link register save eliminated.
+  13:Minibot/src/chassis_task.c ****     // Init chassis hardware
+  14:Minibot/src/chassis_task.c **** }
+  34              		.loc 1 14 1 view .LVU1
+  35 0000 7047     		bx	lr
+  36              		.cfi_endproc
+  37              	.LFE134:
+  39              		.section	.text.Chassis_Ctrl_Loop,"ax",%progbits
+  40              		.align	1
+  41              		.global	Chassis_Ctrl_Loop
+  42              		.syntax unified
+  43              		.thumb
+  44              		.thumb_func
+  46              	Chassis_Ctrl_Loop:
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccJGQ5Wb.s 			page 2
+
+
+  47              	.LFB135:
+  15:Minibot/src/chassis_task.c **** 
+  16:Minibot/src/chassis_task.c **** void Chassis_Ctrl_Loop()
+  17:Minibot/src/chassis_task.c **** {
+  48              		.loc 1 17 1 view -0
+  49              		.cfi_startproc
+  50              		@ args = 0, pretend = 0, frame = 0
+  51              		@ frame_needed = 0, uses_anonymous_args = 0
+  52              		@ link register save eliminated.
+  18:Minibot/src/chassis_task.c ****     // Control loop for the chassis
+  19:Minibot/src/chassis_task.c **** }...
+  53              		.loc 1 19 1 view .LVU3
+  54 0000 7047     		bx	lr
+  55              		.cfi_endproc
+  56              	.LFE135:
+  58              		.global	chassis_rad
+  59              		.section	.bss.chassis_rad,"aw",%nobits
+  60              		.align	2
+  63              	chassis_rad:
+  64 0000 00000000 		.space	4
+  65              		.text
+  66              	.Letext0:
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccJGQ5Wb.s 			page 3
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 chassis_task.c
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccJGQ5Wb.s:21     .text.Chassis_Task_Init:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccJGQ5Wb.s:27     .text.Chassis_Task_Init:00000000 Chassis_Task_Init
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccJGQ5Wb.s:40     .text.Chassis_Ctrl_Loop:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccJGQ5Wb.s:46     .text.Chassis_Ctrl_Loop:00000000 Chassis_Ctrl_Loop
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccJGQ5Wb.s:63     .bss.chassis_rad:00000000 chassis_rad
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccJGQ5Wb.s:60     .bss.chassis_rad:00000000 $d
+
+NO UNDEFINED SYMBOLS

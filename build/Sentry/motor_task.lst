@@ -1,0 +1,178 @@
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccNb1Vey.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"motor_task.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "Sentry/src/motor_task.c"
+  20              		.section	.text.Motor_Task_Loop,"ax",%progbits
+  21              		.align	1
+  22              		.global	Motor_Task_Loop
+  23              		.syntax unified
+  24              		.thumb
+  25              		.thumb_func
+  27              	Motor_Task_Loop:
+  28              	.LFB142:
+   1:Sentry/src/motor_task.c **** #include "motor_task.h"
+   2:Sentry/src/motor_task.c **** #include "dji_motor.h"
+   3:Sentry/src/motor_task.c **** #include "dm_motor.h"
+   4:Sentry/src/motor_task.c **** #include "mf_motor.h"
+   5:Sentry/src/motor_task.c **** #include "supercap.h"
+   6:Sentry/src/motor_task.c **** #include "c_board_comm.h"
+   7:Sentry/src/motor_task.c **** extern uint8_t g_board_comm_sending_pending;
+   8:Sentry/src/motor_task.c **** extern Supercap_t g_supercap;
+   9:Sentry/src/motor_task.c **** uint8_t result_can = 0;
+  10:Sentry/src/motor_task.c **** extern CAN_Instance_t* g_board_communication;
+  11:Sentry/src/motor_task.c **** void Motor_Task_Loop() {
+  29              		.loc 1 11 24 view -0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33 0000 08B5     		push	{r3, lr}
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 8
+  36              		.cfi_offset 3, -8
+  37              		.cfi_offset 14, -4
+  12:Sentry/src/motor_task.c ****     DJI_Motor_Send();
+  38              		.loc 1 12 5 view .LVU1
+  39 0002 FFF7FEFF 		bl	DJI_Motor_Send
+  40              	.LVL0:
+  13:Sentry/src/motor_task.c ****     // MF_Motor_Send();
+  14:Sentry/src/motor_task.c ****     DM_Motor_Send();
+  41              		.loc 1 14 5 view .LVU2
+  42 0006 FFF7FEFF 		bl	DM_Motor_Send
+  43              	.LVL1:
+  15:Sentry/src/motor_task.c **** 
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccNb1Vey.s 			page 2
+
+
+  16:Sentry/src/motor_task.c ****     g_supercap.send_counter++;
+  44              		.loc 1 16 5 view .LVU3
+  45              		.loc 1 16 15 is_stmt 0 view .LVU4
+  46 000a 0E4A     		ldr	r2, .L7
+  47 000c D388     		ldrh	r3, [r2, #6]
+  48              		.loc 1 16 28 view .LVU5
+  49 000e 0133     		adds	r3, r3, #1
+  50 0010 9BB2     		uxth	r3, r3
+  51 0012 D380     		strh	r3, [r2, #6]	@ movhi
+  17:Sentry/src/motor_task.c ****     if (g_supercap.send_counter >= 100) {
+  52              		.loc 1 17 5 is_stmt 1 view .LVU6
+  53              		.loc 1 17 8 is_stmt 0 view .LVU7
+  54 0014 632B     		cmp	r3, #99
+  55 0016 04D8     		bhi	.L5
+  56              	.L2:
+  18:Sentry/src/motor_task.c ****         Supercap_Send();
+  19:Sentry/src/motor_task.c ****         g_supercap.send_counter = 0;
+  20:Sentry/src/motor_task.c ****     }
+  21:Sentry/src/motor_task.c ****     if (g_board_comm_sending_pending == 1)
+  57              		.loc 1 21 5 is_stmt 1 view .LVU8
+  58              		.loc 1 21 38 is_stmt 0 view .LVU9
+  59 0018 0B4B     		ldr	r3, .L7+4
+  60 001a 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+  61              		.loc 1 21 8 view .LVU10
+  62 001c 012B     		cmp	r3, #1
+  63 001e 06D0     		beq	.L6
+  64              	.L1:
+  22:Sentry/src/motor_task.c ****     {
+  23:Sentry/src/motor_task.c ****         result_can = CAN_Transmit(g_board_communication);
+  24:Sentry/src/motor_task.c ****         g_board_comm_sending_pending = 0;
+  25:Sentry/src/motor_task.c ****     }
+  26:Sentry/src/motor_task.c **** }
+  65              		.loc 1 26 1 view .LVU11
+  66 0020 08BD     		pop	{r3, pc}
+  67              	.L5:
+  18:Sentry/src/motor_task.c ****         Supercap_Send();
+  68              		.loc 1 18 9 is_stmt 1 view .LVU12
+  69 0022 FFF7FEFF 		bl	Supercap_Send
+  70              	.LVL2:
+  19:Sentry/src/motor_task.c ****     }
+  71              		.loc 1 19 9 view .LVU13
+  19:Sentry/src/motor_task.c ****     }
+  72              		.loc 1 19 33 is_stmt 0 view .LVU14
+  73 0026 074B     		ldr	r3, .L7
+  74 0028 0022     		movs	r2, #0
+  75 002a DA80     		strh	r2, [r3, #6]	@ movhi
+  76 002c F4E7     		b	.L2
+  77              	.L6:
+  23:Sentry/src/motor_task.c ****         g_board_comm_sending_pending = 0;
+  78              		.loc 1 23 9 is_stmt 1 view .LVU15
+  23:Sentry/src/motor_task.c ****         g_board_comm_sending_pending = 0;
+  79              		.loc 1 23 22 is_stmt 0 view .LVU16
+  80 002e 074B     		ldr	r3, .L7+8
+  81 0030 1868     		ldr	r0, [r3]
+  82 0032 FFF7FEFF 		bl	CAN_Transmit
+  83              	.LVL3:
+  23:Sentry/src/motor_task.c ****         g_board_comm_sending_pending = 0;
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccNb1Vey.s 			page 3
+
+
+  84              		.loc 1 23 20 discriminator 1 view .LVU17
+  85 0036 064B     		ldr	r3, .L7+12
+  86 0038 1870     		strb	r0, [r3]
+  24:Sentry/src/motor_task.c ****     }
+  87              		.loc 1 24 9 is_stmt 1 view .LVU18
+  24:Sentry/src/motor_task.c ****     }
+  88              		.loc 1 24 38 is_stmt 0 view .LVU19
+  89 003a 034B     		ldr	r3, .L7+4
+  90 003c 0022     		movs	r2, #0
+  91 003e 1A70     		strb	r2, [r3]
+  92              		.loc 1 26 1 view .LVU20
+  93 0040 EEE7     		b	.L1
+  94              	.L8:
+  95 0042 00BF     		.align	2
+  96              	.L7:
+  97 0044 00000000 		.word	g_supercap
+  98 0048 00000000 		.word	g_board_comm_sending_pending
+  99 004c 00000000 		.word	g_board_communication
+ 100 0050 00000000 		.word	result_can
+ 101              		.cfi_endproc
+ 102              	.LFE142:
+ 104              		.global	result_can
+ 105              		.section	.bss.result_can,"aw",%nobits
+ 108              	result_can:
+ 109 0000 00       		.space	1
+ 110              		.text
+ 111              	.Letext0:
+ 112              		.file 2 "/Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/arm-none-eabi/include/machine/_defa
+ 113              		.file 3 "/Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/arm-none-eabi/include/sys/_stdint.h
+ 114              		.file 4 "control-base/typec-board-base/Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h"
+ 115              		.file 5 "control-base/typec-board-base/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h"
+ 116              		.file 6 "control-base/typec-board-base/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_can.h"
+ 117              		.file 7 "control-base/bsp/inc/bsp_can.h"
+ 118              		.file 8 "control-base/devices/inc/supercap.h"
+ 119              		.file 9 "control-base/devices/inc/dm_motor.h"
+ 120              		.file 10 "control-base/devices/inc/dji_motor.h"
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccNb1Vey.s 			page 4
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 motor_task.c
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccNb1Vey.s:21     .text.Motor_Task_Loop:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccNb1Vey.s:27     .text.Motor_Task_Loop:00000000 Motor_Task_Loop
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccNb1Vey.s:97     .text.Motor_Task_Loop:00000044 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccNb1Vey.s:108    .bss.result_can:00000000 result_can
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccNb1Vey.s:109    .bss.result_can:00000000 $d
+
+UNDEFINED SYMBOLS
+DJI_Motor_Send
+DM_Motor_Send
+Supercap_Send
+CAN_Transmit
+g_supercap
+g_board_comm_sending_pending
+g_board_communication

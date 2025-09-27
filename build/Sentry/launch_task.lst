@@ -1,0 +1,1086 @@
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccWqkiH1.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"launch_task.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "Sentry/src/launch_task.c"
+  20              		.section	.text.Launch_Task_Init,"ax",%progbits
+  21              		.align	1
+  22              		.global	Launch_Task_Init
+  23              		.syntax unified
+  24              		.thumb
+  25              		.thumb_func
+  27              	Launch_Task_Init:
+  28              	.LFB142:
+   1:Sentry/src/launch_task.c **** #include "launch_task.h"
+   2:Sentry/src/launch_task.c **** 
+   3:Sentry/src/launch_task.c **** #include "dji_motor.h"
+   4:Sentry/src/launch_task.c **** #include "motor.h"
+   5:Sentry/src/launch_task.c **** #include "robot.h"
+   6:Sentry/src/launch_task.c **** #include "remote.h"
+   7:Sentry/src/launch_task.c **** #include "user_math.h"
+   8:Sentry/src/launch_task.c **** #include "referee_system.h"
+   9:Sentry/src/launch_task.c **** #include "laser.h"
+  10:Sentry/src/launch_task.c **** #include <stdint.h>
+  11:Sentry/src/launch_task.c **** #include "jetson_orin.h"
+  12:Sentry/src/launch_task.c **** 
+  13:Sentry/src/launch_task.c **** // TODO: Copied from Swerve-Standard
+  14:Sentry/src/launch_task.c **** 
+  15:Sentry/src/launch_task.c **** extern Robot_State_t g_robot_state;
+  16:Sentry/src/launch_task.c **** extern Remote_t g_remote;
+  17:Sentry/src/launch_task.c **** 
+  18:Sentry/src/launch_task.c **** DJI_Motor_Handle_t *g_flywheel_left, *g_flywheel_right, *g_feed_motor;
+  19:Sentry/src/launch_task.c **** 
+  20:Sentry/src/launch_task.c **** void Launch_Task_Init()
+  21:Sentry/src/launch_task.c **** {
+  29              		.loc 1 21 1 view -0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 544
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33 0000 2DE9F047 		push	{r4, r5, r6, r7, r8, r9, r10, lr}
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 32
+  36              		.cfi_offset 4, -32
+  37              		.cfi_offset 5, -28
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccWqkiH1.s 			page 2
+
+
+  38              		.cfi_offset 6, -24
+  39              		.cfi_offset 7, -20
+  40              		.cfi_offset 8, -16
+  41              		.cfi_offset 9, -12
+  42              		.cfi_offset 10, -8
+  43              		.cfi_offset 14, -4
+  44 0004 ADF5087D 		sub	sp, sp, #544
+  45              	.LCFI1:
+  46              		.cfi_def_cfa_offset 576
+  22:Sentry/src/launch_task.c ****     // Init Launch Hardware
+  23:Sentry/src/launch_task.c ****     Motor_Config_t flywheel_left_config = {
+  47              		.loc 1 23 5 view .LVU1
+  48              		.loc 1 23 20 is_stmt 0 view .LVU2
+  49 0008 0DF5B67A 		add	r10, sp, #364
+  50 000c 4FF0B409 		mov	r9, #180
+  51 0010 4A46     		mov	r2, r9
+  52 0012 0021     		movs	r1, #0
+  53 0014 5046     		mov	r0, r10
+  54 0016 FFF7FEFF 		bl	memset
+  55              	.LVL0:
+  56 001a 0227     		movs	r7, #2
+  57 001c 8DF86C71 		strb	r7, [sp, #364]
+  58 0020 0323     		movs	r3, #3
+  59 0022 8DF87231 		strb	r3, [sp, #370]
+  60 0026 0126     		movs	r6, #1
+  61 0028 8DF87761 		strb	r6, [sp, #375]
+  62 002c DFF8C480 		ldr	r8, .L3+44
+  63 0030 CDF8B881 		str	r8, [sp, #440]	@ float
+  64 0034 244C     		ldr	r4, .L3
+  65 0036 7694     		str	r4, [sp, #472]	@ float
+  24:Sentry/src/launch_task.c ****         .can_bus = 2,
+  25:Sentry/src/launch_task.c ****         .speed_controller_id = 3,
+  26:Sentry/src/launch_task.c ****         .offset = 0,
+  27:Sentry/src/launch_task.c ****         .control_mode = VELOCITY_CONTROL,
+  28:Sentry/src/launch_task.c ****         .motor_reversal = MOTOR_REVERSAL_NORMAL,
+  29:Sentry/src/launch_task.c ****         .velocity_pid =
+  30:Sentry/src/launch_task.c ****             {
+  31:Sentry/src/launch_task.c ****                 .kp = 500.0f,
+  32:Sentry/src/launch_task.c ****                 .output_limit = M3508_MAX_CURRENT_INT,
+  33:Sentry/src/launch_task.c ****             },
+  34:Sentry/src/launch_task.c ****     };
+  35:Sentry/src/launch_task.c **** 
+  36:Sentry/src/launch_task.c ****     Motor_Config_t flywheel_right_config = {
+  66              		.loc 1 36 5 is_stmt 1 view .LVU3
+  67              		.loc 1 36 20 is_stmt 0 view .LVU4
+  68 0038 2EAD     		add	r5, sp, #184
+  69 003a 4A46     		mov	r2, r9
+  70 003c 0021     		movs	r1, #0
+  71 003e 2846     		mov	r0, r5
+  72 0040 FFF7FEFF 		bl	memset
+  73              	.LVL1:
+  74 0044 8DF8B870 		strb	r7, [sp, #184]
+  75 0048 8DF8BE70 		strb	r7, [sp, #190]
+  76 004c 8DF8C260 		strb	r6, [sp, #194]
+  77 0050 8DF8C360 		strb	r6, [sp, #195]
+  78 0054 CDF80481 		str	r8, [sp, #260]	@ float
+  79 0058 4994     		str	r4, [sp, #292]	@ float
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccWqkiH1.s 			page 3
+
+
+  37:Sentry/src/launch_task.c ****         .can_bus = 2,
+  38:Sentry/src/launch_task.c ****         .speed_controller_id = 2,
+  39:Sentry/src/launch_task.c ****         .offset = 0,
+  40:Sentry/src/launch_task.c ****         .control_mode = VELOCITY_CONTROL,
+  41:Sentry/src/launch_task.c ****         .motor_reversal = MOTOR_REVERSAL_REVERSED,
+  42:Sentry/src/launch_task.c ****         .velocity_pid =
+  43:Sentry/src/launch_task.c ****             {
+  44:Sentry/src/launch_task.c ****                 .kp = 500.0f,
+  45:Sentry/src/launch_task.c ****                 .output_limit = M3508_MAX_CURRENT_INT,
+  46:Sentry/src/launch_task.c ****             },
+  47:Sentry/src/launch_task.c ****     };
+  48:Sentry/src/launch_task.c **** 
+  49:Sentry/src/launch_task.c ****     Motor_Config_t feed_speed_config = {
+  80              		.loc 1 49 5 is_stmt 1 view .LVU5
+  81              		.loc 1 49 20 is_stmt 0 view .LVU6
+  82 005a 01AC     		add	r4, sp, #4
+  83 005c 4A46     		mov	r2, r9
+  84 005e 0021     		movs	r1, #0
+  85 0060 2046     		mov	r0, r4
+  86 0062 FFF7FEFF 		bl	memset
+  87              	.LVL2:
+  88 0066 8DF80470 		strb	r7, [sp, #4]
+  89 006a 0623     		movs	r3, #6
+  90 006c 8DF80A30 		strb	r3, [sp, #10]
+  91 0070 8DF80F60 		strb	r6, [sp, #15]
+  92 0074 154B     		ldr	r3, .L3+4
+  93 0076 0793     		str	r3, [sp, #28]	@ float
+  94 0078 154B     		ldr	r3, .L3+8
+  95 007a 0893     		str	r3, [sp, #32]	@ float
+  96 007c 154B     		ldr	r3, .L3+12
+  97 007e 0993     		str	r3, [sp, #36]	@ float
+  98 0080 154B     		ldr	r3, .L3+16
+  99 0082 0B93     		str	r3, [sp, #44]	@ float
+ 100 0084 154B     		ldr	r3, .L3+20
+ 101 0086 0F93     		str	r3, [sp, #60]	@ float
+ 102 0088 CDF85080 		str	r8, [sp, #80]	@ float
+ 103 008c 144A     		ldr	r2, .L3+24
+ 104 008e 1692     		str	r2, [sp, #88]	@ float
+ 105 0090 144A     		ldr	r2, .L3+28
+ 106 0092 1792     		str	r2, [sp, #92]	@ float
+ 107 0094 1C93     		str	r3, [sp, #112]	@ float
+  50:Sentry/src/launch_task.c ****         .can_bus = 2,
+  51:Sentry/src/launch_task.c ****         .speed_controller_id = 6,
+  52:Sentry/src/launch_task.c ****         .offset = 0,
+  53:Sentry/src/launch_task.c ****         .control_mode = VELOCITY_CONTROL,// | POSITION_CONTROL_TOTAL_ANGLE,
+  54:Sentry/src/launch_task.c ****         .motor_reversal = MOTOR_REVERSAL_NORMAL,
+  55:Sentry/src/launch_task.c ****         .velocity_pid =
+  56:Sentry/src/launch_task.c ****             {
+  57:Sentry/src/launch_task.c ****                 .kp = 500.0f,
+  58:Sentry/src/launch_task.c ****                 .kd = 200.0f,
+  59:Sentry/src/launch_task.c ****                 .kf = 100.0f,
+  60:Sentry/src/launch_task.c ****                 .output_limit = M2006_MAX_CURRENT_INT,
+  61:Sentry/src/launch_task.c ****             },
+  62:Sentry/src/launch_task.c ****         .angle_pid =
+  63:Sentry/src/launch_task.c ****             {
+  64:Sentry/src/launch_task.c ****                 .kp = 500000.0f,
+  65:Sentry/src/launch_task.c ****                 .kd = 15000000.0f,
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccWqkiH1.s 			page 4
+
+
+  66:Sentry/src/launch_task.c ****                 .ki = 0.1f,
+  67:Sentry/src/launch_task.c ****                 .output_limit = M2006_MAX_CURRENT_INT,
+  68:Sentry/src/launch_task.c ****                 .integral_limit = 1000.0f,
+  69:Sentry/src/launch_task.c ****             }
+  70:Sentry/src/launch_task.c ****     };
+  71:Sentry/src/launch_task.c **** 
+  72:Sentry/src/launch_task.c ****     g_flywheel_left = DJI_Motor_Init(&flywheel_left_config,M3508);
+ 108              		.loc 1 72 5 is_stmt 1 view .LVU7
+ 109              		.loc 1 72 23 is_stmt 0 view .LVU8
+ 110 0096 3146     		mov	r1, r6
+ 111 0098 5046     		mov	r0, r10
+ 112 009a FFF7FEFF 		bl	DJI_Motor_Init
+ 113              	.LVL3:
+ 114              		.loc 1 72 21 discriminator 1 view .LVU9
+ 115 009e 124B     		ldr	r3, .L3+32
+ 116 00a0 1860     		str	r0, [r3]
+  73:Sentry/src/launch_task.c ****     g_flywheel_right = DJI_Motor_Init(&flywheel_right_config,M3508);
+ 117              		.loc 1 73 5 is_stmt 1 view .LVU10
+ 118              		.loc 1 73 24 is_stmt 0 view .LVU11
+ 119 00a2 3146     		mov	r1, r6
+ 120 00a4 2846     		mov	r0, r5
+ 121 00a6 FFF7FEFF 		bl	DJI_Motor_Init
+ 122              	.LVL4:
+ 123              		.loc 1 73 22 discriminator 1 view .LVU12
+ 124 00aa 104B     		ldr	r3, .L3+36
+ 125 00ac 1860     		str	r0, [r3]
+  74:Sentry/src/launch_task.c ****     g_feed_motor = DJI_Motor_Init(&feed_speed_config,M2006);
+ 126              		.loc 1 74 5 is_stmt 1 view .LVU13
+ 127              		.loc 1 74 20 is_stmt 0 view .LVU14
+ 128 00ae 3946     		mov	r1, r7
+ 129 00b0 2046     		mov	r0, r4
+ 130 00b2 FFF7FEFF 		bl	DJI_Motor_Init
+ 131              	.LVL5:
+ 132              		.loc 1 74 18 discriminator 1 view .LVU15
+ 133 00b6 0E4B     		ldr	r3, .L3+40
+ 134 00b8 1860     		str	r0, [r3]
+  75:Sentry/src/launch_task.c **** 
+  76:Sentry/src/launch_task.c ****     Laser_Init();
+ 135              		.loc 1 76 5 is_stmt 1 view .LVU16
+ 136 00ba FFF7FEFF 		bl	Laser_Init
+ 137              	.LVL6:
+  77:Sentry/src/launch_task.c **** }
+ 138              		.loc 1 77 1 is_stmt 0 view .LVU17
+ 139 00be 0DF5087D 		add	sp, sp, #544
+ 140              	.LCFI2:
+ 141              		.cfi_def_cfa_offset 32
+ 142              		@ sp needed
+ 143 00c2 BDE8F087 		pop	{r4, r5, r6, r7, r8, r9, r10, pc}
+ 144              	.L4:
+ 145 00c6 00BF     		.align	2
+ 146              	.L3:
+ 147 00c8 00007A46 		.word	1182400512
+ 148 00cc 0024F448 		.word	1223959552
+ 149 00d0 CDCCCC3D 		.word	1036831949
+ 150 00d4 C0E1644B 		.word	1264902592
+ 151 00d8 00007A44 		.word	1148846080
+ 152 00dc 00A00C46 		.word	1175232512
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccWqkiH1.s 			page 5
+
+
+ 153 00e0 00004843 		.word	1128792064
+ 154 00e4 0000C842 		.word	1120403456
+ 155 00e8 00000000 		.word	g_flywheel_left
+ 156 00ec 00000000 		.word	g_flywheel_right
+ 157 00f0 00000000 		.word	g_feed_motor
+ 158 00f4 0000FA43 		.word	1140457472
+ 159              		.cfi_endproc
+ 160              	.LFE142:
+ 162              		.section	.text.Launch_Ctrl_Loop,"ax",%progbits
+ 163              		.align	1
+ 164              		.global	Launch_Ctrl_Loop
+ 165              		.syntax unified
+ 166              		.thumb
+ 167              		.thumb_func
+ 169              	Launch_Ctrl_Loop:
+ 170              	.LFB143:
+  78:Sentry/src/launch_task.c **** 
+  79:Sentry/src/launch_task.c **** void Launch_Ctrl_Loop()
+  80:Sentry/src/launch_task.c **** {
+ 171              		.loc 1 80 1 is_stmt 1 view -0
+ 172              		.cfi_startproc
+ 173              		@ args = 0, pretend = 0, frame = 0
+ 174              		@ frame_needed = 0, uses_anonymous_args = 0
+ 175 0000 08B5     		push	{r3, lr}
+ 176              	.LCFI3:
+ 177              		.cfi_def_cfa_offset 8
+ 178              		.cfi_offset 3, -8
+ 179              		.cfi_offset 14, -4
+ 180 0002 2DED028B 		vpush.64	{d8}
+ 181              	.LCFI4:
+ 182              		.cfi_def_cfa_offset 16
+ 183              		.cfi_offset 80, -16
+ 184              		.cfi_offset 81, -12
+  81:Sentry/src/launch_task.c ****     if (g_orin_data.online_flag && g_remote.controller.right_switch == UP) {
+ 185              		.loc 1 81 5 view .LVU19
+ 186              		.loc 1 81 20 is_stmt 0 view .LVU20
+ 187 0006 284B     		ldr	r3, .L15
+ 188 0008 93F89530 		ldrb	r3, [r3, #149]	@ zero_extendqisi2
+ 189              		.loc 1 81 8 view .LVU21
+ 190 000c 1BB1     		cbz	r3, .L6
+ 191              		.loc 1 81 55 discriminator 1 view .LVU22
+ 192 000e 274B     		ldr	r3, .L15+4
+ 193 0010 5B7B     		ldrb	r3, [r3, #13]	@ zero_extendqisi2
+ 194              		.loc 1 81 33 discriminator 1 view .LVU23
+ 195 0012 012B     		cmp	r3, #1
+ 196 0014 25D0     		beq	.L12
+ 197              	.L6:
+  82:Sentry/src/launch_task.c ****         if (g_orin_data.receiving.auto_aiming.fire == 1) {
+  83:Sentry/src/launch_task.c ****             DJI_Motor_Set_Velocity(g_feed_motor, 100.0f);
+  84:Sentry/src/launch_task.c ****         } else {
+  85:Sentry/src/launch_task.c ****             DJI_Motor_Set_Velocity(g_feed_motor, 0.0f);
+  86:Sentry/src/launch_task.c ****         }
+  87:Sentry/src/launch_task.c ****     } else {
+  88:Sentry/src/launch_task.c ****         DJI_Motor_Set_Velocity(g_feed_motor, g_remote.controller.wheel/660.0f * 100.0f);
+ 198              		.loc 1 88 9 is_stmt 1 view .LVU24
+ 199              		.loc 1 88 65 is_stmt 0 view .LVU25
+ 200 0016 254B     		ldr	r3, .L15+4
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccWqkiH1.s 			page 6
+
+
+ 201 0018 D3ED027A 		vldr.32	s15, [r3, #8]	@ int
+ 202              		.loc 1 88 71 view .LVU26
+ 203 001c F8EEE77A 		vcvt.f32.s32	s15, s15
+ 204 0020 9FED237A 		vldr.32	s14, .L15+8
+ 205 0024 87EE870A 		vdiv.f32	s0, s15, s14
+ 206              		.loc 1 88 9 view .LVU27
+ 207 0028 DFED227A 		vldr.32	s15, .L15+12
+ 208 002c 20EE270A 		vmul.f32	s0, s0, s15
+ 209 0030 214B     		ldr	r3, .L15+16
+ 210 0032 1868     		ldr	r0, [r3]
+ 211 0034 FFF7FEFF 		bl	DJI_Motor_Set_Velocity
+ 212              	.LVL7:
+ 213              	.L8:
+  89:Sentry/src/launch_task.c ****     }
+  90:Sentry/src/launch_task.c **** 
+  91:Sentry/src/launch_task.c ****     if (g_remote.controller.left_switch == UP)
+ 214              		.loc 1 91 5 is_stmt 1 view .LVU28
+ 215              		.loc 1 91 28 is_stmt 0 view .LVU29
+ 216 0038 1C4B     		ldr	r3, .L15+4
+ 217 003a 1B7B     		ldrb	r3, [r3, #12]	@ zero_extendqisi2
+ 218              		.loc 1 91 8 view .LVU30
+ 219 003c 012B     		cmp	r3, #1
+ 220 003e 23D0     		beq	.L13
+  92:Sentry/src/launch_task.c ****     {
+  93:Sentry/src/launch_task.c ****         DJI_Motor_Set_Velocity(g_flywheel_left, -300);
+  94:Sentry/src/launch_task.c ****         DJI_Motor_Set_Velocity(g_flywheel_right, -300);
+  95:Sentry/src/launch_task.c **** 
+  96:Sentry/src/launch_task.c ****     }
+  97:Sentry/src/launch_task.c ****     else
+  98:Sentry/src/launch_task.c ****     {
+  99:Sentry/src/launch_task.c ****         DJI_Motor_Set_Velocity(g_flywheel_left, 0);
+ 221              		.loc 1 99 9 is_stmt 1 view .LVU31
+ 222 0040 9FED1E8A 		vldr.32	s16, .L15+20
+ 223 0044 B0EE480A 		vmov.f32	s0, s16
+ 224 0048 1D4B     		ldr	r3, .L15+24
+ 225 004a 1868     		ldr	r0, [r3]
+ 226 004c FFF7FEFF 		bl	DJI_Motor_Set_Velocity
+ 227              	.LVL8:
+ 100:Sentry/src/launch_task.c ****         DJI_Motor_Set_Velocity(g_flywheel_right, 0);
+ 228              		.loc 1 100 9 view .LVU32
+ 229 0050 B0EE480A 		vmov.f32	s0, s16
+ 230 0054 1B4B     		ldr	r3, .L15+28
+ 231 0056 1868     		ldr	r0, [r3]
+ 232 0058 FFF7FEFF 		bl	DJI_Motor_Set_Velocity
+ 233              	.LVL9:
+ 234              	.L5:
+ 101:Sentry/src/launch_task.c ****     }
+ 102:Sentry/src/launch_task.c **** 
+ 103:Sentry/src/launch_task.c **** }
+ 235              		.loc 1 103 1 is_stmt 0 view .LVU33
+ 236 005c BDEC028B 		vldm	sp!, {d8}
+ 237              	.LCFI5:
+ 238              		.cfi_remember_state
+ 239              		.cfi_restore 80
+ 240              		.cfi_restore 81
+ 241              		.cfi_def_cfa_offset 8
+ 242 0060 08BD     		pop	{r3, pc}
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccWqkiH1.s 			page 7
+
+
+ 243              	.L12:
+ 244              	.LCFI6:
+ 245              		.cfi_restore_state
+  82:Sentry/src/launch_task.c ****             DJI_Motor_Set_Velocity(g_feed_motor, 100.0f);
+ 246              		.loc 1 82 9 is_stmt 1 view .LVU34
+  82:Sentry/src/launch_task.c ****             DJI_Motor_Set_Velocity(g_feed_motor, 100.0f);
+ 247              		.loc 1 82 46 is_stmt 0 view .LVU35
+ 248 0062 114B     		ldr	r3, .L15
+ 249 0064 93F87030 		ldrb	r3, [r3, #112]	@ zero_extendqisi2
+  82:Sentry/src/launch_task.c ****             DJI_Motor_Set_Velocity(g_feed_motor, 100.0f);
+ 250              		.loc 1 82 12 view .LVU36
+ 251 0068 012B     		cmp	r3, #1
+ 252 006a 06D0     		beq	.L14
+  85:Sentry/src/launch_task.c ****         }
+ 253              		.loc 1 85 13 is_stmt 1 view .LVU37
+ 254 006c 9FED130A 		vldr.32	s0, .L15+20
+ 255 0070 114B     		ldr	r3, .L15+16
+ 256 0072 1868     		ldr	r0, [r3]
+ 257 0074 FFF7FEFF 		bl	DJI_Motor_Set_Velocity
+ 258              	.LVL10:
+ 259 0078 DEE7     		b	.L8
+ 260              	.L14:
+  83:Sentry/src/launch_task.c ****         } else {
+ 261              		.loc 1 83 13 view .LVU38
+ 262 007a 9FED0E0A 		vldr.32	s0, .L15+12
+ 263 007e 0E4B     		ldr	r3, .L15+16
+ 264 0080 1868     		ldr	r0, [r3]
+ 265 0082 FFF7FEFF 		bl	DJI_Motor_Set_Velocity
+ 266              	.LVL11:
+ 267 0086 D7E7     		b	.L8
+ 268              	.L13:
+  93:Sentry/src/launch_task.c ****         DJI_Motor_Set_Velocity(g_flywheel_right, -300);
+ 269              		.loc 1 93 9 view .LVU39
+ 270 0088 9FED0F8A 		vldr.32	s16, .L15+32
+ 271 008c B0EE480A 		vmov.f32	s0, s16
+ 272 0090 0B4B     		ldr	r3, .L15+24
+ 273 0092 1868     		ldr	r0, [r3]
+ 274 0094 FFF7FEFF 		bl	DJI_Motor_Set_Velocity
+ 275              	.LVL12:
+  94:Sentry/src/launch_task.c **** 
+ 276              		.loc 1 94 9 view .LVU40
+ 277 0098 B0EE480A 		vmov.f32	s0, s16
+ 278 009c 094B     		ldr	r3, .L15+28
+ 279 009e 1868     		ldr	r0, [r3]
+ 280 00a0 FFF7FEFF 		bl	DJI_Motor_Set_Velocity
+ 281              	.LVL13:
+ 282 00a4 DAE7     		b	.L5
+ 283              	.L16:
+ 284 00a6 00BF     		.align	2
+ 285              	.L15:
+ 286 00a8 00000000 		.word	g_orin_data
+ 287 00ac 00000000 		.word	g_remote
+ 288 00b0 00002544 		.word	1143275520
+ 289 00b4 0000C842 		.word	1120403456
+ 290 00b8 00000000 		.word	g_feed_motor
+ 291 00bc 00000000 		.word	0
+ 292 00c0 00000000 		.word	g_flywheel_left
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccWqkiH1.s 			page 8
+
+
+ 293 00c4 00000000 		.word	g_flywheel_right
+ 294 00c8 000096C3 		.word	-1013579776
+ 295              		.cfi_endproc
+ 296              	.LFE143:
+ 298              		.section	.text.resetRelPos,"ax",%progbits
+ 299              		.align	1
+ 300              		.global	resetRelPos
+ 301              		.syntax unified
+ 302              		.thumb
+ 303              		.thumb_func
+ 305              	resetRelPos:
+ 306              	.LFB144:
+ 104:Sentry/src/launch_task.c **** 
+ 105:Sentry/src/launch_task.c **** void resetRelPos() {
+ 307              		.loc 1 105 20 view -0
+ 308              		.cfi_startproc
+ 309              		@ args = 0, pretend = 0, frame = 0
+ 310              		@ frame_needed = 0, uses_anonymous_args = 0
+ 311 0000 10B5     		push	{r4, lr}
+ 312              	.LCFI7:
+ 313              		.cfi_def_cfa_offset 8
+ 314              		.cfi_offset 4, -8
+ 315              		.cfi_offset 14, -4
+ 106:Sentry/src/launch_task.c ****     g_robot_state.launch.shooter_state.accum_angle = 0;
+ 316              		.loc 1 106 5 view .LVU42
+ 317              		.loc 1 106 52 is_stmt 0 view .LVU43
+ 318 0002 064C     		ldr	r4, .L19
+ 319 0004 0023     		movs	r3, #0
+ 320 0006 E363     		str	r3, [r4, #60]	@ float
+ 107:Sentry/src/launch_task.c ****     g_robot_state.launch.shooter_state.prev_time = xTaskGetTickCount();
+ 321              		.loc 1 107 5 is_stmt 1 view .LVU44
+ 322              		.loc 1 107 52 is_stmt 0 view .LVU45
+ 323 0008 FFF7FEFF 		bl	xTaskGetTickCount
+ 324              	.LVL14:
+ 325 000c 07EE900A 		vmov	s15, r0	@ int
+ 326              		.loc 1 107 50 discriminator 1 view .LVU46
+ 327 0010 F8EE677A 		vcvt.f32.u32	s15, s15
+ 328 0014 C4ED0D7A 		vstr.32	s15, [r4, #52]
+ 108:Sentry/src/launch_task.c **** }
+ 329              		.loc 1 108 1 view .LVU47
+ 330 0018 10BD     		pop	{r4, pc}
+ 331              	.L20:
+ 332 001a 00BF     		.align	2
+ 333              	.L19:
+ 334 001c 00000000 		.word	g_robot_state
+ 335              		.cfi_endproc
+ 336              	.LFE144:
+ 338              		.section	.text.rejiggle,"ax",%progbits
+ 339              		.align	1
+ 340              		.global	rejiggle
+ 341              		.syntax unified
+ 342              		.thumb
+ 343              		.thumb_func
+ 345              	rejiggle:
+ 346              	.LFB146:
+ 109:Sentry/src/launch_task.c **** 
+ 110:Sentry/src/launch_task.c **** #define ticksToDegrees(ticks) ((ticks) * 360.0f / DJI_MAX_TICKS)
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccWqkiH1.s 			page 9
+
+
+ 111:Sentry/src/launch_task.c **** #define ticksToRad(ticks) ((ticks) * 360.0f / DJI_MAX_TICKS)
+ 112:Sentry/src/launch_task.c **** #define degreesToTicks(degrees) ((degrees) * DJI_MAX_TICKS / 360.0f)
+ 113:Sentry/src/launch_task.c **** float g_curr_angle = 0;
+ 114:Sentry/src/launch_task.c **** // TODO check if at ref
+ 115:Sentry/src/launch_task.c **** void handleSingleFire() {
+ 116:Sentry/src/launch_task.c ****     if (g_robot_state.launch.IS_BUSY) {
+ 117:Sentry/src/launch_task.c ****         if (DJI_Motor_Is_At_Angle(g_feed_motor, FEED_TOLERANCE)) // if shots fired :O then rejiggle
+ 118:Sentry/src/launch_task.c ****         {
+ 119:Sentry/src/launch_task.c ****             g_robot_state.launch.IS_BUSY = 0;
+ 120:Sentry/src/launch_task.c ****             g_robot_state.launch.busy_mode = IDLE;
+ 121:Sentry/src/launch_task.c ****             rejiggle();
+ 122:Sentry/src/launch_task.c ****         }
+ 123:Sentry/src/launch_task.c ****     }
+ 124:Sentry/src/launch_task.c ****     else {
+ 125:Sentry/src/launch_task.c ****         g_robot_state.launch.IS_BUSY = 1;
+ 126:Sentry/src/launch_task.c ****         g_robot_state.launch.busy_mode = SINGLE_FIRE;
+ 127:Sentry/src/launch_task.c ****         // set a new position reference x degrees forward
+ 128:Sentry/src/launch_task.c ****         resetRelPos();
+ 129:Sentry/src/launch_task.c **** 
+ 130:Sentry/src/launch_task.c ****         DJI_Motor_Set_Control_Mode(g_feed_motor, POSITION_CONTROL_TOTAL_ANGLE);
+ 131:Sentry/src/launch_task.c ****         g_curr_angle = DJI_Motor_Get_Total_Angle(g_feed_motor); // rad
+ 132:Sentry/src/launch_task.c ****         DJI_Motor_Set_Angle(g_feed_motor, g_curr_angle + SHOT_ANGLE_OFFSET_RAD);
+ 133:Sentry/src/launch_task.c ****         // DJI_Motor_Set_Velocity(g_feed_motor, FEED_RATE);
+ 134:Sentry/src/launch_task.c ****     }
+ 135:Sentry/src/launch_task.c **** }
+ 136:Sentry/src/launch_task.c **** 
+ 137:Sentry/src/launch_task.c **** void rejiggle() {
+ 347              		.loc 1 137 17 is_stmt 1 view -0
+ 348              		.cfi_startproc
+ 349              		@ args = 0, pretend = 0, frame = 0
+ 350              		@ frame_needed = 0, uses_anonymous_args = 0
+ 351 0000 10B5     		push	{r4, lr}
+ 352              	.LCFI8:
+ 353              		.cfi_def_cfa_offset 8
+ 354              		.cfi_offset 4, -8
+ 355              		.cfi_offset 14, -4
+ 356 0002 2DED028B 		vpush.64	{d8}
+ 357              	.LCFI9:
+ 358              		.cfi_def_cfa_offset 16
+ 359              		.cfi_offset 80, -16
+ 360              		.cfi_offset 81, -12
+ 138:Sentry/src/launch_task.c ****     //set a position reference slightly back to prevent jams
+ 139:Sentry/src/launch_task.c ****     float curr_angle_rad = DJI_Motor_Get_Total_Angle(g_feed_motor); // rad
+ 361              		.loc 1 139 5 view .LVU49
+ 362              		.loc 1 139 28 is_stmt 0 view .LVU50
+ 363 0006 1D4B     		ldr	r3, .L25
+ 364 0008 1868     		ldr	r0, [r3]
+ 365 000a FFF7FEFF 		bl	DJI_Motor_Get_Total_Angle
+ 366              	.LVL15:
+ 367 000e B0EE408A 		vmov.f32	s16, s0
+ 368              	.LVL16:
+ 140:Sentry/src/launch_task.c **** 
+ 141:Sentry/src/launch_task.c ****     if (g_robot_state.launch.IS_BUSY) { // if busy, means we already called so go back
+ 369              		.loc 1 141 5 is_stmt 1 view .LVU51
+ 370              		.loc 1 141 29 is_stmt 0 view .LVU52
+ 371 0012 1B4B     		ldr	r3, .L25+4
+ 372 0014 93F82F30 		ldrb	r3, [r3, #47]	@ zero_extendqisi2
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccWqkiH1.s 			page 10
+
+
+ 373              		.loc 1 141 8 view .LVU53
+ 374 0018 D3B1     		cbz	r3, .L22
+ 142:Sentry/src/launch_task.c ****         if (DJI_Motor_Is_At_Angle(g_feed_motor, FEED_TOLERANCE))
+ 375              		.loc 1 142 9 is_stmt 1 view .LVU54
+ 376              		.loc 1 142 13 is_stmt 0 view .LVU55
+ 377 001a 9FED1A0A 		vldr.32	s0, .L25+8
+ 378              	.LVL17:
+ 379              		.loc 1 142 13 view .LVU56
+ 380 001e 174B     		ldr	r3, .L25
+ 381 0020 1868     		ldr	r0, [r3]
+ 382 0022 FFF7FEFF 		bl	DJI_Motor_Is_At_Angle
+ 383              	.LVL18:
+ 384              		.loc 1 142 12 discriminator 1 view .LVU57
+ 385 0026 30B3     		cbz	r0, .L21
+ 143:Sentry/src/launch_task.c ****         {
+ 144:Sentry/src/launch_task.c ****             g_robot_state.launch.busy_mode = IDLE;
+ 386              		.loc 1 144 13 is_stmt 1 view .LVU58
+ 387              		.loc 1 144 44 is_stmt 0 view .LVU59
+ 388 0028 154B     		ldr	r3, .L25+4
+ 389 002a 0522     		movs	r2, #5
+ 390 002c 83F83120 		strb	r2, [r3, #49]
+ 145:Sentry/src/launch_task.c ****             g_robot_state.launch.IS_BUSY = 0;
+ 391              		.loc 1 145 13 is_stmt 1 view .LVU60
+ 392              		.loc 1 145 42 is_stmt 0 view .LVU61
+ 393 0030 0022     		movs	r2, #0
+ 394 0032 83F82F20 		strb	r2, [r3, #47]
+ 146:Sentry/src/launch_task.c ****             DJI_Motor_Set_Control_Mode(g_feed_motor, POSITION_CONTROL_TOTAL_ANGLE);
+ 395              		.loc 1 146 13 is_stmt 1 view .LVU62
+ 396 0036 114C     		ldr	r4, .L25
+ 397 0038 1221     		movs	r1, #18
+ 398 003a 2068     		ldr	r0, [r4]
+ 399 003c FFF7FEFF 		bl	DJI_Motor_Set_Control_Mode
+ 400              	.LVL19:
+ 147:Sentry/src/launch_task.c ****             DJI_Motor_Set_Angle(g_feed_motor, curr_angle_rad + (SHOT_ANGLE_OFFSET_RAD / 2));
+ 401              		.loc 1 147 13 view .LVU63
+ 402 0040 9FED110A 		vldr.32	s0, .L25+12
+ 403 0044 38EE000A 		vadd.f32	s0, s16, s0
+ 404 0048 2068     		ldr	r0, [r4]
+ 405 004a FFF7FEFF 		bl	DJI_Motor_Set_Angle
+ 406              	.LVL20:
+ 407 004e 12E0     		b	.L21
+ 408              	.LVL21:
+ 409              	.L22:
+ 148:Sentry/src/launch_task.c ****         }
+ 149:Sentry/src/launch_task.c ****     }
+ 150:Sentry/src/launch_task.c ****     else {
+ 151:Sentry/src/launch_task.c ****         g_robot_state.launch.busy_mode = REJIGGLE;
+ 410              		.loc 1 151 9 view .LVU64
+ 411              		.loc 1 151 40 is_stmt 0 view .LVU65
+ 412 0050 0B4B     		ldr	r3, .L25+4
+ 413 0052 0422     		movs	r2, #4
+ 414 0054 83F83120 		strb	r2, [r3, #49]
+ 152:Sentry/src/launch_task.c ****         g_robot_state.launch.IS_BUSY = 1;
+ 415              		.loc 1 152 9 is_stmt 1 view .LVU66
+ 416              		.loc 1 152 38 is_stmt 0 view .LVU67
+ 417 0058 0122     		movs	r2, #1
+ 418 005a 83F82F20 		strb	r2, [r3, #47]
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccWqkiH1.s 			page 11
+
+
+ 153:Sentry/src/launch_task.c ****         DJI_Motor_Set_Control_Mode(g_feed_motor, POSITION_CONTROL_TOTAL_ANGLE);
+ 419              		.loc 1 153 9 is_stmt 1 view .LVU68
+ 420 005e 074C     		ldr	r4, .L25
+ 421 0060 1221     		movs	r1, #18
+ 422 0062 2068     		ldr	r0, [r4]
+ 423 0064 FFF7FEFF 		bl	DJI_Motor_Set_Control_Mode
+ 424              	.LVL22:
+ 154:Sentry/src/launch_task.c ****         DJI_Motor_Set_Angle(g_feed_motor, curr_angle_rad - (SHOT_ANGLE_OFFSET_RAD / 2));
+ 425              		.loc 1 154 9 view .LVU69
+ 426 0068 9FED070A 		vldr.32	s0, .L25+12
+ 427 006c 38EE400A 		vsub.f32	s0, s16, s0
+ 428 0070 2068     		ldr	r0, [r4]
+ 429 0072 FFF7FEFF 		bl	DJI_Motor_Set_Angle
+ 430              	.LVL23:
+ 431              	.L21:
+ 155:Sentry/src/launch_task.c ****     }
+ 156:Sentry/src/launch_task.c **** }
+ 432              		.loc 1 156 1 is_stmt 0 view .LVU70
+ 433 0076 BDEC028B 		vldm	sp!, {d8}
+ 434              	.LCFI10:
+ 435              		.cfi_restore 80
+ 436              		.cfi_restore 81
+ 437              		.cfi_def_cfa_offset 8
+ 438              	.LVL24:
+ 439              		.loc 1 156 1 view .LVU71
+ 440 007a 10BD     		pop	{r4, pc}
+ 441              	.L26:
+ 442              		.align	2
+ 443              	.L25:
+ 444 007c 00000000 		.word	g_feed_motor
+ 445 0080 00000000 		.word	g_robot_state
+ 446 0084 C1B8B23D 		.word	1035122881
+ 447 0088 910A063F 		.word	1057360529
+ 448              		.cfi_endproc
+ 449              	.LFE146:
+ 451              		.section	.text.handleSingleFire,"ax",%progbits
+ 452              		.align	1
+ 453              		.global	handleSingleFire
+ 454              		.syntax unified
+ 455              		.thumb
+ 456              		.thumb_func
+ 458              	handleSingleFire:
+ 459              	.LFB145:
+ 115:Sentry/src/launch_task.c ****     if (g_robot_state.launch.IS_BUSY) {
+ 460              		.loc 1 115 25 is_stmt 1 view -0
+ 461              		.cfi_startproc
+ 462              		@ args = 0, pretend = 0, frame = 0
+ 463              		@ frame_needed = 0, uses_anonymous_args = 0
+ 464 0000 10B5     		push	{r4, lr}
+ 465              	.LCFI11:
+ 466              		.cfi_def_cfa_offset 8
+ 467              		.cfi_offset 4, -8
+ 468              		.cfi_offset 14, -4
+ 116:Sentry/src/launch_task.c ****         if (DJI_Motor_Is_At_Angle(g_feed_motor, FEED_TOLERANCE)) // if shots fired :O then rejiggle
+ 469              		.loc 1 116 5 view .LVU73
+ 116:Sentry/src/launch_task.c ****         if (DJI_Motor_Is_At_Angle(g_feed_motor, FEED_TOLERANCE)) // if shots fired :O then rejiggle
+ 470              		.loc 1 116 29 is_stmt 0 view .LVU74
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccWqkiH1.s 			page 12
+
+
+ 471 0002 184B     		ldr	r3, .L31
+ 472 0004 93F82F30 		ldrb	r3, [r3, #47]	@ zero_extendqisi2
+ 116:Sentry/src/launch_task.c ****         if (DJI_Motor_Is_At_Angle(g_feed_motor, FEED_TOLERANCE)) // if shots fired :O then rejiggle
+ 473              		.loc 1 116 8 view .LVU75
+ 474 0008 83B1     		cbz	r3, .L28
+ 117:Sentry/src/launch_task.c ****         {
+ 475              		.loc 1 117 9 is_stmt 1 view .LVU76
+ 117:Sentry/src/launch_task.c ****         {
+ 476              		.loc 1 117 13 is_stmt 0 view .LVU77
+ 477 000a 9FED170A 		vldr.32	s0, .L31+4
+ 478 000e 174B     		ldr	r3, .L31+8
+ 479 0010 1868     		ldr	r0, [r3]
+ 480 0012 FFF7FEFF 		bl	DJI_Motor_Is_At_Angle
+ 481              	.LVL25:
+ 117:Sentry/src/launch_task.c ****         {
+ 482              		.loc 1 117 12 discriminator 1 view .LVU78
+ 483 0016 18B3     		cbz	r0, .L27
+ 119:Sentry/src/launch_task.c ****             g_robot_state.launch.busy_mode = IDLE;
+ 484              		.loc 1 119 13 is_stmt 1 view .LVU79
+ 119:Sentry/src/launch_task.c ****             g_robot_state.launch.busy_mode = IDLE;
+ 485              		.loc 1 119 42 is_stmt 0 view .LVU80
+ 486 0018 124B     		ldr	r3, .L31
+ 487 001a 0022     		movs	r2, #0
+ 488 001c 83F82F20 		strb	r2, [r3, #47]
+ 120:Sentry/src/launch_task.c ****             rejiggle();
+ 489              		.loc 1 120 13 is_stmt 1 view .LVU81
+ 120:Sentry/src/launch_task.c ****             rejiggle();
+ 490              		.loc 1 120 44 is_stmt 0 view .LVU82
+ 491 0020 0522     		movs	r2, #5
+ 492 0022 83F83120 		strb	r2, [r3, #49]
+ 121:Sentry/src/launch_task.c ****         }
+ 493              		.loc 1 121 13 is_stmt 1 view .LVU83
+ 494 0026 FFF7FEFF 		bl	rejiggle
+ 495              	.LVL26:
+ 496 002a 19E0     		b	.L27
+ 497              	.L28:
+ 125:Sentry/src/launch_task.c ****         g_robot_state.launch.busy_mode = SINGLE_FIRE;
+ 498              		.loc 1 125 9 view .LVU84
+ 125:Sentry/src/launch_task.c ****         g_robot_state.launch.busy_mode = SINGLE_FIRE;
+ 499              		.loc 1 125 38 is_stmt 0 view .LVU85
+ 500 002c 0D4B     		ldr	r3, .L31
+ 501 002e 0122     		movs	r2, #1
+ 502 0030 83F82F20 		strb	r2, [r3, #47]
+ 126:Sentry/src/launch_task.c ****         // set a new position reference x degrees forward
+ 503              		.loc 1 126 9 is_stmt 1 view .LVU86
+ 126:Sentry/src/launch_task.c ****         // set a new position reference x degrees forward
+ 504              		.loc 1 126 40 is_stmt 0 view .LVU87
+ 505 0034 83F83120 		strb	r2, [r3, #49]
+ 128:Sentry/src/launch_task.c **** 
+ 506              		.loc 1 128 9 is_stmt 1 view .LVU88
+ 507 0038 FFF7FEFF 		bl	resetRelPos
+ 508              	.LVL27:
+ 130:Sentry/src/launch_task.c ****         g_curr_angle = DJI_Motor_Get_Total_Angle(g_feed_motor); // rad
+ 509              		.loc 1 130 9 view .LVU89
+ 510 003c 0B4C     		ldr	r4, .L31+8
+ 511 003e 1221     		movs	r1, #18
+ 512 0040 2068     		ldr	r0, [r4]
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccWqkiH1.s 			page 13
+
+
+ 513 0042 FFF7FEFF 		bl	DJI_Motor_Set_Control_Mode
+ 514              	.LVL28:
+ 131:Sentry/src/launch_task.c ****         DJI_Motor_Set_Angle(g_feed_motor, g_curr_angle + SHOT_ANGLE_OFFSET_RAD);
+ 515              		.loc 1 131 9 view .LVU90
+ 131:Sentry/src/launch_task.c ****         DJI_Motor_Set_Angle(g_feed_motor, g_curr_angle + SHOT_ANGLE_OFFSET_RAD);
+ 516              		.loc 1 131 24 is_stmt 0 view .LVU91
+ 517 0046 2068     		ldr	r0, [r4]
+ 518 0048 FFF7FEFF 		bl	DJI_Motor_Get_Total_Angle
+ 519              	.LVL29:
+ 131:Sentry/src/launch_task.c ****         DJI_Motor_Set_Angle(g_feed_motor, g_curr_angle + SHOT_ANGLE_OFFSET_RAD);
+ 520              		.loc 1 131 22 discriminator 1 view .LVU92
+ 521 004c 084B     		ldr	r3, .L31+12
+ 522 004e 83ED000A 		vstr.32	s0, [r3]
+ 132:Sentry/src/launch_task.c ****         // DJI_Motor_Set_Velocity(g_feed_motor, FEED_RATE);
+ 523              		.loc 1 132 9 is_stmt 1 view .LVU93
+ 524 0052 DFED087A 		vldr.32	s15, .L31+16
+ 525 0056 30EE270A 		vadd.f32	s0, s0, s15
+ 526 005a 2068     		ldr	r0, [r4]
+ 527 005c FFF7FEFF 		bl	DJI_Motor_Set_Angle
+ 528              	.LVL30:
+ 529              	.L27:
+ 135:Sentry/src/launch_task.c **** 
+ 530              		.loc 1 135 1 is_stmt 0 view .LVU94
+ 531 0060 10BD     		pop	{r4, pc}
+ 532              	.L32:
+ 533 0062 00BF     		.align	2
+ 534              	.L31:
+ 535 0064 00000000 		.word	g_robot_state
+ 536 0068 C1B8B23D 		.word	1035122881
+ 537 006c 00000000 		.word	g_feed_motor
+ 538 0070 00000000 		.word	g_curr_angle
+ 539 0074 910A863F 		.word	1065749137
+ 540              		.cfi_endproc
+ 541              	.LFE145:
+ 543              		.section	.text.handleFullAuto,"ax",%progbits
+ 544              		.align	1
+ 545              		.global	handleFullAuto
+ 546              		.syntax unified
+ 547              		.thumb
+ 548              		.thumb_func
+ 550              	handleFullAuto:
+ 551              	.LFB147:
+ 157:Sentry/src/launch_task.c **** 
+ 158:Sentry/src/launch_task.c **** void handleFullAuto() {
+ 552              		.loc 1 158 23 is_stmt 1 view -0
+ 553              		.cfi_startproc
+ 554              		@ args = 0, pretend = 0, frame = 0
+ 555              		@ frame_needed = 0, uses_anonymous_args = 0
+ 556 0000 10B5     		push	{r4, lr}
+ 557              	.LCFI12:
+ 558              		.cfi_def_cfa_offset 8
+ 559              		.cfi_offset 4, -8
+ 560              		.cfi_offset 14, -4
+ 159:Sentry/src/launch_task.c ****     if (g_robot_state.launch.IS_BUSY) {
+ 561              		.loc 1 159 5 view .LVU96
+ 562              		.loc 1 159 29 is_stmt 0 view .LVU97
+ 563 0002 174B     		ldr	r3, .L38
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccWqkiH1.s 			page 14
+
+
+ 564 0004 93F82F30 		ldrb	r3, [r3, #47]	@ zero_extendqisi2
+ 565              		.loc 1 159 8 view .LVU98
+ 566 0008 C3B1     		cbz	r3, .L34
+ 160:Sentry/src/launch_task.c ****         if (g_robot_state.launch.fire_mode == NO_FIRE) {
+ 567              		.loc 1 160 9 is_stmt 1 view .LVU99
+ 568              		.loc 1 160 33 is_stmt 0 view .LVU100
+ 569 000a 154B     		ldr	r3, .L38
+ 570 000c 93F83030 		ldrb	r3, [r3, #48]	@ zero_extendqisi2
+ 571              		.loc 1 160 12 view .LVU101
+ 572 0010 03B1     		cbz	r3, .L37
+ 573              	.L33:
+ 161:Sentry/src/launch_task.c ****             DJI_Motor_Set_Control_Mode(g_feed_motor, VELOCITY_CONTROL);
+ 162:Sentry/src/launch_task.c ****             DJI_Motor_Set_Velocity(g_feed_motor, 0);
+ 163:Sentry/src/launch_task.c ****             g_robot_state.launch.IS_BUSY = 0;
+ 164:Sentry/src/launch_task.c ****             g_robot_state.launch.busy_mode = IDLE;
+ 165:Sentry/src/launch_task.c ****             rejiggle();
+ 166:Sentry/src/launch_task.c ****         }
+ 167:Sentry/src/launch_task.c ****     } else {
+ 168:Sentry/src/launch_task.c ****         DJI_Motor_Set_Control_Mode(g_feed_motor, VELOCITY_CONTROL);
+ 169:Sentry/src/launch_task.c ****         DJI_Motor_Set_Velocity(g_feed_motor, FEED_RATE);
+ 170:Sentry/src/launch_task.c ****         g_robot_state.launch.IS_BUSY = 1;
+ 171:Sentry/src/launch_task.c ****         g_robot_state.launch.busy_mode = FULL_AUTO;
+ 172:Sentry/src/launch_task.c ****     }
+ 173:Sentry/src/launch_task.c **** }
+ 574              		.loc 1 173 1 view .LVU102
+ 575 0012 10BD     		pop	{r4, pc}
+ 576              	.L37:
+ 161:Sentry/src/launch_task.c ****             DJI_Motor_Set_Control_Mode(g_feed_motor, VELOCITY_CONTROL);
+ 577              		.loc 1 161 13 is_stmt 1 view .LVU103
+ 578 0014 134C     		ldr	r4, .L38+4
+ 579 0016 0121     		movs	r1, #1
+ 580 0018 2068     		ldr	r0, [r4]
+ 581 001a FFF7FEFF 		bl	DJI_Motor_Set_Control_Mode
+ 582              	.LVL31:
+ 162:Sentry/src/launch_task.c ****             g_robot_state.launch.IS_BUSY = 0;
+ 583              		.loc 1 162 13 view .LVU104
+ 584 001e 9FED120A 		vldr.32	s0, .L38+8
+ 585 0022 2068     		ldr	r0, [r4]
+ 586 0024 FFF7FEFF 		bl	DJI_Motor_Set_Velocity
+ 587              	.LVL32:
+ 163:Sentry/src/launch_task.c ****             g_robot_state.launch.busy_mode = IDLE;
+ 588              		.loc 1 163 13 view .LVU105
+ 163:Sentry/src/launch_task.c ****             g_robot_state.launch.busy_mode = IDLE;
+ 589              		.loc 1 163 42 is_stmt 0 view .LVU106
+ 590 0028 0D4B     		ldr	r3, .L38
+ 591 002a 0022     		movs	r2, #0
+ 592 002c 83F82F20 		strb	r2, [r3, #47]
+ 164:Sentry/src/launch_task.c ****             rejiggle();
+ 593              		.loc 1 164 13 is_stmt 1 view .LVU107
+ 164:Sentry/src/launch_task.c ****             rejiggle();
+ 594              		.loc 1 164 44 is_stmt 0 view .LVU108
+ 595 0030 0522     		movs	r2, #5
+ 596 0032 83F83120 		strb	r2, [r3, #49]
+ 165:Sentry/src/launch_task.c ****         }
+ 597              		.loc 1 165 13 is_stmt 1 view .LVU109
+ 598 0036 FFF7FEFF 		bl	rejiggle
+ 599              	.LVL33:
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccWqkiH1.s 			page 15
+
+
+ 600 003a EAE7     		b	.L33
+ 601              	.L34:
+ 168:Sentry/src/launch_task.c ****         DJI_Motor_Set_Velocity(g_feed_motor, FEED_RATE);
+ 602              		.loc 1 168 9 view .LVU110
+ 603 003c 094C     		ldr	r4, .L38+4
+ 604 003e 0121     		movs	r1, #1
+ 605 0040 2068     		ldr	r0, [r4]
+ 606 0042 FFF7FEFF 		bl	DJI_Motor_Set_Control_Mode
+ 607              	.LVL34:
+ 169:Sentry/src/launch_task.c ****         g_robot_state.launch.IS_BUSY = 1;
+ 608              		.loc 1 169 9 view .LVU111
+ 609 0046 9FED090A 		vldr.32	s0, .L38+12
+ 610 004a 2068     		ldr	r0, [r4]
+ 611 004c FFF7FEFF 		bl	DJI_Motor_Set_Velocity
+ 612              	.LVL35:
+ 170:Sentry/src/launch_task.c ****         g_robot_state.launch.busy_mode = FULL_AUTO;
+ 613              		.loc 1 170 9 view .LVU112
+ 170:Sentry/src/launch_task.c ****         g_robot_state.launch.busy_mode = FULL_AUTO;
+ 614              		.loc 1 170 38 is_stmt 0 view .LVU113
+ 615 0050 034B     		ldr	r3, .L38
+ 616 0052 0122     		movs	r2, #1
+ 617 0054 83F82F20 		strb	r2, [r3, #47]
+ 171:Sentry/src/launch_task.c ****     }
+ 618              		.loc 1 171 9 is_stmt 1 view .LVU114
+ 171:Sentry/src/launch_task.c ****     }
+ 619              		.loc 1 171 40 is_stmt 0 view .LVU115
+ 620 0058 0322     		movs	r2, #3
+ 621 005a 83F83120 		strb	r2, [r3, #49]
+ 622              		.loc 1 173 1 view .LVU116
+ 623 005e D8E7     		b	.L33
+ 624              	.L39:
+ 625              		.align	2
+ 626              	.L38:
+ 627 0060 00000000 		.word	g_robot_state
+ 628 0064 00000000 		.word	g_feed_motor
+ 629 0068 00000000 		.word	0
+ 630 006c 00001643 		.word	1125515264
+ 631              		.cfi_endproc
+ 632              	.LFE147:
+ 634              		.section	.text.startFlywheel,"ax",%progbits
+ 635              		.align	1
+ 636              		.global	startFlywheel
+ 637              		.syntax unified
+ 638              		.thumb
+ 639              		.thumb_func
+ 641              	startFlywheel:
+ 642              	.LFB148:
+ 174:Sentry/src/launch_task.c **** 
+ 175:Sentry/src/launch_task.c **** void startFlywheel() {
+ 643              		.loc 1 175 22 is_stmt 1 view -0
+ 644              		.cfi_startproc
+ 645              		@ args = 0, pretend = 0, frame = 0
+ 646              		@ frame_needed = 0, uses_anonymous_args = 0
+ 647 0000 08B5     		push	{r3, lr}
+ 648              	.LCFI13:
+ 649              		.cfi_def_cfa_offset 8
+ 650              		.cfi_offset 3, -8
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccWqkiH1.s 			page 16
+
+
+ 651              		.cfi_offset 14, -4
+ 652 0002 2DED028B 		vpush.64	{d8}
+ 653              	.LCFI14:
+ 654              		.cfi_def_cfa_offset 16
+ 655              		.cfi_offset 80, -16
+ 656              		.cfi_offset 81, -12
+ 176:Sentry/src/launch_task.c ****     DJI_Motor_Set_Velocity(g_flywheel_left, -320);
+ 657              		.loc 1 176 5 view .LVU118
+ 658 0006 9FED088A 		vldr.32	s16, .L42
+ 659 000a B0EE480A 		vmov.f32	s0, s16
+ 660 000e 074B     		ldr	r3, .L42+4
+ 661 0010 1868     		ldr	r0, [r3]
+ 662 0012 FFF7FEFF 		bl	DJI_Motor_Set_Velocity
+ 663              	.LVL36:
+ 177:Sentry/src/launch_task.c ****     DJI_Motor_Set_Velocity(g_flywheel_right, -320);
+ 664              		.loc 1 177 5 view .LVU119
+ 665 0016 B0EE480A 		vmov.f32	s0, s16
+ 666 001a 054B     		ldr	r3, .L42+8
+ 667 001c 1868     		ldr	r0, [r3]
+ 668 001e FFF7FEFF 		bl	DJI_Motor_Set_Velocity
+ 669              	.LVL37:
+ 178:Sentry/src/launch_task.c **** }
+ 670              		.loc 1 178 1 is_stmt 0 view .LVU120
+ 671 0022 BDEC028B 		vldm	sp!, {d8}
+ 672              	.LCFI15:
+ 673              		.cfi_restore 80
+ 674              		.cfi_restore 81
+ 675              		.cfi_def_cfa_offset 8
+ 676 0026 08BD     		pop	{r3, pc}
+ 677              	.L43:
+ 678              		.align	2
+ 679              	.L42:
+ 680 0028 0000A0C3 		.word	-1012924416
+ 681 002c 00000000 		.word	g_flywheel_left
+ 682 0030 00000000 		.word	g_flywheel_right
+ 683              		.cfi_endproc
+ 684              	.LFE148:
+ 686              		.section	.text.stopFlywheel,"ax",%progbits
+ 687              		.align	1
+ 688              		.global	stopFlywheel
+ 689              		.syntax unified
+ 690              		.thumb
+ 691              		.thumb_func
+ 693              	stopFlywheel:
+ 694              	.LFB149:
+ 179:Sentry/src/launch_task.c **** 
+ 180:Sentry/src/launch_task.c **** void stopFlywheel() {
+ 695              		.loc 1 180 21 is_stmt 1 view -0
+ 696              		.cfi_startproc
+ 697              		@ args = 0, pretend = 0, frame = 0
+ 698              		@ frame_needed = 0, uses_anonymous_args = 0
+ 699 0000 08B5     		push	{r3, lr}
+ 700              	.LCFI16:
+ 701              		.cfi_def_cfa_offset 8
+ 702              		.cfi_offset 3, -8
+ 703              		.cfi_offset 14, -4
+ 704 0002 2DED028B 		vpush.64	{d8}
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccWqkiH1.s 			page 17
+
+
+ 705              	.LCFI17:
+ 706              		.cfi_def_cfa_offset 16
+ 707              		.cfi_offset 80, -16
+ 708              		.cfi_offset 81, -12
+ 181:Sentry/src/launch_task.c ****     DJI_Motor_Set_Velocity(g_flywheel_left, 0);
+ 709              		.loc 1 181 5 view .LVU122
+ 710 0006 9FED088A 		vldr.32	s16, .L46
+ 711 000a B0EE480A 		vmov.f32	s0, s16
+ 712 000e 074B     		ldr	r3, .L46+4
+ 713 0010 1868     		ldr	r0, [r3]
+ 714 0012 FFF7FEFF 		bl	DJI_Motor_Set_Velocity
+ 715              	.LVL38:
+ 182:Sentry/src/launch_task.c ****     DJI_Motor_Set_Velocity(g_flywheel_right, 0);
+ 716              		.loc 1 182 5 view .LVU123
+ 717 0016 B0EE480A 		vmov.f32	s0, s16
+ 718 001a 054B     		ldr	r3, .L46+8
+ 719 001c 1868     		ldr	r0, [r3]
+ 720 001e FFF7FEFF 		bl	DJI_Motor_Set_Velocity
+ 721              	.LVL39:
+ 183:Sentry/src/launch_task.c **** }
+ 722              		.loc 1 183 1 is_stmt 0 view .LVU124
+ 723 0022 BDEC028B 		vldm	sp!, {d8}
+ 724              	.LCFI18:
+ 725              		.cfi_restore 80
+ 726              		.cfi_restore 81
+ 727              		.cfi_def_cfa_offset 8
+ 728 0026 08BD     		pop	{r3, pc}
+ 729              	.L47:
+ 730              		.align	2
+ 731              	.L46:
+ 732 0028 00000000 		.word	0
+ 733 002c 00000000 		.word	g_flywheel_left
+ 734 0030 00000000 		.word	g_flywheel_right
+ 735              		.cfi_endproc
+ 736              	.LFE149:
+ 738              		.global	g_curr_angle
+ 739              		.section	.bss.g_curr_angle,"aw",%nobits
+ 740              		.align	2
+ 743              	g_curr_angle:
+ 744 0000 00000000 		.space	4
+ 745              		.global	g_feed_motor
+ 746              		.section	.bss.g_feed_motor,"aw",%nobits
+ 747              		.align	2
+ 750              	g_feed_motor:
+ 751 0000 00000000 		.space	4
+ 752              		.global	g_flywheel_right
+ 753              		.section	.bss.g_flywheel_right,"aw",%nobits
+ 754              		.align	2
+ 757              	g_flywheel_right:
+ 758 0000 00000000 		.space	4
+ 759              		.global	g_flywheel_left
+ 760              		.section	.bss.g_flywheel_left,"aw",%nobits
+ 761              		.align	2
+ 764              	g_flywheel_left:
+ 765 0000 00000000 		.space	4
+ 766              		.text
+ 767              	.Letext0:
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccWqkiH1.s 			page 18
+
+
+ 768              		.file 2 "/Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/arm-none-eabi/include/machine/_defa
+ 769              		.file 3 "/Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/arm-none-eabi/include/sys/_stdint.h
+ 770              		.file 4 "control-base/typec-board-base/Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM
+ 771              		.file 5 "control-base/algo/inc/pid.h"
+ 772              		.file 6 "control-base/devices/inc/motor.h"
+ 773              		.file 7 "control-base/devices/inc/dji_motor.h"
+ 774              		.file 8 "Sentry/inc/robot.h"
+ 775              		.file 9 "control-base/devices/inc/remote.h"
+ 776              		.file 10 "control-base/devices/inc/jetson_orin.h"
+ 777              		.file 11 "control-base/typec-board-base/Middlewares/Third_Party/FreeRTOS/Source/include/task.h"
+ 778              		.file 12 "control-base/devices/inc/laser.h"
+ 779              		.file 13 "<built-in>"
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccWqkiH1.s 			page 19
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 launch_task.c
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccWqkiH1.s:21     .text.Launch_Task_Init:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccWqkiH1.s:27     .text.Launch_Task_Init:00000000 Launch_Task_Init
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccWqkiH1.s:147    .text.Launch_Task_Init:000000c8 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccWqkiH1.s:764    .bss.g_flywheel_left:00000000 g_flywheel_left
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccWqkiH1.s:757    .bss.g_flywheel_right:00000000 g_flywheel_right
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccWqkiH1.s:750    .bss.g_feed_motor:00000000 g_feed_motor
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccWqkiH1.s:163    .text.Launch_Ctrl_Loop:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccWqkiH1.s:169    .text.Launch_Ctrl_Loop:00000000 Launch_Ctrl_Loop
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccWqkiH1.s:286    .text.Launch_Ctrl_Loop:000000a8 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccWqkiH1.s:299    .text.resetRelPos:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccWqkiH1.s:305    .text.resetRelPos:00000000 resetRelPos
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccWqkiH1.s:334    .text.resetRelPos:0000001c $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccWqkiH1.s:339    .text.rejiggle:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccWqkiH1.s:345    .text.rejiggle:00000000 rejiggle
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccWqkiH1.s:444    .text.rejiggle:0000007c $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccWqkiH1.s:452    .text.handleSingleFire:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccWqkiH1.s:458    .text.handleSingleFire:00000000 handleSingleFire
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccWqkiH1.s:535    .text.handleSingleFire:00000064 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccWqkiH1.s:743    .bss.g_curr_angle:00000000 g_curr_angle
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccWqkiH1.s:544    .text.handleFullAuto:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccWqkiH1.s:550    .text.handleFullAuto:00000000 handleFullAuto
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccWqkiH1.s:627    .text.handleFullAuto:00000060 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccWqkiH1.s:635    .text.startFlywheel:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccWqkiH1.s:641    .text.startFlywheel:00000000 startFlywheel
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccWqkiH1.s:680    .text.startFlywheel:00000028 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccWqkiH1.s:687    .text.stopFlywheel:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccWqkiH1.s:693    .text.stopFlywheel:00000000 stopFlywheel
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccWqkiH1.s:732    .text.stopFlywheel:00000028 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccWqkiH1.s:740    .bss.g_curr_angle:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccWqkiH1.s:747    .bss.g_feed_motor:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccWqkiH1.s:754    .bss.g_flywheel_right:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccWqkiH1.s:761    .bss.g_flywheel_left:00000000 $d
+
+UNDEFINED SYMBOLS
+memset
+DJI_Motor_Init
+Laser_Init
+DJI_Motor_Set_Velocity
+g_orin_data
+g_remote
+xTaskGetTickCount
+g_robot_state
+DJI_Motor_Get_Total_Angle
+DJI_Motor_Is_At_Angle
+DJI_Motor_Set_Control_Mode
+DJI_Motor_Set_Angle

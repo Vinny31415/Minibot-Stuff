@@ -1,0 +1,690 @@
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccx5vhgv.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"imu_task.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "control-base/devices/src/imu_task.c"
+  20              		.section	.text.IMU_Task_Init,"ax",%progbits
+  21              		.align	1
+  22              		.global	IMU_Task_Init
+  23              		.syntax unified
+  24              		.thumb
+  25              		.thumb_func
+  27              	IMU_Task_Init:
+  28              	.LVL0:
+  29              	.LFB140:
+   1:control-base/devices/src/imu_task.c **** /**
+   2:control-base/devices/src/imu_task.c ****  * @file       imu_task.c/h
+   3:control-base/devices/src/imu_task.c ****  * @brief      use bmi088 to calculate the euler angle.
+   4:control-base/devices/src/imu_task.c ****  *
+   5:control-base/devices/src/imu_task.c ****  * @note        change sample frequency in fusion
+   6:control-base/devices/src/imu_task.c ****  */
+   7:control-base/devices/src/imu_task.c **** 
+   8:control-base/devices/src/imu_task.c **** #include "imu_task.h"
+   9:control-base/devices/src/imu_task.c **** 
+  10:control-base/devices/src/imu_task.c **** 
+  11:control-base/devices/src/imu_task.c **** 
+  12:control-base/devices/src/imu_task.c **** void IMU_Task_Init(IMU_t *imu);
+  13:control-base/devices/src/imu_task.c **** void IMU_Task_Process(IMU_t *imu);
+  14:control-base/devices/src/imu_task.c **** void IMU_Task_Temp();
+  15:control-base/devices/src/imu_task.c **** 
+  16:control-base/devices/src/imu_task.c **** IMU_t g_imu;
+  17:control-base/devices/src/imu_task.c **** PID_t g_imu_temp_pid;
+  18:control-base/devices/src/imu_task.c **** 
+  19:control-base/devices/src/imu_task.c **** void IMU_Task(void const *pvParameters)
+  20:control-base/devices/src/imu_task.c **** {
+  21:control-base/devices/src/imu_task.c ****     IMU_Task_Init(&g_imu);
+  22:control-base/devices/src/imu_task.c ****     portTickType xLastWakeTime;
+  23:control-base/devices/src/imu_task.c ****     xLastWakeTime = xTaskGetTickCount();
+  24:control-base/devices/src/imu_task.c ****     const TickType_t TimeIncrement = pdMS_TO_TICKS(1);
+  25:control-base/devices/src/imu_task.c ****     while (1)
+  26:control-base/devices/src/imu_task.c ****     {
+  27:control-base/devices/src/imu_task.c ****         IMU_Task_Process(&g_imu);
+  28:control-base/devices/src/imu_task.c ****         vTaskDelayUntil(&xLastWakeTime, TimeIncrement);
+  29:control-base/devices/src/imu_task.c ****     }
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccx5vhgv.s 			page 2
+
+
+  30:control-base/devices/src/imu_task.c **** }
+  31:control-base/devices/src/imu_task.c **** 
+  32:control-base/devices/src/imu_task.c **** void IMU_Task_Init(IMU_t *imu)
+  33:control-base/devices/src/imu_task.c **** {
+  30              		.loc 1 33 1 view -0
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 0
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  34              		.loc 1 33 1 is_stmt 0 view .LVU1
+  35 0000 38B5     		push	{r3, r4, r5, lr}
+  36              	.LCFI0:
+  37              		.cfi_def_cfa_offset 16
+  38              		.cfi_offset 3, -16
+  39              		.cfi_offset 4, -12
+  40              		.cfi_offset 5, -8
+  41              		.cfi_offset 14, -4
+  42 0002 0546     		mov	r5, r0
+  34:control-base/devices/src/imu_task.c ****     PID_Init(&g_imu_temp_pid, 1600.0f, 0.2f, 0, 4500, 4400, 0);
+  43              		.loc 1 34 5 is_stmt 1 view .LVU2
+  44 0004 9FED131A 		vldr.32	s2, .L5
+  45 0008 F0EE412A 		vmov.f32	s5, s2
+  46 000c 9FED122A 		vldr.32	s4, .L5+4
+  47 0010 DFED121A 		vldr.32	s3, .L5+8
+  48 0014 DFED120A 		vldr.32	s1, .L5+12
+  49 0018 9FED120A 		vldr.32	s0, .L5+16
+  50 001c 1248     		ldr	r0, .L5+20
+  51              	.LVL1:
+  52              		.loc 1 34 5 is_stmt 0 view .LVU3
+  53 001e FFF7FEFF 		bl	PID_Init
+  54              	.LVL2:
+  35:control-base/devices/src/imu_task.c ****     HAL_TIM_PWM_Start(&htim10, TIM_CHANNEL_1);
+  55              		.loc 1 35 5 is_stmt 1 view .LVU4
+  56 0022 0021     		movs	r1, #0
+  57 0024 1148     		ldr	r0, .L5+24
+  58 0026 FFF7FEFF 		bl	HAL_TIM_PWM_Start
+  59              	.LVL3:
+  36:control-base/devices/src/imu_task.c **** 
+  37:control-base/devices/src/imu_task.c ****     int error = BMI088_init();
+  60              		.loc 1 37 5 view .LVU5
+  61              		.loc 1 37 17 is_stmt 0 view .LVU6
+  62 002a FFF7FEFF 		bl	BMI088_init
+  63              	.LVL4:
+  64              		.loc 1 37 9 discriminator 1 view .LVU7
+  65 002e 0446     		mov	r4, r0
+  66              	.LVL5:
+  38:control-base/devices/src/imu_task.c ****     while (error)
+  67              		.loc 1 38 5 is_stmt 1 view .LVU8
+  68              		.loc 1 38 11 is_stmt 0 view .LVU9
+  69 0030 05E0     		b	.L2
+  70              	.LVL6:
+  71              	.L3:
+  39:control-base/devices/src/imu_task.c ****     {
+  40:control-base/devices/src/imu_task.c ****         error = BMI088_init();
+  72              		.loc 1 40 9 is_stmt 1 view .LVU10
+  73              		.loc 1 40 17 is_stmt 0 view .LVU11
+  74 0032 FFF7FEFF 		bl	BMI088_init
+  75              	.LVL7:
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccx5vhgv.s 			page 3
+
+
+  76              		.loc 1 40 15 discriminator 1 view .LVU12
+  77 0036 0446     		mov	r4, r0
+  78              	.LVL8:
+  41:control-base/devices/src/imu_task.c ****         osDelay(100);
+  79              		.loc 1 41 9 is_stmt 1 view .LVU13
+  80 0038 6420     		movs	r0, #100
+  81              	.LVL9:
+  82              		.loc 1 41 9 is_stmt 0 view .LVU14
+  83 003a FFF7FEFF 		bl	osDelay
+  84              	.LVL10:
+  85              	.L2:
+  38:control-base/devices/src/imu_task.c ****     while (error)
+  86              		.loc 1 38 12 is_stmt 1 view .LVU15
+  87 003e 002C     		cmp	r4, #0
+  88 0040 F7D1     		bne	.L3
+  42:control-base/devices/src/imu_task.c ****     }
+  43:control-base/devices/src/imu_task.c **** 
+  44:control-base/devices/src/imu_task.c ****     /* Initializing Quaternion */
+  45:control-base/devices/src/imu_task.c ****     imu->quat[0] = 1.0f;
+  89              		.loc 1 45 5 view .LVU16
+  90              		.loc 1 45 18 is_stmt 0 view .LVU17
+  91 0042 4FF07E53 		mov	r3, #1065353216
+  92 0046 6B63     		str	r3, [r5, #52]	@ float
+  46:control-base/devices/src/imu_task.c ****     imu->quat[1] = 0.0f;
+  93              		.loc 1 46 5 is_stmt 1 view .LVU18
+  94              		.loc 1 46 18 is_stmt 0 view .LVU19
+  95 0048 0023     		movs	r3, #0
+  96 004a AB63     		str	r3, [r5, #56]	@ float
+  47:control-base/devices/src/imu_task.c ****     imu->quat[2] = 0.0f;
+  97              		.loc 1 47 5 is_stmt 1 view .LVU20
+  98              		.loc 1 47 18 is_stmt 0 view .LVU21
+  99 004c EB63     		str	r3, [r5, #60]	@ float
+  48:control-base/devices/src/imu_task.c ****     imu->quat[3] = 0.0f;
+ 100              		.loc 1 48 5 is_stmt 1 view .LVU22
+ 101              		.loc 1 48 18 is_stmt 0 view .LVU23
+ 102 004e 2B64     		str	r3, [r5, #64]	@ float
+  49:control-base/devices/src/imu_task.c **** 
+  50:control-base/devices/src/imu_task.c **** }
+ 103              		.loc 1 50 1 view .LVU24
+ 104 0050 38BD     		pop	{r3, r4, r5, pc}
+ 105              	.LVL11:
+ 106              	.L6:
+ 107              		.loc 1 50 1 view .LVU25
+ 108 0052 00BF     		.align	2
+ 109              	.L5:
+ 110 0054 00000000 		.word	0
+ 111 0058 00808945 		.word	1166639104
+ 112 005c 00A08C45 		.word	1166843904
+ 113 0060 CDCC4C3E 		.word	1045220557
+ 114 0064 0000C844 		.word	1153957888
+ 115 0068 00000000 		.word	g_imu_temp_pid
+ 116 006c 00000000 		.word	htim10
+ 117              		.cfi_endproc
+ 118              	.LFE140:
+ 120              		.section	.text.IMU_Task_Temp,"ax",%progbits
+ 121              		.align	1
+ 122              		.global	IMU_Task_Temp
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccx5vhgv.s 			page 4
+
+
+ 123              		.syntax unified
+ 124              		.thumb
+ 125              		.thumb_func
+ 127              	IMU_Task_Temp:
+ 128              	.LFB142:
+  51:control-base/devices/src/imu_task.c **** 
+  52:control-base/devices/src/imu_task.c **** void IMU_Task_Process(IMU_t *imu)
+  53:control-base/devices/src/imu_task.c **** {
+  54:control-base/devices/src/imu_task.c ****     BMI088_read(imu->bmi088_raw.gyro, imu->bmi088_raw.accel, &imu->bmi088_raw.temp);
+  55:control-base/devices/src/imu_task.c **** 
+  56:control-base/devices/src/imu_task.c ****     #ifdef WITH_MAGNETOMETER
+  57:control-base/devices/src/imu_task.c ****     // fusion using magnetometer
+  58:control-base/devices/src/imu_task.c ****      MahonyAHRSupdate(imu->quat,
+  59:control-base/devices/src/imu_task.c ****                       imu->bmi088_raw.gyro[0], imu->bmi088_raw.gyro[1], imu->bmi088_raw.gyro[2],
+  60:control-base/devices/src/imu_task.c ****                       imu->bmi088_raw.accel[0], imu->bmi088_raw.accel[1], imu->bmi088_raw.accel[2],
+  61:control-base/devices/src/imu_task.c ****                       imu->ist8310_raw.mag[0], imu->ist8310_raw.mag[1], imu->ist8310_raw.mag[2]);
+  62:control-base/devices/src/imu_task.c ****     #else
+  63:control-base/devices/src/imu_task.c ****     // fusion without magnetometer
+  64:control-base/devices/src/imu_task.c ****     MahonyAHRSupdateIMU(imu->quat,
+  65:control-base/devices/src/imu_task.c ****                         imu->bmi088_raw.gyro[0], imu->bmi088_raw.gyro[1], imu->bmi088_raw.gyro[2],
+  66:control-base/devices/src/imu_task.c ****                         imu->bmi088_raw.accel[0], imu->bmi088_raw.accel[1], imu->bmi088_raw.accel[2
+  67:control-base/devices/src/imu_task.c ****     #endif
+  68:control-base/devices/src/imu_task.c ****     /* Quternion to Euler */
+  69:control-base/devices/src/imu_task.c ****     imu->rad.yaw = atan2f(2.0f * (imu->quat[0] * imu->quat[3] + imu->quat[1] * imu->quat[2]), 2.0f 
+  70:control-base/devices/src/imu_task.c ****     imu->rad.pitch = asinf(-2.0f * (imu->quat[1] * imu->quat[3] - imu->quat[0] * imu->quat[2]));
+  71:control-base/devices/src/imu_task.c ****     imu->rad.roll = atan2f(2.0f * (imu->quat[0] * imu->quat[1] + imu->quat[2] * imu->quat[3]), 2.0f
+  72:control-base/devices/src/imu_task.c ****     /* Radian to Degree*/
+  73:control-base/devices/src/imu_task.c ****     imu->deg.yaw = imu->rad.yaw * RAD_TO_DEG;
+  74:control-base/devices/src/imu_task.c ****     imu->deg.pitch = imu->rad.pitch * RAD_TO_DEG;
+  75:control-base/devices/src/imu_task.c ****     imu->deg.roll = imu->rad.roll * RAD_TO_DEG;
+  76:control-base/devices/src/imu_task.c **** 
+  77:control-base/devices/src/imu_task.c ****     IMU_Task_Temp();
+  78:control-base/devices/src/imu_task.c **** }
+  79:control-base/devices/src/imu_task.c **** 
+  80:control-base/devices/src/imu_task.c **** void IMU_Task_Temp() {
+ 129              		.loc 1 80 22 is_stmt 1 view -0
+ 130              		.cfi_startproc
+ 131              		@ args = 0, pretend = 0, frame = 0
+ 132              		@ frame_needed = 0, uses_anonymous_args = 0
+ 133 0000 08B5     		push	{r3, lr}
+ 134              	.LCFI1:
+ 135              		.cfi_def_cfa_offset 8
+ 136              		.cfi_offset 3, -8
+ 137              		.cfi_offset 14, -4
+  81:control-base/devices/src/imu_task.c ****     static uint8_t start_complete = 0;
+ 138              		.loc 1 81 5 view .LVU27
+  82:control-base/devices/src/imu_task.c ****     if (g_imu.bmi088_raw.temp > 40.0f) {start_complete = 1;}
+ 139              		.loc 1 82 5 view .LVU28
+ 140              		.loc 1 82 25 is_stmt 0 view .LVU29
+ 141 0002 144B     		ldr	r3, .L14
+ 142 0004 D3ED047A 		vldr.32	s15, [r3, #16]
+ 143              		.loc 1 82 8 view .LVU30
+ 144 0008 9FED137A 		vldr.32	s14, .L14+4
+ 145 000c F4EEC77A 		vcmpe.f32	s15, s14
+ 146 0010 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 147 0014 02DD     		ble	.L8
+ 148              		.loc 1 82 41 is_stmt 1 discriminator 1 view .LVU31
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccx5vhgv.s 			page 5
+
+
+ 149              		.loc 1 82 56 is_stmt 0 discriminator 1 view .LVU32
+ 150 0016 114B     		ldr	r3, .L14+8
+ 151 0018 0122     		movs	r2, #1
+ 152 001a 1A70     		strb	r2, [r3]
+ 153              	.L8:
+  83:control-base/devices/src/imu_task.c ****     switch (start_complete)
+ 154              		.loc 1 83 5 is_stmt 1 view .LVU33
+ 155 001c 0F4B     		ldr	r3, .L14+8
+ 156 001e 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 157 0020 8BB1     		cbz	r3, .L10
+ 158 0022 012B     		cmp	r3, #1
+ 159 0024 0ED1     		bne	.L7
+ 160              	.LBB2:
+  84:control-base/devices/src/imu_task.c ****     {
+  85:control-base/devices/src/imu_task.c ****     case 1:
+  86:control-base/devices/src/imu_task.c ****     {
+  87:control-base/devices/src/imu_task.c ****         uint16_t temp_pwm = (uint16_t) PID(&g_imu_temp_pid, 40 - g_imu.bmi088_raw.temp);
+ 161              		.loc 1 87 9 view .LVU34
+ 162              		.loc 1 87 40 is_stmt 0 view .LVU35
+ 163 0026 9FED0C0A 		vldr.32	s0, .L14+4
+ 164 002a 30EE670A 		vsub.f32	s0, s0, s15
+ 165 002e 0C48     		ldr	r0, .L14+12
+ 166 0030 FFF7FEFF 		bl	PID
+ 167              	.LVL12:
+ 168              		.loc 1 87 18 discriminator 1 view .LVU36
+ 169 0034 BCEEC00A 		vcvt.u32.f32	s0, s0
+ 170 0038 10EE103A 		vmov	r3, s0	@ int
+ 171 003c 9BB2     		uxth	r3, r3
+ 172              	.LVL13:
+  88:control-base/devices/src/imu_task.c ****         __HAL_TIM_SetCompare(&htim10, TIM_CHANNEL_1, temp_pwm);
+ 173              		.loc 1 88 9 is_stmt 1 view .LVU37
+ 174 003e 094A     		ldr	r2, .L14+16
+ 175 0040 1268     		ldr	r2, [r2]
+ 176 0042 5363     		str	r3, [r2, #52]
+  89:control-base/devices/src/imu_task.c ****         break;
+ 177              		.loc 1 89 9 view .LVU38
+ 178              	.LVL14:
+ 179              	.L7:
+ 180              		.loc 1 89 9 is_stmt 0 view .LVU39
+ 181              	.LBE2:
+  90:control-base/devices/src/imu_task.c ****     }
+  91:control-base/devices/src/imu_task.c ****     case 0:
+  92:control-base/devices/src/imu_task.c ****         __HAL_TIM_SetCompare(&htim10, TIM_CHANNEL_1, 4999);
+  93:control-base/devices/src/imu_task.c ****         break;
+  94:control-base/devices/src/imu_task.c **** 
+  95:control-base/devices/src/imu_task.c ****     default:
+  96:control-base/devices/src/imu_task.c ****         break;
+  97:control-base/devices/src/imu_task.c ****     }
+  98:control-base/devices/src/imu_task.c **** }...
+ 182              		.loc 1 98 1 view .LVU40
+ 183 0044 08BD     		pop	{r3, pc}
+ 184              	.L10:
+  92:control-base/devices/src/imu_task.c ****         __HAL_TIM_SetCompare(&htim10, TIM_CHANNEL_1, 4999);
+ 185              		.loc 1 92 9 is_stmt 1 view .LVU41
+ 186 0046 074B     		ldr	r3, .L14+16
+ 187 0048 1B68     		ldr	r3, [r3]
+ 188 004a 41F28732 		movw	r2, #4999
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccx5vhgv.s 			page 6
+
+
+ 189 004e 5A63     		str	r2, [r3, #52]
+  93:control-base/devices/src/imu_task.c ****         break;
+ 190              		.loc 1 93 9 view .LVU42
+ 191              		.loc 1 98 1 is_stmt 0 view .LVU43
+ 192 0050 F8E7     		b	.L7
+ 193              	.L15:
+ 194 0052 00BF     		.align	2
+ 195              	.L14:
+ 196 0054 00000000 		.word	g_imu
+ 197 0058 00002042 		.word	1109393408
+ 198 005c 00000000 		.word	start_complete.0
+ 199 0060 00000000 		.word	g_imu_temp_pid
+ 200 0064 00000000 		.word	htim10
+ 201              		.cfi_endproc
+ 202              	.LFE142:
+ 204              		.section	.text.IMU_Task_Process,"ax",%progbits
+ 205              		.align	1
+ 206              		.global	IMU_Task_Process
+ 207              		.syntax unified
+ 208              		.thumb
+ 209              		.thumb_func
+ 211              	IMU_Task_Process:
+ 212              	.LVL15:
+ 213              	.LFB141:
+  53:control-base/devices/src/imu_task.c **** {
+ 214              		.loc 1 53 1 is_stmt 1 view -0
+ 215              		.cfi_startproc
+ 216              		@ args = 0, pretend = 0, frame = 0
+ 217              		@ frame_needed = 0, uses_anonymous_args = 0
+  53:control-base/devices/src/imu_task.c **** {
+ 218              		.loc 1 53 1 is_stmt 0 view .LVU45
+ 219 0000 10B5     		push	{r4, lr}
+ 220              	.LCFI2:
+ 221              		.cfi_def_cfa_offset 8
+ 222              		.cfi_offset 4, -8
+ 223              		.cfi_offset 14, -4
+ 224 0002 2DED088B 		vpush.64	{d8, d9, d10, d11}
+ 225              	.LCFI3:
+ 226              		.cfi_def_cfa_offset 40
+ 227              		.cfi_offset 80, -40
+ 228              		.cfi_offset 81, -36
+ 229              		.cfi_offset 82, -32
+ 230              		.cfi_offset 83, -28
+ 231              		.cfi_offset 84, -24
+ 232              		.cfi_offset 85, -20
+ 233              		.cfi_offset 86, -16
+ 234              		.cfi_offset 87, -12
+ 235 0006 0446     		mov	r4, r0
+  54:control-base/devices/src/imu_task.c ****     BMI088_read(imu->bmi088_raw.gyro, imu->bmi088_raw.accel, &imu->bmi088_raw.temp);
+ 236              		.loc 1 54 5 is_stmt 1 view .LVU46
+ 237 0008 00F11002 		add	r2, r0, #16
+ 238 000c 011D     		adds	r1, r0, #4
+ 239 000e 1430     		adds	r0, r0, #20
+ 240              	.LVL16:
+  54:control-base/devices/src/imu_task.c ****     BMI088_read(imu->bmi088_raw.gyro, imu->bmi088_raw.accel, &imu->bmi088_raw.temp);
+ 241              		.loc 1 54 5 is_stmt 0 view .LVU47
+ 242 0010 FFF7FEFF 		bl	BMI088_read
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccx5vhgv.s 			page 7
+
+
+ 243              	.LVL17:
+  64:control-base/devices/src/imu_task.c ****     MahonyAHRSupdateIMU(imu->quat,
+ 244              		.loc 1 64 5 is_stmt 1 view .LVU48
+ 245 0014 D4ED032A 		vldr.32	s5, [r4, #12]
+ 246 0018 94ED022A 		vldr.32	s4, [r4, #8]
+ 247 001c D4ED011A 		vldr.32	s3, [r4, #4]
+ 248 0020 94ED071A 		vldr.32	s2, [r4, #28]
+ 249 0024 D4ED060A 		vldr.32	s1, [r4, #24]
+ 250 0028 94ED050A 		vldr.32	s0, [r4, #20]
+ 251 002c 04F13400 		add	r0, r4, #52
+ 252 0030 FFF7FEFF 		bl	MahonyAHRSupdateIMU
+ 253              	.LVL18:
+  69:control-base/devices/src/imu_task.c ****     imu->rad.yaw = atan2f(2.0f * (imu->quat[0] * imu->quat[3] + imu->quat[1] * imu->quat[2]), 2.0f 
+ 254              		.loc 1 69 5 view .LVU49
+  69:control-base/devices/src/imu_task.c ****     imu->rad.yaw = atan2f(2.0f * (imu->quat[0] * imu->quat[3] + imu->quat[1] * imu->quat[2]), 2.0f 
+ 255              		.loc 1 69 44 is_stmt 0 view .LVU50
+ 256 0034 94ED0D8A 		vldr.32	s16, [r4, #52]
+  69:control-base/devices/src/imu_task.c ****     imu->rad.yaw = atan2f(2.0f * (imu->quat[0] * imu->quat[3] + imu->quat[1] * imu->quat[2]), 2.0f 
+ 257              		.loc 1 69 59 view .LVU51
+ 258 0038 94ED109A 		vldr.32	s18, [r4, #64]
+  69:control-base/devices/src/imu_task.c ****     imu->rad.yaw = atan2f(2.0f * (imu->quat[0] * imu->quat[3] + imu->quat[1] * imu->quat[2]), 2.0f 
+ 259              		.loc 1 69 48 view .LVU52
+ 260 003c 28EE090A 		vmul.f32	s0, s16, s18
+  69:control-base/devices/src/imu_task.c ****     imu->rad.yaw = atan2f(2.0f * (imu->quat[0] * imu->quat[3] + imu->quat[1] * imu->quat[2]), 2.0f 
+ 261              		.loc 1 69 74 view .LVU53
+ 262 0040 94ED0EBA 		vldr.32	s22, [r4, #56]
+  69:control-base/devices/src/imu_task.c ****     imu->rad.yaw = atan2f(2.0f * (imu->quat[0] * imu->quat[3] + imu->quat[1] * imu->quat[2]), 2.0f 
+ 263              		.loc 1 69 89 view .LVU54
+ 264 0044 D4ED0FAA 		vldr.32	s21, [r4, #60]
+  69:control-base/devices/src/imu_task.c ****     imu->rad.yaw = atan2f(2.0f * (imu->quat[0] * imu->quat[3] + imu->quat[1] * imu->quat[2]), 2.0f 
+ 265              		.loc 1 69 78 view .LVU55
+ 266 0048 6BEE2A7A 		vmul.f32	s15, s22, s21
+  69:control-base/devices/src/imu_task.c ****     imu->rad.yaw = atan2f(2.0f * (imu->quat[0] * imu->quat[3] + imu->quat[1] * imu->quat[2]), 2.0f 
+ 267              		.loc 1 69 63 view .LVU56
+ 268 004c 30EE270A 		vadd.f32	s0, s0, s15
+  69:control-base/devices/src/imu_task.c ****     imu->rad.yaw = atan2f(2.0f * (imu->quat[0] * imu->quat[3] + imu->quat[1] * imu->quat[2]), 2.0f 
+ 269              		.loc 1 69 116 view .LVU57
+ 270 0050 68EE088A 		vmul.f32	s17, s16, s16
+  69:control-base/devices/src/imu_task.c ****     imu->rad.yaw = atan2f(2.0f * (imu->quat[0] * imu->quat[3] + imu->quat[1] * imu->quat[2]), 2.0f 
+ 271              		.loc 1 69 146 view .LVU58
+ 272 0054 6BEE0B0A 		vmul.f32	s1, s22, s22
+  69:control-base/devices/src/imu_task.c ****     imu->rad.yaw = atan2f(2.0f * (imu->quat[0] * imu->quat[3] + imu->quat[1] * imu->quat[2]), 2.0f 
+ 273              		.loc 1 69 131 view .LVU59
+ 274 0058 78EEA00A 		vadd.f32	s1, s17, s1
+  69:control-base/devices/src/imu_task.c ****     imu->rad.yaw = atan2f(2.0f * (imu->quat[0] * imu->quat[3] + imu->quat[1] * imu->quat[2]), 2.0f 
+ 275              		.loc 1 69 100 view .LVU60
+ 276 005c 70EEA00A 		vadd.f32	s1, s1, s1
+  69:control-base/devices/src/imu_task.c ****     imu->rad.yaw = atan2f(2.0f * (imu->quat[0] * imu->quat[3] + imu->quat[1] * imu->quat[2]), 2.0f 
+ 277              		.loc 1 69 20 view .LVU61
+ 278 0060 F7EE00BA 		vmov.f32	s23, #1.0e+0
+ 279 0064 70EEEB0A 		vsub.f32	s1, s1, s23
+ 280 0068 30EE000A 		vadd.f32	s0, s0, s0
+ 281 006c FFF7FEFF 		bl	atan2f
+ 282              	.LVL19:
+ 283 0070 B0EE40AA 		vmov.f32	s20, s0
+  69:control-base/devices/src/imu_task.c ****     imu->rad.yaw = atan2f(2.0f * (imu->quat[0] * imu->quat[3] + imu->quat[1] * imu->quat[2]), 2.0f 
+ 284              		.loc 1 69 18 discriminator 1 view .LVU62
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccx5vhgv.s 			page 8
+
+
+ 285 0074 84ED110A 		vstr.32	s0, [r4, #68]
+  70:control-base/devices/src/imu_task.c ****     imu->rad.pitch = asinf(-2.0f * (imu->quat[1] * imu->quat[3] - imu->quat[0] * imu->quat[2]));
+ 286              		.loc 1 70 5 is_stmt 1 view .LVU63
+  70:control-base/devices/src/imu_task.c ****     imu->rad.pitch = asinf(-2.0f * (imu->quat[1] * imu->quat[3] - imu->quat[0] * imu->quat[2]));
+ 287              		.loc 1 70 50 is_stmt 0 view .LVU64
+ 288 0078 69EE0B7A 		vmul.f32	s15, s18, s22
+  70:control-base/devices/src/imu_task.c ****     imu->rad.pitch = asinf(-2.0f * (imu->quat[1] * imu->quat[3] - imu->quat[0] * imu->quat[2]));
+ 289              		.loc 1 70 80 view .LVU65
+ 290 007c 28EE2A7A 		vmul.f32	s14, s16, s21
+  70:control-base/devices/src/imu_task.c ****     imu->rad.pitch = asinf(-2.0f * (imu->quat[1] * imu->quat[3] - imu->quat[0] * imu->quat[2]));
+ 291              		.loc 1 70 65 view .LVU66
+ 292 0080 77EEC77A 		vsub.f32	s15, s15, s14
+  70:control-base/devices/src/imu_task.c ****     imu->rad.pitch = asinf(-2.0f * (imu->quat[1] * imu->quat[3] - imu->quat[0] * imu->quat[2]));
+ 293              		.loc 1 70 22 view .LVU67
+ 294 0084 B8EE000A 		vmov.f32	s0, #-2.0e+0
+ 295 0088 27EE800A 		vmul.f32	s0, s15, s0
+ 296 008c FFF7FEFF 		bl	asinf
+ 297              	.LVL20:
+ 298 0090 F0EE409A 		vmov.f32	s19, s0
+  70:control-base/devices/src/imu_task.c ****     imu->rad.pitch = asinf(-2.0f * (imu->quat[1] * imu->quat[3] - imu->quat[0] * imu->quat[2]));
+ 299              		.loc 1 70 20 discriminator 1 view .LVU68
+ 300 0094 84ED120A 		vstr.32	s0, [r4, #72]
+  71:control-base/devices/src/imu_task.c ****     imu->rad.roll = atan2f(2.0f * (imu->quat[0] * imu->quat[1] + imu->quat[2] * imu->quat[3]), 2.0f
+ 301              		.loc 1 71 5 is_stmt 1 view .LVU69
+  71:control-base/devices/src/imu_task.c ****     imu->rad.roll = atan2f(2.0f * (imu->quat[0] * imu->quat[1] + imu->quat[2] * imu->quat[3]), 2.0f
+ 302              		.loc 1 71 49 is_stmt 0 view .LVU70
+ 303 0098 28EE0B8A 		vmul.f32	s16, s16, s22
+  71:control-base/devices/src/imu_task.c ****     imu->rad.roll = atan2f(2.0f * (imu->quat[0] * imu->quat[1] + imu->quat[2] * imu->quat[3]), 2.0f
+ 304              		.loc 1 71 79 view .LVU71
+ 305 009c 69EE2AAA 		vmul.f32	s21, s18, s21
+  71:control-base/devices/src/imu_task.c ****     imu->rad.roll = atan2f(2.0f * (imu->quat[0] * imu->quat[1] + imu->quat[2] * imu->quat[3]), 2.0f
+ 306              		.loc 1 71 64 view .LVU72
+ 307 00a0 38EE2A0A 		vadd.f32	s0, s16, s21
+  71:control-base/devices/src/imu_task.c ****     imu->rad.roll = atan2f(2.0f * (imu->quat[0] * imu->quat[1] + imu->quat[2] * imu->quat[3]), 2.0f
+ 308              		.loc 1 71 147 view .LVU73
+ 309 00a4 29EE099A 		vmul.f32	s18, s18, s18
+  71:control-base/devices/src/imu_task.c ****     imu->rad.roll = atan2f(2.0f * (imu->quat[0] * imu->quat[1] + imu->quat[2] * imu->quat[3]), 2.0f
+ 310              		.loc 1 71 132 view .LVU74
+ 311 00a8 78EE898A 		vadd.f32	s17, s17, s18
+  71:control-base/devices/src/imu_task.c ****     imu->rad.roll = atan2f(2.0f * (imu->quat[0] * imu->quat[1] + imu->quat[2] * imu->quat[3]), 2.0f
+ 312              		.loc 1 71 101 view .LVU75
+ 313 00ac 78EEA88A 		vadd.f32	s17, s17, s17
+  71:control-base/devices/src/imu_task.c ****     imu->rad.roll = atan2f(2.0f * (imu->quat[0] * imu->quat[1] + imu->quat[2] * imu->quat[3]), 2.0f
+ 314              		.loc 1 71 21 view .LVU76
+ 315 00b0 78EEEB0A 		vsub.f32	s1, s17, s23
+ 316 00b4 30EE000A 		vadd.f32	s0, s0, s0
+ 317 00b8 FFF7FEFF 		bl	atan2f
+ 318              	.LVL21:
+  71:control-base/devices/src/imu_task.c ****     imu->rad.roll = atan2f(2.0f * (imu->quat[0] * imu->quat[1] + imu->quat[2] * imu->quat[3]), 2.0f
+ 319              		.loc 1 71 19 discriminator 1 view .LVU77
+ 320 00bc 84ED130A 		vstr.32	s0, [r4, #76]
+  73:control-base/devices/src/imu_task.c ****     imu->deg.yaw = imu->rad.yaw * RAD_TO_DEG;
+ 321              		.loc 1 73 5 is_stmt 1 view .LVU78
+  73:control-base/devices/src/imu_task.c ****     imu->deg.yaw = imu->rad.yaw * RAD_TO_DEG;
+ 322              		.loc 1 73 33 is_stmt 0 view .LVU79
+ 323 00c0 9FED0D7A 		vldr.32	s14, .L18
+ 324 00c4 2AEE07AA 		vmul.f32	s20, s20, s14
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccx5vhgv.s 			page 9
+
+
+  73:control-base/devices/src/imu_task.c ****     imu->deg.yaw = imu->rad.yaw * RAD_TO_DEG;
+ 325              		.loc 1 73 35 view .LVU80
+ 326 00c8 DFED0C7A 		vldr.32	s15, .L18+4
+ 327 00cc CAEE276A 		vdiv.f32	s13, s20, s15
+  73:control-base/devices/src/imu_task.c ****     imu->deg.yaw = imu->rad.yaw * RAD_TO_DEG;
+ 328              		.loc 1 73 18 view .LVU81
+ 329 00d0 C4ED146A 		vstr.32	s13, [r4, #80]
+  74:control-base/devices/src/imu_task.c ****     imu->deg.pitch = imu->rad.pitch * RAD_TO_DEG;
+ 330              		.loc 1 74 5 is_stmt 1 view .LVU82
+  74:control-base/devices/src/imu_task.c ****     imu->deg.pitch = imu->rad.pitch * RAD_TO_DEG;
+ 331              		.loc 1 74 37 is_stmt 0 view .LVU83
+ 332 00d4 69EE879A 		vmul.f32	s19, s19, s14
+  74:control-base/devices/src/imu_task.c ****     imu->deg.pitch = imu->rad.pitch * RAD_TO_DEG;
+ 333              		.loc 1 74 39 view .LVU84
+ 334 00d8 C9EEA76A 		vdiv.f32	s13, s19, s15
+  74:control-base/devices/src/imu_task.c ****     imu->deg.pitch = imu->rad.pitch * RAD_TO_DEG;
+ 335              		.loc 1 74 20 view .LVU85
+ 336 00dc C4ED156A 		vstr.32	s13, [r4, #84]
+  75:control-base/devices/src/imu_task.c ****     imu->deg.roll = imu->rad.roll * RAD_TO_DEG;
+ 337              		.loc 1 75 5 is_stmt 1 view .LVU86
+  75:control-base/devices/src/imu_task.c ****     imu->deg.roll = imu->rad.roll * RAD_TO_DEG;
+ 338              		.loc 1 75 35 is_stmt 0 view .LVU87
+ 339 00e0 20EE070A 		vmul.f32	s0, s0, s14
+  75:control-base/devices/src/imu_task.c ****     imu->deg.roll = imu->rad.roll * RAD_TO_DEG;
+ 340              		.loc 1 75 37 view .LVU88
+ 341 00e4 80EE277A 		vdiv.f32	s14, s0, s15
+  75:control-base/devices/src/imu_task.c ****     imu->deg.roll = imu->rad.roll * RAD_TO_DEG;
+ 342              		.loc 1 75 19 view .LVU89
+ 343 00e8 84ED167A 		vstr.32	s14, [r4, #88]
+  77:control-base/devices/src/imu_task.c ****     IMU_Task_Temp();
+ 344              		.loc 1 77 5 is_stmt 1 view .LVU90
+ 345 00ec FFF7FEFF 		bl	IMU_Task_Temp
+ 346              	.LVL22:
+  78:control-base/devices/src/imu_task.c **** }
+ 347              		.loc 1 78 1 is_stmt 0 view .LVU91
+ 348 00f0 BDEC088B 		vldm	sp!, {d8-d11}
+ 349              	.LCFI4:
+ 350              		.cfi_restore 86
+ 351              		.cfi_restore 87
+ 352              		.cfi_restore 84
+ 353              		.cfi_restore 85
+ 354              		.cfi_restore 82
+ 355              		.cfi_restore 83
+ 356              		.cfi_restore 80
+ 357              		.cfi_restore 81
+ 358              		.cfi_def_cfa_offset 8
+ 359 00f4 10BD     		pop	{r4, pc}
+ 360              	.LVL23:
+ 361              	.L19:
+  78:control-base/devices/src/imu_task.c **** }
+ 362              		.loc 1 78 1 view .LVU92
+ 363 00f6 00BF     		.align	2
+ 364              	.L18:
+ 365 00f8 00003443 		.word	1127481344
+ 366 00fc D00F4940 		.word	1078530000
+ 367              		.cfi_endproc
+ 368              	.LFE141:
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccx5vhgv.s 			page 10
+
+
+ 370              		.section	.text.IMU_Task,"ax",%progbits
+ 371              		.align	1
+ 372              		.global	IMU_Task
+ 373              		.syntax unified
+ 374              		.thumb
+ 375              		.thumb_func
+ 377              	IMU_Task:
+ 378              	.LVL24:
+ 379              	.LFB139:
+  20:control-base/devices/src/imu_task.c **** {
+ 380              		.loc 1 20 1 is_stmt 1 view -0
+ 381              		.cfi_startproc
+ 382              		@ args = 0, pretend = 0, frame = 8
+ 383              		@ frame_needed = 0, uses_anonymous_args = 0
+  20:control-base/devices/src/imu_task.c **** {
+ 384              		.loc 1 20 1 is_stmt 0 view .LVU94
+ 385 0000 00B5     		push	{lr}
+ 386              	.LCFI5:
+ 387              		.cfi_def_cfa_offset 4
+ 388              		.cfi_offset 14, -4
+ 389 0002 83B0     		sub	sp, sp, #12
+ 390              	.LCFI6:
+ 391              		.cfi_def_cfa_offset 16
+  21:control-base/devices/src/imu_task.c ****     IMU_Task_Init(&g_imu);
+ 392              		.loc 1 21 5 is_stmt 1 view .LVU95
+ 393 0004 0648     		ldr	r0, .L23
+ 394              	.LVL25:
+  21:control-base/devices/src/imu_task.c ****     IMU_Task_Init(&g_imu);
+ 395              		.loc 1 21 5 is_stmt 0 view .LVU96
+ 396 0006 FFF7FEFF 		bl	IMU_Task_Init
+ 397              	.LVL26:
+  22:control-base/devices/src/imu_task.c ****     portTickType xLastWakeTime;
+ 398              		.loc 1 22 5 is_stmt 1 view .LVU97
+  23:control-base/devices/src/imu_task.c ****     xLastWakeTime = xTaskGetTickCount();
+ 399              		.loc 1 23 5 view .LVU98
+  23:control-base/devices/src/imu_task.c ****     xLastWakeTime = xTaskGetTickCount();
+ 400              		.loc 1 23 21 is_stmt 0 view .LVU99
+ 401 000a FFF7FEFF 		bl	xTaskGetTickCount
+ 402              	.LVL27:
+  23:control-base/devices/src/imu_task.c ****     xLastWakeTime = xTaskGetTickCount();
+ 403              		.loc 1 23 19 discriminator 1 view .LVU100
+ 404 000e 0190     		str	r0, [sp, #4]
+  24:control-base/devices/src/imu_task.c ****     const TickType_t TimeIncrement = pdMS_TO_TICKS(1);
+ 405              		.loc 1 24 5 is_stmt 1 view .LVU101
+ 406              	.LVL28:
+ 407              	.L21:
+  25:control-base/devices/src/imu_task.c ****     while (1)
+ 408              		.loc 1 25 5 view .LVU102
+  27:control-base/devices/src/imu_task.c ****         IMU_Task_Process(&g_imu);
+ 409              		.loc 1 27 9 view .LVU103
+ 410 0010 0348     		ldr	r0, .L23
+ 411 0012 FFF7FEFF 		bl	IMU_Task_Process
+ 412              	.LVL29:
+  28:control-base/devices/src/imu_task.c ****         vTaskDelayUntil(&xLastWakeTime, TimeIncrement);
+ 413              		.loc 1 28 9 discriminator 1 view .LVU104
+ 414 0016 0121     		movs	r1, #1
+ 415 0018 01A8     		add	r0, sp, #4
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccx5vhgv.s 			page 11
+
+
+ 416 001a FFF7FEFF 		bl	vTaskDelayUntil
+ 417              	.LVL30:
+  25:control-base/devices/src/imu_task.c ****     while (1)
+ 418              		.loc 1 25 11 view .LVU105
+ 419 001e F7E7     		b	.L21
+ 420              	.L24:
+ 421              		.align	2
+ 422              	.L23:
+ 423 0020 00000000 		.word	g_imu
+ 424              		.cfi_endproc
+ 425              	.LFE139:
+ 427              		.section	.bss.start_complete.0,"aw",%nobits
+ 430              	start_complete.0:
+ 431 0000 00       		.space	1
+ 432              		.global	g_imu_temp_pid
+ 433              		.section	.bss.g_imu_temp_pid,"aw",%nobits
+ 434              		.align	2
+ 437              	g_imu_temp_pid:
+ 438 0000 00000000 		.space	52
+ 438      00000000 
+ 438      00000000 
+ 438      00000000 
+ 438      00000000 
+ 439              		.global	g_imu
+ 440              		.section	.bss.g_imu,"aw",%nobits
+ 441              		.align	2
+ 444              	g_imu:
+ 445 0000 00000000 		.space	92
+ 445      00000000 
+ 445      00000000 
+ 445      00000000 
+ 445      00000000 
+ 446              		.text
+ 447              	.Letext0:
+ 448              		.file 2 "/Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/arm-none-eabi/include/machine/_defa
+ 449              		.file 3 "/Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/arm-none-eabi/include/sys/_stdint.h
+ 450              		.file 4 "control-base/typec-board-base/Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h"
+ 451              		.file 5 "control-base/typec-board-base/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h"
+ 452              		.file 6 "control-base/typec-board-base/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h"
+ 453              		.file 7 "control-base/typec-board-base/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h"
+ 454              		.file 8 "control-base/typec-board-base/Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM
+ 455              		.file 9 "control-base/typec-board-base/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os
+ 456              		.file 10 "control-base/devices/inc/bmi088driver.h"
+ 457              		.file 11 "control-base/devices/inc/ist8310driver.h"
+ 458              		.file 12 "control-base/algo/inc/pid.h"
+ 459              		.file 13 "control-base/devices/inc/imu_task.h"
+ 460              		.file 14 "control-base/typec-board-base/Core/Inc/tim.h"
+ 461              		.file 15 "/Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/arm-none-eabi/include/math.h"
+ 462              		.file 16 "control-base/algo/inc/MahonyAHRS.h"
+ 463              		.file 17 "control-base/typec-board-base/Middlewares/Third_Party/FreeRTOS/Source/include/task.h"
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccx5vhgv.s 			page 12
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 imu_task.c
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccx5vhgv.s:21     .text.IMU_Task_Init:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccx5vhgv.s:27     .text.IMU_Task_Init:00000000 IMU_Task_Init
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccx5vhgv.s:110    .text.IMU_Task_Init:00000054 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccx5vhgv.s:437    .bss.g_imu_temp_pid:00000000 g_imu_temp_pid
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccx5vhgv.s:121    .text.IMU_Task_Temp:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccx5vhgv.s:127    .text.IMU_Task_Temp:00000000 IMU_Task_Temp
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccx5vhgv.s:196    .text.IMU_Task_Temp:00000054 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccx5vhgv.s:444    .bss.g_imu:00000000 g_imu
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccx5vhgv.s:430    .bss.start_complete.0:00000000 start_complete.0
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccx5vhgv.s:205    .text.IMU_Task_Process:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccx5vhgv.s:211    .text.IMU_Task_Process:00000000 IMU_Task_Process
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccx5vhgv.s:365    .text.IMU_Task_Process:000000f8 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccx5vhgv.s:371    .text.IMU_Task:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccx5vhgv.s:377    .text.IMU_Task:00000000 IMU_Task
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccx5vhgv.s:423    .text.IMU_Task:00000020 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccx5vhgv.s:431    .bss.start_complete.0:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccx5vhgv.s:434    .bss.g_imu_temp_pid:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccx5vhgv.s:441    .bss.g_imu:00000000 $d
+
+UNDEFINED SYMBOLS
+PID_Init
+HAL_TIM_PWM_Start
+BMI088_init
+osDelay
+htim10
+PID
+BMI088_read
+MahonyAHRSupdateIMU
+atan2f
+asinf
+xTaskGetTickCount
+vTaskDelayUntil

@@ -1,0 +1,1073 @@
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"swerve_locomotion.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "control-base/algo/src/swerve_locomotion.c"
+  20              		.section	.text.swerve_init,"ax",%progbits
+  21              		.align	1
+  22              		.global	swerve_init
+  23              		.syntax unified
+  24              		.thumb
+  25              		.thumb_func
+  27              	swerve_init:
+  28              	.LVL0:
+  29              	.LFB0:
+   1:control-base/algo/src/swerve_locomotion.c **** #include "swerve_locomotion.h"
+   2:control-base/algo/src/swerve_locomotion.c **** 
+   3:control-base/algo/src/swerve_locomotion.c **** #include <math.h>
+   4:control-base/algo/src/swerve_locomotion.c **** #include "user_math.h"
+   5:control-base/algo/src/swerve_locomotion.c **** 
+   6:control-base/algo/src/swerve_locomotion.c **** /**
+   7:control-base/algo/src/swerve_locomotion.c ****  * @brief Initializes the swerve drive constants.
+   8:control-base/algo/src/swerve_locomotion.c ****  *
+   9:control-base/algo/src/swerve_locomotion.c ****  * @param track_width The distance between the left and right wheels.
+  10:control-base/algo/src/swerve_locomotion.c ****  * @param wheel_base The distance between the front and rear wheels.
+  11:control-base/algo/src/swerve_locomotion.c ****  * @param wheel_diameter The diameter of the wheels.
+  12:control-base/algo/src/swerve_locomotion.c ****  * @param max_speed The maximum speed of the swerve drive.
+  13:control-base/algo/src/swerve_locomotion.c ****  * @param max_angular_speed The maximum angular speed of the swerve drive.
+  14:control-base/algo/src/swerve_locomotion.c ****  * @return Initialized swerve constants.
+  15:control-base/algo/src/swerve_locomotion.c ****  */
+  16:control-base/algo/src/swerve_locomotion.c **** swerve_constants_t swerve_init(float track_width, float wheel_base, float wheel_diameter, float max
+  30              		.loc 1 16 133 view -0
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 0
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  34              		@ link register save eliminated.
+  17:control-base/algo/src/swerve_locomotion.c ****     swerve_constants_t swerve_constants = {
+  35              		.loc 1 17 5 view .LVU1
+  36              		.loc 1 17 24 is_stmt 0 view .LVU2
+  37 0000 80ED000A 		vstr.32	s0, [r0]
+  38 0004 C0ED010A 		vstr.32	s1, [r0, #4]
+  39 0008 80ED021A 		vstr.32	s2, [r0, #8]
+  40 000c C0ED031A 		vstr.32	s3, [r0, #12]
+  41 0010 80ED042A 		vstr.32	s4, [r0, #16]
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s 			page 2
+
+
+  42 0014 0022     		movs	r2, #0
+  43 0016 4261     		str	r2, [r0, #20]	@ float
+  44 0018 4FF07E51 		mov	r1, #1065353216
+  45 001c 8161     		str	r1, [r0, #24]	@ float
+  18:control-base/algo/src/swerve_locomotion.c ****         .track_width = track_width,
+  19:control-base/algo/src/swerve_locomotion.c ****         .wheel_base = wheel_base,
+  20:control-base/algo/src/swerve_locomotion.c ****         .wheel_diameter = wheel_diameter,
+  21:control-base/algo/src/swerve_locomotion.c ****         .max_speed = max_speed,
+  22:control-base/algo/src/swerve_locomotion.c ****         .max_angular_speed = max_angular_speed,
+  23:control-base/algo/src/swerve_locomotion.c ****         .kinematics_matrix = {
+  24:control-base/algo/src/swerve_locomotion.c ****             {0, 1, -(wheel_base / 2)}, // front left
+  46              		.loc 1 24 33 view .LVU3
+  47 001e F6EE007A 		vmov.f32	s15, #5.0e-1
+  48 0022 60EEA70A 		vmul.f32	s1, s1, s15
+  49              	.LVL1:
+  50              		.loc 1 24 20 view .LVU4
+  51 0026 B1EE607A 		vneg.f32	s14, s1
+  17:control-base/algo/src/swerve_locomotion.c ****     swerve_constants_t swerve_constants = {
+  52              		.loc 1 17 24 view .LVU5
+  53 002a 80ED077A 		vstr.32	s14, [r0, #28]
+  54 002e 0162     		str	r1, [r0, #32]	@ float
+  55 0030 4262     		str	r2, [r0, #36]	@ float
+  25:control-base/algo/src/swerve_locomotion.c ****             {1, 0, -(track_width / 2)},
+  56              		.loc 1 25 34 view .LVU6
+  57 0032 20EE270A 		vmul.f32	s0, s0, s15
+  58              	.LVL2:
+  59              		.loc 1 25 20 view .LVU7
+  60 0036 F1EE407A 		vneg.f32	s15, s0
+  17:control-base/algo/src/swerve_locomotion.c ****     swerve_constants_t swerve_constants = {
+  61              		.loc 1 17 24 view .LVU8
+  62 003a C0ED0A7A 		vstr.32	s15, [r0, #40]
+  63 003e C262     		str	r2, [r0, #44]	@ float
+  64 0040 0163     		str	r1, [r0, #48]	@ float
+  65 0042 80ED0D7A 		vstr.32	s14, [r0, #52]
+  66 0046 8163     		str	r1, [r0, #56]	@ float
+  67 0048 C263     		str	r2, [r0, #60]	@ float
+  68 004a 80ED100A 		vstr.32	s0, [r0, #64]
+  69 004e 4264     		str	r2, [r0, #68]	@ float
+  70 0050 8164     		str	r1, [r0, #72]	@ float
+  71 0052 C0ED130A 		vstr.32	s1, [r0, #76]
+  72 0056 0165     		str	r1, [r0, #80]	@ float
+  73 0058 4265     		str	r2, [r0, #84]	@ float
+  74 005a 80ED160A 		vstr.32	s0, [r0, #88]
+  75 005e C265     		str	r2, [r0, #92]	@ float
+  76 0060 0166     		str	r1, [r0, #96]	@ float
+  77 0062 C0ED190A 		vstr.32	s1, [r0, #100]
+  78 0066 8166     		str	r1, [r0, #104]	@ float
+  79 0068 C266     		str	r2, [r0, #108]	@ float
+  80 006a C0ED1C7A 		vstr.32	s15, [r0, #112]
+  26:control-base/algo/src/swerve_locomotion.c ****             {0, 1, -(wheel_base / 2)}, // rear left
+  27:control-base/algo/src/swerve_locomotion.c ****             {1, 0, +(track_width / 2)},
+  28:control-base/algo/src/swerve_locomotion.c ****             {0, 1, +(wheel_base / 2)}, // rear right
+  29:control-base/algo/src/swerve_locomotion.c ****             {1, 0, +(track_width / 2)},
+  30:control-base/algo/src/swerve_locomotion.c ****             {0, 1, +(wheel_base / 2)}, // front right
+  31:control-base/algo/src/swerve_locomotion.c ****             {1, 0, -(track_width / 2)}
+  32:control-base/algo/src/swerve_locomotion.c ****         }
+  33:control-base/algo/src/swerve_locomotion.c ****     };
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s 			page 3
+
+
+  34:control-base/algo/src/swerve_locomotion.c **** 
+  35:control-base/algo/src/swerve_locomotion.c ****     return swerve_constants;
+  81              		.loc 1 35 5 is_stmt 1 view .LVU9
+  36:control-base/algo/src/swerve_locomotion.c **** }
+  82              		.loc 1 36 1 is_stmt 0 view .LVU10
+  83 006e 7047     		bx	lr
+  84              		.cfi_endproc
+  85              	.LFE0:
+  87              		.section	.text.swerve_calculate_kinematics,"ax",%progbits
+  88              		.align	1
+  89              		.global	swerve_calculate_kinematics
+  90              		.syntax unified
+  91              		.thumb
+  92              		.thumb_func
+  94              	swerve_calculate_kinematics:
+  95              	.LVL3:
+  96              	.LFB1:
+  37:control-base/algo/src/swerve_locomotion.c **** 
+  38:control-base/algo/src/swerve_locomotion.c **** /**
+  39:control-base/algo/src/swerve_locomotion.c ****  * @brief Calculates swerve drive kinematics.
+  40:control-base/algo/src/swerve_locomotion.c ****  *
+  41:control-base/algo/src/swerve_locomotion.c ****  * @param chassis_state Pointer to the chassis state structure.
+  42:control-base/algo/src/swerve_locomotion.c ****  * @param swerve_constants Pointer to the swerve constants structure.
+  43:control-base/algo/src/swerve_locomotion.c ****  */
+  44:control-base/algo/src/swerve_locomotion.c **** void swerve_calculate_kinematics(swerve_chassis_state_t *chassis_state, swerve_constants_t *swerve_
+  97              		.loc 1 44 111 is_stmt 1 view -0
+  98              		.cfi_startproc
+  99              		@ args = 0, pretend = 0, frame = 32
+ 100              		@ frame_needed = 0, uses_anonymous_args = 0
+ 101              		.loc 1 44 111 is_stmt 0 view .LVU12
+ 102 0000 70B5     		push	{r4, r5, r6, lr}
+ 103              	.LCFI0:
+ 104              		.cfi_def_cfa_offset 16
+ 105              		.cfi_offset 4, -16
+ 106              		.cfi_offset 5, -12
+ 107              		.cfi_offset 6, -8
+ 108              		.cfi_offset 14, -4
+ 109 0002 2DED028B 		vpush.64	{d8}
+ 110              	.LCFI1:
+ 111              		.cfi_def_cfa_offset 24
+ 112              		.cfi_offset 80, -24
+ 113              		.cfi_offset 81, -20
+ 114 0006 88B0     		sub	sp, sp, #32
+ 115              	.LCFI2:
+ 116              		.cfi_def_cfa_offset 56
+ 117 0008 0646     		mov	r6, r0
+  45:control-base/algo/src/swerve_locomotion.c ****     float v_x = chassis_state->v_x;
+ 118              		.loc 1 45 5 is_stmt 1 view .LVU13
+ 119              		.loc 1 45 11 is_stmt 0 view .LVU14
+ 120 000a D0ED007A 		vldr.32	s15, [r0]
+ 121              	.LVL4:
+  46:control-base/algo/src/swerve_locomotion.c ****     float v_y = chassis_state->v_y;
+ 122              		.loc 1 46 5 is_stmt 1 view .LVU15
+ 123              		.loc 1 46 11 is_stmt 0 view .LVU16
+ 124 000e 90ED017A 		vldr.32	s14, [r0, #4]
+ 125              	.LVL5:
+  47:control-base/algo/src/swerve_locomotion.c ****     float omega = chassis_state->omega;
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s 			page 4
+
+
+ 126              		.loc 1 47 5 is_stmt 1 view .LVU17
+ 127              		.loc 1 47 11 is_stmt 0 view .LVU18
+ 128 0012 D0ED026A 		vldr.32	s13, [r0, #8]
+ 129              	.LVL6:
+  48:control-base/algo/src/swerve_locomotion.c ****     float(*k_mat)[3] = swerve_constants->kinematics_matrix;
+ 130              		.loc 1 48 5 is_stmt 1 view .LVU19
+  49:control-base/algo/src/swerve_locomotion.c **** 
+  50:control-base/algo/src/swerve_locomotion.c ****     if (v_x == 0 && v_y == 0 && omega == 0)
+ 131              		.loc 1 50 5 view .LVU20
+ 132              		.loc 1 50 8 is_stmt 0 view .LVU21
+ 133 0016 F5EE407A 		vcmp.f32	s15, #0
+ 134 001a F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 135 001e 0AD1     		bne	.L3
+ 136              		.loc 1 50 18 discriminator 1 view .LVU22
+ 137 0020 B5EE407A 		vcmp.f32	s14, #0
+ 138 0024 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 139 0028 05D1     		bne	.L3
+ 140              		.loc 1 50 30 discriminator 2 view .LVU23
+ 141 002a F5EE406A 		vcmp.f32	s13, #0
+ 142 002e F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 143 0032 00F0A180 		beq	.L16
+ 144              	.L3:
+  51:control-base/algo/src/swerve_locomotion.c ****     {
+  52:control-base/algo/src/swerve_locomotion.c ****         for (int i = 0; i < NUMBER_OF_MODULES; i++)
+  53:control-base/algo/src/swerve_locomotion.c ****         {
+  54:control-base/algo/src/swerve_locomotion.c ****             chassis_state->states[i].speed = 0;
+  55:control-base/algo/src/swerve_locomotion.c ****             chassis_state->states[i].angle = chassis_state->states[i].last_angle;
+  56:control-base/algo/src/swerve_locomotion.c ****         }
+  57:control-base/algo/src/swerve_locomotion.c ****         return;
+  58:control-base/algo/src/swerve_locomotion.c ****     }
+  59:control-base/algo/src/swerve_locomotion.c **** 
+  60:control-base/algo/src/swerve_locomotion.c ****     // Multiply the inverse kinematics matrix by the chassis speeds vector
+  61:control-base/algo/src/swerve_locomotion.c ****     float module_states_matrix[8] = {
+ 145              		.loc 1 61 5 is_stmt 1 view .LVU24
+  62:control-base/algo/src/swerve_locomotion.c ****         k_mat[0][0] * v_x + k_mat[0][1] * v_y + k_mat[0][2] * omega,
+ 146              		.loc 1 62 17 is_stmt 0 view .LVU25
+ 147 0036 91ED056A 		vldr.32	s12, [r1, #20]
+ 148              		.loc 1 62 21 view .LVU26
+ 149 003a 26EE276A 		vmul.f32	s12, s12, s15
+ 150              		.loc 1 62 37 view .LVU27
+ 151 003e D1ED065A 		vldr.32	s11, [r1, #24]
+ 152              		.loc 1 62 41 view .LVU28
+ 153 0042 65EE875A 		vmul.f32	s11, s11, s14
+ 154              		.loc 1 62 27 view .LVU29
+ 155 0046 36EE256A 		vadd.f32	s12, s12, s11
+ 156              		.loc 1 62 57 view .LVU30
+ 157 004a D1ED075A 		vldr.32	s11, [r1, #28]
+ 158              		.loc 1 62 61 view .LVU31
+ 159 004e 65EEA65A 		vmul.f32	s11, s11, s13
+ 160              		.loc 1 62 47 view .LVU32
+ 161 0052 36EE256A 		vadd.f32	s12, s12, s11
+  61:control-base/algo/src/swerve_locomotion.c ****         k_mat[0][0] * v_x + k_mat[0][1] * v_y + k_mat[0][2] * omega,
+ 162              		.loc 1 61 11 view .LVU33
+ 163 0056 8DED006A 		vstr.32	s12, [sp]
+  63:control-base/algo/src/swerve_locomotion.c ****         k_mat[1][0] * v_x + k_mat[1][1] * v_y + k_mat[1][2] * omega,
+ 164              		.loc 1 63 17 view .LVU34
+ 165 005a 91ED086A 		vldr.32	s12, [r1, #32]
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s 			page 5
+
+
+ 166              		.loc 1 63 21 view .LVU35
+ 167 005e 26EE276A 		vmul.f32	s12, s12, s15
+ 168              		.loc 1 63 37 view .LVU36
+ 169 0062 D1ED095A 		vldr.32	s11, [r1, #36]
+ 170              		.loc 1 63 41 view .LVU37
+ 171 0066 65EE875A 		vmul.f32	s11, s11, s14
+ 172              		.loc 1 63 27 view .LVU38
+ 173 006a 36EE256A 		vadd.f32	s12, s12, s11
+ 174              		.loc 1 63 57 view .LVU39
+ 175 006e D1ED0A5A 		vldr.32	s11, [r1, #40]
+ 176              		.loc 1 63 61 view .LVU40
+ 177 0072 65EEA65A 		vmul.f32	s11, s11, s13
+ 178              		.loc 1 63 47 view .LVU41
+ 179 0076 36EE256A 		vadd.f32	s12, s12, s11
+  61:control-base/algo/src/swerve_locomotion.c ****         k_mat[0][0] * v_x + k_mat[0][1] * v_y + k_mat[0][2] * omega,
+ 180              		.loc 1 61 11 view .LVU42
+ 181 007a 8DED016A 		vstr.32	s12, [sp, #4]
+  64:control-base/algo/src/swerve_locomotion.c ****         k_mat[2][0] * v_x + k_mat[2][1] * v_y + k_mat[2][2] * omega,
+ 182              		.loc 1 64 17 view .LVU43
+ 183 007e 91ED0B6A 		vldr.32	s12, [r1, #44]
+ 184              		.loc 1 64 21 view .LVU44
+ 185 0082 26EE276A 		vmul.f32	s12, s12, s15
+ 186              		.loc 1 64 37 view .LVU45
+ 187 0086 D1ED0C5A 		vldr.32	s11, [r1, #48]
+ 188              		.loc 1 64 41 view .LVU46
+ 189 008a 65EE875A 		vmul.f32	s11, s11, s14
+ 190              		.loc 1 64 27 view .LVU47
+ 191 008e 36EE256A 		vadd.f32	s12, s12, s11
+ 192              		.loc 1 64 57 view .LVU48
+ 193 0092 D1ED0D5A 		vldr.32	s11, [r1, #52]
+ 194              		.loc 1 64 61 view .LVU49
+ 195 0096 65EEA65A 		vmul.f32	s11, s11, s13
+ 196              		.loc 1 64 47 view .LVU50
+ 197 009a 36EE256A 		vadd.f32	s12, s12, s11
+  61:control-base/algo/src/swerve_locomotion.c ****         k_mat[0][0] * v_x + k_mat[0][1] * v_y + k_mat[0][2] * omega,
+ 198              		.loc 1 61 11 view .LVU51
+ 199 009e 8DED026A 		vstr.32	s12, [sp, #8]
+  65:control-base/algo/src/swerve_locomotion.c ****         k_mat[3][0] * v_x + k_mat[3][1] * v_y + k_mat[3][2] * omega,
+ 200              		.loc 1 65 17 view .LVU52
+ 201 00a2 91ED0E6A 		vldr.32	s12, [r1, #56]
+ 202              		.loc 1 65 21 view .LVU53
+ 203 00a6 26EE276A 		vmul.f32	s12, s12, s15
+ 204              		.loc 1 65 37 view .LVU54
+ 205 00aa D1ED0F5A 		vldr.32	s11, [r1, #60]
+ 206              		.loc 1 65 41 view .LVU55
+ 207 00ae 65EE875A 		vmul.f32	s11, s11, s14
+ 208              		.loc 1 65 27 view .LVU56
+ 209 00b2 36EE256A 		vadd.f32	s12, s12, s11
+ 210              		.loc 1 65 57 view .LVU57
+ 211 00b6 D1ED105A 		vldr.32	s11, [r1, #64]
+ 212              		.loc 1 65 61 view .LVU58
+ 213 00ba 65EEA65A 		vmul.f32	s11, s11, s13
+ 214              		.loc 1 65 47 view .LVU59
+ 215 00be 36EE256A 		vadd.f32	s12, s12, s11
+  61:control-base/algo/src/swerve_locomotion.c ****         k_mat[0][0] * v_x + k_mat[0][1] * v_y + k_mat[0][2] * omega,
+ 216              		.loc 1 61 11 view .LVU60
+ 217 00c2 8DED036A 		vstr.32	s12, [sp, #12]
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s 			page 6
+
+
+  66:control-base/algo/src/swerve_locomotion.c ****         k_mat[4][0] * v_x + k_mat[4][1] * v_y + k_mat[4][2] * omega,
+ 218              		.loc 1 66 17 view .LVU61
+ 219 00c6 91ED116A 		vldr.32	s12, [r1, #68]
+ 220              		.loc 1 66 21 view .LVU62
+ 221 00ca 26EE276A 		vmul.f32	s12, s12, s15
+ 222              		.loc 1 66 37 view .LVU63
+ 223 00ce D1ED125A 		vldr.32	s11, [r1, #72]
+ 224              		.loc 1 66 41 view .LVU64
+ 225 00d2 65EE875A 		vmul.f32	s11, s11, s14
+ 226              		.loc 1 66 27 view .LVU65
+ 227 00d6 36EE256A 		vadd.f32	s12, s12, s11
+ 228              		.loc 1 66 57 view .LVU66
+ 229 00da D1ED135A 		vldr.32	s11, [r1, #76]
+ 230              		.loc 1 66 61 view .LVU67
+ 231 00de 65EEA65A 		vmul.f32	s11, s11, s13
+ 232              		.loc 1 66 47 view .LVU68
+ 233 00e2 36EE256A 		vadd.f32	s12, s12, s11
+  61:control-base/algo/src/swerve_locomotion.c ****         k_mat[0][0] * v_x + k_mat[0][1] * v_y + k_mat[0][2] * omega,
+ 234              		.loc 1 61 11 view .LVU69
+ 235 00e6 8DED046A 		vstr.32	s12, [sp, #16]
+  67:control-base/algo/src/swerve_locomotion.c ****         k_mat[5][0] * v_x + k_mat[5][1] * v_y + k_mat[5][2] * omega,
+ 236              		.loc 1 67 17 view .LVU70
+ 237 00ea 91ED146A 		vldr.32	s12, [r1, #80]
+ 238              		.loc 1 67 21 view .LVU71
+ 239 00ee 26EE276A 		vmul.f32	s12, s12, s15
+ 240              		.loc 1 67 37 view .LVU72
+ 241 00f2 D1ED155A 		vldr.32	s11, [r1, #84]
+ 242              		.loc 1 67 41 view .LVU73
+ 243 00f6 65EE875A 		vmul.f32	s11, s11, s14
+ 244              		.loc 1 67 27 view .LVU74
+ 245 00fa 36EE256A 		vadd.f32	s12, s12, s11
+ 246              		.loc 1 67 57 view .LVU75
+ 247 00fe D1ED165A 		vldr.32	s11, [r1, #88]
+ 248              		.loc 1 67 61 view .LVU76
+ 249 0102 65EEA65A 		vmul.f32	s11, s11, s13
+ 250              		.loc 1 67 47 view .LVU77
+ 251 0106 36EE256A 		vadd.f32	s12, s12, s11
+  61:control-base/algo/src/swerve_locomotion.c ****         k_mat[0][0] * v_x + k_mat[0][1] * v_y + k_mat[0][2] * omega,
+ 252              		.loc 1 61 11 view .LVU78
+ 253 010a 8DED056A 		vstr.32	s12, [sp, #20]
+  68:control-base/algo/src/swerve_locomotion.c ****         k_mat[6][0] * v_x + k_mat[6][1] * v_y + k_mat[6][2] * omega,
+ 254              		.loc 1 68 17 view .LVU79
+ 255 010e 91ED176A 		vldr.32	s12, [r1, #92]
+ 256              		.loc 1 68 21 view .LVU80
+ 257 0112 26EE276A 		vmul.f32	s12, s12, s15
+ 258              		.loc 1 68 37 view .LVU81
+ 259 0116 D1ED185A 		vldr.32	s11, [r1, #96]
+ 260              		.loc 1 68 41 view .LVU82
+ 261 011a 65EE875A 		vmul.f32	s11, s11, s14
+ 262              		.loc 1 68 27 view .LVU83
+ 263 011e 36EE256A 		vadd.f32	s12, s12, s11
+ 264              		.loc 1 68 57 view .LVU84
+ 265 0122 D1ED195A 		vldr.32	s11, [r1, #100]
+ 266              		.loc 1 68 61 view .LVU85
+ 267 0126 65EEA65A 		vmul.f32	s11, s11, s13
+ 268              		.loc 1 68 47 view .LVU86
+ 269 012a 36EE256A 		vadd.f32	s12, s12, s11
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s 			page 7
+
+
+  61:control-base/algo/src/swerve_locomotion.c ****         k_mat[0][0] * v_x + k_mat[0][1] * v_y + k_mat[0][2] * omega,
+ 270              		.loc 1 61 11 view .LVU87
+ 271 012e 8DED066A 		vstr.32	s12, [sp, #24]
+  69:control-base/algo/src/swerve_locomotion.c ****         k_mat[7][0] * v_x + k_mat[7][1] * v_y + k_mat[7][2] * omega,
+ 272              		.loc 1 69 17 view .LVU88
+ 273 0132 91ED1A6A 		vldr.32	s12, [r1, #104]
+ 274              		.loc 1 69 21 view .LVU89
+ 275 0136 66EE277A 		vmul.f32	s15, s12, s15
+ 276              	.LVL7:
+ 277              		.loc 1 69 37 view .LVU90
+ 278 013a 91ED1B6A 		vldr.32	s12, [r1, #108]
+ 279              		.loc 1 69 41 view .LVU91
+ 280 013e 26EE077A 		vmul.f32	s14, s12, s14
+ 281              	.LVL8:
+ 282              		.loc 1 69 27 view .LVU92
+ 283 0142 77EE877A 		vadd.f32	s15, s15, s14
+ 284              		.loc 1 69 57 view .LVU93
+ 285 0146 91ED1C7A 		vldr.32	s14, [r1, #112]
+ 286              		.loc 1 69 61 view .LVU94
+ 287 014a 27EE267A 		vmul.f32	s14, s14, s13
+ 288              		.loc 1 69 47 view .LVU95
+ 289 014e 77EE877A 		vadd.f32	s15, s15, s14
+  61:control-base/algo/src/swerve_locomotion.c ****         k_mat[0][0] * v_x + k_mat[0][1] * v_y + k_mat[0][2] * omega,
+ 290              		.loc 1 61 11 view .LVU96
+ 291 0152 CDED077A 		vstr.32	s15, [sp, #28]
+  70:control-base/algo/src/swerve_locomotion.c ****     };
+  71:control-base/algo/src/swerve_locomotion.c **** 
+  72:control-base/algo/src/swerve_locomotion.c ****     // Convert module x,y matrix to wheel speed and angle
+  73:control-base/algo/src/swerve_locomotion.c ****     for (int i = 0; i < NUMBER_OF_MODULES; i++)
+ 292              		.loc 1 73 5 is_stmt 1 view .LVU97
+ 293              	.LBB2:
+ 294              		.loc 1 73 10 view .LVU98
+ 295              	.LVL9:
+ 296              		.loc 1 73 14 is_stmt 0 view .LVU99
+ 297 0156 0024     		movs	r4, #0
+ 298              		.loc 1 73 5 view .LVU100
+ 299 0158 1BE0     		b	.L7
+ 300              	.LVL10:
+ 301              	.L5:
+ 302              		.loc 1 73 5 view .LVU101
+ 303              	.LBE2:
+ 304              	.LBB6:
+  54:control-base/algo/src/swerve_locomotion.c ****             chassis_state->states[i].angle = chassis_state->states[i].last_angle;
+ 305              		.loc 1 54 13 is_stmt 1 view .LVU102
+  54:control-base/algo/src/swerve_locomotion.c ****             chassis_state->states[i].angle = chassis_state->states[i].last_angle;
+ 306              		.loc 1 54 44 is_stmt 0 view .LVU103
+ 307 015a 02EB4203 		add	r3, r2, r2, lsl #1
+ 308 015e 06EB8303 		add	r3, r6, r3, lsl #2
+ 309 0162 0021     		movs	r1, #0
+ 310 0164 D960     		str	r1, [r3, #12]	@ float
+  55:control-base/algo/src/swerve_locomotion.c ****         }
+ 311              		.loc 1 55 13 is_stmt 1 view .LVU104
+  55:control-base/algo/src/swerve_locomotion.c ****         }
+ 312              		.loc 1 55 70 is_stmt 0 view .LVU105
+ 313 0166 5969     		ldr	r1, [r3, #20]	@ float
+  55:control-base/algo/src/swerve_locomotion.c ****         }
+ 314              		.loc 1 55 44 view .LVU106
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s 			page 8
+
+
+ 315 0168 1961     		str	r1, [r3, #16]	@ float
+  52:control-base/algo/src/swerve_locomotion.c ****         {
+ 316              		.loc 1 52 49 is_stmt 1 discriminator 3 view .LVU107
+ 317 016a 0132     		adds	r2, r2, #1
+ 318              	.LVL11:
+ 319              	.L4:
+  52:control-base/algo/src/swerve_locomotion.c ****         {
+ 320              		.loc 1 52 27 discriminator 1 view .LVU108
+ 321 016c 032A     		cmp	r2, #3
+ 322 016e F4DD     		ble	.L5
+ 323              	.LVL12:
+ 324              	.L2:
+  52:control-base/algo/src/swerve_locomotion.c ****         {
+ 325              		.loc 1 52 27 is_stmt 0 discriminator 1 view .LVU109
+ 326              	.LBE6:
+  74:control-base/algo/src/swerve_locomotion.c ****     {
+  75:control-base/algo/src/swerve_locomotion.c ****         float x = module_states_matrix[i * 2 + 1];
+  76:control-base/algo/src/swerve_locomotion.c ****         float y = module_states_matrix[i * 2];
+  77:control-base/algo/src/swerve_locomotion.c ****         float speed = hypotf(x, y);
+  78:control-base/algo/src/swerve_locomotion.c **** 
+  79:control-base/algo/src/swerve_locomotion.c ****         chassis_state->states[i].speed = speed;
+  80:control-base/algo/src/swerve_locomotion.c **** 
+  81:control-base/algo/src/swerve_locomotion.c ****         if (speed > 1e-6f)
+  82:control-base/algo/src/swerve_locomotion.c ****         {
+  83:control-base/algo/src/swerve_locomotion.c ****             float angle = atan2f(y, x);
+  84:control-base/algo/src/swerve_locomotion.c ****             chassis_state->states[i].angle = angle;
+  85:control-base/algo/src/swerve_locomotion.c ****             chassis_state->states[i].last_angle = angle;
+  86:control-base/algo/src/swerve_locomotion.c ****         }
+  87:control-base/algo/src/swerve_locomotion.c ****         else
+  88:control-base/algo/src/swerve_locomotion.c ****         {
+  89:control-base/algo/src/swerve_locomotion.c ****             chassis_state->states[i].angle = chassis_state->states[i].last_angle;
+  90:control-base/algo/src/swerve_locomotion.c ****         }
+  91:control-base/algo/src/swerve_locomotion.c ****     }
+  92:control-base/algo/src/swerve_locomotion.c **** }
+ 327              		.loc 1 92 1 view .LVU110
+ 328 0170 08B0     		add	sp, sp, #32
+ 329              	.LCFI3:
+ 330              		.cfi_remember_state
+ 331              		.cfi_def_cfa_offset 24
+ 332              		@ sp needed
+ 333 0172 BDEC028B 		vldm	sp!, {d8}
+ 334              	.LCFI4:
+ 335              		.cfi_restore 80
+ 336              		.cfi_restore 81
+ 337              		.cfi_def_cfa_offset 16
+ 338 0176 70BD     		pop	{r4, r5, r6, pc}
+ 339              	.LVL13:
+ 340              	.L16:
+ 341              	.LCFI5:
+ 342              		.cfi_restore_state
+ 343              	.LBB7:
+  52:control-base/algo/src/swerve_locomotion.c ****         {
+ 344              		.loc 1 52 18 view .LVU111
+ 345 0178 0022     		movs	r2, #0
+ 346 017a F7E7     		b	.L4
+ 347              	.LVL14:
+ 348              	.L17:
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s 			page 9
+
+
+  52:control-base/algo/src/swerve_locomotion.c ****         {
+ 349              		.loc 1 52 18 view .LVU112
+ 350              	.LBE7:
+ 351              	.LBB8:
+ 352              	.LBB3:
+ 353              	.LBB4:
+  83:control-base/algo/src/swerve_locomotion.c ****             chassis_state->states[i].angle = angle;
+ 354              		.loc 1 83 13 is_stmt 1 view .LVU113
+  83:control-base/algo/src/swerve_locomotion.c ****             chassis_state->states[i].angle = angle;
+ 355              		.loc 1 83 27 is_stmt 0 view .LVU114
+ 356 017c F0EE680A 		vmov.f32	s1, s17
+ 357 0180 B0EE480A 		vmov.f32	s0, s16
+ 358              	.LVL15:
+  83:control-base/algo/src/swerve_locomotion.c ****             chassis_state->states[i].angle = angle;
+ 359              		.loc 1 83 27 view .LVU115
+ 360 0184 FFF7FEFF 		bl	atan2f
+ 361              	.LVL16:
+  84:control-base/algo/src/swerve_locomotion.c ****             chassis_state->states[i].last_angle = angle;
+ 362              		.loc 1 84 13 is_stmt 1 view .LVU116
+  84:control-base/algo/src/swerve_locomotion.c ****             chassis_state->states[i].last_angle = angle;
+ 363              		.loc 1 84 44 is_stmt 0 view .LVU117
+ 364 0188 85ED040A 		vstr.32	s0, [r5, #16]
+  85:control-base/algo/src/swerve_locomotion.c ****         }
+ 365              		.loc 1 85 13 is_stmt 1 view .LVU118
+  85:control-base/algo/src/swerve_locomotion.c ****         }
+ 366              		.loc 1 85 49 is_stmt 0 view .LVU119
+ 367 018c 85ED050A 		vstr.32	s0, [r5, #20]
+ 368              	.LVL17:
+ 369              	.L10:
+  85:control-base/algo/src/swerve_locomotion.c ****         }
+ 370              		.loc 1 85 49 view .LVU120
+ 371              	.LBE4:
+ 372              	.LBE3:
+  73:control-base/algo/src/swerve_locomotion.c ****     {
+ 373              		.loc 1 73 45 is_stmt 1 discriminator 2 view .LVU121
+ 374 0190 0134     		adds	r4, r4, #1
+ 375              	.LVL18:
+ 376              	.L7:
+  73:control-base/algo/src/swerve_locomotion.c ****     {
+ 377              		.loc 1 73 23 discriminator 1 view .LVU122
+ 378 0192 032C     		cmp	r4, #3
+ 379 0194 ECDC     		bgt	.L2
+ 380              	.LBB5:
+  75:control-base/algo/src/swerve_locomotion.c ****         float y = module_states_matrix[i * 2];
+ 381              		.loc 1 75 9 view .LVU123
+  75:control-base/algo/src/swerve_locomotion.c ****         float y = module_states_matrix[i * 2];
+ 382              		.loc 1 75 42 is_stmt 0 view .LVU124
+ 383 0196 6500     		lsls	r5, r4, #1
+  75:control-base/algo/src/swerve_locomotion.c ****         float y = module_states_matrix[i * 2];
+ 384              		.loc 1 75 46 view .LVU125
+ 385 0198 6B1C     		adds	r3, r5, #1
+  75:control-base/algo/src/swerve_locomotion.c ****         float y = module_states_matrix[i * 2];
+ 386              		.loc 1 75 15 view .LVU126
+ 387 019a 08AA     		add	r2, sp, #32
+ 388 019c 02EB8303 		add	r3, r2, r3, lsl #2
+ 389 01a0 53ED088A 		vldr.32	s17, [r3, #-32]
+ 390              	.LVL19:
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s 			page 10
+
+
+  76:control-base/algo/src/swerve_locomotion.c ****         float speed = hypotf(x, y);
+ 391              		.loc 1 76 9 is_stmt 1 view .LVU127
+  76:control-base/algo/src/swerve_locomotion.c ****         float speed = hypotf(x, y);
+ 392              		.loc 1 76 15 is_stmt 0 view .LVU128
+ 393 01a4 02EBC403 		add	r3, r2, r4, lsl #3
+ 394 01a8 13ED088A 		vldr.32	s16, [r3, #-32]
+ 395              	.LVL20:
+  77:control-base/algo/src/swerve_locomotion.c **** 
+ 396              		.loc 1 77 9 is_stmt 1 view .LVU129
+  77:control-base/algo/src/swerve_locomotion.c **** 
+ 397              		.loc 1 77 23 is_stmt 0 view .LVU130
+ 398 01ac F0EE480A 		vmov.f32	s1, s16
+ 399 01b0 B0EE680A 		vmov.f32	s0, s17
+ 400 01b4 FFF7FEFF 		bl	hypotf
+ 401              	.LVL21:
+  79:control-base/algo/src/swerve_locomotion.c **** 
+ 402              		.loc 1 79 9 is_stmt 1 view .LVU131
+  79:control-base/algo/src/swerve_locomotion.c **** 
+ 403              		.loc 1 79 40 is_stmt 0 view .LVU132
+ 404 01b8 2544     		add	r5, r5, r4
+ 405 01ba 06EB8505 		add	r5, r6, r5, lsl #2
+ 406 01be 85ED030A 		vstr.32	s0, [r5, #12]
+  81:control-base/algo/src/swerve_locomotion.c ****         {
+ 407              		.loc 1 81 9 is_stmt 1 view .LVU133
+  81:control-base/algo/src/swerve_locomotion.c ****         {
+ 408              		.loc 1 81 12 is_stmt 0 view .LVU134
+ 409 01c2 DFED077A 		vldr.32	s15, .L18
+ 410 01c6 B4EEE70A 		vcmpe.f32	s0, s15
+ 411 01ca F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 412 01ce D5DC     		bgt	.L17
+  89:control-base/algo/src/swerve_locomotion.c ****         }
+ 413              		.loc 1 89 13 is_stmt 1 view .LVU135
+  89:control-base/algo/src/swerve_locomotion.c ****         }
+ 414              		.loc 1 89 70 is_stmt 0 view .LVU136
+ 415 01d0 04EB4403 		add	r3, r4, r4, lsl #1
+ 416 01d4 06EB8303 		add	r3, r6, r3, lsl #2
+ 417 01d8 5A69     		ldr	r2, [r3, #20]	@ float
+  89:control-base/algo/src/swerve_locomotion.c ****         }
+ 418              		.loc 1 89 44 view .LVU137
+ 419 01da 1A61     		str	r2, [r3, #16]	@ float
+ 420 01dc D8E7     		b	.L10
+ 421              	.L19:
+ 422 01de 00BF     		.align	2
+ 423              	.L18:
+ 424 01e0 BD378635 		.word	897988541
+ 425              	.LBE5:
+ 426              	.LBE8:
+ 427              		.cfi_endproc
+ 428              	.LFE1:
+ 430              		.section	.text.swerve_desaturate_wheel_speeds,"ax",%progbits
+ 431              		.align	1
+ 432              		.global	swerve_desaturate_wheel_speeds
+ 433              		.syntax unified
+ 434              		.thumb
+ 435              		.thumb_func
+ 437              	swerve_desaturate_wheel_speeds:
+ 438              	.LVL22:
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s 			page 11
+
+
+ 439              	.LFB2:
+  93:control-base/algo/src/swerve_locomotion.c **** 
+  94:control-base/algo/src/swerve_locomotion.c **** /**
+  95:control-base/algo/src/swerve_locomotion.c ****  * @brief Desaturates wheel speeds to ensure they do not exceed the max speed.
+  96:control-base/algo/src/swerve_locomotion.c ****  *
+  97:control-base/algo/src/swerve_locomotion.c ****  * @param chassis_state Pointer to the chassis state structure.
+  98:control-base/algo/src/swerve_locomotion.c ****  * @param swerve_constants Pointer to the swerve constants structure.
+  99:control-base/algo/src/swerve_locomotion.c ****  */
+ 100:control-base/algo/src/swerve_locomotion.c **** void swerve_desaturate_wheel_speeds(swerve_chassis_state_t *chassis_state, swerve_constants_t *swer
+ 440              		.loc 1 100 114 is_stmt 1 view -0
+ 441              		.cfi_startproc
+ 442              		@ args = 0, pretend = 0, frame = 0
+ 443              		@ frame_needed = 0, uses_anonymous_args = 0
+ 444              		.loc 1 100 114 is_stmt 0 view .LVU139
+ 445 0000 70B5     		push	{r4, r5, r6, lr}
+ 446              	.LCFI6:
+ 447              		.cfi_def_cfa_offset 16
+ 448              		.cfi_offset 4, -16
+ 449              		.cfi_offset 5, -12
+ 450              		.cfi_offset 6, -8
+ 451              		.cfi_offset 14, -4
+ 452 0002 0546     		mov	r5, r0
+ 453 0004 0E46     		mov	r6, r1
+ 101:control-base/algo/src/swerve_locomotion.c ****     float highest_speed = fabsf(chassis_state->states[0].speed);
+ 454              		.loc 1 101 5 is_stmt 1 view .LVU140
+ 455              		.loc 1 101 57 is_stmt 0 view .LVU141
+ 456 0006 D0ED030A 		vldr.32	s1, [r0, #12]
+ 457              		.loc 1 101 11 view .LVU142
+ 458 000a F0EEE00A 		vabs.f32	s1, s1
+ 459              	.LVL23:
+ 102:control-base/algo/src/swerve_locomotion.c ****     for (int i = 1; i < NUMBER_OF_MODULES; i++) // start from 1 to find the highest speed
+ 460              		.loc 1 102 5 is_stmt 1 view .LVU143
+ 461              	.LBB9:
+ 462              		.loc 1 102 10 view .LVU144
+ 463              		.loc 1 102 14 is_stmt 0 view .LVU145
+ 464 000e 0124     		movs	r4, #1
+ 465              		.loc 1 102 5 view .LVU146
+ 466 0010 0CE0     		b	.L21
+ 467              	.LVL24:
+ 468              	.L22:
+ 103:control-base/algo/src/swerve_locomotion.c ****     {
+ 104:control-base/algo/src/swerve_locomotion.c ****         highest_speed = fmaxf(highest_speed, fabsf(chassis_state->states[i].speed));
+ 469              		.loc 1 104 9 is_stmt 1 view .LVU147
+ 470              		.loc 1 104 76 is_stmt 0 view .LVU148
+ 471 0012 04EB4403 		add	r3, r4, r4, lsl #1
+ 472 0016 05EB8303 		add	r3, r5, r3, lsl #2
+ 473 001a 93ED030A 		vldr.32	s0, [r3, #12]
+ 474              		.loc 1 104 25 view .LVU149
+ 475 001e B0EEC00A 		vabs.f32	s0, s0
+ 476 0022 FFF7FEFF 		bl	fmaxf
+ 477              	.LVL25:
+ 478              		.loc 1 104 25 view .LVU150
+ 479 0026 F0EE400A 		vmov.f32	s1, s0
+ 480              	.LVL26:
+ 102:control-base/algo/src/swerve_locomotion.c ****     for (int i = 1; i < NUMBER_OF_MODULES; i++) // start from 1 to find the highest speed
+ 481              		.loc 1 102 45 is_stmt 1 discriminator 3 view .LVU151
+ 482 002a 0134     		adds	r4, r4, #1
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s 			page 12
+
+
+ 483              	.LVL27:
+ 484              	.L21:
+ 102:control-base/algo/src/swerve_locomotion.c ****     for (int i = 1; i < NUMBER_OF_MODULES; i++) // start from 1 to find the highest speed
+ 485              		.loc 1 102 23 discriminator 1 view .LVU152
+ 486 002c 032C     		cmp	r4, #3
+ 487 002e F0DD     		ble	.L22
+ 102:control-base/algo/src/swerve_locomotion.c ****     for (int i = 1; i < NUMBER_OF_MODULES; i++) // start from 1 to find the highest speed
+ 488              		.loc 1 102 23 is_stmt 0 discriminator 1 view .LVU153
+ 489              	.LBE9:
+ 105:control-base/algo/src/swerve_locomotion.c ****     }
+ 106:control-base/algo/src/swerve_locomotion.c **** 
+ 107:control-base/algo/src/swerve_locomotion.c ****     if (highest_speed < 0.01f) // avoid division by zero
+ 490              		.loc 1 107 5 is_stmt 1 view .LVU154
+ 491              		.loc 1 107 8 is_stmt 0 view .LVU155
+ 492 0030 DFED107A 		vldr.32	s15, .L29
+ 493 0034 F4EEE70A 		vcmpe.f32	s1, s15
+ 494 0038 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 495 003c 19D4     		bmi	.L20
+ 108:control-base/algo/src/swerve_locomotion.c ****     {
+ 109:control-base/algo/src/swerve_locomotion.c ****         return;
+ 110:control-base/algo/src/swerve_locomotion.c ****     }
+ 111:control-base/algo/src/swerve_locomotion.c **** 
+ 112:control-base/algo/src/swerve_locomotion.c ****     if (highest_speed > swerve_constants->max_speed) {
+ 496              		.loc 1 112 5 is_stmt 1 view .LVU156
+ 497              		.loc 1 112 41 is_stmt 0 view .LVU157
+ 498 003e D6ED037A 		vldr.32	s15, [r6, #12]
+ 499              		.loc 1 112 8 view .LVU158
+ 500 0042 F4EEE07A 		vcmpe.f32	s15, s1
+ 501 0046 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 502 004a 12D5     		bpl	.L20
+ 503              	.LBB10:
+ 113:control-base/algo/src/swerve_locomotion.c ****         float desaturation_coefficient = fabsf(swerve_constants->max_speed / highest_speed);
+ 504              		.loc 1 113 9 is_stmt 1 view .LVU159
+ 505              		.loc 1 113 76 is_stmt 0 view .LVU160
+ 506 004c 87EEA07A 		vdiv.f32	s14, s15, s1
+ 507              		.loc 1 113 15 view .LVU161
+ 508 0050 B0EEC77A 		vabs.f32	s14, s14
+ 509              	.LVL28:
+ 114:control-base/algo/src/swerve_locomotion.c ****         for (int i = 0; i < NUMBER_OF_MODULES; i++)
+ 510              		.loc 1 114 9 is_stmt 1 view .LVU162
+ 511              	.LBB11:
+ 512              		.loc 1 114 14 view .LVU163
+ 513              		.loc 1 114 18 is_stmt 0 view .LVU164
+ 514 0054 0023     		movs	r3, #0
+ 515              		.loc 1 114 9 view .LVU165
+ 516 0056 0AE0     		b	.L25
+ 517              	.LVL29:
+ 518              	.L26:
+ 115:control-base/algo/src/swerve_locomotion.c ****         {
+ 116:control-base/algo/src/swerve_locomotion.c ****             chassis_state->states[i].speed = chassis_state->states[i].speed * desaturation_coeffici
+ 519              		.loc 1 116 13 is_stmt 1 view .LVU166
+ 520              		.loc 1 116 70 is_stmt 0 view .LVU167
+ 521 0058 03EB4302 		add	r2, r3, r3, lsl #1
+ 522 005c 05EB8202 		add	r2, r5, r2, lsl #2
+ 523 0060 D2ED037A 		vldr.32	s15, [r2, #12]
+ 524              		.loc 1 116 77 view .LVU168
+ 525 0064 67EE877A 		vmul.f32	s15, s15, s14
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s 			page 13
+
+
+ 526              		.loc 1 116 44 view .LVU169
+ 527 0068 C2ED037A 		vstr.32	s15, [r2, #12]
+ 114:control-base/algo/src/swerve_locomotion.c ****         for (int i = 0; i < NUMBER_OF_MODULES; i++)
+ 528              		.loc 1 114 49 is_stmt 1 discriminator 3 view .LVU170
+ 529 006c 0133     		adds	r3, r3, #1
+ 530              	.LVL30:
+ 531              	.L25:
+ 114:control-base/algo/src/swerve_locomotion.c ****         for (int i = 0; i < NUMBER_OF_MODULES; i++)
+ 532              		.loc 1 114 27 discriminator 1 view .LVU171
+ 533 006e 032B     		cmp	r3, #3
+ 534 0070 F2DD     		ble	.L26
+ 535              	.LVL31:
+ 536              	.L20:
+ 114:control-base/algo/src/swerve_locomotion.c ****         for (int i = 0; i < NUMBER_OF_MODULES; i++)
+ 537              		.loc 1 114 27 is_stmt 0 discriminator 1 view .LVU172
+ 538              	.LBE11:
+ 539              	.LBE10:
+ 117:control-base/algo/src/swerve_locomotion.c ****         }
+ 118:control-base/algo/src/swerve_locomotion.c ****     }
+ 119:control-base/algo/src/swerve_locomotion.c **** }
+ 540              		.loc 1 119 1 view .LVU173
+ 541 0072 70BD     		pop	{r4, r5, r6, pc}
+ 542              	.LVL32:
+ 543              	.L30:
+ 544              		.loc 1 119 1 view .LVU174
+ 545              		.align	2
+ 546              	.L29:
+ 547 0074 0AD7233C 		.word	1008981770
+ 548              		.cfi_endproc
+ 549              	.LFE2:
+ 551              		.section	.text.swerve_optimize_module_angles,"ax",%progbits
+ 552              		.align	1
+ 553              		.global	swerve_optimize_module_angles
+ 554              		.syntax unified
+ 555              		.thumb
+ 556              		.thumb_func
+ 558              	swerve_optimize_module_angles:
+ 559              	.LVL33:
+ 560              	.LFB3:
+ 120:control-base/algo/src/swerve_locomotion.c **** 
+ 121:control-base/algo/src/swerve_locomotion.c **** 
+ 122:control-base/algo/src/swerve_locomotion.c **** /**
+ 123:control-base/algo/src/swerve_locomotion.c ****  * @brief Optimizes the angles of the swerve modules to minimize rotation.
+ 124:control-base/algo/src/swerve_locomotion.c ****  *
+ 125:control-base/algo/src/swerve_locomotion.c ****  * @param chassis_state Pointer to the swerve chassis state structure.
+ 126:control-base/algo/src/swerve_locomotion.c ****  * @param measured_angles Array of measured angles for each module.
+ 127:control-base/algo/src/swerve_locomotion.c ****  */
+ 128:control-base/algo/src/swerve_locomotion.c **** void swerve_optimize_module_angles(swerve_chassis_state_t *chassis_state, float measured_angles[NUM
+ 561              		.loc 1 128 117 is_stmt 1 view -0
+ 562              		.cfi_startproc
+ 563              		@ args = 0, pretend = 0, frame = 0
+ 564              		@ frame_needed = 0, uses_anonymous_args = 0
+ 565              		@ link register save eliminated.
+ 129:control-base/algo/src/swerve_locomotion.c ****     for (int i = 0; i < NUMBER_OF_MODULES; i++)
+ 566              		.loc 1 129 5 view .LVU176
+ 567              	.LBB12:
+ 568              		.loc 1 129 10 view .LVU177
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s 			page 14
+
+
+ 569              		.loc 1 129 14 is_stmt 0 view .LVU178
+ 570 0000 0023     		movs	r3, #0
+ 571              		.loc 1 129 5 view .LVU179
+ 572 0002 29E0     		b	.L32
+ 573              	.LVL34:
+ 574              	.L50:
+ 575              	.LBB13:
+ 130:control-base/algo/src/swerve_locomotion.c ****     {
+ 131:control-base/algo/src/swerve_locomotion.c ****         if (measured_angles[i] > PI) {
+ 132:control-base/algo/src/swerve_locomotion.c ****             measured_angles[i] -= 2 * PI;
+ 133:control-base/algo/src/swerve_locomotion.c ****         }
+ 134:control-base/algo/src/swerve_locomotion.c **** 
+ 135:control-base/algo/src/swerve_locomotion.c ****         float angle_diff = chassis_state->states[i].angle - measured_angles[i];
+ 136:control-base/algo/src/swerve_locomotion.c **** 
+ 137:control-base/algo/src/swerve_locomotion.c ****         if (angle_diff >= PI_OVER_2 && angle_diff <= 3 * PI_OVER_2) {
+ 138:control-base/algo/src/swerve_locomotion.c ****             chassis_state->states[i].angle -= PI;
+ 139:control-base/algo/src/swerve_locomotion.c ****             chassis_state->states[i].speed *= -1.0f;
+ 140:control-base/algo/src/swerve_locomotion.c ****         }
+ 141:control-base/algo/src/swerve_locomotion.c ****         else if (angle_diff <= -PI_OVER_2 && angle_diff >= -3 * PI_OVER_2) {
+ 576              		.loc 1 141 14 is_stmt 1 view .LVU180
+ 577              		.loc 1 141 17 is_stmt 0 view .LVU181
+ 578 0004 DFED386A 		vldr.32	s13, .L53
+ 579 0008 F4EEE67A 		vcmpe.f32	s15, s13
+ 580 000c F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 581 0010 16D8     		bhi	.L37
+ 582              		.loc 1 141 43 discriminator 1 view .LVU182
+ 583 0012 DFED366A 		vldr.32	s13, .L53+4
+ 584 0016 F4EEE67A 		vcmpe.f32	s15, s13
+ 585 001a F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 586 001e 0FDB     		blt	.L37
+ 142:control-base/algo/src/swerve_locomotion.c ****             chassis_state->states[i].angle += PI;
+ 587              		.loc 1 142 13 is_stmt 1 view .LVU183
+ 588              		.loc 1 142 44 is_stmt 0 view .LVU184
+ 589 0020 03EB4302 		add	r2, r3, r3, lsl #1
+ 590 0024 00EB8202 		add	r2, r0, r2, lsl #2
+ 591 0028 DFED317A 		vldr.32	s15, .L53+8
+ 592              	.LVL35:
+ 593              		.loc 1 142 44 view .LVU185
+ 594 002c 37EE277A 		vadd.f32	s14, s14, s15
+ 595              	.LVL36:
+ 596              		.loc 1 142 44 view .LVU186
+ 597 0030 82ED047A 		vstr.32	s14, [r2, #16]
+ 598              	.LVL37:
+ 143:control-base/algo/src/swerve_locomotion.c ****             chassis_state->states[i].speed *= -1.0f;
+ 599              		.loc 1 143 13 is_stmt 1 view .LVU187
+ 600              		.loc 1 143 37 is_stmt 0 view .LVU188
+ 601 0034 D2ED037A 		vldr.32	s15, [r2, #12]
+ 602              		.loc 1 143 44 view .LVU189
+ 603 0038 F1EE677A 		vneg.f32	s15, s15
+ 604 003c C2ED037A 		vstr.32	s15, [r2, #12]
+ 605              	.L37:
+ 144:control-base/algo/src/swerve_locomotion.c ****         }
+ 145:control-base/algo/src/swerve_locomotion.c **** 
+ 146:control-base/algo/src/swerve_locomotion.c ****         if (chassis_state->states[i].angle < 0) {
+ 606              		.loc 1 146 9 is_stmt 1 view .LVU190
+ 607              		.loc 1 146 37 is_stmt 0 view .LVU191
+ 608 0040 03EB4302 		add	r2, r3, r3, lsl #1
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s 			page 15
+
+
+ 609 0044 00EB8202 		add	r2, r0, r2, lsl #2
+ 610 0048 D2ED047A 		vldr.32	s15, [r2, #16]
+ 611              		.loc 1 146 12 view .LVU192
+ 612 004c F5EEC07A 		vcmpe.f32	s15, #0
+ 613 0050 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 614 0054 3CD4     		bmi	.L51
+ 615              	.L41:
+ 616              		.loc 1 146 12 view .LVU193
+ 617              	.LBE13:
+ 129:control-base/algo/src/swerve_locomotion.c ****     {
+ 618              		.loc 1 129 45 is_stmt 1 discriminator 2 view .LVU194
+ 619 0056 0133     		adds	r3, r3, #1
+ 620              	.LVL38:
+ 621              	.L32:
+ 129:control-base/algo/src/swerve_locomotion.c ****     {
+ 622              		.loc 1 129 23 discriminator 1 view .LVU195
+ 623 0058 032B     		cmp	r3, #3
+ 624 005a 44DC     		bgt	.L52
+ 625              	.LBB14:
+ 131:control-base/algo/src/swerve_locomotion.c ****             measured_angles[i] -= 2 * PI;
+ 626              		.loc 1 131 9 view .LVU196
+ 131:control-base/algo/src/swerve_locomotion.c ****             measured_angles[i] -= 2 * PI;
+ 627              		.loc 1 131 28 is_stmt 0 view .LVU197
+ 628 005c 01EB830C 		add	ip, r1, r3, lsl #2
+ 629 0060 DCED007A 		vldr.32	s15, [ip]
+ 131:control-base/algo/src/swerve_locomotion.c ****             measured_angles[i] -= 2 * PI;
+ 630              		.loc 1 131 12 view .LVU198
+ 631 0064 9FED227A 		vldr.32	s14, .L53+8
+ 632 0068 F4EEC77A 		vcmpe.f32	s15, s14
+ 633 006c F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 634 0070 05DD     		ble	.L33
+ 132:control-base/algo/src/swerve_locomotion.c ****         }
+ 635              		.loc 1 132 13 is_stmt 1 view .LVU199
+ 132:control-base/algo/src/swerve_locomotion.c ****         }
+ 636              		.loc 1 132 32 is_stmt 0 view .LVU200
+ 637 0072 9FED207A 		vldr.32	s14, .L53+12
+ 638 0076 77EEC77A 		vsub.f32	s15, s15, s14
+ 639 007a CCED007A 		vstr.32	s15, [ip]
+ 640              	.L33:
+ 135:control-base/algo/src/swerve_locomotion.c **** 
+ 641              		.loc 1 135 9 is_stmt 1 view .LVU201
+ 135:control-base/algo/src/swerve_locomotion.c **** 
+ 642              		.loc 1 135 52 is_stmt 0 view .LVU202
+ 643 007e 03EB4302 		add	r2, r3, r3, lsl #1
+ 644 0082 00EB8202 		add	r2, r0, r2, lsl #2
+ 645 0086 92ED047A 		vldr.32	s14, [r2, #16]
+ 135:control-base/algo/src/swerve_locomotion.c **** 
+ 646              		.loc 1 135 76 view .LVU203
+ 647 008a DCED007A 		vldr.32	s15, [ip]
+ 135:control-base/algo/src/swerve_locomotion.c **** 
+ 648              		.loc 1 135 15 view .LVU204
+ 649 008e 77EE677A 		vsub.f32	s15, s14, s15
+ 650              	.LVL39:
+ 137:control-base/algo/src/swerve_locomotion.c ****             chassis_state->states[i].angle -= PI;
+ 651              		.loc 1 137 9 is_stmt 1 view .LVU205
+ 137:control-base/algo/src/swerve_locomotion.c ****             chassis_state->states[i].angle -= PI;
+ 652              		.loc 1 137 12 is_stmt 0 view .LVU206
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s 			page 16
+
+
+ 653 0092 DFED196A 		vldr.32	s13, .L53+16
+ 654 0096 F4EEE67A 		vcmpe.f32	s15, s13
+ 655 009a F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 656 009e B1DB     		blt	.L50
+ 137:control-base/algo/src/swerve_locomotion.c ****             chassis_state->states[i].angle -= PI;
+ 657              		.loc 1 137 37 discriminator 1 view .LVU207
+ 658 00a0 DFED166A 		vldr.32	s13, .L53+20
+ 659 00a4 F4EEE67A 		vcmpe.f32	s15, s13
+ 660 00a8 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 661 00ac C8D8     		bhi	.L37
+ 138:control-base/algo/src/swerve_locomotion.c ****             chassis_state->states[i].speed *= -1.0f;
+ 662              		.loc 1 138 13 is_stmt 1 view .LVU208
+ 138:control-base/algo/src/swerve_locomotion.c ****             chassis_state->states[i].speed *= -1.0f;
+ 663              		.loc 1 138 44 is_stmt 0 view .LVU209
+ 664 00ae 03EB4302 		add	r2, r3, r3, lsl #1
+ 665 00b2 00EB8202 		add	r2, r0, r2, lsl #2
+ 666 00b6 DFED0E7A 		vldr.32	s15, .L53+8
+ 667              	.LVL40:
+ 138:control-base/algo/src/swerve_locomotion.c ****             chassis_state->states[i].speed *= -1.0f;
+ 668              		.loc 1 138 44 view .LVU210
+ 669 00ba 37EE677A 		vsub.f32	s14, s14, s15
+ 670              	.LVL41:
+ 138:control-base/algo/src/swerve_locomotion.c ****             chassis_state->states[i].speed *= -1.0f;
+ 671              		.loc 1 138 44 view .LVU211
+ 672 00be 82ED047A 		vstr.32	s14, [r2, #16]
+ 673              	.LVL42:
+ 139:control-base/algo/src/swerve_locomotion.c ****         }
+ 674              		.loc 1 139 13 is_stmt 1 view .LVU212
+ 139:control-base/algo/src/swerve_locomotion.c ****         }
+ 675              		.loc 1 139 37 is_stmt 0 view .LVU213
+ 676 00c2 D2ED037A 		vldr.32	s15, [r2, #12]
+ 139:control-base/algo/src/swerve_locomotion.c ****         }
+ 677              		.loc 1 139 44 view .LVU214
+ 678 00c6 F1EE677A 		vneg.f32	s15, s15
+ 679 00ca C2ED037A 		vstr.32	s15, [r2, #12]
+ 680 00ce B7E7     		b	.L37
+ 681              	.L51:
+ 147:control-base/algo/src/swerve_locomotion.c ****             chassis_state->states[i].angle += 2 * PI;
+ 682              		.loc 1 147 13 is_stmt 1 view .LVU215
+ 683              		.loc 1 147 44 is_stmt 0 view .LVU216
+ 684 00d0 03EB4302 		add	r2, r3, r3, lsl #1
+ 685 00d4 00EB8202 		add	r2, r0, r2, lsl #2
+ 686 00d8 9FED067A 		vldr.32	s14, .L53+12
+ 687 00dc 77EE877A 		vadd.f32	s15, s15, s14
+ 688 00e0 C2ED047A 		vstr.32	s15, [r2, #16]
+ 689 00e4 B7E7     		b	.L41
+ 690              	.LVL43:
+ 691              	.L52:
+ 692              		.loc 1 147 44 view .LVU217
+ 693              	.LBE14:
+ 694              	.LBE12:
+ 148:control-base/algo/src/swerve_locomotion.c ****         }
+ 149:control-base/algo/src/swerve_locomotion.c ****     }
+ 150:control-base/algo/src/swerve_locomotion.c **** }
+ 695              		.loc 1 150 1 view .LVU218
+ 696 00e6 7047     		bx	lr
+ 697              	.L54:
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s 			page 17
+
+
+ 698              		.align	2
+ 699              	.L53:
+ 700 00e8 DA0FC9BF 		.word	-1077342246
+ 701 00ec E4CB96C0 		.word	-1063859228
+ 702 00f0 DA0F4940 		.word	1078530010
+ 703 00f4 DA0FC940 		.word	1086918618
+ 704 00f8 DA0FC93F 		.word	1070141402
+ 705 00fc E4CB9640 		.word	1083624420
+ 706              		.cfi_endproc
+ 707              	.LFE3:
+ 709              		.section	.text.swerve_convert_to_rpm,"ax",%progbits
+ 710              		.align	1
+ 711              		.global	swerve_convert_to_rpm
+ 712              		.syntax unified
+ 713              		.thumb
+ 714              		.thumb_func
+ 716              	swerve_convert_to_rpm:
+ 717              	.LVL44:
+ 718              	.LFB4:
+ 151:control-base/algo/src/swerve_locomotion.c **** 
+ 152:control-base/algo/src/swerve_locomotion.c **** /**
+ 153:control-base/algo/src/swerve_locomotion.c ****  * Convert the chassis state from m/s to rotations per minute
+ 154:control-base/algo/src/swerve_locomotion.c ****  * @param chassis_state: the chassis state to convert
+ 155:control-base/algo/src/swerve_locomotion.c ****  * @param wheel_diameter: the diameter of the wheel
+ 156:control-base/algo/src/swerve_locomotion.c ****  */
+ 157:control-base/algo/src/swerve_locomotion.c ****  void swerve_convert_to_rpm(swerve_chassis_state_t *chassis_state, swerve_constants_t *swerve_const
+ 719              		.loc 1 157 106 is_stmt 1 view -0
+ 720              		.cfi_startproc
+ 721              		@ args = 0, pretend = 0, frame = 0
+ 722              		@ frame_needed = 0, uses_anonymous_args = 0
+ 723              		@ link register save eliminated.
+ 158:control-base/algo/src/swerve_locomotion.c ****     for (int i = 0; i < NUMBER_OF_MODULES; i++) {
+ 724              		.loc 1 158 5 view .LVU220
+ 725              	.LBB15:
+ 726              		.loc 1 158 10 view .LVU221
+ 727              		.loc 1 158 14 is_stmt 0 view .LVU222
+ 728 0000 0023     		movs	r3, #0
+ 729              		.loc 1 158 5 view .LVU223
+ 730 0002 14E0     		b	.L56
+ 731              	.LVL45:
+ 732              	.L57:
+ 159:control-base/algo/src/swerve_locomotion.c ****         chassis_state->states[i].speed *= 60 / (PI * swerve_constants->wheel_diameter);
+ 733              		.loc 1 159 9 is_stmt 1 view .LVU224
+ 734              		.loc 1 159 33 is_stmt 0 view .LVU225
+ 735 0004 03EB4302 		add	r2, r3, r3, lsl #1
+ 736 0008 00EB8202 		add	r2, r0, r2, lsl #2
+ 737 000c D2ED037A 		vldr.32	s15, [r2, #12]
+ 738              		.loc 1 159 70 view .LVU226
+ 739 0010 91ED027A 		vldr.32	s14, [r1, #8]
+ 740              		.loc 1 159 52 view .LVU227
+ 741 0014 DFED076A 		vldr.32	s13, .L58
+ 742 0018 27EE267A 		vmul.f32	s14, s14, s13
+ 743              		.loc 1 159 46 view .LVU228
+ 744 001c 9FED066A 		vldr.32	s12, .L58+4
+ 745 0020 C6EE076A 		vdiv.f32	s13, s12, s14
+ 746              		.loc 1 159 40 view .LVU229
+ 747 0024 67EEA67A 		vmul.f32	s15, s15, s13
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s 			page 18
+
+
+ 748 0028 C2ED037A 		vstr.32	s15, [r2, #12]
+ 158:control-base/algo/src/swerve_locomotion.c ****     for (int i = 0; i < NUMBER_OF_MODULES; i++) {
+ 749              		.loc 1 158 45 is_stmt 1 discriminator 3 view .LVU230
+ 750 002c 0133     		adds	r3, r3, #1
+ 751              	.LVL46:
+ 752              	.L56:
+ 158:control-base/algo/src/swerve_locomotion.c ****     for (int i = 0; i < NUMBER_OF_MODULES; i++) {
+ 753              		.loc 1 158 23 discriminator 1 view .LVU231
+ 754 002e 032B     		cmp	r3, #3
+ 755 0030 E8DD     		ble	.L57
+ 756              	.LBE15:
+ 160:control-base/algo/src/swerve_locomotion.c ****     }
+ 161:control-base/algo/src/swerve_locomotion.c **** }
+ 757              		.loc 1 161 1 is_stmt 0 view .LVU232
+ 758 0032 7047     		bx	lr
+ 759              	.L59:
+ 760              		.align	2
+ 761              	.L58:
+ 762 0034 DA0F4940 		.word	1078530010
+ 763 0038 00007042 		.word	1114636288
+ 764              		.cfi_endproc
+ 765              	.LFE4:
+ 767              		.text
+ 768              	.Letext0:
+ 769              		.file 2 "control-base/algo/inc/swerve_locomotion.h"
+ 770              		.file 3 "/Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/arm-none-eabi/include/math.h"
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s 			page 19
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 swerve_locomotion.c
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s:21     .text.swerve_init:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s:27     .text.swerve_init:00000000 swerve_init
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s:88     .text.swerve_calculate_kinematics:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s:94     .text.swerve_calculate_kinematics:00000000 swerve_calculate_kinematics
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s:424    .text.swerve_calculate_kinematics:000001e0 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s:431    .text.swerve_desaturate_wheel_speeds:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s:437    .text.swerve_desaturate_wheel_speeds:00000000 swerve_desaturate_wheel_speeds
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s:547    .text.swerve_desaturate_wheel_speeds:00000074 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s:552    .text.swerve_optimize_module_angles:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s:558    .text.swerve_optimize_module_angles:00000000 swerve_optimize_module_angles
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s:700    .text.swerve_optimize_module_angles:000000e8 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s:710    .text.swerve_convert_to_rpm:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s:716    .text.swerve_convert_to_rpm:00000000 swerve_convert_to_rpm
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s:762    .text.swerve_convert_to_rpm:00000034 $d
+
+UNDEFINED SYMBOLS
+atan2f
+hypotf
+fmaxf

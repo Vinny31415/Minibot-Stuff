@@ -1,0 +1,871 @@
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccUQZTAV.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"jetson_orin.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "control-base/devices/src/jetson_orin.c"
+  20              		.section	.text.Jetson_Orin_Nav_Timeout_Callback,"ax",%progbits
+  21              		.align	1
+  22              		.global	Jetson_Orin_Nav_Timeout_Callback
+  23              		.syntax unified
+  24              		.thumb
+  25              		.thumb_func
+  27              	Jetson_Orin_Nav_Timeout_Callback:
+  28              	.LFB144:
+   1:control-base/devices/src/jetson_orin.c **** #include "jetson_orin.h"
+   2:control-base/devices/src/jetson_orin.c **** 
+   3:control-base/devices/src/jetson_orin.c **** #include <string.h>
+   4:control-base/devices/src/jetson_orin.c **** #include <math.h>
+   5:control-base/devices/src/jetson_orin.c **** #include "imu_task.h"
+   6:control-base/devices/src/jetson_orin.c **** #include "bsp_daemon.h"
+   7:control-base/devices/src/jetson_orin.c **** #include  "omni_locomotion.h"
+   8:control-base/devices/src/jetson_orin.c **** 
+   9:control-base/devices/src/jetson_orin.c **** extern pose_2d_t sentry_pose;
+  10:control-base/devices/src/jetson_orin.c **** Jetson_Orin_Data_t g_orin_data;
+  11:control-base/devices/src/jetson_orin.c **** 
+  12:control-base/devices/src/jetson_orin.c **** UART_Instance_t *g_orin_uart_instance_ptr;
+  13:control-base/devices/src/jetson_orin.c **** Daemon_Instance_t *g_orin_daemon_instance_ptr, *g_orin_daemon_nav_instance_ptr;
+  14:control-base/devices/src/jetson_orin.c **** uint8_t g_jetson_orin_initialized;
+  15:control-base/devices/src/jetson_orin.c **** 
+  16:control-base/devices/src/jetson_orin.c **** void Jetson_Orin_Rx_Callback(UART_Instance_t *uart_instance)
+  17:control-base/devices/src/jetson_orin.c **** {
+  18:control-base/devices/src/jetson_orin.c **** 	UNUSED(uart_instance);
+  19:control-base/devices/src/jetson_orin.c **** 	g_orin_data.online_flag = 1;
+  20:control-base/devices/src/jetson_orin.c **** 	// TODO: update buffer reference from uart_instance
+  21:control-base/devices/src/jetson_orin.c **** 	if (g_orin_data.rx_buffer[0] == 0xAA)
+  22:control-base/devices/src/jetson_orin.c **** 	{
+  23:control-base/devices/src/jetson_orin.c **** 		// If matching frame header, reload Daemon
+  24:control-base/devices/src/jetson_orin.c **** 		Daemon_Reload(g_orin_daemon_instance_ptr);
+  25:control-base/devices/src/jetson_orin.c **** 
+  26:control-base/devices/src/jetson_orin.c **** 		// Decode data
+  27:control-base/devices/src/jetson_orin.c **** 		g_orin_data.receiving.frame_id = g_orin_data.rx_buffer[0];
+  28:control-base/devices/src/jetson_orin.c **** 		g_orin_data.receiving.frame_type = g_orin_data.rx_buffer[1];
+  29:control-base/devices/src/jetson_orin.c **** 		// ! TODO make an ENUM!!!!!
+  30:control-base/devices/src/jetson_orin.c **** 		switch (g_orin_data.receiving.frame_type)
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccUQZTAV.s 			page 2
+
+
+  31:control-base/devices/src/jetson_orin.c **** 		{
+  32:control-base/devices/src/jetson_orin.c **** 		case 0:
+  33:control-base/devices/src/jetson_orin.c **** 			memcpy(&g_orin_data.receiving.float_byte.data[0], &g_orin_data.rx_buffer[4], 12 * sizeof(uint8_t
+  34:control-base/devices/src/jetson_orin.c **** 			g_orin_data.receiving.auto_aiming.yaw = g_orin_data.receiving.float_byte.data[0];
+  35:control-base/devices/src/jetson_orin.c **** 			g_orin_data.receiving.auto_aiming.pitch = g_orin_data.receiving.float_byte.data[1];
+  36:control-base/devices/src/jetson_orin.c **** 			if (isnan(g_orin_data.receiving.auto_aiming.yaw) || isnan(g_orin_data.receiving.auto_aiming.pitc
+  37:control-base/devices/src/jetson_orin.c **** 			{
+  38:control-base/devices/src/jetson_orin.c **** 				g_orin_data.receiving.auto_aiming.yaw = 0;
+  39:control-base/devices/src/jetson_orin.c **** 				g_orin_data.receiving.auto_aiming.pitch = 0;
+  40:control-base/devices/src/jetson_orin.c **** 			}
+  41:control-base/devices/src/jetson_orin.c **** 			g_orin_data.receiving.auto_aiming.fire = g_orin_data.receiving.float_byte.data_bytes[8];
+  42:control-base/devices/src/jetson_orin.c **** 			g_orin_data.new_data_flag = 1;
+  43:control-base/devices/src/jetson_orin.c **** 			break;
+  44:control-base/devices/src/jetson_orin.c **** 
+  45:control-base/devices/src/jetson_orin.c **** 		case 1:
+  46:control-base/devices/src/jetson_orin.c **** 			Daemon_Reload(g_orin_daemon_nav_instance_ptr);
+  47:control-base/devices/src/jetson_orin.c **** 			g_orin_data.nav_online_flag = 1;
+  48:control-base/devices/src/jetson_orin.c **** 			memcpy(&g_orin_data.receiving.float_byte.data[0], &g_orin_data.rx_buffer[4], 12 * sizeof(uint8_t
+  49:control-base/devices/src/jetson_orin.c **** 			g_orin_data.receiving.navigation.x_vel = g_orin_data.receiving.float_byte.data[0];
+  50:control-base/devices/src/jetson_orin.c **** 			g_orin_data.receiving.navigation.y_vel = g_orin_data.receiving.float_byte.data[1];
+  51:control-base/devices/src/jetson_orin.c **** 			g_orin_data.receiving.navigation.yaw_angular_rate = g_orin_data.receiving.float_byte.data[2];
+  52:control-base/devices/src/jetson_orin.c **** 			g_orin_data.receiving.navigation.state = g_orin_data.rx_buffer[16];
+  53:control-base/devices/src/jetson_orin.c **** 			break;
+  54:control-base/devices/src/jetson_orin.c **** 		case 2:
+  55:control-base/devices/src/jetson_orin.c **** 			g_orin_data.receiving.heart_beat.a = g_orin_data.rx_buffer[2];
+  56:control-base/devices/src/jetson_orin.c **** 			g_orin_data.receiving.heart_beat.b = g_orin_data.rx_buffer[3];
+  57:control-base/devices/src/jetson_orin.c **** 			g_orin_data.receiving.heart_beat.c = g_orin_data.rx_buffer[4];
+  58:control-base/devices/src/jetson_orin.c **** 			g_orin_data.receiving.heart_beat.d = g_orin_data.rx_buffer[5];
+  59:control-base/devices/src/jetson_orin.c **** 			break;
+  60:control-base/devices/src/jetson_orin.c **** 
+  61:control-base/devices/src/jetson_orin.c **** 		default:
+  62:control-base/devices/src/jetson_orin.c **** 			break;
+  63:control-base/devices/src/jetson_orin.c **** 		}
+  64:control-base/devices/src/jetson_orin.c **** 	}
+  65:control-base/devices/src/jetson_orin.c **** }
+  66:control-base/devices/src/jetson_orin.c **** 
+  67:control-base/devices/src/jetson_orin.c **** /**
+  68:control-base/devices/src/jetson_orin.c ****  * @brief Callback function for timeout of Jetson Orin used by Daemon
+  69:control-base/devices/src/jetson_orin.c ****  * @details When not receiving data from Orin for a certain time, will try
+  70:control-base/devices/src/jetson_orin.c ****  * 			to reinitialize the UART service. Daemon is reloaded to prevent
+  71:control-base/devices/src/jetson_orin.c ****  * 			continuous reinitialization at high frequency.
+  72:control-base/devices/src/jetson_orin.c ****  * @param void
+  73:control-base/devices/src/jetson_orin.c ****  */
+  74:control-base/devices/src/jetson_orin.c **** void Jetson_Orin_Timeout_Callback()
+  75:control-base/devices/src/jetson_orin.c **** {
+  76:control-base/devices/src/jetson_orin.c **** 	g_orin_data.online_flag = 0;
+  77:control-base/devices/src/jetson_orin.c **** 	// Attemp to reinitialize UART service
+  78:control-base/devices/src/jetson_orin.c **** 	UART_Service_Init(g_orin_uart_instance_ptr);
+  79:control-base/devices/src/jetson_orin.c **** }
+  80:control-base/devices/src/jetson_orin.c **** 
+  81:control-base/devices/src/jetson_orin.c **** void Jetson_Orin_Nav_Timeout_Callback()
+  82:control-base/devices/src/jetson_orin.c **** {
+  29              		.loc 1 82 1 view -0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33              		@ link register save eliminated.
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccUQZTAV.s 			page 3
+
+
+  83:control-base/devices/src/jetson_orin.c **** 	g_orin_data.receiving.navigation.x_vel = 0.0f;
+  34              		.loc 1 83 2 view .LVU1
+  35              		.loc 1 83 41 is_stmt 0 view .LVU2
+  36 0000 044B     		ldr	r3, .L2
+  37 0002 0022     		movs	r2, #0
+  38 0004 5A67     		str	r2, [r3, #116]	@ float
+  84:control-base/devices/src/jetson_orin.c **** 	g_orin_data.receiving.navigation.y_vel = 0.0f;
+  39              		.loc 1 84 2 is_stmt 1 view .LVU3
+  40              		.loc 1 84 41 is_stmt 0 view .LVU4
+  41 0006 9A67     		str	r2, [r3, #120]	@ float
+  85:control-base/devices/src/jetson_orin.c **** 	g_orin_data.receiving.navigation.yaw_angular_rate = 0.0f;
+  42              		.loc 1 85 2 is_stmt 1 view .LVU5
+  43              		.loc 1 85 52 is_stmt 0 view .LVU6
+  44 0008 DA67     		str	r2, [r3, #124]	@ float
+  86:control-base/devices/src/jetson_orin.c **** 	g_orin_data.nav_online_flag = 0;
+  45              		.loc 1 86 2 is_stmt 1 view .LVU7
+  46              		.loc 1 86 30 is_stmt 0 view .LVU8
+  47 000a 0022     		movs	r2, #0
+  48 000c 83F89620 		strb	r2, [r3, #150]
+  87:control-base/devices/src/jetson_orin.c **** }
+  49              		.loc 1 87 1 view .LVU9
+  50 0010 7047     		bx	lr
+  51              	.L3:
+  52 0012 00BF     		.align	2
+  53              	.L2:
+  54 0014 00000000 		.word	g_orin_data
+  55              		.cfi_endproc
+  56              	.LFE144:
+  58              		.section	.text.Jetson_Orin_Rx_Callback,"ax",%progbits
+  59              		.align	1
+  60              		.global	Jetson_Orin_Rx_Callback
+  61              		.syntax unified
+  62              		.thumb
+  63              		.thumb_func
+  65              	Jetson_Orin_Rx_Callback:
+  66              	.LVL0:
+  67              	.LFB142:
+  17:control-base/devices/src/jetson_orin.c **** 	UNUSED(uart_instance);
+  68              		.loc 1 17 1 is_stmt 1 view -0
+  69              		.cfi_startproc
+  70              		@ args = 0, pretend = 0, frame = 0
+  71              		@ frame_needed = 0, uses_anonymous_args = 0
+  17:control-base/devices/src/jetson_orin.c **** 	UNUSED(uart_instance);
+  72              		.loc 1 17 1 is_stmt 0 view .LVU11
+  73 0000 08B5     		push	{r3, lr}
+  74              	.LCFI0:
+  75              		.cfi_def_cfa_offset 8
+  76              		.cfi_offset 3, -8
+  77              		.cfi_offset 14, -4
+  18:control-base/devices/src/jetson_orin.c **** 	g_orin_data.online_flag = 1;
+  78              		.loc 1 18 2 is_stmt 1 view .LVU12
+  19:control-base/devices/src/jetson_orin.c **** 	// TODO: update buffer reference from uart_instance
+  79              		.loc 1 19 2 view .LVU13
+  19:control-base/devices/src/jetson_orin.c **** 	// TODO: update buffer reference from uart_instance
+  80              		.loc 1 19 26 is_stmt 0 view .LVU14
+  81 0002 344B     		ldr	r3, .L12
+  82 0004 0122     		movs	r2, #1
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccUQZTAV.s 			page 4
+
+
+  83 0006 83F89520 		strb	r2, [r3, #149]
+  21:control-base/devices/src/jetson_orin.c **** 	{
+  84              		.loc 1 21 2 is_stmt 1 view .LVU15
+  21:control-base/devices/src/jetson_orin.c **** 	{
+  85              		.loc 1 21 27 is_stmt 0 view .LVU16
+  86 000a 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+  21:control-base/devices/src/jetson_orin.c **** 	{
+  87              		.loc 1 21 5 view .LVU17
+  88 000c AA2B     		cmp	r3, #170
+  89 000e 00D0     		beq	.L11
+  90              	.LVL1:
+  91              	.L4:
+  65:control-base/devices/src/jetson_orin.c **** 
+  92              		.loc 1 65 1 view .LVU18
+  93 0010 08BD     		pop	{r3, pc}
+  94              	.LVL2:
+  95              	.L11:
+  24:control-base/devices/src/jetson_orin.c **** 
+  96              		.loc 1 24 3 is_stmt 1 view .LVU19
+  97 0012 314B     		ldr	r3, .L12+4
+  98 0014 1868     		ldr	r0, [r3]
+  99              	.LVL3:
+  24:control-base/devices/src/jetson_orin.c **** 
+ 100              		.loc 1 24 3 is_stmt 0 view .LVU20
+ 101 0016 FFF7FEFF 		bl	Daemon_Reload
+ 102              	.LVL4:
+  27:control-base/devices/src/jetson_orin.c **** 		g_orin_data.receiving.frame_type = g_orin_data.rx_buffer[1];
+ 103              		.loc 1 27 3 is_stmt 1 view .LVU21
+  27:control-base/devices/src/jetson_orin.c **** 		g_orin_data.receiving.frame_type = g_orin_data.rx_buffer[1];
+ 104              		.loc 1 27 57 is_stmt 0 view .LVU22
+ 105 001a 2E4B     		ldr	r3, .L12
+ 106 001c 1A78     		ldrb	r2, [r3]	@ zero_extendqisi2
+  27:control-base/devices/src/jetson_orin.c **** 		g_orin_data.receiving.frame_type = g_orin_data.rx_buffer[1];
+ 107              		.loc 1 27 34 view .LVU23
+ 108 001e 83F86420 		strb	r2, [r3, #100]
+  28:control-base/devices/src/jetson_orin.c **** 		// ! TODO make an ENUM!!!!!
+ 109              		.loc 1 28 3 is_stmt 1 view .LVU24
+  28:control-base/devices/src/jetson_orin.c **** 		// ! TODO make an ENUM!!!!!
+ 110              		.loc 1 28 59 is_stmt 0 view .LVU25
+ 111 0022 5A78     		ldrb	r2, [r3, #1]	@ zero_extendqisi2
+  28:control-base/devices/src/jetson_orin.c **** 		// ! TODO make an ENUM!!!!!
+ 112              		.loc 1 28 36 view .LVU26
+ 113 0024 83F86520 		strb	r2, [r3, #101]
+  30:control-base/devices/src/jetson_orin.c **** 		{
+ 114              		.loc 1 30 3 is_stmt 1 view .LVU27
+ 115 0028 012A     		cmp	r2, #1
+ 116 002a 29D0     		beq	.L6
+ 117 002c 022A     		cmp	r2, #2
+ 118 002e 42D0     		beq	.L7
+ 119 0030 002A     		cmp	r2, #0
+ 120 0032 EDD1     		bne	.L4
+  33:control-base/devices/src/jetson_orin.c **** 			g_orin_data.receiving.auto_aiming.yaw = g_orin_data.receiving.float_byte.data[0];
+ 121              		.loc 1 33 4 view .LVU28
+ 122 0034 8833     		adds	r3, r3, #136
+ 123 0036 A3F18402 		sub	r2, r3, #132
+ 124 003a 07CA     		ldm	r2, {r0, r1, r2}
+ 125 003c 83E80700 		stm	r3, {r0, r1, r2}
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccUQZTAV.s 			page 5
+
+
+  34:control-base/devices/src/jetson_orin.c **** 			g_orin_data.receiving.auto_aiming.pitch = g_orin_data.receiving.float_byte.data[1];
+ 126              		.loc 1 34 4 view .LVU29
+  34:control-base/devices/src/jetson_orin.c **** 			g_orin_data.receiving.auto_aiming.pitch = g_orin_data.receiving.float_byte.data[1];
+ 127              		.loc 1 34 81 is_stmt 0 view .LVU30
+ 128 0040 D3ED007A 		vldr.32	s15, [r3]
+  34:control-base/devices/src/jetson_orin.c **** 			g_orin_data.receiving.auto_aiming.pitch = g_orin_data.receiving.float_byte.data[1];
+ 129              		.loc 1 34 42 view .LVU31
+ 130 0044 43ED087A 		vstr.32	s15, [r3, #-32]
+  35:control-base/devices/src/jetson_orin.c **** 			if (isnan(g_orin_data.receiving.auto_aiming.yaw) || isnan(g_orin_data.receiving.auto_aiming.pitc
+ 131              		.loc 1 35 4 is_stmt 1 view .LVU32
+  35:control-base/devices/src/jetson_orin.c **** 			if (isnan(g_orin_data.receiving.auto_aiming.yaw) || isnan(g_orin_data.receiving.auto_aiming.pitc
+ 132              		.loc 1 35 83 is_stmt 0 view .LVU33
+ 133 0048 93ED017A 		vldr.32	s14, [r3, #4]
+  35:control-base/devices/src/jetson_orin.c **** 			if (isnan(g_orin_data.receiving.auto_aiming.yaw) || isnan(g_orin_data.receiving.auto_aiming.pitc
+ 134              		.loc 1 35 44 view .LVU34
+ 135 004c 03ED077A 		vstr.32	s14, [r3, #-28]
+  36:control-base/devices/src/jetson_orin.c **** 			{
+ 136              		.loc 1 36 4 is_stmt 1 view .LVU35
+  36:control-base/devices/src/jetson_orin.c **** 			{
+ 137              		.loc 1 36 7 is_stmt 0 view .LVU36
+ 138 0050 F4EE677A 		vcmp.f32	s15, s15
+ 139 0054 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 140 0058 0DD6     		bvs	.L8
+  36:control-base/devices/src/jetson_orin.c **** 			{
+ 141              		.loc 1 36 53 discriminator 1 view .LVU37
+ 142 005a B4EE477A 		vcmp.f32	s14, s14
+ 143 005e F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 144 0062 08D6     		bvs	.L8
+ 145              	.L9:
+  41:control-base/devices/src/jetson_orin.c **** 			g_orin_data.new_data_flag = 1;
+ 146              		.loc 1 41 4 is_stmt 1 view .LVU38
+  41:control-base/devices/src/jetson_orin.c **** 			g_orin_data.new_data_flag = 1;
+ 147              		.loc 1 41 88 is_stmt 0 view .LVU39
+ 148 0064 1B4B     		ldr	r3, .L12
+ 149 0066 93F89020 		ldrb	r2, [r3, #144]	@ zero_extendqisi2
+  41:control-base/devices/src/jetson_orin.c **** 			g_orin_data.new_data_flag = 1;
+ 150              		.loc 1 41 43 view .LVU40
+ 151 006a 83F87020 		strb	r2, [r3, #112]
+  42:control-base/devices/src/jetson_orin.c **** 			break;
+ 152              		.loc 1 42 4 is_stmt 1 view .LVU41
+  42:control-base/devices/src/jetson_orin.c **** 			break;
+ 153              		.loc 1 42 30 is_stmt 0 view .LVU42
+ 154 006e 0122     		movs	r2, #1
+ 155 0070 83F89420 		strb	r2, [r3, #148]
+  43:control-base/devices/src/jetson_orin.c **** 
+ 156              		.loc 1 43 4 is_stmt 1 view .LVU43
+ 157 0074 CCE7     		b	.L4
+ 158              	.L8:
+  38:control-base/devices/src/jetson_orin.c **** 				g_orin_data.receiving.auto_aiming.pitch = 0;
+ 159              		.loc 1 38 5 view .LVU44
+  38:control-base/devices/src/jetson_orin.c **** 				g_orin_data.receiving.auto_aiming.pitch = 0;
+ 160              		.loc 1 38 43 is_stmt 0 view .LVU45
+ 161 0076 174B     		ldr	r3, .L12
+ 162 0078 0022     		movs	r2, #0
+ 163 007a 9A66     		str	r2, [r3, #104]	@ float
+  39:control-base/devices/src/jetson_orin.c **** 			}
+ 164              		.loc 1 39 5 is_stmt 1 view .LVU46
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccUQZTAV.s 			page 6
+
+
+  39:control-base/devices/src/jetson_orin.c **** 			}
+ 165              		.loc 1 39 45 is_stmt 0 view .LVU47
+ 166 007c DA66     		str	r2, [r3, #108]	@ float
+ 167 007e F1E7     		b	.L9
+ 168              	.L6:
+  46:control-base/devices/src/jetson_orin.c **** 			g_orin_data.nav_online_flag = 1;
+ 169              		.loc 1 46 4 is_stmt 1 view .LVU48
+ 170 0080 164B     		ldr	r3, .L12+8
+ 171 0082 1868     		ldr	r0, [r3]
+ 172 0084 FFF7FEFF 		bl	Daemon_Reload
+ 173              	.LVL5:
+  47:control-base/devices/src/jetson_orin.c **** 			memcpy(&g_orin_data.receiving.float_byte.data[0], &g_orin_data.rx_buffer[4], 12 * sizeof(uint8_t
+ 174              		.loc 1 47 4 view .LVU49
+  47:control-base/devices/src/jetson_orin.c **** 			memcpy(&g_orin_data.receiving.float_byte.data[0], &g_orin_data.rx_buffer[4], 12 * sizeof(uint8_t
+ 175              		.loc 1 47 32 is_stmt 0 view .LVU50
+ 176 0088 124B     		ldr	r3, .L12
+ 177 008a 0122     		movs	r2, #1
+ 178 008c 83F89620 		strb	r2, [r3, #150]
+  48:control-base/devices/src/jetson_orin.c **** 			g_orin_data.receiving.navigation.x_vel = g_orin_data.receiving.float_byte.data[0];
+ 179              		.loc 1 48 4 is_stmt 1 view .LVU51
+ 180 0090 03F1880C 		add	ip, r3, #136
+ 181 0094 1A1D     		adds	r2, r3, #4
+ 182 0096 07CA     		ldm	r2, {r0, r1, r2}
+ 183 0098 8CE80700 		stm	ip, {r0, r1, r2}
+  49:control-base/devices/src/jetson_orin.c **** 			g_orin_data.receiving.navigation.y_vel = g_orin_data.receiving.float_byte.data[1];
+ 184              		.loc 1 49 4 view .LVU52
+  49:control-base/devices/src/jetson_orin.c **** 			g_orin_data.receiving.navigation.y_vel = g_orin_data.receiving.float_byte.data[1];
+ 185              		.loc 1 49 82 is_stmt 0 view .LVU53
+ 186 009c D3F88820 		ldr	r2, [r3, #136]	@ float
+  49:control-base/devices/src/jetson_orin.c **** 			g_orin_data.receiving.navigation.y_vel = g_orin_data.receiving.float_byte.data[1];
+ 187              		.loc 1 49 43 view .LVU54
+ 188 00a0 5A67     		str	r2, [r3, #116]	@ float
+  50:control-base/devices/src/jetson_orin.c **** 			g_orin_data.receiving.navigation.yaw_angular_rate = g_orin_data.receiving.float_byte.data[2];
+ 189              		.loc 1 50 4 is_stmt 1 view .LVU55
+  50:control-base/devices/src/jetson_orin.c **** 			g_orin_data.receiving.navigation.yaw_angular_rate = g_orin_data.receiving.float_byte.data[2];
+ 190              		.loc 1 50 82 is_stmt 0 view .LVU56
+ 191 00a2 D3F88C20 		ldr	r2, [r3, #140]	@ float
+  50:control-base/devices/src/jetson_orin.c **** 			g_orin_data.receiving.navigation.yaw_angular_rate = g_orin_data.receiving.float_byte.data[2];
+ 192              		.loc 1 50 43 view .LVU57
+ 193 00a6 9A67     		str	r2, [r3, #120]	@ float
+  51:control-base/devices/src/jetson_orin.c **** 			g_orin_data.receiving.navigation.state = g_orin_data.rx_buffer[16];
+ 194              		.loc 1 51 4 is_stmt 1 view .LVU58
+  51:control-base/devices/src/jetson_orin.c **** 			g_orin_data.receiving.navigation.state = g_orin_data.rx_buffer[16];
+ 195              		.loc 1 51 93 is_stmt 0 view .LVU59
+ 196 00a8 D3F89020 		ldr	r2, [r3, #144]	@ float
+  51:control-base/devices/src/jetson_orin.c **** 			g_orin_data.receiving.navigation.state = g_orin_data.rx_buffer[16];
+ 197              		.loc 1 51 54 view .LVU60
+ 198 00ac DA67     		str	r2, [r3, #124]	@ float
+  52:control-base/devices/src/jetson_orin.c **** 			break;
+ 199              		.loc 1 52 4 is_stmt 1 view .LVU61
+  52:control-base/devices/src/jetson_orin.c **** 			break;
+ 200              		.loc 1 52 66 is_stmt 0 view .LVU62
+ 201 00ae 1A7C     		ldrb	r2, [r3, #16]	@ zero_extendqisi2
+  52:control-base/devices/src/jetson_orin.c **** 			break;
+ 202              		.loc 1 52 43 view .LVU63
+ 203 00b0 83F88020 		strb	r2, [r3, #128]
+  53:control-base/devices/src/jetson_orin.c **** 		case 2:
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccUQZTAV.s 			page 7
+
+
+ 204              		.loc 1 53 4 is_stmt 1 view .LVU64
+ 205 00b4 ACE7     		b	.L4
+ 206              	.L7:
+  55:control-base/devices/src/jetson_orin.c **** 			g_orin_data.receiving.heart_beat.b = g_orin_data.rx_buffer[3];
+ 207              		.loc 1 55 4 view .LVU65
+  55:control-base/devices/src/jetson_orin.c **** 			g_orin_data.receiving.heart_beat.b = g_orin_data.rx_buffer[3];
+ 208              		.loc 1 55 62 is_stmt 0 view .LVU66
+ 209 00b6 074B     		ldr	r3, .L12
+ 210 00b8 9A78     		ldrb	r2, [r3, #2]	@ zero_extendqisi2
+  55:control-base/devices/src/jetson_orin.c **** 			g_orin_data.receiving.heart_beat.b = g_orin_data.rx_buffer[3];
+ 211              		.loc 1 55 39 view .LVU67
+ 212 00ba 83F88420 		strb	r2, [r3, #132]
+  56:control-base/devices/src/jetson_orin.c **** 			g_orin_data.receiving.heart_beat.c = g_orin_data.rx_buffer[4];
+ 213              		.loc 1 56 4 is_stmt 1 view .LVU68
+  56:control-base/devices/src/jetson_orin.c **** 			g_orin_data.receiving.heart_beat.c = g_orin_data.rx_buffer[4];
+ 214              		.loc 1 56 62 is_stmt 0 view .LVU69
+ 215 00be DA78     		ldrb	r2, [r3, #3]	@ zero_extendqisi2
+  56:control-base/devices/src/jetson_orin.c **** 			g_orin_data.receiving.heart_beat.c = g_orin_data.rx_buffer[4];
+ 216              		.loc 1 56 39 view .LVU70
+ 217 00c0 83F88520 		strb	r2, [r3, #133]
+  57:control-base/devices/src/jetson_orin.c **** 			g_orin_data.receiving.heart_beat.d = g_orin_data.rx_buffer[5];
+ 218              		.loc 1 57 4 is_stmt 1 view .LVU71
+  57:control-base/devices/src/jetson_orin.c **** 			g_orin_data.receiving.heart_beat.d = g_orin_data.rx_buffer[5];
+ 219              		.loc 1 57 62 is_stmt 0 view .LVU72
+ 220 00c4 1A79     		ldrb	r2, [r3, #4]	@ zero_extendqisi2
+  57:control-base/devices/src/jetson_orin.c **** 			g_orin_data.receiving.heart_beat.d = g_orin_data.rx_buffer[5];
+ 221              		.loc 1 57 39 view .LVU73
+ 222 00c6 83F88620 		strb	r2, [r3, #134]
+  58:control-base/devices/src/jetson_orin.c **** 			break;
+ 223              		.loc 1 58 4 is_stmt 1 view .LVU74
+  58:control-base/devices/src/jetson_orin.c **** 			break;
+ 224              		.loc 1 58 62 is_stmt 0 view .LVU75
+ 225 00ca 5A79     		ldrb	r2, [r3, #5]	@ zero_extendqisi2
+  58:control-base/devices/src/jetson_orin.c **** 			break;
+ 226              		.loc 1 58 39 view .LVU76
+ 227 00cc 83F88720 		strb	r2, [r3, #135]
+  59:control-base/devices/src/jetson_orin.c **** 
+ 228              		.loc 1 59 4 is_stmt 1 view .LVU77
+  65:control-base/devices/src/jetson_orin.c **** 
+ 229              		.loc 1 65 1 is_stmt 0 view .LVU78
+ 230 00d0 9EE7     		b	.L4
+ 231              	.L13:
+ 232 00d2 00BF     		.align	2
+ 233              	.L12:
+ 234 00d4 00000000 		.word	g_orin_data
+ 235 00d8 00000000 		.word	g_orin_daemon_instance_ptr
+ 236 00dc 00000000 		.word	g_orin_daemon_nav_instance_ptr
+ 237              		.cfi_endproc
+ 238              	.LFE142:
+ 240              		.section	.text.Jetson_Orin_Timeout_Callback,"ax",%progbits
+ 241              		.align	1
+ 242              		.global	Jetson_Orin_Timeout_Callback
+ 243              		.syntax unified
+ 244              		.thumb
+ 245              		.thumb_func
+ 247              	Jetson_Orin_Timeout_Callback:
+ 248              	.LFB143:
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccUQZTAV.s 			page 8
+
+
+  75:control-base/devices/src/jetson_orin.c **** 	g_orin_data.online_flag = 0;
+ 249              		.loc 1 75 1 is_stmt 1 view -0
+ 250              		.cfi_startproc
+ 251              		@ args = 0, pretend = 0, frame = 0
+ 252              		@ frame_needed = 0, uses_anonymous_args = 0
+ 253 0000 08B5     		push	{r3, lr}
+ 254              	.LCFI1:
+ 255              		.cfi_def_cfa_offset 8
+ 256              		.cfi_offset 3, -8
+ 257              		.cfi_offset 14, -4
+  76:control-base/devices/src/jetson_orin.c **** 	// Attemp to reinitialize UART service
+ 258              		.loc 1 76 2 view .LVU80
+  76:control-base/devices/src/jetson_orin.c **** 	// Attemp to reinitialize UART service
+ 259              		.loc 1 76 26 is_stmt 0 view .LVU81
+ 260 0002 044B     		ldr	r3, .L16
+ 261 0004 0022     		movs	r2, #0
+ 262 0006 83F89520 		strb	r2, [r3, #149]
+  78:control-base/devices/src/jetson_orin.c **** }
+ 263              		.loc 1 78 2 is_stmt 1 view .LVU82
+ 264 000a 034B     		ldr	r3, .L16+4
+ 265 000c 1868     		ldr	r0, [r3]
+ 266 000e FFF7FEFF 		bl	UART_Service_Init
+ 267              	.LVL6:
+  79:control-base/devices/src/jetson_orin.c **** 
+ 268              		.loc 1 79 1 is_stmt 0 view .LVU83
+ 269 0012 08BD     		pop	{r3, pc}
+ 270              	.L17:
+ 271              		.align	2
+ 272              	.L16:
+ 273 0014 00000000 		.word	g_orin_data
+ 274 0018 00000000 		.word	g_orin_uart_instance_ptr
+ 275              		.cfi_endproc
+ 276              	.LFE143:
+ 278              		.section	.text.Jetson_Orin_Init,"ax",%progbits
+ 279              		.align	1
+ 280              		.global	Jetson_Orin_Init
+ 281              		.syntax unified
+ 282              		.thumb
+ 283              		.thumb_func
+ 285              	Jetson_Orin_Init:
+ 286              	.LVL7:
+ 287              	.LFB145:
+  88:control-base/devices/src/jetson_orin.c **** 
+  89:control-base/devices/src/jetson_orin.c **** void Jetson_Orin_Init(UART_HandleTypeDef *huartx)
+  90:control-base/devices/src/jetson_orin.c **** {
+ 288              		.loc 1 90 1 is_stmt 1 view -0
+ 289              		.cfi_startproc
+ 290              		@ args = 0, pretend = 0, frame = 0
+ 291              		@ frame_needed = 0, uses_anonymous_args = 0
+ 292              		.loc 1 90 1 is_stmt 0 view .LVU85
+ 293 0000 08B5     		push	{r3, lr}
+ 294              	.LCFI2:
+ 295              		.cfi_def_cfa_offset 8
+ 296              		.cfi_offset 3, -8
+ 297              		.cfi_offset 14, -4
+  91:control-base/devices/src/jetson_orin.c **** 	// register UART instance
+  92:control-base/devices/src/jetson_orin.c **** 	g_orin_uart_instance_ptr = UART_Register(huartx, g_orin_data.rx_buffer, ORIN_DATA_RX_BUFER_SIZE, J
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccUQZTAV.s 			page 9
+
+
+ 298              		.loc 1 92 2 is_stmt 1 view .LVU86
+ 299              		.loc 1 92 29 is_stmt 0 view .LVU87
+ 300 0002 0C4B     		ldr	r3, .L20
+ 301 0004 1422     		movs	r2, #20
+ 302 0006 0C49     		ldr	r1, .L20+4
+ 303 0008 FFF7FEFF 		bl	UART_Register
+ 304              	.LVL8:
+ 305              		.loc 1 92 27 discriminator 1 view .LVU88
+ 306 000c 0B4B     		ldr	r3, .L20+8
+ 307 000e 1860     		str	r0, [r3]
+  93:control-base/devices/src/jetson_orin.c **** 
+  94:control-base/devices/src/jetson_orin.c **** 	// register Daemon instance
+  95:control-base/devices/src/jetson_orin.c **** 	// timeout is defined in the header file
+  96:control-base/devices/src/jetson_orin.c **** 	uint16_t reload_value = ORIN_TIMEOUT_MS / DAEMON_PERIOD;
+ 308              		.loc 1 96 2 is_stmt 1 view .LVU89
+ 309              	.LVL9:
+  97:control-base/devices/src/jetson_orin.c **** 	uint16_t initial_counter = reload_value;
+ 310              		.loc 1 97 2 view .LVU90
+  98:control-base/devices/src/jetson_orin.c **** 	g_orin_daemon_instance_ptr = Daemon_Register(reload_value, initial_counter, Jetson_Orin_Timeout_Ca
+ 311              		.loc 1 98 2 view .LVU91
+ 312              		.loc 1 98 31 is_stmt 0 view .LVU92
+ 313 0010 0B4A     		ldr	r2, .L20+12
+ 314 0012 3221     		movs	r1, #50
+ 315 0014 0846     		mov	r0, r1
+ 316 0016 FFF7FEFF 		bl	Daemon_Register
+ 317              	.LVL10:
+ 318              		.loc 1 98 29 discriminator 1 view .LVU93
+ 319 001a 0A4B     		ldr	r3, .L20+16
+ 320 001c 1860     		str	r0, [r3]
+  99:control-base/devices/src/jetson_orin.c **** 
+ 100:control-base/devices/src/jetson_orin.c **** 	reload_value = ORIN_NAV_TIMEOUT_MS / DAEMON_PERIOD;
+ 321              		.loc 1 100 2 is_stmt 1 view .LVU94
+ 322              	.LVL11:
+ 101:control-base/devices/src/jetson_orin.c **** 	initial_counter = reload_value;
+ 323              		.loc 1 101 2 view .LVU95
+ 102:control-base/devices/src/jetson_orin.c **** 	g_orin_daemon_nav_instance_ptr = Daemon_Register(reload_value, initial_counter, Jetson_Orin_Nav_Ti
+ 324              		.loc 1 102 2 view .LVU96
+ 325              		.loc 1 102 35 is_stmt 0 view .LVU97
+ 326 001e 0A4A     		ldr	r2, .L20+20
+ 327 0020 1421     		movs	r1, #20
+ 328 0022 0846     		mov	r0, r1
+ 329 0024 FFF7FEFF 		bl	Daemon_Register
+ 330              	.LVL12:
+ 331              		.loc 1 102 33 discriminator 1 view .LVU98
+ 332 0028 084B     		ldr	r3, .L20+24
+ 333 002a 1860     		str	r0, [r3]
+ 103:control-base/devices/src/jetson_orin.c **** 	g_jetson_orin_initialized = 1;
+ 334              		.loc 1 103 2 is_stmt 1 view .LVU99
+ 335              		.loc 1 103 28 is_stmt 0 view .LVU100
+ 336 002c 084B     		ldr	r3, .L20+28
+ 337 002e 0122     		movs	r2, #1
+ 338 0030 1A70     		strb	r2, [r3]
+ 104:control-base/devices/src/jetson_orin.c **** }
+ 339              		.loc 1 104 1 view .LVU101
+ 340 0032 08BD     		pop	{r3, pc}
+ 341              	.L21:
+ 342              		.align	2
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccUQZTAV.s 			page 10
+
+
+ 343              	.L20:
+ 344 0034 00000000 		.word	Jetson_Orin_Rx_Callback
+ 345 0038 00000000 		.word	g_orin_data
+ 346 003c 00000000 		.word	g_orin_uart_instance_ptr
+ 347 0040 00000000 		.word	Jetson_Orin_Timeout_Callback
+ 348 0044 00000000 		.word	g_orin_daemon_instance_ptr
+ 349 0048 00000000 		.word	Jetson_Orin_Nav_Timeout_Callback
+ 350 004c 00000000 		.word	g_orin_daemon_nav_instance_ptr
+ 351 0050 00000000 		.word	g_jetson_orin_initialized
+ 352              		.cfi_endproc
+ 353              	.LFE145:
+ 355              		.section	.text.Jetson_Orin_Send_Data,"ax",%progbits
+ 356              		.align	1
+ 357              		.global	Jetson_Orin_Send_Data
+ 358              		.syntax unified
+ 359              		.thumb
+ 360              		.thumb_func
+ 362              	Jetson_Orin_Send_Data:
+ 363              	.LFB146:
+ 105:control-base/devices/src/jetson_orin.c **** 
+ 106:control-base/devices/src/jetson_orin.c **** void Jetson_Orin_Send_Data(void)
+ 107:control-base/devices/src/jetson_orin.c **** {
+ 364              		.loc 1 107 1 is_stmt 1 view -0
+ 365              		.cfi_startproc
+ 366              		@ args = 0, pretend = 0, frame = 0
+ 367              		@ frame_needed = 0, uses_anonymous_args = 0
+ 368 0000 08B5     		push	{r3, lr}
+ 369              	.LCFI3:
+ 370              		.cfi_def_cfa_offset 8
+ 371              		.cfi_offset 3, -8
+ 372              		.cfi_offset 14, -4
+ 108:control-base/devices/src/jetson_orin.c **** 	if (!g_jetson_orin_initialized) {
+ 373              		.loc 1 108 2 view .LVU103
+ 374              		.loc 1 108 6 is_stmt 0 view .LVU104
+ 375 0002 244B     		ldr	r3, .L26
+ 376 0004 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 377              		.loc 1 108 5 view .LVU105
+ 378 0006 03B9     		cbnz	r3, .L25
+ 379              	.L22:
+ 109:control-base/devices/src/jetson_orin.c **** 		return;
+ 110:control-base/devices/src/jetson_orin.c **** 	}
+ 111:control-base/devices/src/jetson_orin.c **** 
+ 112:control-base/devices/src/jetson_orin.c **** 	// update data to be sent
+ 113:control-base/devices/src/jetson_orin.c **** 	g_orin_data.sending.header = 0xAA; // header byte
+ 114:control-base/devices/src/jetson_orin.c **** 	g_orin_data.sending.enemy_color_is_red = (Referee_System.Robot_State.ID > 11) ? 1 : 0;	// ID > 11 
+ 115:control-base/devices/src/jetson_orin.c **** 	g_orin_data.sending.game_status = Referee_System.Game_Status.Progress;
+ 116:control-base/devices/src/jetson_orin.c **** 	g_orin_data.sending.rfid = (Referee_System.RFID.center_zone << 1) | (Referee_System.RFID.resupply_
+ 117:control-base/devices/src/jetson_orin.c **** 	g_orin_data.sending.pitch_angle = g_imu.rad.pitch;
+ 118:control-base/devices/src/jetson_orin.c **** 	g_orin_data.sending.pitch_angular_rate = g_imu.bmi088_raw.gyro[1];
+ 119:control-base/devices/src/jetson_orin.c **** 	g_orin_data.sending.yaw_angular_rate = g_imu.bmi088_raw.gyro[2];
+ 120:control-base/devices/src/jetson_orin.c **** 	g_orin_data.sending.position_x = sentry_pose.y;
+ 121:control-base/devices/src/jetson_orin.c **** 	g_orin_data.sending.position_y = -sentry_pose.x;
+ 122:control-base/devices/src/jetson_orin.c **** 	g_orin_data.sending.orientation = sentry_pose.theta;
+ 123:control-base/devices/src/jetson_orin.c **** 	g_orin_data.sending.velocity_x = sentry_pose.vy;
+ 124:control-base/devices/src/jetson_orin.c **** 	g_orin_data.sending.velocity_y = -sentry_pose.vx;
+ 125:control-base/devices/src/jetson_orin.c **** 	g_orin_data.sending.HP = Referee_System.Robot_State.Remaining_HP;
+ 126:control-base/devices/src/jetson_orin.c **** 	g_orin_data.sending.reserved = 7529; // reserved for future use
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccUQZTAV.s 			page 11
+
+
+ 127:control-base/devices/src/jetson_orin.c **** 
+ 128:control-base/devices/src/jetson_orin.c **** 	// // float to byte conversion
+ 129:control-base/devices/src/jetson_orin.c **** 	// g_orin_data.sending.float_byte.data[0] = g_orin_data.sending.pitch_angle;
+ 130:control-base/devices/src/jetson_orin.c **** 	// g_orin_data.sending.float_byte.data[1] = g_orin_data.sending.pitch_angular_rate;
+ 131:control-base/devices/src/jetson_orin.c **** 	// g_orin_data.sending.float_byte.data[2] = g_orin_data.sending.yaw_angular_rate;
+ 132:control-base/devices/src/jetson_orin.c **** 	// g_orin_data.sending.float_byte.data[3] = g_orin_data.sending.position_x;
+ 133:control-base/devices/src/jetson_orin.c **** 	// g_orin_data.sending.float_byte.data[4] = g_orin_data.sending.position_y;
+ 134:control-base/devices/src/jetson_orin.c **** 	// g_orin_data.sending.float_byte.data[5] = g_orin_data.sending.orientation;
+ 135:control-base/devices/src/jetson_orin.c **** 	// g_orin_data.sending.float_byte.data[6] = g_orin_data.sending.velocity_x;
+ 136:control-base/devices/src/jetson_orin.c **** 	// g_orin_data.sending.float_byte.data[7] = g_orin_data.sending.velocity_y;
+ 137:control-base/devices/src/jetson_orin.c **** 	// g_orin_data.sending.float_byte.data[8] 
+ 138:control-base/devices/src/jetson_orin.c **** 
+ 139:control-base/devices/src/jetson_orin.c **** 	// g_orin_data.tx_buffer[0] = 0xAA;
+ 140:control-base/devices/src/jetson_orin.c **** 	// g_orin_data.tx_buffer[1] = 0;
+ 141:control-base/devices/src/jetson_orin.c **** 	// g_orin_data.tx_buffer[1] = g_orin_data.sending.enemy_color_is_red << 7 | (g_orin_data.sending.g
+ 142:control-base/devices/src/jetson_orin.c **** 	// memcpy(&g_orin_data.tx_buffer[2], &g_orin_data.sending.float_byte.data_bytes[0], 32 * sizeof(ui
+ 143:control-base/devices/src/jetson_orin.c **** 
+ 144:control-base/devices/src/jetson_orin.c **** 	UART_Transmit(g_orin_uart_instance_ptr, &(g_orin_data.sending.header), sizeof(g_orin_data.tx_buffe
+ 145:control-base/devices/src/jetson_orin.c **** }...
+ 380              		.loc 1 145 1 view .LVU106
+ 381 0008 08BD     		pop	{r3, pc}
+ 382              	.L25:
+ 113:control-base/devices/src/jetson_orin.c **** 	g_orin_data.sending.header = 0xAA; // header byte
+ 383              		.loc 1 113 2 is_stmt 1 view .LVU107
+ 113:control-base/devices/src/jetson_orin.c **** 	g_orin_data.sending.header = 0xAA; // header byte
+ 384              		.loc 1 113 29 is_stmt 0 view .LVU108
+ 385 000a 2349     		ldr	r1, .L26+4
+ 386 000c AA23     		movs	r3, #170
+ 387 000e 81F83C30 		strb	r3, [r1, #60]
+ 114:control-base/devices/src/jetson_orin.c **** 	g_orin_data.sending.enemy_color_is_red = (Referee_System.Robot_State.ID > 11) ? 1 : 0;	// ID > 11 
+ 388              		.loc 1 114 2 is_stmt 1 view .LVU109
+ 114:control-base/devices/src/jetson_orin.c **** 	g_orin_data.sending.enemy_color_is_red = (Referee_System.Robot_State.ID > 11) ? 1 : 0;	// ID > 11 
+ 389              		.loc 1 114 70 is_stmt 0 view .LVU110
+ 390 0012 224B     		ldr	r3, .L26+8
+ 391 0014 93F85121 		ldrb	r2, [r3, #337]	@ zero_extendqisi2
+ 114:control-base/devices/src/jetson_orin.c **** 	g_orin_data.sending.enemy_color_is_red = (Referee_System.Robot_State.ID > 11) ? 1 : 0;	// ID > 11 
+ 392              		.loc 1 114 84 view .LVU111
+ 393 0018 0B2A     		cmp	r2, #11
+ 394 001a 94BF     		ite	ls
+ 395 001c 0022     		movls	r2, #0
+ 396 001e 0122     		movhi	r2, #1
+ 114:control-base/devices/src/jetson_orin.c **** 	g_orin_data.sending.enemy_color_is_red = (Referee_System.Robot_State.ID > 11) ? 1 : 0;	// ID > 11 
+ 397              		.loc 1 114 41 view .LVU112
+ 398 0020 81F83D20 		strb	r2, [r1, #61]
+ 115:control-base/devices/src/jetson_orin.c **** 	g_orin_data.sending.game_status = Referee_System.Game_Status.Progress;
+ 399              		.loc 1 115 2 is_stmt 1 view .LVU113
+ 115:control-base/devices/src/jetson_orin.c **** 	g_orin_data.sending.game_status = Referee_System.Game_Status.Progress;
+ 400              		.loc 1 115 62 is_stmt 0 view .LVU114
+ 401 0024 93F81721 		ldrb	r2, [r3, #279]	@ zero_extendqisi2
+ 402 0028 C2F30312 		ubfx	r2, r2, #4, #4
+ 115:control-base/devices/src/jetson_orin.c **** 	g_orin_data.sending.game_status = Referee_System.Game_Status.Progress;
+ 403              		.loc 1 115 34 view .LVU115
+ 404 002c 81F83E20 		strb	r2, [r1, #62]
+ 116:control-base/devices/src/jetson_orin.c **** 	g_orin_data.sending.rfid = (Referee_System.RFID.center_zone << 1) | (Referee_System.RFID.resupply_
+ 405              		.loc 1 116 2 is_stmt 1 view .LVU116
+ 116:control-base/devices/src/jetson_orin.c **** 	g_orin_data.sending.rfid = (Referee_System.RFID.center_zone << 1) | (Referee_System.RFID.resupply_
+ 406              		.loc 1 116 49 is_stmt 0 view .LVU117
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccUQZTAV.s 			page 12
+
+
+ 407 0030 93F89601 		ldrb	r0, [r3, #406]	@ zero_extendqisi2
+ 116:control-base/devices/src/jetson_orin.c **** 	g_orin_data.sending.rfid = (Referee_System.RFID.center_zone << 1) | (Referee_System.RFID.resupply_
+ 408              		.loc 1 116 90 view .LVU118
+ 409 0034 93F89521 		ldrb	r2, [r3, #405]	@ zero_extendqisi2
+ 116:control-base/devices/src/jetson_orin.c **** 	g_orin_data.sending.rfid = (Referee_System.RFID.center_zone << 1) | (Referee_System.RFID.resupply_
+ 410              		.loc 1 116 68 view .LVU119
+ 411 0038 42EA4002 		orr	r2, r2, r0, lsl #1
+ 116:control-base/devices/src/jetson_orin.c **** 	g_orin_data.sending.rfid = (Referee_System.RFID.center_zone << 1) | (Referee_System.RFID.resupply_
+ 412              		.loc 1 116 27 view .LVU120
+ 413 003c 81F83F20 		strb	r2, [r1, #63]
+ 117:control-base/devices/src/jetson_orin.c **** 	g_orin_data.sending.pitch_angle = g_imu.rad.pitch;
+ 414              		.loc 1 117 2 is_stmt 1 view .LVU121
+ 117:control-base/devices/src/jetson_orin.c **** 	g_orin_data.sending.pitch_angle = g_imu.rad.pitch;
+ 415              		.loc 1 117 45 is_stmt 0 view .LVU122
+ 416 0040 174A     		ldr	r2, .L26+12
+ 417 0042 906C     		ldr	r0, [r2, #72]	@ float
+ 117:control-base/devices/src/jetson_orin.c **** 	g_orin_data.sending.pitch_angle = g_imu.rad.pitch;
+ 418              		.loc 1 117 34 view .LVU123
+ 419 0044 0864     		str	r0, [r1, #64]	@ float
+ 118:control-base/devices/src/jetson_orin.c **** 	g_orin_data.sending.pitch_angular_rate = g_imu.bmi088_raw.gyro[1];
+ 420              		.loc 1 118 2 is_stmt 1 view .LVU124
+ 118:control-base/devices/src/jetson_orin.c **** 	g_orin_data.sending.pitch_angular_rate = g_imu.bmi088_raw.gyro[1];
+ 421              		.loc 1 118 64 is_stmt 0 view .LVU125
+ 422 0046 9069     		ldr	r0, [r2, #24]	@ float
+ 118:control-base/devices/src/jetson_orin.c **** 	g_orin_data.sending.pitch_angular_rate = g_imu.bmi088_raw.gyro[1];
+ 423              		.loc 1 118 41 view .LVU126
+ 424 0048 4864     		str	r0, [r1, #68]	@ float
+ 119:control-base/devices/src/jetson_orin.c **** 	g_orin_data.sending.yaw_angular_rate = g_imu.bmi088_raw.gyro[2];
+ 425              		.loc 1 119 2 is_stmt 1 view .LVU127
+ 119:control-base/devices/src/jetson_orin.c **** 	g_orin_data.sending.yaw_angular_rate = g_imu.bmi088_raw.gyro[2];
+ 426              		.loc 1 119 62 is_stmt 0 view .LVU128
+ 427 004a D269     		ldr	r2, [r2, #28]	@ float
+ 119:control-base/devices/src/jetson_orin.c **** 	g_orin_data.sending.yaw_angular_rate = g_imu.bmi088_raw.gyro[2];
+ 428              		.loc 1 119 39 view .LVU129
+ 429 004c 8A64     		str	r2, [r1, #72]	@ float
+ 120:control-base/devices/src/jetson_orin.c **** 	g_orin_data.sending.position_x = sentry_pose.y;
+ 430              		.loc 1 120 2 is_stmt 1 view .LVU130
+ 120:control-base/devices/src/jetson_orin.c **** 	g_orin_data.sending.position_x = sentry_pose.y;
+ 431              		.loc 1 120 46 is_stmt 0 view .LVU131
+ 432 004e 154A     		ldr	r2, .L26+16
+ 433 0050 5068     		ldr	r0, [r2, #4]	@ float
+ 120:control-base/devices/src/jetson_orin.c **** 	g_orin_data.sending.position_x = sentry_pose.y;
+ 434              		.loc 1 120 33 view .LVU132
+ 435 0052 C864     		str	r0, [r1, #76]	@ float
+ 121:control-base/devices/src/jetson_orin.c **** 	g_orin_data.sending.position_y = -sentry_pose.x;
+ 436              		.loc 1 121 2 is_stmt 1 view .LVU133
+ 121:control-base/devices/src/jetson_orin.c **** 	g_orin_data.sending.position_y = -sentry_pose.x;
+ 437              		.loc 1 121 47 is_stmt 0 view .LVU134
+ 438 0054 D2ED007A 		vldr.32	s15, [r2]
+ 121:control-base/devices/src/jetson_orin.c **** 	g_orin_data.sending.position_y = -sentry_pose.x;
+ 439              		.loc 1 121 35 view .LVU135
+ 440 0058 F1EE677A 		vneg.f32	s15, s15
+ 121:control-base/devices/src/jetson_orin.c **** 	g_orin_data.sending.position_y = -sentry_pose.x;
+ 441              		.loc 1 121 33 view .LVU136
+ 442 005c C1ED147A 		vstr.32	s15, [r1, #80]
+ 122:control-base/devices/src/jetson_orin.c **** 	g_orin_data.sending.orientation = sentry_pose.theta;
+ 443              		.loc 1 122 2 is_stmt 1 view .LVU137
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccUQZTAV.s 			page 13
+
+
+ 122:control-base/devices/src/jetson_orin.c **** 	g_orin_data.sending.orientation = sentry_pose.theta;
+ 444              		.loc 1 122 47 is_stmt 0 view .LVU138
+ 445 0060 9068     		ldr	r0, [r2, #8]	@ float
+ 122:control-base/devices/src/jetson_orin.c **** 	g_orin_data.sending.orientation = sentry_pose.theta;
+ 446              		.loc 1 122 34 view .LVU139
+ 447 0062 4865     		str	r0, [r1, #84]	@ float
+ 123:control-base/devices/src/jetson_orin.c **** 	g_orin_data.sending.velocity_x = sentry_pose.vy;
+ 448              		.loc 1 123 2 is_stmt 1 view .LVU140
+ 123:control-base/devices/src/jetson_orin.c **** 	g_orin_data.sending.velocity_x = sentry_pose.vy;
+ 449              		.loc 1 123 46 is_stmt 0 view .LVU141
+ 450 0064 1069     		ldr	r0, [r2, #16]	@ float
+ 123:control-base/devices/src/jetson_orin.c **** 	g_orin_data.sending.velocity_x = sentry_pose.vy;
+ 451              		.loc 1 123 33 view .LVU142
+ 452 0066 8865     		str	r0, [r1, #88]	@ float
+ 124:control-base/devices/src/jetson_orin.c **** 	g_orin_data.sending.velocity_y = -sentry_pose.vx;
+ 453              		.loc 1 124 2 is_stmt 1 view .LVU143
+ 124:control-base/devices/src/jetson_orin.c **** 	g_orin_data.sending.velocity_y = -sentry_pose.vx;
+ 454              		.loc 1 124 47 is_stmt 0 view .LVU144
+ 455 0068 D2ED037A 		vldr.32	s15, [r2, #12]
+ 124:control-base/devices/src/jetson_orin.c **** 	g_orin_data.sending.velocity_y = -sentry_pose.vx;
+ 456              		.loc 1 124 35 view .LVU145
+ 457 006c F1EE677A 		vneg.f32	s15, s15
+ 124:control-base/devices/src/jetson_orin.c **** 	g_orin_data.sending.velocity_y = -sentry_pose.vx;
+ 458              		.loc 1 124 33 view .LVU146
+ 459 0070 C1ED177A 		vstr.32	s15, [r1, #92]
+ 125:control-base/devices/src/jetson_orin.c **** 	g_orin_data.sending.HP = Referee_System.Robot_State.Remaining_HP;
+ 460              		.loc 1 125 2 is_stmt 1 view .LVU147
+ 125:control-base/devices/src/jetson_orin.c **** 	g_orin_data.sending.HP = Referee_System.Robot_State.Remaining_HP;
+ 461              		.loc 1 125 53 is_stmt 0 view .LVU148
+ 462 0074 B3F85331 		ldrh	r3, [r3, #339]	@ unaligned
+ 125:control-base/devices/src/jetson_orin.c **** 	g_orin_data.sending.HP = Referee_System.Robot_State.Remaining_HP;
+ 463              		.loc 1 125 25 view .LVU149
+ 464 0078 A1F86030 		strh	r3, [r1, #96]	@ movhi
+ 126:control-base/devices/src/jetson_orin.c **** 	g_orin_data.sending.reserved = 7529; // reserved for future use
+ 465              		.loc 1 126 2 is_stmt 1 view .LVU150
+ 126:control-base/devices/src/jetson_orin.c **** 	g_orin_data.sending.reserved = 7529; // reserved for future use
+ 466              		.loc 1 126 31 is_stmt 0 view .LVU151
+ 467 007c 41F66953 		movw	r3, #7529
+ 468 0080 A1F86230 		strh	r3, [r1, #98]	@ movhi
+ 144:control-base/devices/src/jetson_orin.c **** 	UART_Transmit(g_orin_uart_instance_ptr, &(g_orin_data.sending.header), sizeof(g_orin_data.tx_buffe
+ 469              		.loc 1 144 2 is_stmt 1 view .LVU152
+ 470 0084 0223     		movs	r3, #2
+ 471 0086 2822     		movs	r2, #40
+ 472 0088 3C31     		adds	r1, r1, #60
+ 473 008a 0748     		ldr	r0, .L26+20
+ 474 008c 0068     		ldr	r0, [r0]
+ 475 008e FFF7FEFF 		bl	UART_Transmit
+ 476              	.LVL13:
+ 477 0092 B9E7     		b	.L22
+ 478              	.L27:
+ 479              		.align	2
+ 480              	.L26:
+ 481 0094 00000000 		.word	g_jetson_orin_initialized
+ 482 0098 00000000 		.word	g_orin_data
+ 483 009c 00000000 		.word	Referee_System
+ 484 00a0 00000000 		.word	g_imu
+ 485 00a4 00000000 		.word	sentry_pose
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccUQZTAV.s 			page 14
+
+
+ 486 00a8 00000000 		.word	g_orin_uart_instance_ptr
+ 487              		.cfi_endproc
+ 488              	.LFE146:
+ 490              		.global	g_jetson_orin_initialized
+ 491              		.section	.bss.g_jetson_orin_initialized,"aw",%nobits
+ 494              	g_jetson_orin_initialized:
+ 495 0000 00       		.space	1
+ 496              		.global	g_orin_daemon_nav_instance_ptr
+ 497              		.section	.bss.g_orin_daemon_nav_instance_ptr,"aw",%nobits
+ 498              		.align	2
+ 501              	g_orin_daemon_nav_instance_ptr:
+ 502 0000 00000000 		.space	4
+ 503              		.global	g_orin_daemon_instance_ptr
+ 504              		.section	.bss.g_orin_daemon_instance_ptr,"aw",%nobits
+ 505              		.align	2
+ 508              	g_orin_daemon_instance_ptr:
+ 509 0000 00000000 		.space	4
+ 510              		.global	g_orin_uart_instance_ptr
+ 511              		.section	.bss.g_orin_uart_instance_ptr,"aw",%nobits
+ 512              		.align	2
+ 515              	g_orin_uart_instance_ptr:
+ 516 0000 00000000 		.space	4
+ 517              		.global	g_orin_data
+ 518              		.section	.bss.g_orin_data,"aw",%nobits
+ 519              		.align	2
+ 522              	g_orin_data:
+ 523 0000 00000000 		.space	152
+ 523      00000000 
+ 523      00000000 
+ 523      00000000 
+ 523      00000000 
+ 524              		.text
+ 525              	.Letext0:
+ 526              		.file 2 "/Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/arm-none-eabi/include/machine/_defa
+ 527              		.file 3 "/Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/arm-none-eabi/include/sys/_stdint.h
+ 528              		.file 4 "control-base/typec-board-base/Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h"
+ 529              		.file 5 "control-base/typec-board-base/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h"
+ 530              		.file 6 "control-base/typec-board-base/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h"
+ 531              		.file 7 "control-base/typec-board-base/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h"
+ 532              		.file 8 "control-base/bsp/inc/bsp_uart.h"
+ 533              		.file 9 "control-base/bsp/inc/bsp_daemon.h"
+ 534              		.file 10 "control-base/devices/inc/referee_system.h"
+ 535              		.file 11 "control-base/devices/inc/jetson_orin.h"
+ 536              		.file 12 "control-base/devices/inc/bmi088driver.h"
+ 537              		.file 13 "control-base/devices/inc/ist8310driver.h"
+ 538              		.file 14 "control-base/devices/inc/imu_task.h"
+ 539              		.file 15 "control-base/algo/inc/omni_locomotion.h"
+ 540              		.file 16 "/Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/arm-none-eabi/include/string.h"
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccUQZTAV.s 			page 15
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 jetson_orin.c
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccUQZTAV.s:21     .text.Jetson_Orin_Nav_Timeout_Callback:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccUQZTAV.s:27     .text.Jetson_Orin_Nav_Timeout_Callback:00000000 Jetson_Orin_Nav_Timeout_Callback
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccUQZTAV.s:54     .text.Jetson_Orin_Nav_Timeout_Callback:00000014 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccUQZTAV.s:522    .bss.g_orin_data:00000000 g_orin_data
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccUQZTAV.s:59     .text.Jetson_Orin_Rx_Callback:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccUQZTAV.s:65     .text.Jetson_Orin_Rx_Callback:00000000 Jetson_Orin_Rx_Callback
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccUQZTAV.s:234    .text.Jetson_Orin_Rx_Callback:000000d4 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccUQZTAV.s:508    .bss.g_orin_daemon_instance_ptr:00000000 g_orin_daemon_instance_ptr
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccUQZTAV.s:501    .bss.g_orin_daemon_nav_instance_ptr:00000000 g_orin_daemon_nav_instance_ptr
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccUQZTAV.s:241    .text.Jetson_Orin_Timeout_Callback:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccUQZTAV.s:247    .text.Jetson_Orin_Timeout_Callback:00000000 Jetson_Orin_Timeout_Callback
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccUQZTAV.s:273    .text.Jetson_Orin_Timeout_Callback:00000014 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccUQZTAV.s:515    .bss.g_orin_uart_instance_ptr:00000000 g_orin_uart_instance_ptr
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccUQZTAV.s:279    .text.Jetson_Orin_Init:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccUQZTAV.s:285    .text.Jetson_Orin_Init:00000000 Jetson_Orin_Init
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccUQZTAV.s:344    .text.Jetson_Orin_Init:00000034 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccUQZTAV.s:494    .bss.g_jetson_orin_initialized:00000000 g_jetson_orin_initialized
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccUQZTAV.s:356    .text.Jetson_Orin_Send_Data:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccUQZTAV.s:362    .text.Jetson_Orin_Send_Data:00000000 Jetson_Orin_Send_Data
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccUQZTAV.s:481    .text.Jetson_Orin_Send_Data:00000094 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccUQZTAV.s:495    .bss.g_jetson_orin_initialized:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccUQZTAV.s:498    .bss.g_orin_daemon_nav_instance_ptr:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccUQZTAV.s:505    .bss.g_orin_daemon_instance_ptr:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccUQZTAV.s:512    .bss.g_orin_uart_instance_ptr:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccUQZTAV.s:519    .bss.g_orin_data:00000000 $d
+
+UNDEFINED SYMBOLS
+Daemon_Reload
+UART_Service_Init
+UART_Register
+Daemon_Register
+UART_Transmit
+Referee_System
+g_imu
+sentry_pose

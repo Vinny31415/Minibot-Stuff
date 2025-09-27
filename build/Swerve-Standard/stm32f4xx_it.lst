@@ -1,0 +1,1187 @@
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"stm32f4xx_it.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "control-base/typec-board-base/Core/Src/stm32f4xx_it.c"
+  20              		.section	.text.NMI_Handler,"ax",%progbits
+  21              		.align	1
+  22              		.global	NMI_Handler
+  23              		.syntax unified
+  24              		.thumb
+  25              		.thumb_func
+  27              	NMI_Handler:
+  28              	.LFB134:
+   1:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** /* USER CODE BEGIN Header */
+   2:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** /**
+   3:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****  ******************************************************************************
+   4:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****  * @file    stm32f4xx_it.c
+   5:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****  * @brief   Interrupt Service Routines.
+   6:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****  ******************************************************************************
+   7:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****  * @attention
+   8:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****  *
+   9:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****  * Copyright (c) 2023 STMicroelectronics.
+  10:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****  * All rights reserved.
+  11:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****  *
+  12:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****  * This software is licensed under terms that can be found in the LICENSE file
+  13:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****  * in the root directory of this software component.
+  14:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****  * If no LICENSE file comes with this software, it is provided AS-IS.
+  15:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****  *
+  16:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****  ******************************************************************************
+  17:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****  */
+  18:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** /* USER CODE END Header */
+  19:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+  20:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** /* Includes ------------------------------------------------------------------*/
+  21:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** #include "main.h"
+  22:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** #include "stm32f4xx_it.h"
+  23:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** /* Private includes ----------------------------------------------------------*/
+  24:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** /* USER CODE BEGIN Includes */
+  25:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** #include "remote.h"
+  26:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** /* USER CODE END Includes */
+  27:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+  28:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** /* Private typedef -----------------------------------------------------------*/
+  29:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** /* USER CODE BEGIN TD */
+  30:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s 			page 2
+
+
+  31:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** /* USER CODE END TD */
+  32:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+  33:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** /* Private define ------------------------------------------------------------*/
+  34:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** /* USER CODE BEGIN PD */
+  35:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+  36:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** /* USER CODE END PD */
+  37:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+  38:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** /* Private macro -------------------------------------------------------------*/
+  39:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** /* USER CODE BEGIN PM */
+  40:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+  41:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** /* USER CODE END PM */
+  42:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+  43:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** /* Private variables ---------------------------------------------------------*/
+  44:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** /* USER CODE BEGIN PV */
+  45:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+  46:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** /* USER CODE END PV */
+  47:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+  48:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** /* Private function prototypes -----------------------------------------------*/
+  49:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** /* USER CODE BEGIN PFP */
+  50:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+  51:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** /* USER CODE END PFP */
+  52:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+  53:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** /* Private user code ---------------------------------------------------------*/
+  54:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** /* USER CODE BEGIN 0 */
+  55:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+  56:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** /* USER CODE END 0 */
+  57:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+  58:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** /* External variables --------------------------------------------------------*/
+  59:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** extern CAN_HandleTypeDef hcan1;
+  60:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** extern CAN_HandleTypeDef hcan2;
+  61:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** extern DMA_HandleTypeDef hdma_usart1_rx;
+  62:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** extern DMA_HandleTypeDef hdma_usart1_tx;
+  63:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** extern DMA_HandleTypeDef hdma_usart3_rx;
+  64:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** extern DMA_HandleTypeDef hdma_usart6_rx;
+  65:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** extern DMA_HandleTypeDef hdma_usart6_tx;
+  66:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** extern UART_HandleTypeDef huart1;
+  67:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** extern UART_HandleTypeDef huart3;
+  68:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** extern UART_HandleTypeDef huart6;
+  69:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** extern TIM_HandleTypeDef htim2;
+  70:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+  71:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** /* USER CODE BEGIN EV */
+  72:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+  73:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** /* USER CODE END EV */
+  74:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+  75:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** /******************************************************************************/
+  76:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** /*           Cortex-M4 Processor Interruption and Exception Handlers          */
+  77:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** /******************************************************************************/
+  78:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** /**
+  79:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   * @brief This function handles Non maskable interrupt.
+  80:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   */
+  81:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** void NMI_Handler(void)
+  82:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** {
+  29              		.loc 1 82 1 view -0
+  30              		.cfi_startproc
+  31              		@ Volatile: function does not return.
+  32              		@ args = 0, pretend = 0, frame = 0
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s 			page 3
+
+
+  34              		@ link register save eliminated.
+  35              	.L2:
+  83:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE BEGIN NonMaskableInt_IRQn 0 */
+  84:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+  85:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE END NonMaskableInt_IRQn 0 */
+  86:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE BEGIN NonMaskableInt_IRQn 1 */
+  87:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   while (1)
+  36              		.loc 1 87 3 view .LVU1
+  88:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   {
+  89:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   }
+  37              		.loc 1 89 3 view .LVU2
+  87:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   {
+  38              		.loc 1 87 9 view .LVU3
+  39 0000 FEE7     		b	.L2
+  40              		.cfi_endproc
+  41              	.LFE134:
+  43              		.section	.text.HardFault_Handler,"ax",%progbits
+  44              		.align	1
+  45              		.global	HardFault_Handler
+  46              		.syntax unified
+  47              		.thumb
+  48              		.thumb_func
+  50              	HardFault_Handler:
+  51              	.LFB135:
+  90:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE END NonMaskableInt_IRQn 1 */
+  91:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** }
+  92:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+  93:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** /**
+  94:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   * @brief This function handles Hard fault interrupt.
+  95:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   */
+  96:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** void HardFault_Handler(void)
+  97:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** {
+  52              		.loc 1 97 1 view -0
+  53              		.cfi_startproc
+  54              		@ Volatile: function does not return.
+  55              		@ args = 0, pretend = 0, frame = 0
+  56              		@ frame_needed = 0, uses_anonymous_args = 0
+  57              		@ link register save eliminated.
+  58              	.L4:
+  98:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE BEGIN HardFault_IRQn 0 */
+  99:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+ 100:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE END HardFault_IRQn 0 */
+ 101:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   while (1)
+  59              		.loc 1 101 3 view .LVU5
+ 102:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   {
+ 103:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****     /* USER CODE BEGIN W1_HardFault_IRQn 0 */
+ 104:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****     /* USER CODE END W1_HardFault_IRQn 0 */
+ 105:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   }
+  60              		.loc 1 105 3 view .LVU6
+ 101:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   {
+  61              		.loc 1 101 9 view .LVU7
+  62 0000 FEE7     		b	.L4
+  63              		.cfi_endproc
+  64              	.LFE135:
+  66              		.section	.text.MemManage_Handler,"ax",%progbits
+  67              		.align	1
+  68              		.global	MemManage_Handler
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s 			page 4
+
+
+  69              		.syntax unified
+  70              		.thumb
+  71              		.thumb_func
+  73              	MemManage_Handler:
+  74              	.LFB136:
+ 106:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** }
+ 107:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+ 108:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** /**
+ 109:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   * @brief This function handles Memory management fault.
+ 110:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   */
+ 111:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** void MemManage_Handler(void)
+ 112:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** {
+  75              		.loc 1 112 1 view -0
+  76              		.cfi_startproc
+  77              		@ Volatile: function does not return.
+  78              		@ args = 0, pretend = 0, frame = 0
+  79              		@ frame_needed = 0, uses_anonymous_args = 0
+  80              		@ link register save eliminated.
+  81              	.L6:
+ 113:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE BEGIN MemoryManagement_IRQn 0 */
+ 114:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+ 115:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE END MemoryManagement_IRQn 0 */
+ 116:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   while (1)
+  82              		.loc 1 116 3 view .LVU9
+ 117:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   {
+ 118:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****     /* USER CODE BEGIN W1_MemoryManagement_IRQn 0 */
+ 119:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****     /* USER CODE END W1_MemoryManagement_IRQn 0 */
+ 120:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   }
+  83              		.loc 1 120 3 view .LVU10
+ 116:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   {
+  84              		.loc 1 116 9 view .LVU11
+  85 0000 FEE7     		b	.L6
+  86              		.cfi_endproc
+  87              	.LFE136:
+  89              		.section	.text.BusFault_Handler,"ax",%progbits
+  90              		.align	1
+  91              		.global	BusFault_Handler
+  92              		.syntax unified
+  93              		.thumb
+  94              		.thumb_func
+  96              	BusFault_Handler:
+  97              	.LFB137:
+ 121:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** }
+ 122:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+ 123:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** /**
+ 124:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   * @brief This function handles Pre-fetch fault, memory access fault.
+ 125:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   */
+ 126:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** void BusFault_Handler(void)
+ 127:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** {
+  98              		.loc 1 127 1 view -0
+  99              		.cfi_startproc
+ 100              		@ Volatile: function does not return.
+ 101              		@ args = 0, pretend = 0, frame = 0
+ 102              		@ frame_needed = 0, uses_anonymous_args = 0
+ 103              		@ link register save eliminated.
+ 104              	.L8:
+ 128:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE BEGIN BusFault_IRQn 0 */
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s 			page 5
+
+
+ 129:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+ 130:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE END BusFault_IRQn 0 */
+ 131:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   while (1)
+ 105              		.loc 1 131 3 view .LVU13
+ 132:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   {
+ 133:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****     /* USER CODE BEGIN W1_BusFault_IRQn 0 */
+ 134:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****     /* USER CODE END W1_BusFault_IRQn 0 */
+ 135:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   }
+ 106              		.loc 1 135 3 view .LVU14
+ 131:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   {
+ 107              		.loc 1 131 9 view .LVU15
+ 108 0000 FEE7     		b	.L8
+ 109              		.cfi_endproc
+ 110              	.LFE137:
+ 112              		.section	.text.UsageFault_Handler,"ax",%progbits
+ 113              		.align	1
+ 114              		.global	UsageFault_Handler
+ 115              		.syntax unified
+ 116              		.thumb
+ 117              		.thumb_func
+ 119              	UsageFault_Handler:
+ 120              	.LFB138:
+ 136:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** }
+ 137:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+ 138:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** /**
+ 139:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   * @brief This function handles Undefined instruction or illegal state.
+ 140:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   */
+ 141:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** void UsageFault_Handler(void)
+ 142:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** {
+ 121              		.loc 1 142 1 view -0
+ 122              		.cfi_startproc
+ 123              		@ Volatile: function does not return.
+ 124              		@ args = 0, pretend = 0, frame = 0
+ 125              		@ frame_needed = 0, uses_anonymous_args = 0
+ 126              		@ link register save eliminated.
+ 127              	.L10:
+ 143:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE BEGIN UsageFault_IRQn 0 */
+ 144:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+ 145:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE END UsageFault_IRQn 0 */
+ 146:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   while (1)
+ 128              		.loc 1 146 3 view .LVU17
+ 147:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   {
+ 148:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****     /* USER CODE BEGIN W1_UsageFault_IRQn 0 */
+ 149:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****     /* USER CODE END W1_UsageFault_IRQn 0 */
+ 150:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   }
+ 129              		.loc 1 150 3 view .LVU18
+ 146:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   {
+ 130              		.loc 1 146 9 view .LVU19
+ 131 0000 FEE7     		b	.L10
+ 132              		.cfi_endproc
+ 133              	.LFE138:
+ 135              		.section	.text.DebugMon_Handler,"ax",%progbits
+ 136              		.align	1
+ 137              		.global	DebugMon_Handler
+ 138              		.syntax unified
+ 139              		.thumb
+ 140              		.thumb_func
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s 			page 6
+
+
+ 142              	DebugMon_Handler:
+ 143              	.LFB139:
+ 151:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** }
+ 152:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+ 153:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** /**
+ 154:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   * @brief This function handles Debug monitor.
+ 155:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   */
+ 156:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** void DebugMon_Handler(void)
+ 157:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** {
+ 144              		.loc 1 157 1 view -0
+ 145              		.cfi_startproc
+ 146              		@ args = 0, pretend = 0, frame = 0
+ 147              		@ frame_needed = 0, uses_anonymous_args = 0
+ 148              		@ link register save eliminated.
+ 158:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE BEGIN DebugMonitor_IRQn 0 */
+ 159:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+ 160:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE END DebugMonitor_IRQn 0 */
+ 161:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE BEGIN DebugMonitor_IRQn 1 */
+ 162:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+ 163:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE END DebugMonitor_IRQn 1 */
+ 164:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** }
+ 149              		.loc 1 164 1 view .LVU21
+ 150 0000 7047     		bx	lr
+ 151              		.cfi_endproc
+ 152              	.LFE139:
+ 154              		.section	.text.EXTI0_IRQHandler,"ax",%progbits
+ 155              		.align	1
+ 156              		.global	EXTI0_IRQHandler
+ 157              		.syntax unified
+ 158              		.thumb
+ 159              		.thumb_func
+ 161              	EXTI0_IRQHandler:
+ 162              	.LFB140:
+ 165:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+ 166:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** /******************************************************************************/
+ 167:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** /* STM32F4xx Peripheral Interrupt Handlers                                    */
+ 168:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** /* Add here the Interrupt Handlers for the used peripherals.                  */
+ 169:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** /* For the available peripheral interrupt handler names,                      */
+ 170:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** /* please refer to the startup file (startup_stm32f4xx.s).                    */
+ 171:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** /******************************************************************************/
+ 172:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+ 173:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** /**
+ 174:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   * @brief This function handles EXTI line0 interrupt.
+ 175:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   */
+ 176:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** void EXTI0_IRQHandler(void)
+ 177:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** {
+ 163              		.loc 1 177 1 view -0
+ 164              		.cfi_startproc
+ 165              		@ args = 0, pretend = 0, frame = 0
+ 166              		@ frame_needed = 0, uses_anonymous_args = 0
+ 167 0000 08B5     		push	{r3, lr}
+ 168              	.LCFI0:
+ 169              		.cfi_def_cfa_offset 8
+ 170              		.cfi_offset 3, -8
+ 171              		.cfi_offset 14, -4
+ 178:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE BEGIN EXTI0_IRQn 0 */
+ 179:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s 			page 7
+
+
+ 180:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE END EXTI0_IRQn 0 */
+ 181:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_0);
+ 172              		.loc 1 181 3 view .LVU23
+ 173 0002 0120     		movs	r0, #1
+ 174 0004 FFF7FEFF 		bl	HAL_GPIO_EXTI_IRQHandler
+ 175              	.LVL0:
+ 182:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE BEGIN EXTI0_IRQn 1 */
+ 183:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+ 184:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE END EXTI0_IRQn 1 */
+ 185:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** }
+ 176              		.loc 1 185 1 is_stmt 0 view .LVU24
+ 177 0008 08BD     		pop	{r3, pc}
+ 178              		.cfi_endproc
+ 179              	.LFE140:
+ 181              		.section	.text.EXTI3_IRQHandler,"ax",%progbits
+ 182              		.align	1
+ 183              		.global	EXTI3_IRQHandler
+ 184              		.syntax unified
+ 185              		.thumb
+ 186              		.thumb_func
+ 188              	EXTI3_IRQHandler:
+ 189              	.LFB141:
+ 186:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+ 187:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** /**
+ 188:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   * @brief This function handles EXTI line3 interrupt.
+ 189:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   */
+ 190:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** void EXTI3_IRQHandler(void)
+ 191:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** {
+ 190              		.loc 1 191 1 is_stmt 1 view -0
+ 191              		.cfi_startproc
+ 192              		@ args = 0, pretend = 0, frame = 0
+ 193              		@ frame_needed = 0, uses_anonymous_args = 0
+ 194 0000 08B5     		push	{r3, lr}
+ 195              	.LCFI1:
+ 196              		.cfi_def_cfa_offset 8
+ 197              		.cfi_offset 3, -8
+ 198              		.cfi_offset 14, -4
+ 192:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE BEGIN EXTI3_IRQn 0 */
+ 193:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+ 194:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE END EXTI3_IRQn 0 */
+ 195:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   HAL_GPIO_EXTI_IRQHandler(DRDY_IST8310_Pin);
+ 199              		.loc 1 195 3 view .LVU26
+ 200 0002 0820     		movs	r0, #8
+ 201 0004 FFF7FEFF 		bl	HAL_GPIO_EXTI_IRQHandler
+ 202              	.LVL1:
+ 196:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE BEGIN EXTI3_IRQn 1 */
+ 197:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+ 198:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE END EXTI3_IRQn 1 */
+ 199:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** }
+ 203              		.loc 1 199 1 is_stmt 0 view .LVU27
+ 204 0008 08BD     		pop	{r3, pc}
+ 205              		.cfi_endproc
+ 206              	.LFE141:
+ 208              		.section	.text.EXTI4_IRQHandler,"ax",%progbits
+ 209              		.align	1
+ 210              		.global	EXTI4_IRQHandler
+ 211              		.syntax unified
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s 			page 8
+
+
+ 212              		.thumb
+ 213              		.thumb_func
+ 215              	EXTI4_IRQHandler:
+ 216              	.LFB142:
+ 200:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+ 201:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** /**
+ 202:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   * @brief This function handles EXTI line4 interrupt.
+ 203:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   */
+ 204:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** void EXTI4_IRQHandler(void)
+ 205:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** {
+ 217              		.loc 1 205 1 is_stmt 1 view -0
+ 218              		.cfi_startproc
+ 219              		@ args = 0, pretend = 0, frame = 0
+ 220              		@ frame_needed = 0, uses_anonymous_args = 0
+ 221 0000 08B5     		push	{r3, lr}
+ 222              	.LCFI2:
+ 223              		.cfi_def_cfa_offset 8
+ 224              		.cfi_offset 3, -8
+ 225              		.cfi_offset 14, -4
+ 206:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE BEGIN EXTI4_IRQn 0 */
+ 207:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+ 208:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE END EXTI4_IRQn 0 */
+ 209:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   HAL_GPIO_EXTI_IRQHandler(INT1_ACCEL_Pin);
+ 226              		.loc 1 209 3 view .LVU29
+ 227 0002 1020     		movs	r0, #16
+ 228 0004 FFF7FEFF 		bl	HAL_GPIO_EXTI_IRQHandler
+ 229              	.LVL2:
+ 210:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE BEGIN EXTI4_IRQn 1 */
+ 211:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+ 212:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE END EXTI4_IRQn 1 */
+ 213:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** }
+ 230              		.loc 1 213 1 is_stmt 0 view .LVU30
+ 231 0008 08BD     		pop	{r3, pc}
+ 232              		.cfi_endproc
+ 233              	.LFE142:
+ 235              		.section	.text.DMA1_Stream1_IRQHandler,"ax",%progbits
+ 236              		.align	1
+ 237              		.global	DMA1_Stream1_IRQHandler
+ 238              		.syntax unified
+ 239              		.thumb
+ 240              		.thumb_func
+ 242              	DMA1_Stream1_IRQHandler:
+ 243              	.LFB143:
+ 214:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+ 215:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** /**
+ 216:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   * @brief This function handles DMA1 stream1 global interrupt.
+ 217:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   */
+ 218:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** void DMA1_Stream1_IRQHandler(void)
+ 219:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** {
+ 244              		.loc 1 219 1 is_stmt 1 view -0
+ 245              		.cfi_startproc
+ 246              		@ args = 0, pretend = 0, frame = 0
+ 247              		@ frame_needed = 0, uses_anonymous_args = 0
+ 248 0000 08B5     		push	{r3, lr}
+ 249              	.LCFI3:
+ 250              		.cfi_def_cfa_offset 8
+ 251              		.cfi_offset 3, -8
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s 			page 9
+
+
+ 252              		.cfi_offset 14, -4
+ 220:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE BEGIN DMA1_Stream1_IRQn 0 */
+ 221:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+ 222:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE END DMA1_Stream1_IRQn 0 */
+ 223:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   HAL_DMA_IRQHandler(&hdma_usart3_rx);
+ 253              		.loc 1 223 3 view .LVU32
+ 254 0002 0248     		ldr	r0, .L20
+ 255 0004 FFF7FEFF 		bl	HAL_DMA_IRQHandler
+ 256              	.LVL3:
+ 224:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE BEGIN DMA1_Stream1_IRQn 1 */
+ 225:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+ 226:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE END DMA1_Stream1_IRQn 1 */
+ 227:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** }
+ 257              		.loc 1 227 1 is_stmt 0 view .LVU33
+ 258 0008 08BD     		pop	{r3, pc}
+ 259              	.L21:
+ 260 000a 00BF     		.align	2
+ 261              	.L20:
+ 262 000c 00000000 		.word	hdma_usart3_rx
+ 263              		.cfi_endproc
+ 264              	.LFE143:
+ 266              		.section	.text.CAN1_RX0_IRQHandler,"ax",%progbits
+ 267              		.align	1
+ 268              		.global	CAN1_RX0_IRQHandler
+ 269              		.syntax unified
+ 270              		.thumb
+ 271              		.thumb_func
+ 273              	CAN1_RX0_IRQHandler:
+ 274              	.LFB144:
+ 228:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+ 229:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** /**
+ 230:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   * @brief This function handles CAN1 RX0 interrupts.
+ 231:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   */
+ 232:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** void CAN1_RX0_IRQHandler(void)
+ 233:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** {
+ 275              		.loc 1 233 1 is_stmt 1 view -0
+ 276              		.cfi_startproc
+ 277              		@ args = 0, pretend = 0, frame = 0
+ 278              		@ frame_needed = 0, uses_anonymous_args = 0
+ 279 0000 08B5     		push	{r3, lr}
+ 280              	.LCFI4:
+ 281              		.cfi_def_cfa_offset 8
+ 282              		.cfi_offset 3, -8
+ 283              		.cfi_offset 14, -4
+ 234:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE BEGIN CAN1_RX0_IRQn 0 */
+ 235:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   
+ 236:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE END CAN1_RX0_IRQn 0 */
+ 237:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   HAL_CAN_IRQHandler(&hcan1);
+ 284              		.loc 1 237 3 view .LVU35
+ 285 0002 0248     		ldr	r0, .L24
+ 286 0004 FFF7FEFF 		bl	HAL_CAN_IRQHandler
+ 287              	.LVL4:
+ 238:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE BEGIN CAN1_RX0_IRQn 1 */
+ 239:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+ 240:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE END CAN1_RX0_IRQn 1 */
+ 241:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** }
+ 288              		.loc 1 241 1 is_stmt 0 view .LVU36
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s 			page 10
+
+
+ 289 0008 08BD     		pop	{r3, pc}
+ 290              	.L25:
+ 291 000a 00BF     		.align	2
+ 292              	.L24:
+ 293 000c 00000000 		.word	hcan1
+ 294              		.cfi_endproc
+ 295              	.LFE144:
+ 297              		.section	.text.CAN1_RX1_IRQHandler,"ax",%progbits
+ 298              		.align	1
+ 299              		.global	CAN1_RX1_IRQHandler
+ 300              		.syntax unified
+ 301              		.thumb
+ 302              		.thumb_func
+ 304              	CAN1_RX1_IRQHandler:
+ 305              	.LFB145:
+ 242:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+ 243:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** /**
+ 244:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   * @brief This function handles CAN1 RX1 interrupt.
+ 245:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   */
+ 246:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** void CAN1_RX1_IRQHandler(void)
+ 247:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** {
+ 306              		.loc 1 247 1 is_stmt 1 view -0
+ 307              		.cfi_startproc
+ 308              		@ args = 0, pretend = 0, frame = 0
+ 309              		@ frame_needed = 0, uses_anonymous_args = 0
+ 310 0000 08B5     		push	{r3, lr}
+ 311              	.LCFI5:
+ 312              		.cfi_def_cfa_offset 8
+ 313              		.cfi_offset 3, -8
+ 314              		.cfi_offset 14, -4
+ 248:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE BEGIN CAN1_RX1_IRQn 0 */
+ 249:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+ 250:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE END CAN1_RX1_IRQn 0 */
+ 251:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   HAL_CAN_IRQHandler(&hcan1);
+ 315              		.loc 1 251 3 view .LVU38
+ 316 0002 0248     		ldr	r0, .L28
+ 317 0004 FFF7FEFF 		bl	HAL_CAN_IRQHandler
+ 318              	.LVL5:
+ 252:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE BEGIN CAN1_RX1_IRQn 1 */
+ 253:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+ 254:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE END CAN1_RX1_IRQn 1 */
+ 255:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** }
+ 319              		.loc 1 255 1 is_stmt 0 view .LVU39
+ 320 0008 08BD     		pop	{r3, pc}
+ 321              	.L29:
+ 322 000a 00BF     		.align	2
+ 323              	.L28:
+ 324 000c 00000000 		.word	hcan1
+ 325              		.cfi_endproc
+ 326              	.LFE145:
+ 328              		.section	.text.EXTI9_5_IRQHandler,"ax",%progbits
+ 329              		.align	1
+ 330              		.global	EXTI9_5_IRQHandler
+ 331              		.syntax unified
+ 332              		.thumb
+ 333              		.thumb_func
+ 335              	EXTI9_5_IRQHandler:
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s 			page 11
+
+
+ 336              	.LFB146:
+ 256:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+ 257:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** /**
+ 258:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   * @brief This function handles EXTI line[9:5] interrupts.
+ 259:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   */
+ 260:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** void EXTI9_5_IRQHandler(void)
+ 261:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** {
+ 337              		.loc 1 261 1 is_stmt 1 view -0
+ 338              		.cfi_startproc
+ 339              		@ args = 0, pretend = 0, frame = 0
+ 340              		@ frame_needed = 0, uses_anonymous_args = 0
+ 341 0000 08B5     		push	{r3, lr}
+ 342              	.LCFI6:
+ 343              		.cfi_def_cfa_offset 8
+ 344              		.cfi_offset 3, -8
+ 345              		.cfi_offset 14, -4
+ 262:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE BEGIN EXTI9_5_IRQn 0 */
+ 263:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+ 264:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE END EXTI9_5_IRQn 0 */
+ 265:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   HAL_GPIO_EXTI_IRQHandler(INT1_GYRO_Pin);
+ 346              		.loc 1 265 3 view .LVU41
+ 347 0002 2020     		movs	r0, #32
+ 348 0004 FFF7FEFF 		bl	HAL_GPIO_EXTI_IRQHandler
+ 349              	.LVL6:
+ 266:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE BEGIN EXTI9_5_IRQn 1 */
+ 267:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+ 268:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE END EXTI9_5_IRQn 1 */
+ 269:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** }
+ 350              		.loc 1 269 1 is_stmt 0 view .LVU42
+ 351 0008 08BD     		pop	{r3, pc}
+ 352              		.cfi_endproc
+ 353              	.LFE146:
+ 355              		.section	.text.TIM2_IRQHandler,"ax",%progbits
+ 356              		.align	1
+ 357              		.global	TIM2_IRQHandler
+ 358              		.syntax unified
+ 359              		.thumb
+ 360              		.thumb_func
+ 362              	TIM2_IRQHandler:
+ 363              	.LFB147:
+ 270:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+ 271:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** /**
+ 272:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   * @brief This function handles TIM2 global interrupt.
+ 273:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   */
+ 274:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** void TIM2_IRQHandler(void)
+ 275:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** {
+ 364              		.loc 1 275 1 is_stmt 1 view -0
+ 365              		.cfi_startproc
+ 366              		@ args = 0, pretend = 0, frame = 0
+ 367              		@ frame_needed = 0, uses_anonymous_args = 0
+ 368 0000 08B5     		push	{r3, lr}
+ 369              	.LCFI7:
+ 370              		.cfi_def_cfa_offset 8
+ 371              		.cfi_offset 3, -8
+ 372              		.cfi_offset 14, -4
+ 276:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE BEGIN TIM2_IRQn 0 */
+ 277:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s 			page 12
+
+
+ 278:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE END TIM2_IRQn 0 */
+ 279:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   HAL_TIM_IRQHandler(&htim2);
+ 373              		.loc 1 279 3 view .LVU44
+ 374 0002 0248     		ldr	r0, .L34
+ 375 0004 FFF7FEFF 		bl	HAL_TIM_IRQHandler
+ 376              	.LVL7:
+ 280:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE BEGIN TIM2_IRQn 1 */
+ 281:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+ 282:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE END TIM2_IRQn 1 */
+ 283:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** }
+ 377              		.loc 1 283 1 is_stmt 0 view .LVU45
+ 378 0008 08BD     		pop	{r3, pc}
+ 379              	.L35:
+ 380 000a 00BF     		.align	2
+ 381              	.L34:
+ 382 000c 00000000 		.word	htim2
+ 383              		.cfi_endproc
+ 384              	.LFE147:
+ 386              		.section	.text.USART1_IRQHandler,"ax",%progbits
+ 387              		.align	1
+ 388              		.global	USART1_IRQHandler
+ 389              		.syntax unified
+ 390              		.thumb
+ 391              		.thumb_func
+ 393              	USART1_IRQHandler:
+ 394              	.LFB148:
+ 284:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+ 285:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** /**
+ 286:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   * @brief This function handles USART1 global interrupt.
+ 287:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   */
+ 288:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** void USART1_IRQHandler(void)
+ 289:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** {
+ 395              		.loc 1 289 1 is_stmt 1 view -0
+ 396              		.cfi_startproc
+ 397              		@ args = 0, pretend = 0, frame = 0
+ 398              		@ frame_needed = 0, uses_anonymous_args = 0
+ 399 0000 08B5     		push	{r3, lr}
+ 400              	.LCFI8:
+ 401              		.cfi_def_cfa_offset 8
+ 402              		.cfi_offset 3, -8
+ 403              		.cfi_offset 14, -4
+ 290:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE BEGIN USART1_IRQn 0 */
+ 291:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+ 292:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE END USART1_IRQn 0 */
+ 293:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   HAL_UART_IRQHandler(&huart1);
+ 404              		.loc 1 293 3 view .LVU47
+ 405 0002 0248     		ldr	r0, .L38
+ 406 0004 FFF7FEFF 		bl	HAL_UART_IRQHandler
+ 407              	.LVL8:
+ 294:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE BEGIN USART1_IRQn 1 */
+ 295:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+ 296:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE END USART1_IRQn 1 */
+ 297:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** }
+ 408              		.loc 1 297 1 is_stmt 0 view .LVU48
+ 409 0008 08BD     		pop	{r3, pc}
+ 410              	.L39:
+ 411 000a 00BF     		.align	2
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s 			page 13
+
+
+ 412              	.L38:
+ 413 000c 00000000 		.word	huart1
+ 414              		.cfi_endproc
+ 415              	.LFE148:
+ 417              		.section	.text.USART3_IRQHandler,"ax",%progbits
+ 418              		.align	1
+ 419              		.global	USART3_IRQHandler
+ 420              		.syntax unified
+ 421              		.thumb
+ 422              		.thumb_func
+ 424              	USART3_IRQHandler:
+ 425              	.LFB149:
+ 298:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+ 299:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** /**
+ 300:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   * @brief This function handles USART3 global interrupt.
+ 301:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   */
+ 302:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** void USART3_IRQHandler(void)
+ 303:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** {
+ 426              		.loc 1 303 1 is_stmt 1 view -0
+ 427              		.cfi_startproc
+ 428              		@ args = 0, pretend = 0, frame = 0
+ 429              		@ frame_needed = 0, uses_anonymous_args = 0
+ 430 0000 08B5     		push	{r3, lr}
+ 431              	.LCFI9:
+ 432              		.cfi_def_cfa_offset 8
+ 433              		.cfi_offset 3, -8
+ 434              		.cfi_offset 14, -4
+ 304:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE BEGIN USART3_IRQn 0 */
+ 305:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+ 306:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE END USART3_IRQn 0 */
+ 307:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   HAL_UART_IRQHandler(&huart3);
+ 435              		.loc 1 307 3 view .LVU50
+ 436 0002 0248     		ldr	r0, .L42
+ 437 0004 FFF7FEFF 		bl	HAL_UART_IRQHandler
+ 438              	.LVL9:
+ 308:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE BEGIN USART3_IRQn 1 */
+ 309:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+ 310:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE END USART3_IRQn 1 */
+ 311:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** }
+ 439              		.loc 1 311 1 is_stmt 0 view .LVU51
+ 440 0008 08BD     		pop	{r3, pc}
+ 441              	.L43:
+ 442 000a 00BF     		.align	2
+ 443              	.L42:
+ 444 000c 00000000 		.word	huart3
+ 445              		.cfi_endproc
+ 446              	.LFE149:
+ 448              		.section	.text.DMA2_Stream1_IRQHandler,"ax",%progbits
+ 449              		.align	1
+ 450              		.global	DMA2_Stream1_IRQHandler
+ 451              		.syntax unified
+ 452              		.thumb
+ 453              		.thumb_func
+ 455              	DMA2_Stream1_IRQHandler:
+ 456              	.LFB150:
+ 312:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+ 313:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** /**
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s 			page 14
+
+
+ 314:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   * @brief This function handles DMA2 stream1 global interrupt.
+ 315:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   */
+ 316:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** void DMA2_Stream1_IRQHandler(void)
+ 317:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** {
+ 457              		.loc 1 317 1 is_stmt 1 view -0
+ 458              		.cfi_startproc
+ 459              		@ args = 0, pretend = 0, frame = 0
+ 460              		@ frame_needed = 0, uses_anonymous_args = 0
+ 461 0000 08B5     		push	{r3, lr}
+ 462              	.LCFI10:
+ 463              		.cfi_def_cfa_offset 8
+ 464              		.cfi_offset 3, -8
+ 465              		.cfi_offset 14, -4
+ 318:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE BEGIN DMA2_Stream1_IRQn 0 */
+ 319:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+ 320:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE END DMA2_Stream1_IRQn 0 */
+ 321:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   HAL_DMA_IRQHandler(&hdma_usart6_rx);
+ 466              		.loc 1 321 3 view .LVU53
+ 467 0002 0248     		ldr	r0, .L46
+ 468 0004 FFF7FEFF 		bl	HAL_DMA_IRQHandler
+ 469              	.LVL10:
+ 322:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE BEGIN DMA2_Stream1_IRQn 1 */
+ 323:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+ 324:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE END DMA2_Stream1_IRQn 1 */
+ 325:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** }
+ 470              		.loc 1 325 1 is_stmt 0 view .LVU54
+ 471 0008 08BD     		pop	{r3, pc}
+ 472              	.L47:
+ 473 000a 00BF     		.align	2
+ 474              	.L46:
+ 475 000c 00000000 		.word	hdma_usart6_rx
+ 476              		.cfi_endproc
+ 477              	.LFE150:
+ 479              		.section	.text.CAN2_RX0_IRQHandler,"ax",%progbits
+ 480              		.align	1
+ 481              		.global	CAN2_RX0_IRQHandler
+ 482              		.syntax unified
+ 483              		.thumb
+ 484              		.thumb_func
+ 486              	CAN2_RX0_IRQHandler:
+ 487              	.LFB151:
+ 326:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+ 327:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** /**
+ 328:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   * @brief This function handles CAN2 RX0 interrupts.
+ 329:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   */
+ 330:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** void CAN2_RX0_IRQHandler(void)
+ 331:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** {
+ 488              		.loc 1 331 1 is_stmt 1 view -0
+ 489              		.cfi_startproc
+ 490              		@ args = 0, pretend = 0, frame = 0
+ 491              		@ frame_needed = 0, uses_anonymous_args = 0
+ 492 0000 08B5     		push	{r3, lr}
+ 493              	.LCFI11:
+ 494              		.cfi_def_cfa_offset 8
+ 495              		.cfi_offset 3, -8
+ 496              		.cfi_offset 14, -4
+ 332:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE BEGIN CAN2_RX0_IRQn 0 */
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s 			page 15
+
+
+ 333:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+ 334:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE END CAN2_RX0_IRQn 0 */
+ 335:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   HAL_CAN_IRQHandler(&hcan2);
+ 497              		.loc 1 335 3 view .LVU56
+ 498 0002 0248     		ldr	r0, .L50
+ 499 0004 FFF7FEFF 		bl	HAL_CAN_IRQHandler
+ 500              	.LVL11:
+ 336:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE BEGIN CAN2_RX0_IRQn 1 */
+ 337:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+ 338:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE END CAN2_RX0_IRQn 1 */
+ 339:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** }
+ 501              		.loc 1 339 1 is_stmt 0 view .LVU57
+ 502 0008 08BD     		pop	{r3, pc}
+ 503              	.L51:
+ 504 000a 00BF     		.align	2
+ 505              	.L50:
+ 506 000c 00000000 		.word	hcan2
+ 507              		.cfi_endproc
+ 508              	.LFE151:
+ 510              		.section	.text.CAN2_RX1_IRQHandler,"ax",%progbits
+ 511              		.align	1
+ 512              		.global	CAN2_RX1_IRQHandler
+ 513              		.syntax unified
+ 514              		.thumb
+ 515              		.thumb_func
+ 517              	CAN2_RX1_IRQHandler:
+ 518              	.LFB152:
+ 340:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+ 341:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** /**
+ 342:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   * @brief This function handles CAN2 RX1 interrupt.
+ 343:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   */
+ 344:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** void CAN2_RX1_IRQHandler(void)
+ 345:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** {
+ 519              		.loc 1 345 1 is_stmt 1 view -0
+ 520              		.cfi_startproc
+ 521              		@ args = 0, pretend = 0, frame = 0
+ 522              		@ frame_needed = 0, uses_anonymous_args = 0
+ 523 0000 08B5     		push	{r3, lr}
+ 524              	.LCFI12:
+ 525              		.cfi_def_cfa_offset 8
+ 526              		.cfi_offset 3, -8
+ 527              		.cfi_offset 14, -4
+ 346:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE BEGIN CAN2_RX1_IRQn 0 */
+ 347:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+ 348:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE END CAN2_RX1_IRQn 0 */
+ 349:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   HAL_CAN_IRQHandler(&hcan2);
+ 528              		.loc 1 349 3 view .LVU59
+ 529 0002 0248     		ldr	r0, .L54
+ 530 0004 FFF7FEFF 		bl	HAL_CAN_IRQHandler
+ 531              	.LVL12:
+ 350:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE BEGIN CAN2_RX1_IRQn 1 */
+ 351:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+ 352:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE END CAN2_RX1_IRQn 1 */
+ 353:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** }
+ 532              		.loc 1 353 1 is_stmt 0 view .LVU60
+ 533 0008 08BD     		pop	{r3, pc}
+ 534              	.L55:
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s 			page 16
+
+
+ 535 000a 00BF     		.align	2
+ 536              	.L54:
+ 537 000c 00000000 		.word	hcan2
+ 538              		.cfi_endproc
+ 539              	.LFE152:
+ 541              		.section	.text.DMA2_Stream5_IRQHandler,"ax",%progbits
+ 542              		.align	1
+ 543              		.global	DMA2_Stream5_IRQHandler
+ 544              		.syntax unified
+ 545              		.thumb
+ 546              		.thumb_func
+ 548              	DMA2_Stream5_IRQHandler:
+ 549              	.LFB153:
+ 354:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+ 355:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** /**
+ 356:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   * @brief This function handles DMA2 stream5 global interrupt.
+ 357:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   */
+ 358:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** void DMA2_Stream5_IRQHandler(void)
+ 359:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** {
+ 550              		.loc 1 359 1 is_stmt 1 view -0
+ 551              		.cfi_startproc
+ 552              		@ args = 0, pretend = 0, frame = 0
+ 553              		@ frame_needed = 0, uses_anonymous_args = 0
+ 554 0000 08B5     		push	{r3, lr}
+ 555              	.LCFI13:
+ 556              		.cfi_def_cfa_offset 8
+ 557              		.cfi_offset 3, -8
+ 558              		.cfi_offset 14, -4
+ 360:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE BEGIN DMA2_Stream5_IRQn 0 */
+ 361:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+ 362:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE END DMA2_Stream5_IRQn 0 */
+ 363:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   HAL_DMA_IRQHandler(&hdma_usart1_rx);
+ 559              		.loc 1 363 3 view .LVU62
+ 560 0002 0248     		ldr	r0, .L58
+ 561 0004 FFF7FEFF 		bl	HAL_DMA_IRQHandler
+ 562              	.LVL13:
+ 364:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE BEGIN DMA2_Stream5_IRQn 1 */
+ 365:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+ 366:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE END DMA2_Stream5_IRQn 1 */
+ 367:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** }
+ 563              		.loc 1 367 1 is_stmt 0 view .LVU63
+ 564 0008 08BD     		pop	{r3, pc}
+ 565              	.L59:
+ 566 000a 00BF     		.align	2
+ 567              	.L58:
+ 568 000c 00000000 		.word	hdma_usart1_rx
+ 569              		.cfi_endproc
+ 570              	.LFE153:
+ 572              		.section	.text.DMA2_Stream6_IRQHandler,"ax",%progbits
+ 573              		.align	1
+ 574              		.global	DMA2_Stream6_IRQHandler
+ 575              		.syntax unified
+ 576              		.thumb
+ 577              		.thumb_func
+ 579              	DMA2_Stream6_IRQHandler:
+ 580              	.LFB154:
+ 368:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s 			page 17
+
+
+ 369:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** /**
+ 370:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   * @brief This function handles DMA2 stream6 global interrupt.
+ 371:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   */
+ 372:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** void DMA2_Stream6_IRQHandler(void)
+ 373:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** {
+ 581              		.loc 1 373 1 is_stmt 1 view -0
+ 582              		.cfi_startproc
+ 583              		@ args = 0, pretend = 0, frame = 0
+ 584              		@ frame_needed = 0, uses_anonymous_args = 0
+ 585 0000 08B5     		push	{r3, lr}
+ 586              	.LCFI14:
+ 587              		.cfi_def_cfa_offset 8
+ 588              		.cfi_offset 3, -8
+ 589              		.cfi_offset 14, -4
+ 374:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE BEGIN DMA2_Stream6_IRQn 0 */
+ 375:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+ 376:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE END DMA2_Stream6_IRQn 0 */
+ 377:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   HAL_DMA_IRQHandler(&hdma_usart6_tx);
+ 590              		.loc 1 377 3 view .LVU65
+ 591 0002 0248     		ldr	r0, .L62
+ 592 0004 FFF7FEFF 		bl	HAL_DMA_IRQHandler
+ 593              	.LVL14:
+ 378:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE BEGIN DMA2_Stream6_IRQn 1 */
+ 379:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+ 380:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE END DMA2_Stream6_IRQn 1 */
+ 381:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** }
+ 594              		.loc 1 381 1 is_stmt 0 view .LVU66
+ 595 0008 08BD     		pop	{r3, pc}
+ 596              	.L63:
+ 597 000a 00BF     		.align	2
+ 598              	.L62:
+ 599 000c 00000000 		.word	hdma_usart6_tx
+ 600              		.cfi_endproc
+ 601              	.LFE154:
+ 603              		.section	.text.DMA2_Stream7_IRQHandler,"ax",%progbits
+ 604              		.align	1
+ 605              		.global	DMA2_Stream7_IRQHandler
+ 606              		.syntax unified
+ 607              		.thumb
+ 608              		.thumb_func
+ 610              	DMA2_Stream7_IRQHandler:
+ 611              	.LFB155:
+ 382:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+ 383:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** /**
+ 384:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   * @brief This function handles DMA2 stream7 global interrupt.
+ 385:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   */
+ 386:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** void DMA2_Stream7_IRQHandler(void)
+ 387:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** {
+ 612              		.loc 1 387 1 is_stmt 1 view -0
+ 613              		.cfi_startproc
+ 614              		@ args = 0, pretend = 0, frame = 0
+ 615              		@ frame_needed = 0, uses_anonymous_args = 0
+ 616 0000 08B5     		push	{r3, lr}
+ 617              	.LCFI15:
+ 618              		.cfi_def_cfa_offset 8
+ 619              		.cfi_offset 3, -8
+ 620              		.cfi_offset 14, -4
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s 			page 18
+
+
+ 388:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE BEGIN DMA2_Stream7_IRQn 0 */
+ 389:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+ 390:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE END DMA2_Stream7_IRQn 0 */
+ 391:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   HAL_DMA_IRQHandler(&hdma_usart1_tx);
+ 621              		.loc 1 391 3 view .LVU68
+ 622 0002 0248     		ldr	r0, .L66
+ 623 0004 FFF7FEFF 		bl	HAL_DMA_IRQHandler
+ 624              	.LVL15:
+ 392:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE BEGIN DMA2_Stream7_IRQn 1 */
+ 393:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+ 394:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE END DMA2_Stream7_IRQn 1 */
+ 395:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** }
+ 625              		.loc 1 395 1 is_stmt 0 view .LVU69
+ 626 0008 08BD     		pop	{r3, pc}
+ 627              	.L67:
+ 628 000a 00BF     		.align	2
+ 629              	.L66:
+ 630 000c 00000000 		.word	hdma_usart1_tx
+ 631              		.cfi_endproc
+ 632              	.LFE155:
+ 634              		.section	.text.USART6_IRQHandler,"ax",%progbits
+ 635              		.align	1
+ 636              		.global	USART6_IRQHandler
+ 637              		.syntax unified
+ 638              		.thumb
+ 639              		.thumb_func
+ 641              	USART6_IRQHandler:
+ 642              	.LFB156:
+ 396:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+ 397:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** /**
+ 398:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   * @brief This function handles USART6 global interrupt.
+ 399:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   */
+ 400:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** void USART6_IRQHandler(void)
+ 401:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** {
+ 643              		.loc 1 401 1 is_stmt 1 view -0
+ 644              		.cfi_startproc
+ 645              		@ args = 0, pretend = 0, frame = 0
+ 646              		@ frame_needed = 0, uses_anonymous_args = 0
+ 647 0000 08B5     		push	{r3, lr}
+ 648              	.LCFI16:
+ 649              		.cfi_def_cfa_offset 8
+ 650              		.cfi_offset 3, -8
+ 651              		.cfi_offset 14, -4
+ 402:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE BEGIN USART6_IRQn 0 */
+ 403:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+ 404:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE END USART6_IRQn 0 */
+ 405:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   HAL_UART_IRQHandler(&huart6);
+ 652              		.loc 1 405 3 view .LVU71
+ 653 0002 0248     		ldr	r0, .L70
+ 654 0004 FFF7FEFF 		bl	HAL_UART_IRQHandler
+ 655              	.LVL16:
+ 406:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE BEGIN USART6_IRQn 1 */
+ 407:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** 
+ 408:control-base/typec-board-base/Core/Src/stm32f4xx_it.c ****   /* USER CODE END USART6_IRQn 1 */
+ 409:control-base/typec-board-base/Core/Src/stm32f4xx_it.c **** }
+ 656              		.loc 1 409 1 is_stmt 0 view .LVU72
+ 657 0008 08BD     		pop	{r3, pc}
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s 			page 19
+
+
+ 658              	.L71:
+ 659 000a 00BF     		.align	2
+ 660              	.L70:
+ 661 000c 00000000 		.word	huart6
+ 662              		.cfi_endproc
+ 663              	.LFE156:
+ 665              		.text
+ 666              	.Letext0:
+ 667              		.file 2 "/Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/arm-none-eabi/include/machine/_defa
+ 668              		.file 3 "/Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/arm-none-eabi/include/sys/_stdint.h
+ 669              		.file 4 "control-base/typec-board-base/Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h"
+ 670              		.file 5 "control-base/typec-board-base/Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h"
+ 671              		.file 6 "control-base/typec-board-base/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h"
+ 672              		.file 7 "control-base/typec-board-base/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h"
+ 673              		.file 8 "control-base/typec-board-base/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_can.h"
+ 674              		.file 9 "control-base/typec-board-base/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h"
+ 675              		.file 10 "control-base/typec-board-base/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h"
+ 676              		.file 11 "control-base/typec-board-base/Core/Inc/usart.h"
+ 677              		.file 12 "control-base/typec-board-base/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h"
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s 			page 20
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 stm32f4xx_it.c
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s:21     .text.NMI_Handler:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s:27     .text.NMI_Handler:00000000 NMI_Handler
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s:44     .text.HardFault_Handler:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s:50     .text.HardFault_Handler:00000000 HardFault_Handler
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s:67     .text.MemManage_Handler:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s:73     .text.MemManage_Handler:00000000 MemManage_Handler
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s:90     .text.BusFault_Handler:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s:96     .text.BusFault_Handler:00000000 BusFault_Handler
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s:113    .text.UsageFault_Handler:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s:119    .text.UsageFault_Handler:00000000 UsageFault_Handler
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s:136    .text.DebugMon_Handler:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s:142    .text.DebugMon_Handler:00000000 DebugMon_Handler
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s:155    .text.EXTI0_IRQHandler:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s:161    .text.EXTI0_IRQHandler:00000000 EXTI0_IRQHandler
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s:182    .text.EXTI3_IRQHandler:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s:188    .text.EXTI3_IRQHandler:00000000 EXTI3_IRQHandler
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s:209    .text.EXTI4_IRQHandler:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s:215    .text.EXTI4_IRQHandler:00000000 EXTI4_IRQHandler
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s:236    .text.DMA1_Stream1_IRQHandler:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s:242    .text.DMA1_Stream1_IRQHandler:00000000 DMA1_Stream1_IRQHandler
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s:262    .text.DMA1_Stream1_IRQHandler:0000000c $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s:267    .text.CAN1_RX0_IRQHandler:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s:273    .text.CAN1_RX0_IRQHandler:00000000 CAN1_RX0_IRQHandler
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s:293    .text.CAN1_RX0_IRQHandler:0000000c $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s:298    .text.CAN1_RX1_IRQHandler:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s:304    .text.CAN1_RX1_IRQHandler:00000000 CAN1_RX1_IRQHandler
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s:324    .text.CAN1_RX1_IRQHandler:0000000c $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s:329    .text.EXTI9_5_IRQHandler:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s:335    .text.EXTI9_5_IRQHandler:00000000 EXTI9_5_IRQHandler
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s:356    .text.TIM2_IRQHandler:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s:362    .text.TIM2_IRQHandler:00000000 TIM2_IRQHandler
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s:382    .text.TIM2_IRQHandler:0000000c $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s:387    .text.USART1_IRQHandler:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s:393    .text.USART1_IRQHandler:00000000 USART1_IRQHandler
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s:413    .text.USART1_IRQHandler:0000000c $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s:418    .text.USART3_IRQHandler:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s:424    .text.USART3_IRQHandler:00000000 USART3_IRQHandler
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s:444    .text.USART3_IRQHandler:0000000c $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s:449    .text.DMA2_Stream1_IRQHandler:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s:455    .text.DMA2_Stream1_IRQHandler:00000000 DMA2_Stream1_IRQHandler
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s:475    .text.DMA2_Stream1_IRQHandler:0000000c $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s:480    .text.CAN2_RX0_IRQHandler:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s:486    .text.CAN2_RX0_IRQHandler:00000000 CAN2_RX0_IRQHandler
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s:506    .text.CAN2_RX0_IRQHandler:0000000c $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s:511    .text.CAN2_RX1_IRQHandler:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s:517    .text.CAN2_RX1_IRQHandler:00000000 CAN2_RX1_IRQHandler
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s:537    .text.CAN2_RX1_IRQHandler:0000000c $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s:542    .text.DMA2_Stream5_IRQHandler:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s:548    .text.DMA2_Stream5_IRQHandler:00000000 DMA2_Stream5_IRQHandler
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s:568    .text.DMA2_Stream5_IRQHandler:0000000c $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s:573    .text.DMA2_Stream6_IRQHandler:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s:579    .text.DMA2_Stream6_IRQHandler:00000000 DMA2_Stream6_IRQHandler
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s:599    .text.DMA2_Stream6_IRQHandler:0000000c $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s:604    .text.DMA2_Stream7_IRQHandler:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s:610    .text.DMA2_Stream7_IRQHandler:00000000 DMA2_Stream7_IRQHandler
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s 			page 21
+
+
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s:630    .text.DMA2_Stream7_IRQHandler:0000000c $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s:635    .text.USART6_IRQHandler:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s:641    .text.USART6_IRQHandler:00000000 USART6_IRQHandler
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccrzT2rB.s:661    .text.USART6_IRQHandler:0000000c $d
+
+UNDEFINED SYMBOLS
+HAL_GPIO_EXTI_IRQHandler
+HAL_DMA_IRQHandler
+hdma_usart3_rx
+HAL_CAN_IRQHandler
+hcan1
+HAL_TIM_IRQHandler
+htim2
+HAL_UART_IRQHandler
+huart1
+huart3
+hdma_usart6_rx
+hcan2
+hdma_usart1_rx
+hdma_usart6_tx
+hdma_usart1_tx
+huart6
