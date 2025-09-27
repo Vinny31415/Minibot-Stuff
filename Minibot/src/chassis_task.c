@@ -13,6 +13,7 @@ void Chassis_Task_Init()
     // Init chassis hardware
     printf("hello\n");
     printf("hello again\n");
+    printf("Adele\n");
 }
 
 void Chassis_Ctrl_Loop()
