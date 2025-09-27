@@ -1,4 +1,4 @@
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 1
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqhSwGP.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -58,7 +58,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 1
   27:control-base/algo/src/MahonyAHRS.c **** //-------------------------------------------------------------------------------------------------
   28:control-base/algo/src/MahonyAHRS.c **** // Variable definitions
   29:control-base/algo/src/MahonyAHRS.c **** 
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 2
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqhSwGP.s 			page 2
 
 
   30:control-base/algo/src/MahonyAHRS.c **** volatile float twoKp = twoKpDef;											// 2 * proportional gain (Kp)
@@ -118,7 +118,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 1
   84:control-base/algo/src/MahonyAHRS.c ****         q2q3 = q[2] * q[3];
   85:control-base/algo/src/MahonyAHRS.c ****         q3q3 = q[3] * q[3];   
   86:control-base/algo/src/MahonyAHRS.c **** 
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 3
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqhSwGP.s 			page 3
 
 
   87:control-base/algo/src/MahonyAHRS.c ****         // Reference direction of Earth's magnetic field
@@ -178,7 +178,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 1
  141:control-base/algo/src/MahonyAHRS.c **** 	q[0] *= recipNorm;
  142:control-base/algo/src/MahonyAHRS.c **** 	q[1] *= recipNorm;
  143:control-base/algo/src/MahonyAHRS.c **** 	q[2] *= recipNorm;
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 4
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqhSwGP.s 			page 4
 
 
  144:control-base/algo/src/MahonyAHRS.c **** 	q[3] *= recipNorm;
@@ -238,7 +238,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 1
  198:control-base/algo/src/MahonyAHRS.c **** 	gy *= (0.5f * (1.0f / sampleFreq));
  199:control-base/algo/src/MahonyAHRS.c **** 	gz *= (0.5f * (1.0f / sampleFreq));
  200:control-base/algo/src/MahonyAHRS.c **** 	qa = q[0];
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 5
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqhSwGP.s 			page 5
 
 
  201:control-base/algo/src/MahonyAHRS.c **** 	qb = q[1];
@@ -298,7 +298,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 1
   44 0008 084B     		ldr	r3, .L2
   45 000a 10EE102A 		vmov	r2, s0	@ int
   46 000e A3EB6203 		sub	r3, r3, r2, asr #1
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 6
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqhSwGP.s 			page 6
 
 
   47 0012 00EE103A 		vmov	s0, r3	@ int
@@ -358,7 +358,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 1
   98              		.cfi_offset 83, -20
   99              		.cfi_offset 84, -16
  100              		.cfi_offset 85, -12
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 7
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqhSwGP.s 			page 7
 
 
  101 0006 0446     		mov	r4, r0
@@ -418,7 +418,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 1
  140              		.loc 1 161 3 is_stmt 1 view .LVU30
  161:control-base/algo/src/MahonyAHRS.c **** 		ay *= recipNorm;
  141              		.loc 1 161 6 is_stmt 0 view .LVU31
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 8
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqhSwGP.s 			page 8
 
 
  142 0058 68EE808A 		vmul.f32	s17, s17, s0
@@ -478,7 +478,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 1
  178 008c 67EEA77A 		vmul.f32	s15, s15, s15
  168:control-base/algo/src/MahonyAHRS.c **** 	
  179              		.loc 1 168 24 view .LVU50
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 9
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqhSwGP.s 			page 9
 
 
  180 0090 F6EE005A 		vmov.f32	s11, #5.0e-1
@@ -538,7 +538,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 1
  218 00c6 D3ED007A 		vldr.32	s15, [r3]
  176:control-base/algo/src/MahonyAHRS.c **** 			integralFBx += twoKi * halfex * (1.0f / sampleFreq);	// integral error scaled by Ki
  219              		.loc 1 176 5 view .LVU67
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 10
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqhSwGP.s 			page 10
 
 
  220 00ca F5EEC07A 		vcmpe.f32	s15, #0
@@ -598,7 +598,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 1
  260              		.loc 1 180 4 is_stmt 1 view .LVU81
  261 0128 D1ED007A 		vldr.32	s15, [r1]
  180:control-base/algo/src/MahonyAHRS.c **** 			gy += integralFBy;
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 11
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqhSwGP.s 			page 11
 
 
  262              		.loc 1 180 7 is_stmt 0 view .LVU82
@@ -658,7 +658,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 1
  301              		.loc 1 197 5 is_stmt 0 view .LVU97
  302 0166 DFED3F7A 		vldr.32	s15, .L13+24
  303 016a 29EE270A 		vmul.f32	s0, s18, s15
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 12
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqhSwGP.s 			page 12
 
 
  304              	.LVL31:
@@ -718,7 +718,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 1
  340 019e 84ED009A 		vstr.32	s18, [r4]
  204:control-base/algo/src/MahonyAHRS.c **** 	q[2] += (qa * gy - qb * gz + q[3] * gx);
  341              		.loc 1 204 2 is_stmt 1 view .LVU116
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 13
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqhSwGP.s 			page 13
 
 
  204:control-base/algo/src/MahonyAHRS.c **** 	q[2] += (qa * gy - qb * gz + q[3] * gx);
@@ -778,7 +778,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 1
  378              		.loc 1 206 34 view .LVU134
  379 01e6 20EE270A 		vmul.f32	s0, s0, s15
  380              	.LVL39:
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 14
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqhSwGP.s 			page 14
 
 
  206:control-base/algo/src/MahonyAHRS.c **** 	
@@ -838,7 +838,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 1
  213:control-base/algo/src/MahonyAHRS.c **** }
  418              		.loc 1 213 7 is_stmt 0 view .LVU152
  419 022e 69EE809A 		vmul.f32	s19, s19, s0
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 15
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqhSwGP.s 			page 15
 
 
  420 0232 C4ED039A 		vstr.32	s19, [r4, #12]
@@ -898,7 +898,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 1
  468              		.syntax unified
  469              		.thumb
  470              		.thumb_func
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 16
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqhSwGP.s 			page 16
 
 
  472              	MahonyAHRSupdate:
@@ -958,7 +958,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 1
  520              		.loc 1 50 2 view .LVU165
   51:control-base/algo/src/MahonyAHRS.c **** 	float qa, qb, qc;
  521              		.loc 1 51 2 view .LVU166
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 17
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqhSwGP.s 			page 17
 
 
   52:control-base/algo/src/MahonyAHRS.c **** 
@@ -1018,7 +1018,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 1
  561              		.loc 1 64 15 view .LVU181
  562 007e 37EE800A 		vadd.f32	s0, s15, s0
  563 0082 FFF7FEFF 		bl	invSqrt
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 18
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqhSwGP.s 			page 18
 
 
  564              	.LVL47:
@@ -1078,7 +1078,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 1
   73:control-base/algo/src/MahonyAHRS.c **** 
  602              		.loc 1 73 3 is_stmt 1 view .LVU198
   73:control-base/algo/src/MahonyAHRS.c **** 
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 19
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqhSwGP.s 			page 19
 
 
  603              		.loc 1 73 6 is_stmt 0 view .LVU199
@@ -1138,7 +1138,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 1
   82:control-base/algo/src/MahonyAHRS.c ****         q2q2 = q[2] * q[2];
  640              		.loc 1 82 14 is_stmt 0 view .LVU217
  641 00ee 2BEE0DBA 		vmul.f32	s22, s22, s26
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 20
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqhSwGP.s 			page 20
 
 
  642              	.LVL62:
@@ -1198,7 +1198,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 1
  679              	.LVL67:
   89:control-base/algo/src/MahonyAHRS.c ****         bx = sqrt(hx * hx + hy * hy);
  680              		.loc 1 89 9 is_stmt 1 view .LVU235
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 21
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqhSwGP.s 			page 21
 
 
   89:control-base/algo/src/MahonyAHRS.c ****         bx = sqrt(hx * hx + hy * hy);
@@ -1258,7 +1258,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 1
  720              	.LVL75:
  721 0172 51EC100B 		vmov	r0, r1, d0
   90:control-base/algo/src/MahonyAHRS.c ****         bz = 2.0f * (mx * (q1q3 - q0q2) + my * (q2q3 + q0q1) + mz * (0.5f - q1q1 - q2q2));
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 22
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqhSwGP.s 			page 22
 
 
  722              		.loc 1 90 12 discriminator 1 view .LVU251
@@ -1318,7 +1318,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 1
  759              		.loc 1 97 21 is_stmt 0 view .LVU268
  760 01ae 2CEE07CA 		vmul.f32	s24, s24, s14
  761              	.LVL82:
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 23
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqhSwGP.s 			page 23
 
 
   97:control-base/algo/src/MahonyAHRS.c ****         halfwy = bx * (q1q2 - q0q3) + bz * (q0q1 + q2q3);
@@ -1378,7 +1378,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 1
  799 01f2 37EE657A 		vsub.f32	s14, s14, s11
  102:control-base/algo/src/MahonyAHRS.c **** 		halfey = (az * halfvx - ax * halfvz) + (mz * halfwx - mx * halfwz);
  800              		.loc 1 102 10 view .LVU286
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 24
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqhSwGP.s 			page 24
 
 
  801 01f6 36EE076A 		vadd.f32	s12, s12, s14
@@ -1438,7 +1438,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 1
  104:control-base/algo/src/MahonyAHRS.c **** 
  840              		.loc 1 104 10 view .LVU302
  841 0232 78EE898A 		vadd.f32	s17, s17, s18
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 25
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqhSwGP.s 			page 25
 
 
  842              	.LVL96:
@@ -1498,7 +1498,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 1
  881 028c 524B     		ldr	r3, .L27+16
  882 028e D3ED006A 		vldr.32	s13, [r3]
  883 0292 76EEA77A 		vadd.f32	s15, s13, s15
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 26
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqhSwGP.s 			page 26
 
 
  884 0296 C3ED007A 		vstr.32	s15, [r3]
@@ -1558,7 +1558,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 1
  923              	.LVL103:
  924              	.L19:
  128:control-base/algo/src/MahonyAHRS.c **** 	gy *= (0.5f * (1.0f / sampleFreq));
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 27
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqhSwGP.s 			page 27
 
 
  925              		.loc 1 128 2 is_stmt 1 view .LVU333
@@ -1618,7 +1618,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 1
  961              		.loc 1 134 30 view .LVU351
  962 0308 79EEE59A 		vsub.f32	s19, s19, s11
  134:control-base/algo/src/MahonyAHRS.c **** 	q[1] += (qa * gx + qc * gz - q[3] * gy);
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 28
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqhSwGP.s 			page 28
 
 
  963              		.loc 1 134 7 view .LVU352
@@ -1678,7 +1678,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 1
  1000              	.LVL111:
  137:control-base/algo/src/MahonyAHRS.c **** 	
  1001              		.loc 1 137 19 view .LVU370
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 29
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqhSwGP.s 			page 29
 
 
  1002 0354 38EE2A8A 		vadd.f32	s16, s16, s21
@@ -1738,7 +1738,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 1
  1039 0398 68EE808A 		vmul.f32	s17, s17, s0
  1040 039c C4ED028A 		vstr.32	s17, [r4, #8]
  144:control-base/algo/src/MahonyAHRS.c **** }
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 30
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqhSwGP.s 			page 30
 
 
  1041              		.loc 1 144 2 is_stmt 1 view .LVU388
@@ -1798,7 +1798,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 1
  117:control-base/algo/src/MahonyAHRS.c **** 			integralFBz = 0.0f;
  1089              		.loc 1 117 4 is_stmt 1 view .LVU395
  117:control-base/algo/src/MahonyAHRS.c **** 			integralFBz = 0.0f;
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 31
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqhSwGP.s 			page 31
 
 
  1090              		.loc 1 117 16 is_stmt 0 view .LVU396
@@ -1852,30 +1852,30 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 1
  1147              	.Letext0:
  1148              		.file 2 "control-base/algo/inc/MahonyAHRS.h"
  1149              		.file 3 "/Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/arm-none-eabi/include/math.h"
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s 			page 32
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqhSwGP.s 			page 32
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 MahonyAHRS.c
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s:21     .text.invSqrt:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s:27     .text.invSqrt:00000000 invSqrt
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s:68     .text.invSqrt:0000002c $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s:73     .text.MahonyAHRSupdateIMU:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s:79     .text.MahonyAHRSupdateIMU:00000000 MahonyAHRSupdateIMU
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s:455    .text.MahonyAHRSupdateIMU:0000024c $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s:1137   .bss.twoKi:00000000 twoKi
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s:1130   .bss.integralFBx:00000000 integralFBx
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s:1123   .bss.integralFBy:00000000 integralFBy
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s:1116   .bss.integralFBz:00000000 integralFBz
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s:1144   .data.twoKp:00000000 twoKp
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s:466    .text.MahonyAHRSupdate:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s:472    .text.MahonyAHRSupdate:00000000 MahonyAHRSupdate
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s:1101   .text.MahonyAHRSupdate:000003c8 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s:1113   .bss.integralFBz:00000000 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s:1120   .bss.integralFBy:00000000 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s:1127   .bss.integralFBx:00000000 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s:1134   .bss.twoKi:00000000 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD06SVJ.s:1141   .data.twoKp:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqhSwGP.s:21     .text.invSqrt:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqhSwGP.s:27     .text.invSqrt:00000000 invSqrt
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqhSwGP.s:68     .text.invSqrt:0000002c $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqhSwGP.s:73     .text.MahonyAHRSupdateIMU:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqhSwGP.s:79     .text.MahonyAHRSupdateIMU:00000000 MahonyAHRSupdateIMU
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqhSwGP.s:455    .text.MahonyAHRSupdateIMU:0000024c $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqhSwGP.s:1137   .bss.twoKi:00000000 twoKi
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqhSwGP.s:1130   .bss.integralFBx:00000000 integralFBx
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqhSwGP.s:1123   .bss.integralFBy:00000000 integralFBy
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqhSwGP.s:1116   .bss.integralFBz:00000000 integralFBz
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqhSwGP.s:1144   .data.twoKp:00000000 twoKp
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqhSwGP.s:466    .text.MahonyAHRSupdate:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqhSwGP.s:472    .text.MahonyAHRSupdate:00000000 MahonyAHRSupdate
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqhSwGP.s:1101   .text.MahonyAHRSupdate:000003c8 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqhSwGP.s:1113   .bss.integralFBz:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqhSwGP.s:1120   .bss.integralFBy:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqhSwGP.s:1127   .bss.integralFBx:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqhSwGP.s:1134   .bss.twoKi:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqhSwGP.s:1141   .data.twoKp:00000000 $d
 
 UNDEFINED SYMBOLS
 __aeabi_f2d

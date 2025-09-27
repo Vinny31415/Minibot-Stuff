@@ -1,4 +1,4 @@
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc69wiwp.s 			page 1
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccwTSzGp.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -58,7 +58,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc69wiwp.s 			page 1
   46              		.loc 1 10 54 is_stmt 0 view .LVU3
   47 0008 0C20     		movs	r0, #12
   48              	.LVL1:
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc69wiwp.s 			page 2
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccwTSzGp.s 			page 2
 
 
   49              		.loc 1 10 54 view .LVU4
@@ -118,7 +118,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc69wiwp.s 			page 1
   20:control-base/bsp/src/bsp_daemon.c **** void Daemon_Reload(Daemon_Instance_t *daemon)
   21:control-base/bsp/src/bsp_daemon.c **** {
   96              		.loc 1 21 1 is_stmt 1 view -0
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc69wiwp.s 			page 3
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccwTSzGp.s 			page 3
 
 
   97              		.cfi_startproc
@@ -178,7 +178,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc69wiwp.s 			page 1
  147 000e 12DD     		ble	.L11
   28:control-base/bsp/src/bsp_daemon.c ****     {
   29:control-base/bsp/src/bsp_daemon.c ****         g_daemon_instances[i]->counter--;
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc69wiwp.s 			page 4
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccwTSzGp.s 			page 4
 
 
  148              		.loc 1 29 9 view .LVU30
@@ -238,7 +238,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc69wiwp.s 			page 1
  198              	g_daemon_instance_count:
  199 0000 00       		.space	1
  200              		.global	g_daemon_instances
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc69wiwp.s 			page 5
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccwTSzGp.s 			page 5
 
 
  201              		.section	.bss.g_daemon_instances,"aw",%nobits
@@ -253,23 +253,23 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc69wiwp.s 			page 1
  210              		.file 3 "/Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/arm-none-eabi/include/sys/_stdint.h
  211              		.file 4 "control-base/bsp/inc/bsp_daemon.h"
  212              		.file 5 "/Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/arm-none-eabi/include/stdlib.h"
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc69wiwp.s 			page 6
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccwTSzGp.s 			page 6
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 bsp_daemon.c
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc69wiwp.s:21     .text.Daemon_Register:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc69wiwp.s:27     .text.Daemon_Register:00000000 Daemon_Register
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc69wiwp.s:81     .text.Daemon_Register:00000024 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc69wiwp.s:198    .bss.g_daemon_instance_count:00000000 g_daemon_instance_count
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc69wiwp.s:205    .bss.g_daemon_instances:00000000 g_daemon_instances
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc69wiwp.s:87     .text.Daemon_Reload:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc69wiwp.s:93     .text.Daemon_Reload:00000000 Daemon_Reload
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc69wiwp.s:112    .text.Daemon_Task_Loop:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc69wiwp.s:118    .text.Daemon_Task_Loop:00000000 Daemon_Task_Loop
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc69wiwp.s:189    .text.Daemon_Task_Loop:00000038 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc69wiwp.s:199    .bss.g_daemon_instance_count:00000000 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc69wiwp.s:202    .bss.g_daemon_instances:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccwTSzGp.s:21     .text.Daemon_Register:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccwTSzGp.s:27     .text.Daemon_Register:00000000 Daemon_Register
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccwTSzGp.s:81     .text.Daemon_Register:00000024 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccwTSzGp.s:198    .bss.g_daemon_instance_count:00000000 g_daemon_instance_count
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccwTSzGp.s:205    .bss.g_daemon_instances:00000000 g_daemon_instances
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccwTSzGp.s:87     .text.Daemon_Reload:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccwTSzGp.s:93     .text.Daemon_Reload:00000000 Daemon_Reload
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccwTSzGp.s:112    .text.Daemon_Task_Loop:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccwTSzGp.s:118    .text.Daemon_Task_Loop:00000000 Daemon_Task_Loop
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccwTSzGp.s:189    .text.Daemon_Task_Loop:00000038 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccwTSzGp.s:199    .bss.g_daemon_instance_count:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccwTSzGp.s:202    .bss.g_daemon_instances:00000000 $d
 
 UNDEFINED SYMBOLS
 malloc

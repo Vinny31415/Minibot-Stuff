@@ -1,4 +1,4 @@
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccsr2qDs.s 			page 1
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccbP21kF.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -36,7 +36,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccsr2qDs.s 			page 1
    6:Minibot/src/debug_task.c **** #include "imu_task.h"
    7:Minibot/src/debug_task.c **** #include "robot.h"
    8:Minibot/src/debug_task.c **** #include "referee_system.h"
-   9:Minibot/src/debug_task.c **** #include "jetson_orin.h"
+   9:Minibot/src/debug_task.c **** // #include "jetson_orin.h"
   10:Minibot/src/debug_task.c **** #include "bsp_daemon.h"
   11:Minibot/src/debug_task.c **** #include "launch_task.h"
   12:Minibot/src/debug_task.c **** 
@@ -58,7 +58,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccsr2qDs.s 			page 1
   28:Minibot/src/debug_task.c **** #define DEBUG_ENABLED
   29:Minibot/src/debug_task.c **** 
   30:Minibot/src/debug_task.c **** void Debug_Task_Loop(void)
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccsr2qDs.s 			page 2
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccbP21kF.s 			page 2
 
 
   31:Minibot/src/debug_task.c **** {
@@ -87,7 +87,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccsr2qDs.s 			page 1
   49:Minibot/src/debug_task.c ****     //      counter = 0;
   50:Minibot/src/debug_task.c ****     //  }
   51:Minibot/src/debug_task.c **** #endif
-  52:Minibot/src/debug_task.c **** }...
+  52:Minibot/src/debug_task.c **** }
   34              		.loc 1 52 1 view .LVU1
   35 0000 7047     		bx	lr
   36              		.cfi_endproc
@@ -118,23 +118,23 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccsr2qDs.s 			page 1
   56              		.section	.data.top_border,"aw"
   57              		.align	2
   60              	top_border:
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccsr2qDs.s 			page 3
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccbP21kF.s 			page 3
 
 
   61 0000 1C000000 		.word	.LC1
   62              		.text
   63              	.Letext0:
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccsr2qDs.s 			page 4
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccbP21kF.s 			page 4
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 debug_task.c
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccsr2qDs.s:21     .text.Debug_Task_Loop:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccsr2qDs.s:27     .text.Debug_Task_Loop:00000000 Debug_Task_Loop
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccsr2qDs.s:48     .data.bottom_border:00000000 bottom_border
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccsr2qDs.s:41     .rodata.str1.4:00000000 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccsr2qDs.s:45     .data.bottom_border:00000000 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccsr2qDs.s:60     .data.top_border:00000000 top_border
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccsr2qDs.s:57     .data.top_border:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccbP21kF.s:21     .text.Debug_Task_Loop:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccbP21kF.s:27     .text.Debug_Task_Loop:00000000 Debug_Task_Loop
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccbP21kF.s:48     .data.bottom_border:00000000 bottom_border
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccbP21kF.s:41     .rodata.str1.4:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccbP21kF.s:45     .data.bottom_border:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccbP21kF.s:60     .data.top_border:00000000 top_border
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccbP21kF.s:57     .data.top_border:00000000 $d
 
 NO UNDEFINED SYMBOLS

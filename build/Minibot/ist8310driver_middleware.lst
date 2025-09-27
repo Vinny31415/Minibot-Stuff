@@ -1,4 +1,4 @@
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccLzGLIB.s 			page 1
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccOpxAoN.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -58,7 +58,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccLzGLIB.s 			page 1
   47              	.LFB140:
   12:control-base/devices/src/ist8310driver_middleware.c **** 
   13:control-base/devices/src/ist8310driver_middleware.c **** void ist8310_com_init(void)
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccLzGLIB.s 			page 2
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccOpxAoN.s 			page 2
 
 
   14:control-base/devices/src/ist8310driver_middleware.c **** {
@@ -118,7 +118,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccLzGLIB.s 			page 1
   95              		.loc 1 22 5 is_stmt 1 view .LVU9
   23:control-base/devices/src/ist8310driver_middleware.c **** }
   96              		.loc 1 23 1 is_stmt 0 view .LVU10
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccLzGLIB.s 			page 3
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccOpxAoN.s 			page 3
 
 
   97 001c 9DF81700 		ldrb	r0, [sp, #23]	@ zero_extendqisi2
@@ -178,7 +178,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccLzGLIB.s 			page 1
  150              	.LVL7:
   27:control-base/devices/src/ist8310driver_middleware.c **** 
   28:control-base/devices/src/ist8310driver_middleware.c **** }
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccLzGLIB.s 			page 4
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccOpxAoN.s 			page 4
 
 
  151              		.loc 1 28 1 view .LVU17
@@ -238,7 +238,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccLzGLIB.s 			page 1
  203              		.loc 1 32 1 view .LVU24
  204 0018 05B0     		add	sp, sp, #20
  205              	.LCFI8:
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccLzGLIB.s 			page 5
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccOpxAoN.s 			page 5
 
 
  206              		.cfi_def_cfa_offset 4
@@ -298,7 +298,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccLzGLIB.s 			page 1
  258              		.cfi_def_cfa_offset 4
  259              		@ sp needed
  260 001a 5DF804FB 		ldr	pc, [sp], #4
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccLzGLIB.s 			page 6
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccOpxAoN.s 			page 6
 
 
  261              	.L18:
@@ -358,7 +358,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccLzGLIB.s 			page 1
  313              		.cfi_def_cfa_offset 8
  314              		.cfi_offset 3, -8
  315              		.cfi_offset 14, -4
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccLzGLIB.s 			page 7
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccOpxAoN.s 			page 7
 
 
   43:control-base/devices/src/ist8310driver_middleware.c ****     delay_us(us);
@@ -418,7 +418,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccLzGLIB.s 			page 1
   51:control-base/devices/src/ist8310driver_middleware.c **** {
  366              		.loc 1 51 1 is_stmt 1 view -0
  367              		.cfi_startproc
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccLzGLIB.s 			page 8
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccOpxAoN.s 			page 8
 
 
  368              		@ args = 0, pretend = 0, frame = 0
@@ -455,37 +455,37 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccLzGLIB.s 			page 1
  398              		.file 8 "control-base/typec-board-base/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c.h"
  399              		.file 9 "control-base/typec-board-base/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os
  400              		.file 10 "control-base/bsp/inc/bsp_delay.h"
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccLzGLIB.s 			page 9
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccOpxAoN.s 			page 9
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 ist8310driver_middleware.c
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccLzGLIB.s:21     .text.ist8310_GPIO_init:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccLzGLIB.s:27     .text.ist8310_GPIO_init:00000000 ist8310_GPIO_init
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccLzGLIB.s:40     .text.ist8310_com_init:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccLzGLIB.s:46     .text.ist8310_com_init:00000000 ist8310_com_init
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccLzGLIB.s:59     .text.ist8310_IIC_read_single_reg:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccLzGLIB.s:65     .text.ist8310_IIC_read_single_reg:00000000 ist8310_IIC_read_single_reg
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccLzGLIB.s:106    .text.ist8310_IIC_read_single_reg:00000028 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccLzGLIB.s:111    .text.ist8310_IIC_write_single_reg:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccLzGLIB.s:117    .text.ist8310_IIC_write_single_reg:00000000 ist8310_IIC_write_single_reg
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccLzGLIB.s:160    .text.ist8310_IIC_write_single_reg:00000028 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccLzGLIB.s:165    .text.ist8310_IIC_read_muli_reg:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccLzGLIB.s:171    .text.ist8310_IIC_read_muli_reg:00000000 ist8310_IIC_read_muli_reg
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccLzGLIB.s:212    .text.ist8310_IIC_read_muli_reg:00000020 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccLzGLIB.s:217    .text.ist8310_IIC_write_muli_reg:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccLzGLIB.s:223    .text.ist8310_IIC_write_muli_reg:00000000 ist8310_IIC_write_muli_reg
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccLzGLIB.s:264    .text.ist8310_IIC_write_muli_reg:00000020 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccLzGLIB.s:269    .text.ist8310_delay_ms:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccLzGLIB.s:275    .text.ist8310_delay_ms:00000000 ist8310_delay_ms
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccLzGLIB.s:297    .text.ist8310_delay_us:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccLzGLIB.s:303    .text.ist8310_delay_us:00000000 ist8310_delay_us
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccLzGLIB.s:325    .text.ist8310_RST_H:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccLzGLIB.s:331    .text.ist8310_RST_H:00000000 ist8310_RST_H
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccLzGLIB.s:353    .text.ist8310_RST_H:00000010 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccLzGLIB.s:358    .text.ist8310_RST_L:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccLzGLIB.s:364    .text.ist8310_RST_L:00000000 ist8310_RST_L
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccLzGLIB.s:386    .text.ist8310_RST_L:00000010 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccOpxAoN.s:21     .text.ist8310_GPIO_init:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccOpxAoN.s:27     .text.ist8310_GPIO_init:00000000 ist8310_GPIO_init
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccOpxAoN.s:40     .text.ist8310_com_init:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccOpxAoN.s:46     .text.ist8310_com_init:00000000 ist8310_com_init
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccOpxAoN.s:59     .text.ist8310_IIC_read_single_reg:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccOpxAoN.s:65     .text.ist8310_IIC_read_single_reg:00000000 ist8310_IIC_read_single_reg
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccOpxAoN.s:106    .text.ist8310_IIC_read_single_reg:00000028 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccOpxAoN.s:111    .text.ist8310_IIC_write_single_reg:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccOpxAoN.s:117    .text.ist8310_IIC_write_single_reg:00000000 ist8310_IIC_write_single_reg
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccOpxAoN.s:160    .text.ist8310_IIC_write_single_reg:00000028 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccOpxAoN.s:165    .text.ist8310_IIC_read_muli_reg:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccOpxAoN.s:171    .text.ist8310_IIC_read_muli_reg:00000000 ist8310_IIC_read_muli_reg
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccOpxAoN.s:212    .text.ist8310_IIC_read_muli_reg:00000020 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccOpxAoN.s:217    .text.ist8310_IIC_write_muli_reg:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccOpxAoN.s:223    .text.ist8310_IIC_write_muli_reg:00000000 ist8310_IIC_write_muli_reg
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccOpxAoN.s:264    .text.ist8310_IIC_write_muli_reg:00000020 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccOpxAoN.s:269    .text.ist8310_delay_ms:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccOpxAoN.s:275    .text.ist8310_delay_ms:00000000 ist8310_delay_ms
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccOpxAoN.s:297    .text.ist8310_delay_us:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccOpxAoN.s:303    .text.ist8310_delay_us:00000000 ist8310_delay_us
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccOpxAoN.s:325    .text.ist8310_RST_H:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccOpxAoN.s:331    .text.ist8310_RST_H:00000000 ist8310_RST_H
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccOpxAoN.s:353    .text.ist8310_RST_H:00000010 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccOpxAoN.s:358    .text.ist8310_RST_L:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccOpxAoN.s:364    .text.ist8310_RST_L:00000000 ist8310_RST_L
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccOpxAoN.s:386    .text.ist8310_RST_L:00000010 $d
 
 UNDEFINED SYMBOLS
 HAL_I2C_Mem_Read

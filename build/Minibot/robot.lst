@@ -1,4 +1,4 @@
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s 			page 1
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -41,94 +41,88 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s 			page 1
    9:Minibot/inc/robot_tasks.h **** #include "launch_task.h"
   10:Minibot/inc/robot_tasks.h **** #include "motor_task.h"
   11:Minibot/inc/robot_tasks.h **** #include "debug_task.h"
-  12:Minibot/inc/robot_tasks.h **** #include "jetson_orin.h"
-  13:Minibot/inc/robot_tasks.h **** #include "bsp_serial.h"
-  14:Minibot/inc/robot_tasks.h **** #include "bsp_daemon.h"
-  15:Minibot/inc/robot_tasks.h **** 
-  16:Minibot/inc/robot_tasks.h **** extern void IMU_Task(void const *pvParameters);
-  17:Minibot/inc/robot_tasks.h **** 
-  18:Minibot/inc/robot_tasks.h **** osThreadId imu_task_handle;
-  19:Minibot/inc/robot_tasks.h **** osThreadId robot_command_task_handle;
-  20:Minibot/inc/robot_tasks.h **** osThreadId motor_task_handle;
-  21:Minibot/inc/robot_tasks.h **** osThreadId ui_task_handle;
-  22:Minibot/inc/robot_tasks.h **** osThreadId debug_task_handle;
-  23:Minibot/inc/robot_tasks.h **** osThreadId jetson_orin_task_handle;
-  24:Minibot/inc/robot_tasks.h **** osThreadId daemon_task_handle;
-  25:Minibot/inc/robot_tasks.h **** 
-  26:Minibot/inc/robot_tasks.h **** void Robot_Tasks_Robot_Command(void const *argument);
-  27:Minibot/inc/robot_tasks.h **** void Robot_Tasks_Motor(void const *argument);
-  28:Minibot/inc/robot_tasks.h **** void Robot_Tasks_IMU(void const *argument);
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s 			page 2
+  12:Minibot/inc/robot_tasks.h **** #include "bsp_serial.h"
+  13:Minibot/inc/robot_tasks.h **** #include "bsp_daemon.h"
+  14:Minibot/inc/robot_tasks.h **** 
+  15:Minibot/inc/robot_tasks.h **** extern void IMU_Task(void const *pvParameters);
+  16:Minibot/inc/robot_tasks.h **** 
+  17:Minibot/inc/robot_tasks.h **** osThreadId imu_task_handle;
+  18:Minibot/inc/robot_tasks.h **** osThreadId robot_command_task_handle;
+  19:Minibot/inc/robot_tasks.h **** osThreadId motor_task_handle;
+  20:Minibot/inc/robot_tasks.h **** osThreadId ui_task_handle;
+  21:Minibot/inc/robot_tasks.h **** osThreadId debug_task_handle;
+  22:Minibot/inc/robot_tasks.h **** osThreadId daemon_task_handle;
+  23:Minibot/inc/robot_tasks.h **** 
+  24:Minibot/inc/robot_tasks.h **** void Robot_Tasks_Robot_Command(void const *argument);
+  25:Minibot/inc/robot_tasks.h **** void Robot_Tasks_Motor(void const *argument);
+  26:Minibot/inc/robot_tasks.h **** void Robot_Tasks_IMU(void const *argument);
+  27:Minibot/inc/robot_tasks.h **** void Robot_Tasks_UI(void const *argument);
+  28:Minibot/inc/robot_tasks.h **** void Robot_Tasks_Debug(void const *argument);
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s 			page 2
 
 
-  29:Minibot/inc/robot_tasks.h **** void Robot_Tasks_UI(void const *argument);
-  30:Minibot/inc/robot_tasks.h **** void Robot_Tasks_Debug(void const *argument);
-  31:Minibot/inc/robot_tasks.h **** void Robot_Tasks_Jetson_Orin(void const *argument);
-  32:Minibot/inc/robot_tasks.h **** void Robot_Tasks_Daemon(void const *argument);
-  33:Minibot/inc/robot_tasks.h **** 
-  34:Minibot/inc/robot_tasks.h **** void Robot_Tasks_Start()
-  35:Minibot/inc/robot_tasks.h **** {
-  36:Minibot/inc/robot_tasks.h ****     osThreadDef(imu_task, Robot_Tasks_IMU, osPriorityAboveNormal, 0, 1024);
-  37:Minibot/inc/robot_tasks.h ****     imu_task_handle = osThreadCreate(osThread(imu_task), NULL);
+  29:Minibot/inc/robot_tasks.h **** void Robot_Tasks_Daemon(void const *argument);
+  30:Minibot/inc/robot_tasks.h **** 
+  31:Minibot/inc/robot_tasks.h **** void Robot_Tasks_Start()
+  32:Minibot/inc/robot_tasks.h **** {
+  33:Minibot/inc/robot_tasks.h ****     osThreadDef(imu_task, Robot_Tasks_IMU, osPriorityAboveNormal, 0, 1024);
+  34:Minibot/inc/robot_tasks.h ****     imu_task_handle = osThreadCreate(osThread(imu_task), NULL);
+  35:Minibot/inc/robot_tasks.h **** 
+  36:Minibot/inc/robot_tasks.h ****     osThreadDef(motor_task, Robot_Tasks_Motor, osPriorityAboveNormal, 0, 256);
+  37:Minibot/inc/robot_tasks.h ****     motor_task_handle = osThreadCreate(osThread(motor_task), NULL);
   38:Minibot/inc/robot_tasks.h **** 
-  39:Minibot/inc/robot_tasks.h ****     osThreadDef(motor_task, Robot_Tasks_Motor, osPriorityAboveNormal, 0, 256);
-  40:Minibot/inc/robot_tasks.h ****     motor_task_handle = osThreadCreate(osThread(motor_task), NULL);
+  39:Minibot/inc/robot_tasks.h ****     osThreadDef(robot_command_task, Robot_Tasks_Robot_Command, osPriorityAboveNormal, 0, 256);
+  40:Minibot/inc/robot_tasks.h ****     robot_command_task_handle = osThreadCreate(osThread(robot_command_task), NULL);
   41:Minibot/inc/robot_tasks.h **** 
-  42:Minibot/inc/robot_tasks.h ****     osThreadDef(robot_command_task, Robot_Tasks_Robot_Command, osPriorityAboveNormal, 0, 256);
-  43:Minibot/inc/robot_tasks.h ****     robot_command_task_handle = osThreadCreate(osThread(robot_command_task), NULL);
+  42:Minibot/inc/robot_tasks.h ****     osThreadDef(ui_task, Robot_Tasks_UI, osPriorityAboveNormal, 0, 256);
+  43:Minibot/inc/robot_tasks.h ****     ui_task_handle = osThreadCreate(osThread(ui_task), NULL);
   44:Minibot/inc/robot_tasks.h **** 
-  45:Minibot/inc/robot_tasks.h ****     osThreadDef(ui_task, Robot_Tasks_UI, osPriorityAboveNormal, 0, 256);
-  46:Minibot/inc/robot_tasks.h ****     ui_task_handle = osThreadCreate(osThread(ui_task), NULL);
+  45:Minibot/inc/robot_tasks.h ****     osThreadDef(debug_task, Robot_Tasks_Debug, osPriorityIdle, 0, 256);
+  46:Minibot/inc/robot_tasks.h ****     debug_task_handle = osThreadCreate(osThread(debug_task), NULL);
   47:Minibot/inc/robot_tasks.h **** 
-  48:Minibot/inc/robot_tasks.h ****     osThreadDef(debug_task, Robot_Tasks_Debug, osPriorityIdle, 0, 256);
-  49:Minibot/inc/robot_tasks.h ****     debug_task_handle = osThreadCreate(osThread(debug_task), NULL);
-  50:Minibot/inc/robot_tasks.h **** 
-  51:Minibot/inc/robot_tasks.h ****     osThreadDef(jetson_orin_task, Robot_Tasks_Jetson_Orin, osPriorityAboveNormal, 0, 256);
-  52:Minibot/inc/robot_tasks.h ****     jetson_orin_task_handle = osThreadCreate(osThread(jetson_orin_task), NULL);
-  53:Minibot/inc/robot_tasks.h **** 
-  54:Minibot/inc/robot_tasks.h ****     osThreadDef(daemon_task, Robot_Tasks_Daemon, osPriorityAboveNormal, 0, 256);
-  55:Minibot/inc/robot_tasks.h ****     daemon_task_handle = osThreadCreate(osThread(daemon_task), NULL);
-  56:Minibot/inc/robot_tasks.h **** }
-  57:Minibot/inc/robot_tasks.h **** 
-  58:Minibot/inc/robot_tasks.h **** void Robot_Tasks_Robot_Command(void const *argument)
-  59:Minibot/inc/robot_tasks.h **** {
-  60:Minibot/inc/robot_tasks.h ****     portTickType xLastWakeTime;
-  61:Minibot/inc/robot_tasks.h ****     xLastWakeTime = xTaskGetTickCount();
-  62:Minibot/inc/robot_tasks.h ****     const TickType_t TimeIncrement = pdMS_TO_TICKS(2);
-  63:Minibot/inc/robot_tasks.h ****     while (1)
-  64:Minibot/inc/robot_tasks.h ****     {
-  65:Minibot/inc/robot_tasks.h ****         Robot_Command_Loop();
-  66:Minibot/inc/robot_tasks.h ****         vTaskDelayUntil(&xLastWakeTime, TimeIncrement);
-  67:Minibot/inc/robot_tasks.h ****     }
-  68:Minibot/inc/robot_tasks.h **** }
-  69:Minibot/inc/robot_tasks.h **** 
-  70:Minibot/inc/robot_tasks.h **** __weak void Robot_Tasks_IMU(void const *argument)
-  71:Minibot/inc/robot_tasks.h **** {
-  72:Minibot/inc/robot_tasks.h ****     IMU_Task(argument);
-  73:Minibot/inc/robot_tasks.h **** }
-  74:Minibot/inc/robot_tasks.h **** 
-  75:Minibot/inc/robot_tasks.h **** void Robot_Tasks_Motor(void const *argument)
-  76:Minibot/inc/robot_tasks.h **** {
-  77:Minibot/inc/robot_tasks.h ****     portTickType xLastWakeTime;
-  78:Minibot/inc/robot_tasks.h ****     xLastWakeTime = xTaskGetTickCount();
-  79:Minibot/inc/robot_tasks.h ****     const TickType_t TimeIncrement = pdMS_TO_TICKS(1);
-  80:Minibot/inc/robot_tasks.h ****     while (1)
-  81:Minibot/inc/robot_tasks.h ****     {
-  82:Minibot/inc/robot_tasks.h ****         Motor_Task_Loop();
-  83:Minibot/inc/robot_tasks.h ****         vTaskDelayUntil(&xLastWakeTime, TimeIncrement);
-  84:Minibot/inc/robot_tasks.h ****     }
-  85:Minibot/inc/robot_tasks.h **** }
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s 			page 3
-
-
-  86:Minibot/inc/robot_tasks.h **** 
-  87:Minibot/inc/robot_tasks.h **** void Robot_Tasks_UI(void const *argument)
-  88:Minibot/inc/robot_tasks.h **** {
-  31              		.loc 2 88 1 view -0
+  48:Minibot/inc/robot_tasks.h ****     osThreadDef(daemon_task, Robot_Tasks_Daemon, osPriorityAboveNormal, 0, 256);
+  49:Minibot/inc/robot_tasks.h ****     daemon_task_handle = osThreadCreate(osThread(daemon_task), NULL);
+  50:Minibot/inc/robot_tasks.h **** }
+  51:Minibot/inc/robot_tasks.h **** 
+  52:Minibot/inc/robot_tasks.h **** void Robot_Tasks_Robot_Command(void const *argument)
+  53:Minibot/inc/robot_tasks.h **** {
+  54:Minibot/inc/robot_tasks.h ****     portTickType xLastWakeTime;
+  55:Minibot/inc/robot_tasks.h ****     xLastWakeTime = xTaskGetTickCount();
+  56:Minibot/inc/robot_tasks.h ****     const TickType_t TimeIncrement = pdMS_TO_TICKS(2);
+  57:Minibot/inc/robot_tasks.h ****     while (1)
+  58:Minibot/inc/robot_tasks.h ****     {
+  59:Minibot/inc/robot_tasks.h ****         Robot_Command_Loop();
+  60:Minibot/inc/robot_tasks.h ****         vTaskDelayUntil(&xLastWakeTime, TimeIncrement);
+  61:Minibot/inc/robot_tasks.h ****     }
+  62:Minibot/inc/robot_tasks.h **** }
+  63:Minibot/inc/robot_tasks.h **** 
+  64:Minibot/inc/robot_tasks.h **** __weak void Robot_Tasks_IMU(void const *argument)
+  65:Minibot/inc/robot_tasks.h **** {
+  66:Minibot/inc/robot_tasks.h ****     IMU_Task(argument);
+  67:Minibot/inc/robot_tasks.h **** }
+  68:Minibot/inc/robot_tasks.h **** 
+  69:Minibot/inc/robot_tasks.h **** void Robot_Tasks_Motor(void const *argument)
+  70:Minibot/inc/robot_tasks.h **** {
+  71:Minibot/inc/robot_tasks.h ****     portTickType xLastWakeTime;
+  72:Minibot/inc/robot_tasks.h ****     xLastWakeTime = xTaskGetTickCount();
+  73:Minibot/inc/robot_tasks.h ****     const TickType_t TimeIncrement = pdMS_TO_TICKS(1);
+  74:Minibot/inc/robot_tasks.h ****     while (1)
+  75:Minibot/inc/robot_tasks.h ****     {
+  76:Minibot/inc/robot_tasks.h ****         Motor_Task_Loop();
+  77:Minibot/inc/robot_tasks.h ****         vTaskDelayUntil(&xLastWakeTime, TimeIncrement);
+  78:Minibot/inc/robot_tasks.h ****     }
+  79:Minibot/inc/robot_tasks.h **** }
+  80:Minibot/inc/robot_tasks.h **** 
+  81:Minibot/inc/robot_tasks.h **** void Robot_Tasks_UI(void const *argument)
+  82:Minibot/inc/robot_tasks.h **** {
+  31              		.loc 2 82 1 view -0
   32              		.cfi_startproc
   33              		@ args = 0, pretend = 0, frame = 8
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s 			page 3
+
+
   34              		@ frame_needed = 0, uses_anonymous_args = 0
-  35              		.loc 2 88 1 is_stmt 0 view .LVU1
+  35              		.loc 2 82 1 is_stmt 0 view .LVU1
   36 0000 00B5     		push	{lr}
   37              	.LCFI0:
   38              		.cfi_def_cfa_offset 4
@@ -136,31 +130,31 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s 			page 1
   40 0002 83B0     		sub	sp, sp, #12
   41              	.LCFI1:
   42              		.cfi_def_cfa_offset 16
-  89:Minibot/inc/robot_tasks.h ****     portTickType xLastWakeTime;
-  43              		.loc 2 89 5 is_stmt 1 view .LVU2
-  90:Minibot/inc/robot_tasks.h ****     xLastWakeTime = xTaskGetTickCount();
-  44              		.loc 2 90 5 view .LVU3
-  45              		.loc 2 90 21 is_stmt 0 view .LVU4
+  83:Minibot/inc/robot_tasks.h ****     portTickType xLastWakeTime;
+  43              		.loc 2 83 5 is_stmt 1 view .LVU2
+  84:Minibot/inc/robot_tasks.h ****     xLastWakeTime = xTaskGetTickCount();
+  44              		.loc 2 84 5 view .LVU3
+  45              		.loc 2 84 21 is_stmt 0 view .LVU4
   46 0004 FFF7FEFF 		bl	xTaskGetTickCount
   47              	.LVL1:
-  48              		.loc 2 90 19 discriminator 1 view .LVU5
+  48              		.loc 2 84 19 discriminator 1 view .LVU5
   49 0008 0190     		str	r0, [sp, #4]
-  91:Minibot/inc/robot_tasks.h ****     const TickType_t TimeIncrement = pdMS_TO_TICKS(1);
-  50              		.loc 2 91 5 is_stmt 1 view .LVU6
+  85:Minibot/inc/robot_tasks.h ****     const TickType_t TimeIncrement = pdMS_TO_TICKS(1);
+  50              		.loc 2 85 5 is_stmt 1 view .LVU6
   51              	.LVL2:
   52              	.L2:
-  92:Minibot/inc/robot_tasks.h ****     while (1)
-  53              		.loc 2 92 5 view .LVU7
-  93:Minibot/inc/robot_tasks.h ****     {
-  94:Minibot/inc/robot_tasks.h ****         // UI_Task_Loop();
-  95:Minibot/inc/robot_tasks.h ****         vTaskDelayUntil(&xLastWakeTime, TimeIncrement);
-  54              		.loc 2 95 9 discriminator 1 view .LVU8
+  86:Minibot/inc/robot_tasks.h ****     while (1)
+  53              		.loc 2 86 5 view .LVU7
+  87:Minibot/inc/robot_tasks.h ****     {
+  88:Minibot/inc/robot_tasks.h ****         // UI_Task_Loop();
+  89:Minibot/inc/robot_tasks.h ****         vTaskDelayUntil(&xLastWakeTime, TimeIncrement);
+  54              		.loc 2 89 9 discriminator 1 view .LVU8
   55 000a 0121     		movs	r1, #1
   56 000c 01A8     		add	r0, sp, #4
   57 000e FFF7FEFF 		bl	vTaskDelayUntil
   58              	.LVL3:
-  92:Minibot/inc/robot_tasks.h ****     while (1)
-  59              		.loc 2 92 11 view .LVU9
+  86:Minibot/inc/robot_tasks.h ****     while (1)
+  59              		.loc 2 86 11 view .LVU9
   60 0012 FAE7     		b	.L2
   61              		.cfi_endproc
   62              	.LFE146:
@@ -173,27 +167,27 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s 			page 1
   71              	Robot_Tasks_IMU:
   72              	.LVL4:
   73              	.LFB144:
-  71:Minibot/inc/robot_tasks.h ****     IMU_Task(argument);
-  74              		.loc 2 71 1 view -0
+  65:Minibot/inc/robot_tasks.h ****     IMU_Task(argument);
+  74              		.loc 2 65 1 view -0
   75              		.cfi_startproc
   76              		@ args = 0, pretend = 0, frame = 0
   77              		@ frame_needed = 0, uses_anonymous_args = 0
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s 			page 4
-
-
-  71:Minibot/inc/robot_tasks.h ****     IMU_Task(argument);
-  78              		.loc 2 71 1 is_stmt 0 view .LVU11
+  65:Minibot/inc/robot_tasks.h ****     IMU_Task(argument);
+  78              		.loc 2 65 1 is_stmt 0 view .LVU11
   79 0000 08B5     		push	{r3, lr}
   80              	.LCFI2:
   81              		.cfi_def_cfa_offset 8
   82              		.cfi_offset 3, -8
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s 			page 4
+
+
   83              		.cfi_offset 14, -4
-  72:Minibot/inc/robot_tasks.h **** }
-  84              		.loc 2 72 5 is_stmt 1 view .LVU12
+  66:Minibot/inc/robot_tasks.h **** }
+  84              		.loc 2 66 5 is_stmt 1 view .LVU12
   85 0002 FFF7FEFF 		bl	IMU_Task
   86              	.LVL5:
-  73:Minibot/inc/robot_tasks.h **** 
-  87              		.loc 2 73 1 is_stmt 0 view .LVU13
+  67:Minibot/inc/robot_tasks.h **** 
+  87              		.loc 2 67 1 is_stmt 0 view .LVU13
   88 0006 08BD     		pop	{r3, pc}
   89              		.cfi_endproc
   90              	.LFE144:
@@ -206,13 +200,13 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s 			page 1
   99              	Robot_Tasks_Motor:
  100              	.LVL6:
  101              	.LFB145:
-  76:Minibot/inc/robot_tasks.h ****     portTickType xLastWakeTime;
- 102              		.loc 2 76 1 is_stmt 1 view -0
+  70:Minibot/inc/robot_tasks.h ****     portTickType xLastWakeTime;
+ 102              		.loc 2 70 1 is_stmt 1 view -0
  103              		.cfi_startproc
  104              		@ args = 0, pretend = 0, frame = 8
  105              		@ frame_needed = 0, uses_anonymous_args = 0
-  76:Minibot/inc/robot_tasks.h ****     portTickType xLastWakeTime;
- 106              		.loc 2 76 1 is_stmt 0 view .LVU15
+  70:Minibot/inc/robot_tasks.h ****     portTickType xLastWakeTime;
+ 106              		.loc 2 70 1 is_stmt 0 view .LVU15
  107 0000 00B5     		push	{lr}
  108              	.LCFI3:
  109              		.cfi_def_cfa_offset 4
@@ -220,38 +214,38 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s 			page 1
  111 0002 83B0     		sub	sp, sp, #12
  112              	.LCFI4:
  113              		.cfi_def_cfa_offset 16
-  77:Minibot/inc/robot_tasks.h ****     xLastWakeTime = xTaskGetTickCount();
- 114              		.loc 2 77 5 is_stmt 1 view .LVU16
-  78:Minibot/inc/robot_tasks.h ****     const TickType_t TimeIncrement = pdMS_TO_TICKS(1);
- 115              		.loc 2 78 5 view .LVU17
-  78:Minibot/inc/robot_tasks.h ****     const TickType_t TimeIncrement = pdMS_TO_TICKS(1);
- 116              		.loc 2 78 21 is_stmt 0 view .LVU18
+  71:Minibot/inc/robot_tasks.h ****     xLastWakeTime = xTaskGetTickCount();
+ 114              		.loc 2 71 5 is_stmt 1 view .LVU16
+  72:Minibot/inc/robot_tasks.h ****     const TickType_t TimeIncrement = pdMS_TO_TICKS(1);
+ 115              		.loc 2 72 5 view .LVU17
+  72:Minibot/inc/robot_tasks.h ****     const TickType_t TimeIncrement = pdMS_TO_TICKS(1);
+ 116              		.loc 2 72 21 is_stmt 0 view .LVU18
  117 0004 FFF7FEFF 		bl	xTaskGetTickCount
  118              	.LVL7:
-  78:Minibot/inc/robot_tasks.h ****     const TickType_t TimeIncrement = pdMS_TO_TICKS(1);
- 119              		.loc 2 78 19 discriminator 1 view .LVU19
+  72:Minibot/inc/robot_tasks.h ****     const TickType_t TimeIncrement = pdMS_TO_TICKS(1);
+ 119              		.loc 2 72 19 discriminator 1 view .LVU19
  120 0008 0190     		str	r0, [sp, #4]
-  79:Minibot/inc/robot_tasks.h ****     while (1)
- 121              		.loc 2 79 5 is_stmt 1 view .LVU20
+  73:Minibot/inc/robot_tasks.h ****     while (1)
+ 121              		.loc 2 73 5 is_stmt 1 view .LVU20
  122              	.LVL8:
  123              	.L7:
-  80:Minibot/inc/robot_tasks.h ****     {
- 124              		.loc 2 80 5 view .LVU21
-  82:Minibot/inc/robot_tasks.h ****         vTaskDelayUntil(&xLastWakeTime, TimeIncrement);
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s 			page 5
-
-
- 125              		.loc 2 82 9 view .LVU22
+  74:Minibot/inc/robot_tasks.h ****     {
+ 124              		.loc 2 74 5 view .LVU21
+  76:Minibot/inc/robot_tasks.h ****         vTaskDelayUntil(&xLastWakeTime, TimeIncrement);
+ 125              		.loc 2 76 9 view .LVU22
  126 000a FFF7FEFF 		bl	Motor_Task_Loop
  127              	.LVL9:
-  83:Minibot/inc/robot_tasks.h ****     }
- 128              		.loc 2 83 9 discriminator 1 view .LVU23
+  77:Minibot/inc/robot_tasks.h ****     }
+ 128              		.loc 2 77 9 discriminator 1 view .LVU23
  129 000e 0121     		movs	r1, #1
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s 			page 5
+
+
  130 0010 01A8     		add	r0, sp, #4
  131 0012 FFF7FEFF 		bl	vTaskDelayUntil
  132              	.LVL10:
-  80:Minibot/inc/robot_tasks.h ****     {
- 133              		.loc 2 80 11 view .LVU24
+  74:Minibot/inc/robot_tasks.h ****     {
+ 133              		.loc 2 74 11 view .LVU24
  134 0016 F8E7     		b	.L7
  135              		.cfi_endproc
  136              	.LFE145:
@@ -264,16 +258,16 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s 			page 1
  145              	Robot_Tasks_Debug:
  146              	.LVL11:
  147              	.LFB147:
-  96:Minibot/inc/robot_tasks.h ****     }
-  97:Minibot/inc/robot_tasks.h **** }
-  98:Minibot/inc/robot_tasks.h **** 
-  99:Minibot/inc/robot_tasks.h **** void Robot_Tasks_Debug(void const *argument)
- 100:Minibot/inc/robot_tasks.h **** {
- 148              		.loc 2 100 1 view -0
+  90:Minibot/inc/robot_tasks.h ****     }
+  91:Minibot/inc/robot_tasks.h **** }
+  92:Minibot/inc/robot_tasks.h **** 
+  93:Minibot/inc/robot_tasks.h **** void Robot_Tasks_Debug(void const *argument)
+  94:Minibot/inc/robot_tasks.h **** {
+ 148              		.loc 2 94 1 view -0
  149              		.cfi_startproc
  150              		@ args = 0, pretend = 0, frame = 8
  151              		@ frame_needed = 0, uses_anonymous_args = 0
- 152              		.loc 2 100 1 is_stmt 0 view .LVU26
+ 152              		.loc 2 94 1 is_stmt 0 view .LVU26
  153 0000 00B5     		push	{lr}
  154              	.LCFI5:
  155              		.cfi_def_cfa_offset 4
@@ -281,59 +275,59 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s 			page 1
  157 0002 83B0     		sub	sp, sp, #12
  158              	.LCFI6:
  159              		.cfi_def_cfa_offset 16
- 101:Minibot/inc/robot_tasks.h ****     portTickType xLastWakeTime;
- 160              		.loc 2 101 5 is_stmt 1 view .LVU27
- 102:Minibot/inc/robot_tasks.h ****     xLastWakeTime = xTaskGetTickCount();
- 161              		.loc 2 102 5 view .LVU28
- 162              		.loc 2 102 21 is_stmt 0 view .LVU29
+  95:Minibot/inc/robot_tasks.h ****     portTickType xLastWakeTime;
+ 160              		.loc 2 95 5 is_stmt 1 view .LVU27
+  96:Minibot/inc/robot_tasks.h ****     xLastWakeTime = xTaskGetTickCount();
+ 161              		.loc 2 96 5 view .LVU28
+ 162              		.loc 2 96 21 is_stmt 0 view .LVU29
  163 0004 FFF7FEFF 		bl	xTaskGetTickCount
  164              	.LVL12:
- 165              		.loc 2 102 19 discriminator 1 view .LVU30
+ 165              		.loc 2 96 19 discriminator 1 view .LVU30
  166 0008 0190     		str	r0, [sp, #4]
- 103:Minibot/inc/robot_tasks.h ****     const TickType_t TimeIncrement = pdMS_TO_TICKS(DEBUG_PERIOD);
- 167              		.loc 2 103 5 is_stmt 1 view .LVU31
+  97:Minibot/inc/robot_tasks.h ****     const TickType_t TimeIncrement = pdMS_TO_TICKS(DEBUG_PERIOD);
+ 167              		.loc 2 97 5 is_stmt 1 view .LVU31
  168              	.LVL13:
  169              	.L10:
- 104:Minibot/inc/robot_tasks.h ****     while (1)
- 170              		.loc 2 104 5 view .LVU32
- 105:Minibot/inc/robot_tasks.h ****     {
- 106:Minibot/inc/robot_tasks.h ****         Debug_Task_Loop();
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s 			page 6
-
-
- 171              		.loc 2 106 9 view .LVU33
+  98:Minibot/inc/robot_tasks.h ****     while (1)
+ 170              		.loc 2 98 5 view .LVU32
+  99:Minibot/inc/robot_tasks.h ****     {
+ 100:Minibot/inc/robot_tasks.h ****         Debug_Task_Loop();
+ 171              		.loc 2 100 9 view .LVU33
  172 000a FFF7FEFF 		bl	Debug_Task_Loop
  173              	.LVL14:
- 107:Minibot/inc/robot_tasks.h ****         vTaskDelayUntil(&xLastWakeTime, TimeIncrement);
- 174              		.loc 2 107 9 discriminator 1 view .LVU34
+ 101:Minibot/inc/robot_tasks.h ****         vTaskDelayUntil(&xLastWakeTime, TimeIncrement);
+ 174              		.loc 2 101 9 discriminator 1 view .LVU34
  175 000e 0A21     		movs	r1, #10
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s 			page 6
+
+
  176 0010 01A8     		add	r0, sp, #4
  177 0012 FFF7FEFF 		bl	vTaskDelayUntil
  178              	.LVL15:
- 104:Minibot/inc/robot_tasks.h ****     while (1)
- 179              		.loc 2 104 11 view .LVU35
+  98:Minibot/inc/robot_tasks.h ****     while (1)
+ 179              		.loc 2 98 11 view .LVU35
  180 0016 F8E7     		b	.L10
  181              		.cfi_endproc
  182              	.LFE147:
- 184              		.section	.text.Robot_Tasks_Jetson_Orin,"ax",%progbits
+ 184              		.section	.text.Robot_Tasks_Daemon,"ax",%progbits
  185              		.align	1
- 186              		.global	Robot_Tasks_Jetson_Orin
+ 186              		.global	Robot_Tasks_Daemon
  187              		.syntax unified
  188              		.thumb
  189              		.thumb_func
- 191              	Robot_Tasks_Jetson_Orin:
+ 191              	Robot_Tasks_Daemon:
  192              	.LVL16:
  193              	.LFB148:
- 108:Minibot/inc/robot_tasks.h ****     }
- 109:Minibot/inc/robot_tasks.h **** }
- 110:Minibot/inc/robot_tasks.h **** 
- 111:Minibot/inc/robot_tasks.h **** void Robot_Tasks_Jetson_Orin(void const *argument)
- 112:Minibot/inc/robot_tasks.h **** {
- 194              		.loc 2 112 1 view -0
+ 102:Minibot/inc/robot_tasks.h ****     }
+ 103:Minibot/inc/robot_tasks.h **** }
+ 104:Minibot/inc/robot_tasks.h **** 
+ 105:Minibot/inc/robot_tasks.h **** void Robot_Tasks_Daemon(void const *argument)
+ 106:Minibot/inc/robot_tasks.h **** {
+ 194              		.loc 2 106 1 view -0
  195              		.cfi_startproc
  196              		@ args = 0, pretend = 0, frame = 8
  197              		@ frame_needed = 0, uses_anonymous_args = 0
- 198              		.loc 2 112 1 is_stmt 0 view .LVU37
+ 198              		.loc 2 106 1 is_stmt 0 view .LVU37
  199 0000 00B5     		push	{lr}
  200              	.LCFI7:
  201              		.cfi_def_cfa_offset 4
@@ -341,299 +335,218 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s 			page 1
  203 0002 83B0     		sub	sp, sp, #12
  204              	.LCFI8:
  205              		.cfi_def_cfa_offset 16
- 113:Minibot/inc/robot_tasks.h ****     portTickType xLastWakeTime;
- 206              		.loc 2 113 5 is_stmt 1 view .LVU38
- 114:Minibot/inc/robot_tasks.h ****     xLastWakeTime = xTaskGetTickCount();
- 207              		.loc 2 114 5 view .LVU39
- 208              		.loc 2 114 21 is_stmt 0 view .LVU40
+ 107:Minibot/inc/robot_tasks.h ****     portTickType xLastWakeTime;
+ 206              		.loc 2 107 5 is_stmt 1 view .LVU38
+ 108:Minibot/inc/robot_tasks.h ****     xLastWakeTime = xTaskGetTickCount();
+ 207              		.loc 2 108 5 view .LVU39
+ 208              		.loc 2 108 21 is_stmt 0 view .LVU40
  209 0004 FFF7FEFF 		bl	xTaskGetTickCount
  210              	.LVL17:
- 211              		.loc 2 114 19 discriminator 1 view .LVU41
+ 211              		.loc 2 108 19 discriminator 1 view .LVU41
  212 0008 0190     		str	r0, [sp, #4]
- 115:Minibot/inc/robot_tasks.h ****     const TickType_t TimeIncrement = pdMS_TO_TICKS(JETSON_ORIN_PERIOD);
- 213              		.loc 2 115 5 is_stmt 1 view .LVU42
+ 109:Minibot/inc/robot_tasks.h ****     const TickType_t TimeIncrement = pdMS_TO_TICKS(DAEMON_PERIOD);
+ 213              		.loc 2 109 5 is_stmt 1 view .LVU42
  214              	.LVL18:
  215              	.L13:
- 116:Minibot/inc/robot_tasks.h ****     while (1)
- 216              		.loc 2 116 5 view .LVU43
- 117:Minibot/inc/robot_tasks.h ****     {
- 118:Minibot/inc/robot_tasks.h ****         Jetson_Orin_Send_Data();
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s 			page 7
-
-
- 217              		.loc 2 118 9 view .LVU44
- 218 000a FFF7FEFF 		bl	Jetson_Orin_Send_Data
+ 110:Minibot/inc/robot_tasks.h ****     while (1)
+ 216              		.loc 2 110 5 view .LVU43
+ 111:Minibot/inc/robot_tasks.h ****     {
+ 112:Minibot/inc/robot_tasks.h ****         Daemon_Task_Loop();
+ 217              		.loc 2 112 9 view .LVU44
+ 218 000a FFF7FEFF 		bl	Daemon_Task_Loop
  219              	.LVL19:
- 119:Minibot/inc/robot_tasks.h ****         vTaskDelayUntil(&xLastWakeTime, TimeIncrement);
- 220              		.loc 2 119 9 discriminator 1 view .LVU45
- 221 000e 0421     		movs	r1, #4
- 222 0010 0DEB0100 		add	r0, sp, r1
- 223 0014 FFF7FEFF 		bl	vTaskDelayUntil
+ 113:Minibot/inc/robot_tasks.h ****         vTaskDelayUntil(&xLastWakeTime, TimeIncrement);
+ 220              		.loc 2 113 9 discriminator 1 view .LVU45
+ 221 000e 0A21     		movs	r1, #10
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s 			page 7
+
+
+ 222 0010 01A8     		add	r0, sp, #4
+ 223 0012 FFF7FEFF 		bl	vTaskDelayUntil
  224              	.LVL20:
- 116:Minibot/inc/robot_tasks.h ****     while (1)
- 225              		.loc 2 116 11 view .LVU46
- 226 0018 F7E7     		b	.L13
+ 110:Minibot/inc/robot_tasks.h ****     while (1)
+ 225              		.loc 2 110 11 view .LVU46
+ 226 0016 F8E7     		b	.L13
  227              		.cfi_endproc
  228              	.LFE148:
- 230              		.section	.text.Robot_Tasks_Daemon,"ax",%progbits
+ 230              		.section	.text.Robot_Tasks_Start,"ax",%progbits
  231              		.align	1
- 232              		.global	Robot_Tasks_Daemon
+ 232              		.global	Robot_Tasks_Start
  233              		.syntax unified
  234              		.thumb
  235              		.thumb_func
- 237              	Robot_Tasks_Daemon:
- 238              	.LVL21:
- 239              	.LFB149:
- 120:Minibot/inc/robot_tasks.h ****     }
- 121:Minibot/inc/robot_tasks.h **** }
- 122:Minibot/inc/robot_tasks.h **** 
- 123:Minibot/inc/robot_tasks.h **** void Robot_Tasks_Daemon(void const *argument)
- 124:Minibot/inc/robot_tasks.h **** {
- 240              		.loc 2 124 1 view -0
- 241              		.cfi_startproc
- 242              		@ args = 0, pretend = 0, frame = 8
- 243              		@ frame_needed = 0, uses_anonymous_args = 0
- 244              		.loc 2 124 1 is_stmt 0 view .LVU48
- 245 0000 00B5     		push	{lr}
- 246              	.LCFI9:
- 247              		.cfi_def_cfa_offset 4
- 248              		.cfi_offset 14, -4
- 249 0002 83B0     		sub	sp, sp, #12
- 250              	.LCFI10:
- 251              		.cfi_def_cfa_offset 16
- 125:Minibot/inc/robot_tasks.h ****     portTickType xLastWakeTime;
- 252              		.loc 2 125 5 is_stmt 1 view .LVU49
- 126:Minibot/inc/robot_tasks.h ****     xLastWakeTime = xTaskGetTickCount();
- 253              		.loc 2 126 5 view .LVU50
- 254              		.loc 2 126 21 is_stmt 0 view .LVU51
- 255 0004 FFF7FEFF 		bl	xTaskGetTickCount
- 256              	.LVL22:
- 257              		.loc 2 126 19 discriminator 1 view .LVU52
- 258 0008 0190     		str	r0, [sp, #4]
- 127:Minibot/inc/robot_tasks.h ****     const TickType_t TimeIncrement = pdMS_TO_TICKS(DAEMON_PERIOD);
- 259              		.loc 2 127 5 is_stmt 1 view .LVU53
- 260              	.LVL23:
- 261              	.L16:
- 128:Minibot/inc/robot_tasks.h ****     while (1)
- 262              		.loc 2 128 5 view .LVU54
- 129:Minibot/inc/robot_tasks.h ****     {
- 130:Minibot/inc/robot_tasks.h ****         Daemon_Task_Loop();
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s 			page 8
+ 237              	Robot_Tasks_Start:
+ 238              	.LFB142:
+  32:Minibot/inc/robot_tasks.h ****     osThreadDef(imu_task, Robot_Tasks_IMU, osPriorityAboveNormal, 0, 1024);
+ 239              		.loc 2 32 1 view -0
+ 240              		.cfi_startproc
+ 241              		@ args = 0, pretend = 0, frame = 168
+ 242              		@ frame_needed = 0, uses_anonymous_args = 0
+ 243 0000 10B5     		push	{r4, lr}
+ 244              	.LCFI9:
+ 245              		.cfi_def_cfa_offset 8
+ 246              		.cfi_offset 4, -8
+ 247              		.cfi_offset 14, -4
+ 248 0002 AAB0     		sub	sp, sp, #168
+ 249              	.LCFI10:
+ 250              		.cfi_def_cfa_offset 176
+  33:Minibot/inc/robot_tasks.h ****     imu_task_handle = osThreadCreate(osThread(imu_task), NULL);
+ 251              		.loc 2 33 5 view .LVU48
+ 252 0004 364C     		ldr	r4, .L17
+ 253 0006 0DF18C0C 		add	ip, sp, #140
+ 254 000a A646     		mov	lr, r4
+ 255 000c BEE80F00 		ldmia	lr!, {r0, r1, r2, r3}
+ 256 0010 ACE80F00 		stmia	ip!, {r0, r1, r2, r3}
+ 257 0014 9EE80700 		ldm	lr, {r0, r1, r2}
+ 258 0018 8CE80700 		stm	ip, {r0, r1, r2}
+  34:Minibot/inc/robot_tasks.h **** 
+ 259              		.loc 2 34 5 view .LVU49
+  34:Minibot/inc/robot_tasks.h **** 
+ 260              		.loc 2 34 23 is_stmt 0 view .LVU50
+ 261 001c 0021     		movs	r1, #0
+ 262 001e 23A8     		add	r0, sp, #140
+ 263 0020 FFF7FEFF 		bl	osThreadCreate
+ 264              	.LVL21:
+  34:Minibot/inc/robot_tasks.h **** 
+ 265              		.loc 2 34 21 discriminator 1 view .LVU51
+ 266 0024 2F4B     		ldr	r3, .L17+4
+ 267 0026 1860     		str	r0, [r3]
+  36:Minibot/inc/robot_tasks.h ****     motor_task_handle = osThreadCreate(osThread(motor_task), NULL);
+ 268              		.loc 2 36 5 is_stmt 1 view .LVU52
+ 269 0028 0DF1700C 		add	ip, sp, #112
+ 270 002c 04F11C0E 		add	lr, r4, #28
+ 271 0030 BEE80F00 		ldmia	lr!, {r0, r1, r2, r3}
+ 272 0034 ACE80F00 		stmia	ip!, {r0, r1, r2, r3}
+ 273 0038 9EE80700 		ldm	lr, {r0, r1, r2}
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s 			page 8
 
 
- 263              		.loc 2 130 9 view .LVU55
- 264 000a FFF7FEFF 		bl	Daemon_Task_Loop
- 265              	.LVL24:
- 131:Minibot/inc/robot_tasks.h ****         vTaskDelayUntil(&xLastWakeTime, TimeIncrement);
- 266              		.loc 2 131 9 discriminator 1 view .LVU56
- 267 000e 0A21     		movs	r1, #10
- 268 0010 01A8     		add	r0, sp, #4
- 269 0012 FFF7FEFF 		bl	vTaskDelayUntil
- 270              	.LVL25:
- 128:Minibot/inc/robot_tasks.h ****     while (1)
- 271              		.loc 2 128 11 view .LVU57
- 272 0016 F8E7     		b	.L16
- 273              		.cfi_endproc
- 274              	.LFE149:
- 276              		.section	.text.Robot_Tasks_Start,"ax",%progbits
- 277              		.align	1
- 278              		.global	Robot_Tasks_Start
- 279              		.syntax unified
- 280              		.thumb
- 281              		.thumb_func
- 283              	Robot_Tasks_Start:
- 284              	.LFB142:
-  35:Minibot/inc/robot_tasks.h ****     osThreadDef(imu_task, Robot_Tasks_IMU, osPriorityAboveNormal, 0, 1024);
- 285              		.loc 2 35 1 view -0
- 286              		.cfi_startproc
- 287              		@ args = 0, pretend = 0, frame = 200
- 288              		@ frame_needed = 0, uses_anonymous_args = 0
- 289 0000 10B5     		push	{r4, lr}
- 290              	.LCFI11:
- 291              		.cfi_def_cfa_offset 8
- 292              		.cfi_offset 4, -8
- 293              		.cfi_offset 14, -4
- 294 0002 B2B0     		sub	sp, sp, #200
- 295              	.LCFI12:
- 296              		.cfi_def_cfa_offset 208
-  36:Minibot/inc/robot_tasks.h ****     imu_task_handle = osThreadCreate(osThread(imu_task), NULL);
- 297              		.loc 2 36 5 view .LVU59
- 298 0004 3F4C     		ldr	r4, .L20
- 299 0006 0DF1AC0C 		add	ip, sp, #172
- 300 000a A646     		mov	lr, r4
- 301 000c BEE80F00 		ldmia	lr!, {r0, r1, r2, r3}
- 302 0010 ACE80F00 		stmia	ip!, {r0, r1, r2, r3}
- 303 0014 9EE80700 		ldm	lr, {r0, r1, r2}
- 304 0018 8CE80700 		stm	ip, {r0, r1, r2}
+ 274 003c 8CE80700 		stm	ip, {r0, r1, r2}
   37:Minibot/inc/robot_tasks.h **** 
- 305              		.loc 2 37 5 view .LVU60
+ 275              		.loc 2 37 5 view .LVU53
   37:Minibot/inc/robot_tasks.h **** 
- 306              		.loc 2 37 23 is_stmt 0 view .LVU61
- 307 001c 0021     		movs	r1, #0
- 308 001e 2BA8     		add	r0, sp, #172
- 309 0020 FFF7FEFF 		bl	osThreadCreate
- 310              	.LVL26:
+ 276              		.loc 2 37 25 is_stmt 0 view .LVU54
+ 277 0040 0021     		movs	r1, #0
+ 278 0042 1CA8     		add	r0, sp, #112
+ 279 0044 FFF7FEFF 		bl	osThreadCreate
+ 280              	.LVL22:
   37:Minibot/inc/robot_tasks.h **** 
- 311              		.loc 2 37 21 discriminator 1 view .LVU62
- 312 0024 384B     		ldr	r3, .L20+4
- 313 0026 1860     		str	r0, [r3]
-  39:Minibot/inc/robot_tasks.h ****     motor_task_handle = osThreadCreate(osThread(motor_task), NULL);
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s 			page 9
-
-
- 314              		.loc 2 39 5 is_stmt 1 view .LVU63
- 315 0028 0DF1900C 		add	ip, sp, #144
- 316 002c 04F11C0E 		add	lr, r4, #28
- 317 0030 BEE80F00 		ldmia	lr!, {r0, r1, r2, r3}
- 318 0034 ACE80F00 		stmia	ip!, {r0, r1, r2, r3}
- 319 0038 9EE80700 		ldm	lr, {r0, r1, r2}
- 320 003c 8CE80700 		stm	ip, {r0, r1, r2}
+ 281              		.loc 2 37 23 discriminator 1 view .LVU55
+ 282 0048 274B     		ldr	r3, .L17+8
+ 283 004a 1860     		str	r0, [r3]
+  39:Minibot/inc/robot_tasks.h ****     robot_command_task_handle = osThreadCreate(osThread(robot_command_task), NULL);
+ 284              		.loc 2 39 5 is_stmt 1 view .LVU56
+ 285 004c 0DF1540C 		add	ip, sp, #84
+ 286 0050 04F1380E 		add	lr, r4, #56
+ 287 0054 BEE80F00 		ldmia	lr!, {r0, r1, r2, r3}
+ 288 0058 ACE80F00 		stmia	ip!, {r0, r1, r2, r3}
+ 289 005c 9EE80700 		ldm	lr, {r0, r1, r2}
+ 290 0060 8CE80700 		stm	ip, {r0, r1, r2}
   40:Minibot/inc/robot_tasks.h **** 
- 321              		.loc 2 40 5 view .LVU64
+ 291              		.loc 2 40 5 view .LVU57
   40:Minibot/inc/robot_tasks.h **** 
- 322              		.loc 2 40 25 is_stmt 0 view .LVU65
- 323 0040 0021     		movs	r1, #0
- 324 0042 24A8     		add	r0, sp, #144
- 325 0044 FFF7FEFF 		bl	osThreadCreate
- 326              	.LVL27:
+ 292              		.loc 2 40 33 is_stmt 0 view .LVU58
+ 293 0064 0021     		movs	r1, #0
+ 294 0066 15A8     		add	r0, sp, #84
+ 295 0068 FFF7FEFF 		bl	osThreadCreate
+ 296              	.LVL23:
   40:Minibot/inc/robot_tasks.h **** 
- 327              		.loc 2 40 23 discriminator 1 view .LVU66
- 328 0048 304B     		ldr	r3, .L20+8
- 329 004a 1860     		str	r0, [r3]
-  42:Minibot/inc/robot_tasks.h ****     robot_command_task_handle = osThreadCreate(osThread(robot_command_task), NULL);
- 330              		.loc 2 42 5 is_stmt 1 view .LVU67
- 331 004c 0DF1740C 		add	ip, sp, #116
- 332 0050 04F1380E 		add	lr, r4, #56
- 333 0054 BEE80F00 		ldmia	lr!, {r0, r1, r2, r3}
- 334 0058 ACE80F00 		stmia	ip!, {r0, r1, r2, r3}
- 335 005c 9EE80700 		ldm	lr, {r0, r1, r2}
- 336 0060 8CE80700 		stm	ip, {r0, r1, r2}
+ 297              		.loc 2 40 31 discriminator 1 view .LVU59
+ 298 006c 1F4B     		ldr	r3, .L17+12
+ 299 006e 1860     		str	r0, [r3]
+  42:Minibot/inc/robot_tasks.h ****     ui_task_handle = osThreadCreate(osThread(ui_task), NULL);
+ 300              		.loc 2 42 5 is_stmt 1 view .LVU60
+ 301 0070 0DF1380C 		add	ip, sp, #56
+ 302 0074 04F1540E 		add	lr, r4, #84
+ 303 0078 BEE80F00 		ldmia	lr!, {r0, r1, r2, r3}
+ 304 007c ACE80F00 		stmia	ip!, {r0, r1, r2, r3}
+ 305 0080 9EE80700 		ldm	lr, {r0, r1, r2}
+ 306 0084 8CE80700 		stm	ip, {r0, r1, r2}
   43:Minibot/inc/robot_tasks.h **** 
- 337              		.loc 2 43 5 view .LVU68
+ 307              		.loc 2 43 5 view .LVU61
   43:Minibot/inc/robot_tasks.h **** 
- 338              		.loc 2 43 33 is_stmt 0 view .LVU69
- 339 0064 0021     		movs	r1, #0
- 340 0066 1DA8     		add	r0, sp, #116
- 341 0068 FFF7FEFF 		bl	osThreadCreate
- 342              	.LVL28:
+ 308              		.loc 2 43 22 is_stmt 0 view .LVU62
+ 309 0088 0021     		movs	r1, #0
+ 310 008a 0EA8     		add	r0, sp, #56
+ 311 008c FFF7FEFF 		bl	osThreadCreate
+ 312              	.LVL24:
   43:Minibot/inc/robot_tasks.h **** 
- 343              		.loc 2 43 31 discriminator 1 view .LVU70
- 344 006c 284B     		ldr	r3, .L20+12
- 345 006e 1860     		str	r0, [r3]
-  45:Minibot/inc/robot_tasks.h ****     ui_task_handle = osThreadCreate(osThread(ui_task), NULL);
- 346              		.loc 2 45 5 is_stmt 1 view .LVU71
- 347 0070 0DF1580C 		add	ip, sp, #88
- 348 0074 04F1540E 		add	lr, r4, #84
- 349 0078 BEE80F00 		ldmia	lr!, {r0, r1, r2, r3}
- 350 007c ACE80F00 		stmia	ip!, {r0, r1, r2, r3}
- 351 0080 9EE80700 		ldm	lr, {r0, r1, r2}
- 352 0084 8CE80700 		stm	ip, {r0, r1, r2}
+ 313              		.loc 2 43 20 discriminator 1 view .LVU63
+ 314 0090 174B     		ldr	r3, .L17+16
+ 315 0092 1860     		str	r0, [r3]
+  45:Minibot/inc/robot_tasks.h ****     debug_task_handle = osThreadCreate(osThread(debug_task), NULL);
+ 316              		.loc 2 45 5 is_stmt 1 view .LVU64
+ 317 0094 0DF11C0C 		add	ip, sp, #28
+ 318 0098 04F1700E 		add	lr, r4, #112
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s 			page 9
+
+
+ 319 009c BEE80F00 		ldmia	lr!, {r0, r1, r2, r3}
+ 320 00a0 ACE80F00 		stmia	ip!, {r0, r1, r2, r3}
+ 321 00a4 9EE80700 		ldm	lr, {r0, r1, r2}
+ 322 00a8 8CE80700 		stm	ip, {r0, r1, r2}
   46:Minibot/inc/robot_tasks.h **** 
- 353              		.loc 2 46 5 view .LVU72
+ 323              		.loc 2 46 5 view .LVU65
   46:Minibot/inc/robot_tasks.h **** 
- 354              		.loc 2 46 22 is_stmt 0 view .LVU73
- 355 0088 0021     		movs	r1, #0
- 356 008a 16A8     		add	r0, sp, #88
- 357 008c FFF7FEFF 		bl	osThreadCreate
- 358              	.LVL29:
+ 324              		.loc 2 46 25 is_stmt 0 view .LVU66
+ 325 00ac 0021     		movs	r1, #0
+ 326 00ae 07A8     		add	r0, sp, #28
+ 327 00b0 FFF7FEFF 		bl	osThreadCreate
+ 328              	.LVL25:
   46:Minibot/inc/robot_tasks.h **** 
- 359              		.loc 2 46 20 discriminator 1 view .LVU74
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s 			page 10
+ 329              		.loc 2 46 23 discriminator 1 view .LVU67
+ 330 00b4 0F4B     		ldr	r3, .L17+20
+ 331 00b6 1860     		str	r0, [r3]
+  48:Minibot/inc/robot_tasks.h ****     daemon_task_handle = osThreadCreate(osThread(daemon_task), NULL);
+ 332              		.loc 2 48 5 is_stmt 1 view .LVU68
+ 333 00b8 EE46     		mov	lr, sp
+ 334 00ba 04F18C0C 		add	ip, r4, #140
+ 335 00be BCE80F00 		ldmia	ip!, {r0, r1, r2, r3}
+ 336 00c2 AEE80F00 		stmia	lr!, {r0, r1, r2, r3}
+ 337 00c6 9CE80700 		ldm	ip, {r0, r1, r2}
+ 338 00ca 8EE80700 		stm	lr, {r0, r1, r2}
+  49:Minibot/inc/robot_tasks.h **** }
+ 339              		.loc 2 49 5 view .LVU69
+  49:Minibot/inc/robot_tasks.h **** }
+ 340              		.loc 2 49 26 is_stmt 0 view .LVU70
+ 341 00ce 0021     		movs	r1, #0
+ 342 00d0 6846     		mov	r0, sp
+ 343 00d2 FFF7FEFF 		bl	osThreadCreate
+ 344              	.LVL26:
+  49:Minibot/inc/robot_tasks.h **** }
+ 345              		.loc 2 49 24 discriminator 1 view .LVU71
+ 346 00d6 084B     		ldr	r3, .L17+24
+ 347 00d8 1860     		str	r0, [r3]
+  50:Minibot/inc/robot_tasks.h **** 
+ 348              		.loc 2 50 1 view .LVU72
+ 349 00da 2AB0     		add	sp, sp, #168
+ 350              	.LCFI11:
+ 351              		.cfi_def_cfa_offset 8
+ 352              		@ sp needed
+ 353 00dc 10BD     		pop	{r4, pc}
+ 354              	.L18:
+ 355 00de 00BF     		.align	2
+ 356              	.L17:
+ 357 00e0 00000000 		.word	.LANCHOR0
+ 358 00e4 00000000 		.word	imu_task_handle
+ 359 00e8 00000000 		.word	motor_task_handle
+ 360 00ec 00000000 		.word	robot_command_task_handle
+ 361 00f0 00000000 		.word	ui_task_handle
+ 362 00f4 00000000 		.word	debug_task_handle
+ 363 00f8 00000000 		.word	daemon_task_handle
+ 364              		.cfi_endproc
+ 365              	.LFE142:
+ 367              		.section	.text.Robot_Init,"ax",%progbits
+ 368              		.align	1
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s 			page 10
 
 
- 360 0090 204B     		ldr	r3, .L20+16
- 361 0092 1860     		str	r0, [r3]
-  48:Minibot/inc/robot_tasks.h ****     debug_task_handle = osThreadCreate(osThread(debug_task), NULL);
- 362              		.loc 2 48 5 is_stmt 1 view .LVU75
- 363 0094 0DF13C0C 		add	ip, sp, #60
- 364 0098 04F1700E 		add	lr, r4, #112
- 365 009c BEE80F00 		ldmia	lr!, {r0, r1, r2, r3}
- 366 00a0 ACE80F00 		stmia	ip!, {r0, r1, r2, r3}
- 367 00a4 9EE80700 		ldm	lr, {r0, r1, r2}
- 368 00a8 8CE80700 		stm	ip, {r0, r1, r2}
-  49:Minibot/inc/robot_tasks.h **** 
- 369              		.loc 2 49 5 view .LVU76
-  49:Minibot/inc/robot_tasks.h **** 
- 370              		.loc 2 49 25 is_stmt 0 view .LVU77
- 371 00ac 0021     		movs	r1, #0
- 372 00ae 0FA8     		add	r0, sp, #60
- 373 00b0 FFF7FEFF 		bl	osThreadCreate
- 374              	.LVL30:
-  49:Minibot/inc/robot_tasks.h **** 
- 375              		.loc 2 49 23 discriminator 1 view .LVU78
- 376 00b4 184B     		ldr	r3, .L20+20
- 377 00b6 1860     		str	r0, [r3]
-  51:Minibot/inc/robot_tasks.h ****     jetson_orin_task_handle = osThreadCreate(osThread(jetson_orin_task), NULL);
- 378              		.loc 2 51 5 is_stmt 1 view .LVU79
- 379 00b8 0DF1200C 		add	ip, sp, #32
- 380 00bc 04F18C0E 		add	lr, r4, #140
- 381 00c0 BEE80F00 		ldmia	lr!, {r0, r1, r2, r3}
- 382 00c4 ACE80F00 		stmia	ip!, {r0, r1, r2, r3}
- 383 00c8 9EE80700 		ldm	lr, {r0, r1, r2}
- 384 00cc 8CE80700 		stm	ip, {r0, r1, r2}
-  52:Minibot/inc/robot_tasks.h **** 
- 385              		.loc 2 52 5 view .LVU80
-  52:Minibot/inc/robot_tasks.h **** 
- 386              		.loc 2 52 31 is_stmt 0 view .LVU81
- 387 00d0 0021     		movs	r1, #0
- 388 00d2 08A8     		add	r0, sp, #32
- 389 00d4 FFF7FEFF 		bl	osThreadCreate
- 390              	.LVL31:
-  52:Minibot/inc/robot_tasks.h **** 
- 391              		.loc 2 52 29 discriminator 1 view .LVU82
- 392 00d8 104B     		ldr	r3, .L20+24
- 393 00da 1860     		str	r0, [r3]
-  54:Minibot/inc/robot_tasks.h ****     daemon_task_handle = osThreadCreate(osThread(daemon_task), NULL);
- 394              		.loc 2 54 5 is_stmt 1 view .LVU83
- 395 00dc 0DF1040E 		add	lr, sp, #4
- 396 00e0 04F1A80C 		add	ip, r4, #168
- 397 00e4 BCE80F00 		ldmia	ip!, {r0, r1, r2, r3}
- 398 00e8 AEE80F00 		stmia	lr!, {r0, r1, r2, r3}
- 399 00ec 9CE80700 		ldm	ip, {r0, r1, r2}
- 400 00f0 8EE80700 		stm	lr, {r0, r1, r2}
-  55:Minibot/inc/robot_tasks.h **** }
- 401              		.loc 2 55 5 view .LVU84
-  55:Minibot/inc/robot_tasks.h **** }
- 402              		.loc 2 55 26 is_stmt 0 view .LVU85
- 403 00f4 0021     		movs	r1, #0
- 404 00f6 01A8     		add	r0, sp, #4
- 405 00f8 FFF7FEFF 		bl	osThreadCreate
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s 			page 11
-
-
- 406              	.LVL32:
-  55:Minibot/inc/robot_tasks.h **** }
- 407              		.loc 2 55 24 discriminator 1 view .LVU86
- 408 00fc 084B     		ldr	r3, .L20+28
- 409 00fe 1860     		str	r0, [r3]
-  56:Minibot/inc/robot_tasks.h **** 
- 410              		.loc 2 56 1 view .LVU87
- 411 0100 32B0     		add	sp, sp, #200
- 412              	.LCFI13:
- 413              		.cfi_def_cfa_offset 8
- 414              		@ sp needed
- 415 0102 10BD     		pop	{r4, pc}
- 416              	.L21:
- 417              		.align	2
- 418              	.L20:
- 419 0104 00000000 		.word	.LANCHOR0
- 420 0108 00000000 		.word	imu_task_handle
- 421 010c 00000000 		.word	motor_task_handle
- 422 0110 00000000 		.word	robot_command_task_handle
- 423 0114 00000000 		.word	ui_task_handle
- 424 0118 00000000 		.word	debug_task_handle
- 425 011c 00000000 		.word	jetson_orin_task_handle
- 426 0120 00000000 		.word	daemon_task_handle
- 427              		.cfi_endproc
- 428              	.LFE142:
- 430              		.section	.text.Robot_Init,"ax",%progbits
- 431              		.align	1
- 432              		.global	Robot_Init
- 433              		.syntax unified
- 434              		.thumb
- 435              		.thumb_func
- 437              	Robot_Init:
- 438              	.LFB150:
+ 369              		.global	Robot_Init
+ 370              		.syntax unified
+ 371              		.thumb
+ 372              		.thumb_func
+ 374              	Robot_Init:
+ 375              	.LFB149:
    1:Minibot/src/robot.c **** #include "robot.h"
    2:Minibot/src/robot.c **** 
    3:Minibot/src/robot.c **** #include "robot_tasks.h"
@@ -658,197 +571,194 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s 			page 1
   22:Minibot/src/robot.c ****  */
   23:Minibot/src/robot.c **** void Robot_Init()
   24:Minibot/src/robot.c **** {
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s 			page 12
-
-
- 439              		.loc 1 24 1 is_stmt 1 view -0
- 440              		.cfi_startproc
- 441              		@ args = 0, pretend = 0, frame = 408
- 442              		@ frame_needed = 0, uses_anonymous_args = 0
- 443 0000 30B5     		push	{r4, r5, lr}
- 444              	.LCFI14:
- 445              		.cfi_def_cfa_offset 12
- 446              		.cfi_offset 4, -12
- 447              		.cfi_offset 5, -8
- 448              		.cfi_offset 14, -4
- 449 0002 ADF5497D 		sub	sp, sp, #804
- 450              	.LCFI15:
- 451              		.cfi_def_cfa_offset 816
+ 376              		.loc 1 24 1 is_stmt 1 view -0
+ 377              		.cfi_startproc
+ 378              		@ args = 0, pretend = 0, frame = 408
+ 379              		@ frame_needed = 0, uses_anonymous_args = 0
+ 380 0000 30B5     		push	{r4, r5, lr}
+ 381              	.LCFI12:
+ 382              		.cfi_def_cfa_offset 12
+ 383              		.cfi_offset 4, -12
+ 384              		.cfi_offset 5, -8
+ 385              		.cfi_offset 14, -4
+ 386 0002 ADF5497D 		sub	sp, sp, #804
+ 387              	.LCFI13:
+ 388              		.cfi_def_cfa_offset 816
   25:Minibot/src/robot.c ****     g_robot_state.state = STARTING_UP;
- 452              		.loc 1 25 5 view .LVU89
- 453              		.loc 1 25 25 is_stmt 0 view .LVU90
- 454 0006 0025     		movs	r5, #0
- 455 0008 1B4B     		ldr	r3, .L24
- 456 000a 1D70     		strb	r5, [r3]
+ 389              		.loc 1 25 5 view .LVU74
+ 390              		.loc 1 25 25 is_stmt 0 view .LVU75
+ 391 0006 0025     		movs	r5, #0
+ 392 0008 1B4B     		ldr	r3, .L21
+ 393 000a 1D70     		strb	r5, [r3]
   26:Minibot/src/robot.c **** 
   27:Minibot/src/robot.c ****     Buzzer_Init();
- 457              		.loc 1 27 5 is_stmt 1 view .LVU91
- 458 000c FFF7FEFF 		bl	Buzzer_Init
- 459              	.LVL33:
+ 394              		.loc 1 27 5 is_stmt 1 view .LVU76
+ 395 000c FFF7FEFF 		bl	Buzzer_Init
+ 396              	.LVL27:
   28:Minibot/src/robot.c ****     Melody_t system_init_melody = {
- 460              		.loc 1 28 5 view .LVU92
- 461              		.loc 1 28 14 is_stmt 0 view .LVU93
- 462 0010 62AC     		add	r4, sp, #392
- 463 0012 4FF4CC72 		mov	r2, #408
- 464 0016 2946     		mov	r1, r5
- 465 0018 2046     		mov	r0, r4
- 466 001a FFF7FEFF 		bl	memset
- 467              	.LVL34:
- 468 001e 174B     		ldr	r3, .L24+4
- 469 0020 2360     		str	r3, [r4]	@ float
- 470 0022 174B     		ldr	r3, .L24+8
- 471 0024 6360     		str	r3, [r4, #4]	@ float
- 472 0026 174A     		ldr	r2, .L24+12
- 473 0028 A260     		str	r2, [r4, #8]	@ float
- 474 002a E360     		str	r3, [r4, #12]	@ float
- 475 002c 164A     		ldr	r2, .L24+16
- 476 002e 2261     		str	r2, [r4, #16]	@ float
- 477 0030 6361     		str	r3, [r4, #20]	@ float
- 478 0032 164A     		ldr	r2, .L24+20
- 479 0034 A261     		str	r2, [r4, #24]	@ float
- 480 0036 E361     		str	r3, [r4, #28]	@ float
- 481 0038 154A     		ldr	r2, .L24+24
- 482 003a 2262     		str	r2, [r4, #32]	@ float
- 483 003c 6362     		str	r3, [r4, #36]	@ float
- 484 003e 154A     		ldr	r2, .L24+28
- 485 0040 A262     		str	r2, [r4, #40]	@ float
- 486 0042 E362     		str	r3, [r4, #44]	@ float
- 487 0044 144B     		ldr	r3, .L24+32
- 488 0046 2363     		str	r3, [r4, #48]	@ float
- 489 0048 144B     		ldr	r3, .L24+36
- 490 004a 6363     		str	r3, [r4, #52]	@ float
- 491 004c 4FF07C53 		mov	r3, #1056964608
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s 			page 13
+ 397              		.loc 1 28 5 view .LVU77
+ 398              		.loc 1 28 14 is_stmt 0 view .LVU78
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s 			page 11
 
 
- 492 0050 C4F89031 		str	r3, [r4, #400]	@ float
- 493 0054 0723     		movs	r3, #7
- 494 0056 A4F89431 		strh	r3, [r4, #404]	@ movhi
+ 399 0010 62AC     		add	r4, sp, #392
+ 400 0012 4FF4CC72 		mov	r2, #408
+ 401 0016 2946     		mov	r1, r5
+ 402 0018 2046     		mov	r0, r4
+ 403 001a FFF7FEFF 		bl	memset
+ 404              	.LVL28:
+ 405 001e 174B     		ldr	r3, .L21+4
+ 406 0020 2360     		str	r3, [r4]	@ float
+ 407 0022 174B     		ldr	r3, .L21+8
+ 408 0024 6360     		str	r3, [r4, #4]	@ float
+ 409 0026 174A     		ldr	r2, .L21+12
+ 410 0028 A260     		str	r2, [r4, #8]	@ float
+ 411 002a E360     		str	r3, [r4, #12]	@ float
+ 412 002c 164A     		ldr	r2, .L21+16
+ 413 002e 2261     		str	r2, [r4, #16]	@ float
+ 414 0030 6361     		str	r3, [r4, #20]	@ float
+ 415 0032 164A     		ldr	r2, .L21+20
+ 416 0034 A261     		str	r2, [r4, #24]	@ float
+ 417 0036 E361     		str	r3, [r4, #28]	@ float
+ 418 0038 154A     		ldr	r2, .L21+24
+ 419 003a 2262     		str	r2, [r4, #32]	@ float
+ 420 003c 6362     		str	r3, [r4, #36]	@ float
+ 421 003e 154A     		ldr	r2, .L21+28
+ 422 0040 A262     		str	r2, [r4, #40]	@ float
+ 423 0042 E362     		str	r3, [r4, #44]	@ float
+ 424 0044 144B     		ldr	r3, .L21+32
+ 425 0046 2363     		str	r3, [r4, #48]	@ float
+ 426 0048 144B     		ldr	r3, .L21+36
+ 427 004a 6363     		str	r3, [r4, #52]	@ float
+ 428 004c 4FF07C53 		mov	r3, #1056964608
+ 429 0050 C4F89031 		str	r3, [r4, #400]	@ float
+ 430 0054 0723     		movs	r3, #7
+ 431 0056 A4F89431 		strh	r3, [r4, #404]	@ movhi
   29:Minibot/src/robot.c ****         .notes = SYSTEM_INITIALIZING,
   30:Minibot/src/robot.c ****         .loudness = 0.5f,
   31:Minibot/src/robot.c ****         .note_num = SYSTEM_INITIALIZING_NOTE_NUM,
   32:Minibot/src/robot.c ****     };
   33:Minibot/src/robot.c ****     Buzzer_Play_Melody(system_init_melody); // TODO: Change to non-blocking
- 495              		.loc 1 33 5 is_stmt 1 view .LVU94
- 496 005a 4FF4C472 		mov	r2, #392
- 497 005e 66A9     		add	r1, sp, #408
- 498 0060 6846     		mov	r0, sp
- 499 0062 FFF7FEFF 		bl	memcpy
- 500              	.LVL35:
- 501 0066 94E80F00 		ldm	r4, {r0, r1, r2, r3}
- 502 006a FFF7FEFF 		bl	Buzzer_Play_Melody
- 503              	.LVL36:
+ 432              		.loc 1 33 5 is_stmt 1 view .LVU79
+ 433 005a 4FF4C472 		mov	r2, #392
+ 434 005e 66A9     		add	r1, sp, #408
+ 435 0060 6846     		mov	r0, sp
+ 436 0062 FFF7FEFF 		bl	memcpy
+ 437              	.LVL29:
+ 438 0066 94E80F00 		ldm	r4, {r0, r1, r2, r3}
+ 439 006a FFF7FEFF 		bl	Buzzer_Play_Melody
+ 440              	.LVL30:
   34:Minibot/src/robot.c **** 
   35:Minibot/src/robot.c ****     // Initialize all tasks
   36:Minibot/src/robot.c ****     Robot_Tasks_Start();
- 504              		.loc 1 36 5 view .LVU95
- 505 006e FFF7FEFF 		bl	Robot_Tasks_Start
- 506              	.LVL37:
+ 441              		.loc 1 36 5 view .LVU80
+ 442 006e FFF7FEFF 		bl	Robot_Tasks_Start
+ 443              	.LVL31:
   37:Minibot/src/robot.c **** }
- 507              		.loc 1 37 1 is_stmt 0 view .LVU96
- 508 0072 0DF5497D 		add	sp, sp, #804
- 509              	.LCFI16:
- 510              		.cfi_def_cfa_offset 12
- 511              		@ sp needed
- 512 0076 30BD     		pop	{r4, r5, pc}
- 513              	.L25:
- 514              		.align	2
- 515              	.L24:
- 516 0078 00000000 		.word	g_robot_state
- 517 007c 00008343 		.word	1132658688
- 518 0080 0000FA42 		.word	1123680256
- 519 0084 0000A543 		.word	1134886912
- 520 0088 0000C443 		.word	1136918528
- 521 008c 00C00244 		.word	1141030912
- 522 0090 00C02444 		.word	1143259136
- 523 0094 00004444 		.word	1145307136
- 524 0098 00E08244 		.word	1149427712
- 525 009c 0000FA43 		.word	1140457472
- 526              		.cfi_endproc
- 527              	.LFE150:
- 529              		.section	.text.Handle_Starting_Up_State,"ax",%progbits
- 530              		.align	1
- 531              		.global	Handle_Starting_Up_State
- 532              		.syntax unified
- 533              		.thumb
- 534              		.thumb_func
- 536              	Handle_Starting_Up_State:
- 537              	.LFB151:
+ 444              		.loc 1 37 1 is_stmt 0 view .LVU81
+ 445 0072 0DF5497D 		add	sp, sp, #804
+ 446              	.LCFI14:
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s 			page 12
+
+
+ 447              		.cfi_def_cfa_offset 12
+ 448              		@ sp needed
+ 449 0076 30BD     		pop	{r4, r5, pc}
+ 450              	.L22:
+ 451              		.align	2
+ 452              	.L21:
+ 453 0078 00000000 		.word	g_robot_state
+ 454 007c 00008343 		.word	1132658688
+ 455 0080 0000FA42 		.word	1123680256
+ 456 0084 0000A543 		.word	1134886912
+ 457 0088 0000C443 		.word	1136918528
+ 458 008c 00C00244 		.word	1141030912
+ 459 0090 00C02444 		.word	1143259136
+ 460 0094 00004444 		.word	1145307136
+ 461 0098 00E08244 		.word	1149427712
+ 462 009c 0000FA43 		.word	1140457472
+ 463              		.cfi_endproc
+ 464              	.LFE149:
+ 466              		.section	.text.Handle_Starting_Up_State,"ax",%progbits
+ 467              		.align	1
+ 468              		.global	Handle_Starting_Up_State
+ 469              		.syntax unified
+ 470              		.thumb
+ 471              		.thumb_func
+ 473              	Handle_Starting_Up_State:
+ 474              	.LFB150:
   38:Minibot/src/robot.c **** 
   39:Minibot/src/robot.c **** /**
   40:Minibot/src/robot.c ****  * @brief This function handles the starting up state of the robot, initializing all hardware.
   41:Minibot/src/robot.c ****  */
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s 			page 14
-
-
   42:Minibot/src/robot.c **** void Handle_Starting_Up_State()
   43:Minibot/src/robot.c **** {
- 538              		.loc 1 43 1 is_stmt 1 view -0
- 539              		.cfi_startproc
- 540              		@ args = 0, pretend = 0, frame = 0
- 541              		@ frame_needed = 0, uses_anonymous_args = 0
- 542 0000 08B5     		push	{r3, lr}
- 543              	.LCFI17:
- 544              		.cfi_def_cfa_offset 8
- 545              		.cfi_offset 3, -8
- 546              		.cfi_offset 14, -4
+ 475              		.loc 1 43 1 is_stmt 1 view -0
+ 476              		.cfi_startproc
+ 477              		@ args = 0, pretend = 0, frame = 0
+ 478              		@ frame_needed = 0, uses_anonymous_args = 0
+ 479 0000 08B5     		push	{r3, lr}
+ 480              	.LCFI15:
+ 481              		.cfi_def_cfa_offset 8
+ 482              		.cfi_offset 3, -8
+ 483              		.cfi_offset 14, -4
   44:Minibot/src/robot.c ****     // Initialize all hardware
   45:Minibot/src/robot.c ****     Chassis_Task_Init();
- 547              		.loc 1 45 5 view .LVU98
- 548 0002 FFF7FEFF 		bl	Chassis_Task_Init
- 549              	.LVL38:
+ 484              		.loc 1 45 5 view .LVU83
+ 485 0002 FFF7FEFF 		bl	Chassis_Task_Init
+ 486              	.LVL32:
   46:Minibot/src/robot.c ****     Gimbal_Task_Init();
- 550              		.loc 1 46 5 view .LVU99
- 551 0006 FFF7FEFF 		bl	Gimbal_Task_Init
- 552              	.LVL39:
+ 487              		.loc 1 46 5 view .LVU84
+ 488 0006 FFF7FEFF 		bl	Gimbal_Task_Init
+ 489              	.LVL33:
   47:Minibot/src/robot.c ****     Launch_Task_Init();
- 553              		.loc 1 47 5 view .LVU100
- 554 000a FFF7FEFF 		bl	Launch_Task_Init
- 555              	.LVL40:
+ 490              		.loc 1 47 5 view .LVU85
+ 491 000a FFF7FEFF 		bl	Launch_Task_Init
+ 492              	.LVL34:
   48:Minibot/src/robot.c ****     Remote_Init(&huart3);
- 556              		.loc 1 48 5 view .LVU101
- 557 000e 0648     		ldr	r0, .L28
- 558 0010 FFF7FEFF 		bl	Remote_Init
- 559              	.LVL41:
+ 493              		.loc 1 48 5 view .LVU86
+ 494 000e 0648     		ldr	r0, .L25
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s 			page 13
+
+
+ 495 0010 FFF7FEFF 		bl	Remote_Init
+ 496              	.LVL35:
   49:Minibot/src/robot.c ****     CAN_Service_Init();
- 560              		.loc 1 49 5 view .LVU102
- 561 0014 FFF7FEFF 		bl	CAN_Service_Init
- 562              	.LVL42:
+ 497              		.loc 1 49 5 view .LVU87
+ 498 0014 FFF7FEFF 		bl	CAN_Service_Init
+ 499              	.LVL36:
   50:Minibot/src/robot.c ****     Referee_System_Init(&huart1);
- 563              		.loc 1 50 5 view .LVU103
- 564 0018 0448     		ldr	r0, .L28+4
- 565 001a FFF7FEFF 		bl	Referee_System_Init
- 566              	.LVL43:
+ 500              		.loc 1 50 5 view .LVU88
+ 501 0018 0448     		ldr	r0, .L25+4
+ 502 001a FFF7FEFF 		bl	Referee_System_Init
+ 503              	.LVL37:
   51:Minibot/src/robot.c **** 
   52:Minibot/src/robot.c ****     // Set robot state to disabled
   53:Minibot/src/robot.c ****     g_robot_state.state = DISABLED;
- 567              		.loc 1 53 5 view .LVU104
- 568              		.loc 1 53 25 is_stmt 0 view .LVU105
- 569 001e 044B     		ldr	r3, .L28+8
- 570 0020 0122     		movs	r2, #1
- 571 0022 1A70     		strb	r2, [r3]
+ 504              		.loc 1 53 5 view .LVU89
+ 505              		.loc 1 53 25 is_stmt 0 view .LVU90
+ 506 001e 044B     		ldr	r3, .L25+8
+ 507 0020 0122     		movs	r2, #1
+ 508 0022 1A70     		strb	r2, [r3]
   54:Minibot/src/robot.c **** }
- 572              		.loc 1 54 1 view .LVU106
- 573 0024 08BD     		pop	{r3, pc}
- 574              	.L29:
- 575 0026 00BF     		.align	2
- 576              	.L28:
- 577 0028 00000000 		.word	huart3
- 578 002c 00000000 		.word	huart1
- 579 0030 00000000 		.word	g_robot_state
- 580              		.cfi_endproc
- 581              	.LFE151:
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s 			page 15
-
-
- 583              		.section	.text.Handle_Enabled_State,"ax",%progbits
- 584              		.align	1
- 585              		.global	Handle_Enabled_State
- 586              		.syntax unified
- 587              		.thumb
- 588              		.thumb_func
- 590              	Handle_Enabled_State:
- 591              	.LFB152:
+ 509              		.loc 1 54 1 view .LVU91
+ 510 0024 08BD     		pop	{r3, pc}
+ 511              	.L26:
+ 512 0026 00BF     		.align	2
+ 513              	.L25:
+ 514 0028 00000000 		.word	huart3
+ 515 002c 00000000 		.word	huart1
+ 516 0030 00000000 		.word	g_robot_state
+ 517              		.cfi_endproc
+ 518              	.LFE150:
+ 520              		.section	.text.Handle_Enabled_State,"ax",%progbits
+ 521              		.align	1
+ 522              		.global	Handle_Enabled_State
+ 523              		.syntax unified
+ 524              		.thumb
+ 525              		.thumb_func
+ 527              	Handle_Enabled_State:
+ 528              	.LFB151:
   55:Minibot/src/robot.c **** 
   56:Minibot/src/robot.c **** /**
   57:Minibot/src/robot.c ****  * @brief This function handles the enabled state of the robot.
@@ -856,37 +766,40 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s 			page 1
   59:Minibot/src/robot.c ****  */
   60:Minibot/src/robot.c **** void Handle_Enabled_State()
   61:Minibot/src/robot.c **** {
- 592              		.loc 1 61 1 is_stmt 1 view -0
- 593              		.cfi_startproc
- 594              		@ args = 0, pretend = 0, frame = 0
- 595              		@ frame_needed = 0, uses_anonymous_args = 0
- 596 0000 08B5     		push	{r3, lr}
- 597              	.LCFI18:
- 598              		.cfi_def_cfa_offset 8
- 599              		.cfi_offset 3, -8
- 600              		.cfi_offset 14, -4
+ 529              		.loc 1 61 1 is_stmt 1 view -0
+ 530              		.cfi_startproc
+ 531              		@ args = 0, pretend = 0, frame = 0
+ 532              		@ frame_needed = 0, uses_anonymous_args = 0
+ 533 0000 08B5     		push	{r3, lr}
+ 534              	.LCFI16:
+ 535              		.cfi_def_cfa_offset 8
+ 536              		.cfi_offset 3, -8
+ 537              		.cfi_offset 14, -4
   62:Minibot/src/robot.c ****     if (g_remote.online_flag == REMOTE_OFFLINE || g_remote.controller.right_switch == DOWN)
- 601              		.loc 1 62 5 view .LVU108
- 602              		.loc 1 62 17 is_stmt 0 view .LVU109
- 603 0002 074B     		ldr	r3, .L35
- 604 0004 93F82830 		ldrb	r3, [r3, #40]	@ zero_extendqisi2
- 605              		.loc 1 62 8 view .LVU110
- 606 0008 1BB1     		cbz	r3, .L31
- 607              		.loc 1 62 70 discriminator 1 view .LVU111
- 608 000a 054B     		ldr	r3, .L35
- 609 000c 5B7B     		ldrb	r3, [r3, #13]	@ zero_extendqisi2
- 610              		.loc 1 62 48 discriminator 1 view .LVU112
- 611 000e 022B     		cmp	r3, #2
- 612 0010 03D1     		bne	.L32
- 613              	.L31:
+ 538              		.loc 1 62 5 view .LVU93
+ 539              		.loc 1 62 17 is_stmt 0 view .LVU94
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s 			page 14
+
+
+ 540 0002 074B     		ldr	r3, .L32
+ 541 0004 93F82830 		ldrb	r3, [r3, #40]	@ zero_extendqisi2
+ 542              		.loc 1 62 8 view .LVU95
+ 543 0008 1BB1     		cbz	r3, .L28
+ 544              		.loc 1 62 70 discriminator 1 view .LVU96
+ 545 000a 054B     		ldr	r3, .L32
+ 546 000c 5B7B     		ldrb	r3, [r3, #13]	@ zero_extendqisi2
+ 547              		.loc 1 62 48 discriminator 1 view .LVU97
+ 548 000e 022B     		cmp	r3, #2
+ 549 0010 03D1     		bne	.L29
+ 550              	.L28:
   63:Minibot/src/robot.c ****     {
   64:Minibot/src/robot.c ****         g_robot_state.state = DISABLED;
- 614              		.loc 1 64 9 is_stmt 1 view .LVU113
- 615              		.loc 1 64 29 is_stmt 0 view .LVU114
- 616 0012 044B     		ldr	r3, .L35+4
- 617 0014 0122     		movs	r2, #1
- 618 0016 1A70     		strb	r2, [r3]
- 619              	.L30:
+ 551              		.loc 1 64 9 is_stmt 1 view .LVU98
+ 552              		.loc 1 64 29 is_stmt 0 view .LVU99
+ 553 0012 044B     		ldr	r3, .L32+4
+ 554 0014 0122     		movs	r2, #1
+ 555 0016 1A70     		strb	r2, [r3]
+ 556              	.L27:
   65:Minibot/src/robot.c ****     }
   66:Minibot/src/robot.c ****     else
   67:Minibot/src/robot.c ****     {
@@ -898,41 +811,41 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s 			page 1
   73:Minibot/src/robot.c ****         Process_Launch_Control();
   74:Minibot/src/robot.c ****     }
   75:Minibot/src/robot.c **** }
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s 			page 16
-
-
- 620              		.loc 1 75 1 view .LVU115
- 621 0018 08BD     		pop	{r3, pc}
- 622              	.L32:
+ 557              		.loc 1 75 1 view .LVU100
+ 558 0018 08BD     		pop	{r3, pc}
+ 559              	.L29:
   69:Minibot/src/robot.c ****         Process_Remote_Input();
- 623              		.loc 1 69 9 is_stmt 1 view .LVU116
- 624 001a FFF7FEFF 		bl	Referee_Set_Robot_State
- 625              	.LVL44:
+ 560              		.loc 1 69 9 is_stmt 1 view .LVU101
+ 561 001a FFF7FEFF 		bl	Referee_Set_Robot_State
+ 562              	.LVL38:
   70:Minibot/src/robot.c ****         Process_Chassis_Control();
- 626              		.loc 1 70 9 view .LVU117
+ 563              		.loc 1 70 9 view .LVU102
   71:Minibot/src/robot.c ****         Process_Gimbal_Control();
- 627              		.loc 1 71 9 view .LVU118
+ 564              		.loc 1 71 9 view .LVU103
   72:Minibot/src/robot.c ****         Process_Launch_Control();
- 628              		.loc 1 72 9 view .LVU119
+ 565              		.loc 1 72 9 view .LVU104
   73:Minibot/src/robot.c ****     }
- 629              		.loc 1 73 9 view .LVU120
- 630              		.loc 1 75 1 is_stmt 0 view .LVU121
- 631 001e FBE7     		b	.L30
- 632              	.L36:
- 633              		.align	2
- 634              	.L35:
- 635 0020 00000000 		.word	g_remote
- 636 0024 00000000 		.word	g_robot_state
- 637              		.cfi_endproc
- 638              	.LFE152:
- 640              		.section	.text.Handle_Disabled_State,"ax",%progbits
- 641              		.align	1
- 642              		.global	Handle_Disabled_State
- 643              		.syntax unified
- 644              		.thumb
- 645              		.thumb_func
- 647              	Handle_Disabled_State:
- 648              	.LFB153:
+ 566              		.loc 1 73 9 view .LVU105
+ 567              		.loc 1 75 1 is_stmt 0 view .LVU106
+ 568 001e FBE7     		b	.L27
+ 569              	.L33:
+ 570              		.align	2
+ 571              	.L32:
+ 572 0020 00000000 		.word	g_remote
+ 573 0024 00000000 		.word	g_robot_state
+ 574              		.cfi_endproc
+ 575              	.LFE151:
+ 577              		.section	.text.Handle_Disabled_State,"ax",%progbits
+ 578              		.align	1
+ 579              		.global	Handle_Disabled_State
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s 			page 15
+
+
+ 580              		.syntax unified
+ 581              		.thumb
+ 582              		.thumb_func
+ 584              	Handle_Disabled_State:
+ 585              	.LFB152:
   76:Minibot/src/robot.c **** 
   77:Minibot/src/robot.c **** /**
   78:Minibot/src/robot.c ****  * @brief This function handles the disabled state of the robot.
@@ -940,186 +853,186 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s 			page 1
   80:Minibot/src/robot.c ****  */
   81:Minibot/src/robot.c **** void Handle_Disabled_State()
   82:Minibot/src/robot.c **** {
- 649              		.loc 1 82 1 is_stmt 1 view -0
- 650              		.cfi_startproc
- 651              		@ args = 0, pretend = 0, frame = 0
- 652              		@ frame_needed = 0, uses_anonymous_args = 0
- 653 0000 08B5     		push	{r3, lr}
- 654              	.LCFI19:
- 655              		.cfi_def_cfa_offset 8
- 656              		.cfi_offset 3, -8
- 657              		.cfi_offset 14, -4
+ 586              		.loc 1 82 1 is_stmt 1 view -0
+ 587              		.cfi_startproc
+ 588              		@ args = 0, pretend = 0, frame = 0
+ 589              		@ frame_needed = 0, uses_anonymous_args = 0
+ 590 0000 08B5     		push	{r3, lr}
+ 591              	.LCFI17:
+ 592              		.cfi_def_cfa_offset 8
+ 593              		.cfi_offset 3, -8
+ 594              		.cfi_offset 14, -4
   83:Minibot/src/robot.c ****     DJI_Motor_Disable_All();
- 658              		.loc 1 83 5 view .LVU123
- 659 0002 FFF7FEFF 		bl	DJI_Motor_Disable_All
- 660              	.LVL45:
+ 595              		.loc 1 83 5 view .LVU108
+ 596 0002 FFF7FEFF 		bl	DJI_Motor_Disable_All
+ 597              	.LVL39:
   84:Minibot/src/robot.c ****     //  Disable all major components
   85:Minibot/src/robot.c ****     g_robot_state.launch.IS_FLYWHEEL_ENABLED = 0;
- 661              		.loc 1 85 5 view .LVU124
- 662              		.loc 1 85 46 is_stmt 0 view .LVU125
- 663 0006 0B4B     		ldr	r3, .L41
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s 			page 17
-
-
- 664 0008 0022     		movs	r2, #0
- 665 000a 83F82E20 		strb	r2, [r3, #46]
+ 598              		.loc 1 85 5 view .LVU109
+ 599              		.loc 1 85 46 is_stmt 0 view .LVU110
+ 600 0006 0B4B     		ldr	r3, .L38
+ 601 0008 0022     		movs	r2, #0
+ 602 000a 83F82E20 		strb	r2, [r3, #46]
   86:Minibot/src/robot.c ****     g_robot_state.chassis.x_speed = 0;
- 666              		.loc 1 86 5 is_stmt 1 view .LVU126
- 667              		.loc 1 86 35 is_stmt 0 view .LVU127
- 668 000e 0022     		movs	r2, #0
- 669 0010 5A60     		str	r2, [r3, #4]	@ float
+ 603              		.loc 1 86 5 is_stmt 1 view .LVU111
+ 604              		.loc 1 86 35 is_stmt 0 view .LVU112
+ 605 000e 0022     		movs	r2, #0
+ 606 0010 5A60     		str	r2, [r3, #4]	@ float
   87:Minibot/src/robot.c ****     g_robot_state.chassis.y_speed = 0;
- 670              		.loc 1 87 5 is_stmt 1 view .LVU128
- 671              		.loc 1 87 35 is_stmt 0 view .LVU129
- 672 0012 9A60     		str	r2, [r3, #8]	@ float
+ 607              		.loc 1 87 5 is_stmt 1 view .LVU113
+ 608              		.loc 1 87 35 is_stmt 0 view .LVU114
+ 609 0012 9A60     		str	r2, [r3, #8]	@ float
   88:Minibot/src/robot.c **** 
   89:Minibot/src/robot.c ****     if (g_remote.online_flag == REMOTE_ONLINE && g_remote.controller.right_switch != DOWN)
- 673              		.loc 1 89 5 is_stmt 1 view .LVU130
- 674              		.loc 1 89 17 is_stmt 0 view .LVU131
- 675 0014 084B     		ldr	r3, .L41+4
- 676 0016 93F82830 		ldrb	r3, [r3, #40]	@ zero_extendqisi2
- 677              		.loc 1 89 8 view .LVU132
- 678 001a 012B     		cmp	r3, #1
- 679 001c 00D0     		beq	.L40
- 680              	.L37:
+ 610              		.loc 1 89 5 is_stmt 1 view .LVU115
+ 611              		.loc 1 89 17 is_stmt 0 view .LVU116
+ 612 0014 084B     		ldr	r3, .L38+4
+ 613 0016 93F82830 		ldrb	r3, [r3, #40]	@ zero_extendqisi2
+ 614              		.loc 1 89 8 view .LVU117
+ 615 001a 012B     		cmp	r3, #1
+ 616 001c 00D0     		beq	.L37
+ 617              	.L34:
   90:Minibot/src/robot.c ****     {
   91:Minibot/src/robot.c ****         g_robot_state.state = ENABLED;
   92:Minibot/src/robot.c ****         DJI_Motor_Enable_All();
   93:Minibot/src/robot.c ****     }
   94:Minibot/src/robot.c **** }
- 681              		.loc 1 94 1 view .LVU133
- 682 001e 08BD     		pop	{r3, pc}
- 683              	.L40:
+ 618              		.loc 1 94 1 view .LVU118
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s 			page 16
+
+
+ 619 001e 08BD     		pop	{r3, pc}
+ 620              	.L37:
   89:Minibot/src/robot.c ****     {
- 684              		.loc 1 89 69 discriminator 1 view .LVU134
- 685 0020 054B     		ldr	r3, .L41+4
- 686 0022 5B7B     		ldrb	r3, [r3, #13]	@ zero_extendqisi2
+ 621              		.loc 1 89 69 discriminator 1 view .LVU119
+ 622 0020 054B     		ldr	r3, .L38+4
+ 623 0022 5B7B     		ldrb	r3, [r3, #13]	@ zero_extendqisi2
   89:Minibot/src/robot.c ****     {
- 687              		.loc 1 89 47 discriminator 1 view .LVU135
- 688 0024 022B     		cmp	r3, #2
- 689 0026 FAD0     		beq	.L37
+ 624              		.loc 1 89 47 discriminator 1 view .LVU120
+ 625 0024 022B     		cmp	r3, #2
+ 626 0026 FAD0     		beq	.L34
   91:Minibot/src/robot.c ****         DJI_Motor_Enable_All();
- 690              		.loc 1 91 9 is_stmt 1 view .LVU136
+ 627              		.loc 1 91 9 is_stmt 1 view .LVU121
   91:Minibot/src/robot.c ****         DJI_Motor_Enable_All();
- 691              		.loc 1 91 29 is_stmt 0 view .LVU137
- 692 0028 024B     		ldr	r3, .L41
- 693 002a 0222     		movs	r2, #2
- 694 002c 1A70     		strb	r2, [r3]
+ 628              		.loc 1 91 29 is_stmt 0 view .LVU122
+ 629 0028 024B     		ldr	r3, .L38
+ 630 002a 0222     		movs	r2, #2
+ 631 002c 1A70     		strb	r2, [r3]
   92:Minibot/src/robot.c ****     }
- 695              		.loc 1 92 9 is_stmt 1 view .LVU138
- 696 002e FFF7FEFF 		bl	DJI_Motor_Enable_All
- 697              	.LVL46:
- 698              		.loc 1 94 1 is_stmt 0 view .LVU139
- 699 0032 F4E7     		b	.L37
- 700              	.L42:
- 701              		.align	2
- 702              	.L41:
- 703 0034 00000000 		.word	g_robot_state
- 704 0038 00000000 		.word	g_remote
- 705              		.cfi_endproc
- 706              	.LFE153:
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s 			page 18
-
-
- 708              		.section	.text.Process_Remote_Input,"ax",%progbits
- 709              		.align	1
- 710              		.global	Process_Remote_Input
- 711              		.syntax unified
- 712              		.thumb
- 713              		.thumb_func
- 715              	Process_Remote_Input:
- 716              	.LFB154:
+ 632              		.loc 1 92 9 is_stmt 1 view .LVU123
+ 633 002e FFF7FEFF 		bl	DJI_Motor_Enable_All
+ 634              	.LVL40:
+ 635              		.loc 1 94 1 is_stmt 0 view .LVU124
+ 636 0032 F4E7     		b	.L34
+ 637              	.L39:
+ 638              		.align	2
+ 639              	.L38:
+ 640 0034 00000000 		.word	g_robot_state
+ 641 0038 00000000 		.word	g_remote
+ 642              		.cfi_endproc
+ 643              	.LFE152:
+ 645              		.section	.text.Process_Remote_Input,"ax",%progbits
+ 646              		.align	1
+ 647              		.global	Process_Remote_Input
+ 648              		.syntax unified
+ 649              		.thumb
+ 650              		.thumb_func
+ 652              	Process_Remote_Input:
+ 653              	.LFB153:
   95:Minibot/src/robot.c **** 
   96:Minibot/src/robot.c **** void Process_Remote_Input()
   97:Minibot/src/robot.c **** {
- 717              		.loc 1 97 1 is_stmt 1 view -0
- 718              		.cfi_startproc
- 719              		@ args = 0, pretend = 0, frame = 0
- 720              		@ frame_needed = 0, uses_anonymous_args = 0
- 721              		@ link register save eliminated.
+ 654              		.loc 1 97 1 is_stmt 1 view -0
+ 655              		.cfi_startproc
+ 656              		@ args = 0, pretend = 0, frame = 0
+ 657              		@ frame_needed = 0, uses_anonymous_args = 0
+ 658              		@ link register save eliminated.
   98:Minibot/src/robot.c ****     // USER CODE HERE
   99:Minibot/src/robot.c **** }
- 722              		.loc 1 99 1 view .LVU141
- 723 0000 7047     		bx	lr
- 724              		.cfi_endproc
- 725              	.LFE154:
- 727              		.section	.text.Process_Chassis_Control,"ax",%progbits
- 728              		.align	1
- 729              		.global	Process_Chassis_Control
- 730              		.syntax unified
- 731              		.thumb
- 732              		.thumb_func
- 734              	Process_Chassis_Control:
- 735              	.LFB155:
+ 659              		.loc 1 99 1 view .LVU126
+ 660 0000 7047     		bx	lr
+ 661              		.cfi_endproc
+ 662              	.LFE153:
+ 664              		.section	.text.Process_Chassis_Control,"ax",%progbits
+ 665              		.align	1
+ 666              		.global	Process_Chassis_Control
+ 667              		.syntax unified
+ 668              		.thumb
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s 			page 17
+
+
+ 669              		.thumb_func
+ 671              	Process_Chassis_Control:
+ 672              	.LFB154:
  100:Minibot/src/robot.c **** 
  101:Minibot/src/robot.c **** void Process_Chassis_Control()
  102:Minibot/src/robot.c **** {
- 736              		.loc 1 102 1 view -0
- 737              		.cfi_startproc
- 738              		@ args = 0, pretend = 0, frame = 0
- 739              		@ frame_needed = 0, uses_anonymous_args = 0
- 740              		@ link register save eliminated.
+ 673              		.loc 1 102 1 view -0
+ 674              		.cfi_startproc
+ 675              		@ args = 0, pretend = 0, frame = 0
+ 676              		@ frame_needed = 0, uses_anonymous_args = 0
+ 677              		@ link register save eliminated.
  103:Minibot/src/robot.c ****      // USER CODE HERE
  104:Minibot/src/robot.c **** }
- 741              		.loc 1 104 1 view .LVU143
- 742 0000 7047     		bx	lr
- 743              		.cfi_endproc
- 744              	.LFE155:
- 746              		.section	.text.Process_Gimbal_Control,"ax",%progbits
- 747              		.align	1
- 748              		.global	Process_Gimbal_Control
- 749              		.syntax unified
- 750              		.thumb
- 751              		.thumb_func
- 753              	Process_Gimbal_Control:
- 754              	.LFB156:
+ 678              		.loc 1 104 1 view .LVU128
+ 679 0000 7047     		bx	lr
+ 680              		.cfi_endproc
+ 681              	.LFE154:
+ 683              		.section	.text.Process_Gimbal_Control,"ax",%progbits
+ 684              		.align	1
+ 685              		.global	Process_Gimbal_Control
+ 686              		.syntax unified
+ 687              		.thumb
+ 688              		.thumb_func
+ 690              	Process_Gimbal_Control:
+ 691              	.LFB155:
  105:Minibot/src/robot.c **** 
  106:Minibot/src/robot.c **** void Process_Gimbal_Control()
  107:Minibot/src/robot.c **** {
- 755              		.loc 1 107 1 view -0
- 756              		.cfi_startproc
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s 			page 19
-
-
- 757              		@ args = 0, pretend = 0, frame = 0
- 758              		@ frame_needed = 0, uses_anonymous_args = 0
- 759              		@ link register save eliminated.
+ 692              		.loc 1 107 1 view -0
+ 693              		.cfi_startproc
+ 694              		@ args = 0, pretend = 0, frame = 0
+ 695              		@ frame_needed = 0, uses_anonymous_args = 0
+ 696              		@ link register save eliminated.
  108:Minibot/src/robot.c ****      // USER CODE HERE
  109:Minibot/src/robot.c **** }
- 760              		.loc 1 109 1 view .LVU145
- 761 0000 7047     		bx	lr
- 762              		.cfi_endproc
- 763              	.LFE156:
- 765              		.section	.text.Process_Launch_Control,"ax",%progbits
- 766              		.align	1
- 767              		.global	Process_Launch_Control
- 768              		.syntax unified
- 769              		.thumb
- 770              		.thumb_func
- 772              	Process_Launch_Control:
- 773              	.LFB157:
+ 697              		.loc 1 109 1 view .LVU130
+ 698 0000 7047     		bx	lr
+ 699              		.cfi_endproc
+ 700              	.LFE155:
+ 702              		.section	.text.Process_Launch_Control,"ax",%progbits
+ 703              		.align	1
+ 704              		.global	Process_Launch_Control
+ 705              		.syntax unified
+ 706              		.thumb
+ 707              		.thumb_func
+ 709              	Process_Launch_Control:
+ 710              	.LFB156:
  110:Minibot/src/robot.c **** 
  111:Minibot/src/robot.c **** void Process_Launch_Control()
  112:Minibot/src/robot.c **** {
- 774              		.loc 1 112 1 view -0
- 775              		.cfi_startproc
- 776              		@ args = 0, pretend = 0, frame = 0
- 777              		@ frame_needed = 0, uses_anonymous_args = 0
- 778              		@ link register save eliminated.
+ 711              		.loc 1 112 1 view -0
+ 712              		.cfi_startproc
+ 713              		@ args = 0, pretend = 0, frame = 0
+ 714              		@ frame_needed = 0, uses_anonymous_args = 0
+ 715              		@ link register save eliminated.
  113:Minibot/src/robot.c ****      // USER CODE HERE
  114:Minibot/src/robot.c **** }
- 779              		.loc 1 114 1 view .LVU147
- 780 0000 7047     		bx	lr
- 781              		.cfi_endproc
- 782              	.LFE157:
- 784              		.section	.text.Robot_Command_Loop,"ax",%progbits
- 785              		.align	1
- 786              		.global	Robot_Command_Loop
- 787              		.syntax unified
- 788              		.thumb
- 789              		.thumb_func
- 791              	Robot_Command_Loop:
- 792              	.LFB158:
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s 			page 18
+
+
+ 716              		.loc 1 114 1 view .LVU132
+ 717 0000 7047     		bx	lr
+ 718              		.cfi_endproc
+ 719              	.LFE156:
+ 721              		.section	.text.Robot_Command_Loop,"ax",%progbits
+ 722              		.align	1
+ 723              		.global	Robot_Command_Loop
+ 724              		.syntax unified
+ 725              		.thumb
+ 726              		.thumb_func
+ 728              	Robot_Command_Loop:
+ 729              	.LFB157:
  115:Minibot/src/robot.c **** 
  116:Minibot/src/robot.c **** /**
  117:Minibot/src/robot.c ****  *  This function is called periodically by the Robot Task.
@@ -1128,38 +1041,35 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s 			page 1
  120:Minibot/src/robot.c ****  */
  121:Minibot/src/robot.c **** void Robot_Command_Loop()
  122:Minibot/src/robot.c **** {
- 793              		.loc 1 122 1 view -0
- 794              		.cfi_startproc
- 795              		@ args = 0, pretend = 0, frame = 0
- 796              		@ frame_needed = 0, uses_anonymous_args = 0
- 797 0000 08B5     		push	{r3, lr}
- 798              	.LCFI20:
- 799              		.cfi_def_cfa_offset 8
- 800              		.cfi_offset 3, -8
- 801              		.cfi_offset 14, -4
+ 730              		.loc 1 122 1 view -0
+ 731              		.cfi_startproc
+ 732              		@ args = 0, pretend = 0, frame = 0
+ 733              		@ frame_needed = 0, uses_anonymous_args = 0
+ 734 0000 08B5     		push	{r3, lr}
+ 735              	.LCFI18:
+ 736              		.cfi_def_cfa_offset 8
+ 737              		.cfi_offset 3, -8
+ 738              		.cfi_offset 14, -4
  123:Minibot/src/robot.c ****     switch (g_robot_state.state)
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s 			page 20
-
-
- 802              		.loc 1 123 5 view .LVU149
- 803              		.loc 1 123 26 is_stmt 0 view .LVU150
- 804 0002 094B     		ldr	r3, .L53
- 805 0004 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
- 806              		.loc 1 123 5 view .LVU151
- 807 0006 012B     		cmp	r3, #1
- 808 0008 05D0     		beq	.L48
- 809 000a 022B     		cmp	r3, #2
- 810 000c 06D0     		beq	.L49
- 811 000e 43B9     		cbnz	r3, .L50
+ 739              		.loc 1 123 5 view .LVU134
+ 740              		.loc 1 123 26 is_stmt 0 view .LVU135
+ 741 0002 094B     		ldr	r3, .L50
+ 742 0004 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 743              		.loc 1 123 5 view .LVU136
+ 744 0006 012B     		cmp	r3, #1
+ 745 0008 05D0     		beq	.L45
+ 746 000a 022B     		cmp	r3, #2
+ 747 000c 06D0     		beq	.L46
+ 748 000e 43B9     		cbnz	r3, .L47
  124:Minibot/src/robot.c ****     {
  125:Minibot/src/robot.c ****     case STARTING_UP:
  126:Minibot/src/robot.c ****         Handle_Starting_Up_State();
- 812              		.loc 1 126 9 is_stmt 1 view .LVU152
- 813 0010 FFF7FEFF 		bl	Handle_Starting_Up_State
- 814              	.LVL47:
+ 749              		.loc 1 126 9 is_stmt 1 view .LVU137
+ 750 0010 FFF7FEFF 		bl	Handle_Starting_Up_State
+ 751              	.LVL41:
  127:Minibot/src/robot.c ****         break;
- 815              		.loc 1 127 9 view .LVU153
- 816              	.L47:
+ 752              		.loc 1 127 9 view .LVU138
+ 753              	.L44:
  128:Minibot/src/robot.c ****     case DISABLED:
  129:Minibot/src/robot.c ****         Handle_Disabled_State();
  130:Minibot/src/robot.c ****         break;
@@ -1168,355 +1078,329 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s 			page 1
  133:Minibot/src/robot.c ****         break;
  134:Minibot/src/robot.c ****     default:
  135:Minibot/src/robot.c ****         Error_Handler();
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s 			page 19
+
+
  136:Minibot/src/robot.c ****         break;
  137:Minibot/src/robot.c ****     }
  138:Minibot/src/robot.c **** }
- 817              		.loc 1 138 1 is_stmt 0 view .LVU154
- 818 0014 08BD     		pop	{r3, pc}
- 819              	.L48:
+ 754              		.loc 1 138 1 is_stmt 0 view .LVU139
+ 755 0014 08BD     		pop	{r3, pc}
+ 756              	.L45:
  129:Minibot/src/robot.c ****         break;
- 820              		.loc 1 129 9 is_stmt 1 view .LVU155
- 821 0016 FFF7FEFF 		bl	Handle_Disabled_State
- 822              	.LVL48:
+ 757              		.loc 1 129 9 is_stmt 1 view .LVU140
+ 758 0016 FFF7FEFF 		bl	Handle_Disabled_State
+ 759              	.LVL42:
  130:Minibot/src/robot.c ****     case ENABLED:
- 823              		.loc 1 130 9 view .LVU156
- 824 001a FBE7     		b	.L47
- 825              	.L49:
+ 760              		.loc 1 130 9 view .LVU141
+ 761 001a FBE7     		b	.L44
+ 762              	.L46:
  132:Minibot/src/robot.c ****         break;
- 826              		.loc 1 132 9 view .LVU157
- 827 001c FFF7FEFF 		bl	Handle_Enabled_State
- 828              	.LVL49:
+ 763              		.loc 1 132 9 view .LVU142
+ 764 001c FFF7FEFF 		bl	Handle_Enabled_State
+ 765              	.LVL43:
  133:Minibot/src/robot.c ****     default:
- 829              		.loc 1 133 9 view .LVU158
- 830 0020 F8E7     		b	.L47
- 831              	.L50:
+ 766              		.loc 1 133 9 view .LVU143
+ 767 0020 F8E7     		b	.L44
+ 768              	.L47:
  135:Minibot/src/robot.c ****         break;
- 832              		.loc 1 135 9 view .LVU159
- 833 0022 FFF7FEFF 		bl	Error_Handler
- 834              	.LVL50:
+ 769              		.loc 1 135 9 view .LVU144
+ 770 0022 FFF7FEFF 		bl	Error_Handler
+ 771              	.LVL44:
  136:Minibot/src/robot.c ****     }
- 835              		.loc 1 136 9 view .LVU160
- 836              		.loc 1 138 1 is_stmt 0 view .LVU161
- 837 0026 F5E7     		b	.L47
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s 			page 21
+ 772              		.loc 1 136 9 view .LVU145
+ 773              		.loc 1 138 1 is_stmt 0 view .LVU146
+ 774 0026 F5E7     		b	.L44
+ 775              	.L51:
+ 776              		.align	2
+ 777              	.L50:
+ 778 0028 00000000 		.word	g_robot_state
+ 779              		.cfi_endproc
+ 780              	.LFE157:
+ 782              		.section	.text.Robot_Tasks_Robot_Command,"ax",%progbits
+ 783              		.align	1
+ 784              		.global	Robot_Tasks_Robot_Command
+ 785              		.syntax unified
+ 786              		.thumb
+ 787              		.thumb_func
+ 789              	Robot_Tasks_Robot_Command:
+ 790              	.LVL45:
+ 791              	.LFB143:
+  53:Minibot/inc/robot_tasks.h ****     portTickType xLastWakeTime;
+ 792              		.loc 2 53 1 is_stmt 1 view -0
+ 793              		.cfi_startproc
+ 794              		@ args = 0, pretend = 0, frame = 8
+ 795              		@ frame_needed = 0, uses_anonymous_args = 0
+  53:Minibot/inc/robot_tasks.h ****     portTickType xLastWakeTime;
+ 796              		.loc 2 53 1 is_stmt 0 view .LVU148
+ 797 0000 00B5     		push	{lr}
+ 798              	.LCFI19:
+ 799              		.cfi_def_cfa_offset 4
+ 800              		.cfi_offset 14, -4
+ 801 0002 83B0     		sub	sp, sp, #12
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s 			page 20
 
 
- 838              	.L54:
- 839              		.align	2
- 840              	.L53:
- 841 0028 00000000 		.word	g_robot_state
- 842              		.cfi_endproc
- 843              	.LFE158:
- 845              		.section	.text.Robot_Tasks_Robot_Command,"ax",%progbits
- 846              		.align	1
- 847              		.global	Robot_Tasks_Robot_Command
- 848              		.syntax unified
- 849              		.thumb
- 850              		.thumb_func
- 852              	Robot_Tasks_Robot_Command:
- 853              	.LVL51:
- 854              	.LFB143:
-  59:Minibot/inc/robot_tasks.h ****     portTickType xLastWakeTime;
- 855              		.loc 2 59 1 is_stmt 1 view -0
- 856              		.cfi_startproc
- 857              		@ args = 0, pretend = 0, frame = 8
- 858              		@ frame_needed = 0, uses_anonymous_args = 0
-  59:Minibot/inc/robot_tasks.h ****     portTickType xLastWakeTime;
- 859              		.loc 2 59 1 is_stmt 0 view .LVU163
- 860 0000 00B5     		push	{lr}
- 861              	.LCFI21:
- 862              		.cfi_def_cfa_offset 4
- 863              		.cfi_offset 14, -4
- 864 0002 83B0     		sub	sp, sp, #12
- 865              	.LCFI22:
- 866              		.cfi_def_cfa_offset 16
-  60:Minibot/inc/robot_tasks.h ****     xLastWakeTime = xTaskGetTickCount();
- 867              		.loc 2 60 5 is_stmt 1 view .LVU164
-  61:Minibot/inc/robot_tasks.h ****     const TickType_t TimeIncrement = pdMS_TO_TICKS(2);
- 868              		.loc 2 61 5 view .LVU165
-  61:Minibot/inc/robot_tasks.h ****     const TickType_t TimeIncrement = pdMS_TO_TICKS(2);
- 869              		.loc 2 61 21 is_stmt 0 view .LVU166
- 870 0004 FFF7FEFF 		bl	xTaskGetTickCount
- 871              	.LVL52:
-  61:Minibot/inc/robot_tasks.h ****     const TickType_t TimeIncrement = pdMS_TO_TICKS(2);
- 872              		.loc 2 61 19 discriminator 1 view .LVU167
- 873 0008 0190     		str	r0, [sp, #4]
-  62:Minibot/inc/robot_tasks.h ****     while (1)
- 874              		.loc 2 62 5 is_stmt 1 view .LVU168
- 875              	.LVL53:
- 876              	.L56:
-  63:Minibot/inc/robot_tasks.h ****     {
- 877              		.loc 2 63 5 view .LVU169
-  65:Minibot/inc/robot_tasks.h ****         vTaskDelayUntil(&xLastWakeTime, TimeIncrement);
- 878              		.loc 2 65 9 view .LVU170
- 879 000a FFF7FEFF 		bl	Robot_Command_Loop
- 880              	.LVL54:
-  66:Minibot/inc/robot_tasks.h ****     }
- 881              		.loc 2 66 9 discriminator 1 view .LVU171
- 882 000e 0221     		movs	r1, #2
- 883 0010 01A8     		add	r0, sp, #4
- 884 0012 FFF7FEFF 		bl	vTaskDelayUntil
- 885              	.LVL55:
-  63:Minibot/inc/robot_tasks.h ****     {
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s 			page 22
+ 802              	.LCFI20:
+ 803              		.cfi_def_cfa_offset 16
+  54:Minibot/inc/robot_tasks.h ****     xLastWakeTime = xTaskGetTickCount();
+ 804              		.loc 2 54 5 is_stmt 1 view .LVU149
+  55:Minibot/inc/robot_tasks.h ****     const TickType_t TimeIncrement = pdMS_TO_TICKS(2);
+ 805              		.loc 2 55 5 view .LVU150
+  55:Minibot/inc/robot_tasks.h ****     const TickType_t TimeIncrement = pdMS_TO_TICKS(2);
+ 806              		.loc 2 55 21 is_stmt 0 view .LVU151
+ 807 0004 FFF7FEFF 		bl	xTaskGetTickCount
+ 808              	.LVL46:
+  55:Minibot/inc/robot_tasks.h ****     const TickType_t TimeIncrement = pdMS_TO_TICKS(2);
+ 809              		.loc 2 55 19 discriminator 1 view .LVU152
+ 810 0008 0190     		str	r0, [sp, #4]
+  56:Minibot/inc/robot_tasks.h ****     while (1)
+ 811              		.loc 2 56 5 is_stmt 1 view .LVU153
+ 812              	.LVL47:
+ 813              	.L53:
+  57:Minibot/inc/robot_tasks.h ****     {
+ 814              		.loc 2 57 5 view .LVU154
+  59:Minibot/inc/robot_tasks.h ****         vTaskDelayUntil(&xLastWakeTime, TimeIncrement);
+ 815              		.loc 2 59 9 view .LVU155
+ 816 000a FFF7FEFF 		bl	Robot_Command_Loop
+ 817              	.LVL48:
+  60:Minibot/inc/robot_tasks.h ****     }
+ 818              		.loc 2 60 9 discriminator 1 view .LVU156
+ 819 000e 0221     		movs	r1, #2
+ 820 0010 01A8     		add	r0, sp, #4
+ 821 0012 FFF7FEFF 		bl	vTaskDelayUntil
+ 822              	.LVL49:
+  57:Minibot/inc/robot_tasks.h ****     {
+ 823              		.loc 2 57 11 view .LVU157
+ 824 0016 F8E7     		b	.L53
+ 825              		.cfi_endproc
+ 826              	.LFE143:
+ 828              		.section	.rodata.str1.4,"aMS",%progbits,1
+ 829              		.align	2
+ 830              	.LC10:
+ 831 0000 6461656D 		.ascii	"daemon_task\000"
+ 831      6F6E5F74 
+ 831      61736B00 
+ 832              		.align	2
+ 833              	.LC8:
+ 834 000c 64656275 		.ascii	"debug_task\000"
+ 834      675F7461 
+ 834      736B00
+ 835 0017 00       		.align	2
+ 836              	.LC6:
+ 837 0018 75695F74 		.ascii	"ui_task\000"
+ 837      61736B00 
+ 838              		.align	2
+ 839              	.LC4:
+ 840 0020 726F626F 		.ascii	"robot_command_task\000"
+ 840      745F636F 
+ 840      6D6D616E 
+ 840      645F7461 
+ 840      736B00
+ 841 0033 00       		.align	2
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s 			page 21
 
 
- 886              		.loc 2 63 11 view .LVU172
- 887 0016 F8E7     		b	.L56
- 888              		.cfi_endproc
- 889              	.LFE143:
- 891              		.section	.rodata.str1.4,"aMS",%progbits,1
- 892              		.align	2
- 893              	.LC12:
- 894 0000 6461656D 		.ascii	"daemon_task\000"
- 894      6F6E5F74 
- 894      61736B00 
- 895              		.align	2
- 896              	.LC10:
- 897 000c 6A657473 		.ascii	"jetson_orin_task\000"
- 897      6F6E5F6F 
- 897      72696E5F 
- 897      7461736B 
- 897      00
- 898 001d 000000   		.align	2
- 899              	.LC8:
- 900 0020 64656275 		.ascii	"debug_task\000"
- 900      675F7461 
- 900      736B00
- 901 002b 00       		.align	2
- 902              	.LC6:
- 903 002c 75695F74 		.ascii	"ui_task\000"
- 903      61736B00 
- 904              		.align	2
- 905              	.LC4:
- 906 0034 726F626F 		.ascii	"robot_command_task\000"
- 906      745F636F 
- 906      6D6D616E 
- 906      645F7461 
- 906      736B00
- 907 0047 00       		.align	2
- 908              	.LC2:
- 909 0048 6D6F746F 		.ascii	"motor_task\000"
- 909      725F7461 
- 909      736B00
- 910 0053 00       		.align	2
- 911              	.LC0:
- 912 0054 696D755F 		.ascii	"imu_task\000"
- 912      7461736B 
- 912      00
- 913              		.global	g_robot_state
- 914              		.section	.bss.g_robot_state,"aw",%nobits
- 915              		.align	2
- 918              	g_robot_state:
- 919 0000 00000000 		.space	92
- 919      00000000 
- 919      00000000 
- 919      00000000 
- 919      00000000 
- 920              		.global	daemon_task_handle
- 921              		.section	.bss.daemon_task_handle,"aw",%nobits
- 922              		.align	2
- 925              	daemon_task_handle:
- 926 0000 00000000 		.space	4
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s 			page 23
+ 842              	.LC2:
+ 843 0034 6D6F746F 		.ascii	"motor_task\000"
+ 843      725F7461 
+ 843      736B00
+ 844 003f 00       		.align	2
+ 845              	.LC0:
+ 846 0040 696D755F 		.ascii	"imu_task\000"
+ 846      7461736B 
+ 846      00
+ 847              		.global	g_robot_state
+ 848              		.section	.bss.g_robot_state,"aw",%nobits
+ 849              		.align	2
+ 852              	g_robot_state:
+ 853 0000 00000000 		.space	92
+ 853      00000000 
+ 853      00000000 
+ 853      00000000 
+ 853      00000000 
+ 854              		.global	daemon_task_handle
+ 855              		.section	.bss.daemon_task_handle,"aw",%nobits
+ 856              		.align	2
+ 859              	daemon_task_handle:
+ 860 0000 00000000 		.space	4
+ 861              		.global	debug_task_handle
+ 862              		.section	.bss.debug_task_handle,"aw",%nobits
+ 863              		.align	2
+ 866              	debug_task_handle:
+ 867 0000 00000000 		.space	4
+ 868              		.global	ui_task_handle
+ 869              		.section	.bss.ui_task_handle,"aw",%nobits
+ 870              		.align	2
+ 873              	ui_task_handle:
+ 874 0000 00000000 		.space	4
+ 875              		.global	motor_task_handle
+ 876              		.section	.bss.motor_task_handle,"aw",%nobits
+ 877              		.align	2
+ 880              	motor_task_handle:
+ 881 0000 00000000 		.space	4
+ 882              		.global	robot_command_task_handle
+ 883              		.section	.bss.robot_command_task_handle,"aw",%nobits
+ 884              		.align	2
+ 887              	robot_command_task_handle:
+ 888 0000 00000000 		.space	4
+ 889              		.global	imu_task_handle
+ 890              		.section	.bss.imu_task_handle,"aw",%nobits
+ 891              		.align	2
+ 894              	imu_task_handle:
+ 895 0000 00000000 		.space	4
+ 896              		.section	.rodata
+ 897              		.align	2
+ 898              		.set	.LANCHOR0,. + 0
+ 899              	.LC12:
+ 900 0000 40000000 		.word	.LC0
+ 901 0004 00000000 		.word	Robot_Tasks_IMU
+ 902 0008 0100     		.short	1
+ 903 000a 0000     		.space	2
+ 904 000c 00000000 		.word	0
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s 			page 22
 
 
- 927              		.global	jetson_orin_task_handle
- 928              		.section	.bss.jetson_orin_task_handle,"aw",%nobits
- 929              		.align	2
- 932              	jetson_orin_task_handle:
- 933 0000 00000000 		.space	4
- 934              		.global	debug_task_handle
- 935              		.section	.bss.debug_task_handle,"aw",%nobits
- 936              		.align	2
- 939              	debug_task_handle:
- 940 0000 00000000 		.space	4
- 941              		.global	ui_task_handle
- 942              		.section	.bss.ui_task_handle,"aw",%nobits
- 943              		.align	2
- 946              	ui_task_handle:
- 947 0000 00000000 		.space	4
- 948              		.global	motor_task_handle
- 949              		.section	.bss.motor_task_handle,"aw",%nobits
- 950              		.align	2
- 953              	motor_task_handle:
- 954 0000 00000000 		.space	4
- 955              		.global	robot_command_task_handle
- 956              		.section	.bss.robot_command_task_handle,"aw",%nobits
- 957              		.align	2
- 960              	robot_command_task_handle:
- 961 0000 00000000 		.space	4
- 962              		.global	imu_task_handle
- 963              		.section	.bss.imu_task_handle,"aw",%nobits
- 964              		.align	2
- 967              	imu_task_handle:
- 968 0000 00000000 		.space	4
- 969              		.section	.rodata
- 970              		.align	2
- 971              		.set	.LANCHOR0,. + 0
- 972              	.LC14:
- 973 0000 54000000 		.word	.LC0
- 974 0004 00000000 		.word	Robot_Tasks_IMU
- 975 0008 0100     		.short	1
- 976 000a 0000     		.space	2
- 977 000c 00000000 		.word	0
- 978 0010 00040000 		.word	1024
- 979 0014 00000000 		.word	0
- 980 0018 00000000 		.word	0
- 981              	.LC15:
- 982 001c 48000000 		.word	.LC2
- 983 0020 00000000 		.word	Robot_Tasks_Motor
- 984 0024 0100     		.short	1
- 985 0026 0000     		.space	2
- 986 0028 00000000 		.word	0
- 987 002c 00010000 		.word	256
- 988 0030 00000000 		.word	0
- 989 0034 00000000 		.word	0
- 990              	.LC16:
- 991 0038 34000000 		.word	.LC4
- 992 003c 00000000 		.word	Robot_Tasks_Robot_Command
- 993 0040 0100     		.short	1
- 994 0042 0000     		.space	2
- 995 0044 00000000 		.word	0
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s 			page 24
+ 905 0010 00040000 		.word	1024
+ 906 0014 00000000 		.word	0
+ 907 0018 00000000 		.word	0
+ 908              	.LC13:
+ 909 001c 34000000 		.word	.LC2
+ 910 0020 00000000 		.word	Robot_Tasks_Motor
+ 911 0024 0100     		.short	1
+ 912 0026 0000     		.space	2
+ 913 0028 00000000 		.word	0
+ 914 002c 00010000 		.word	256
+ 915 0030 00000000 		.word	0
+ 916 0034 00000000 		.word	0
+ 917              	.LC14:
+ 918 0038 20000000 		.word	.LC4
+ 919 003c 00000000 		.word	Robot_Tasks_Robot_Command
+ 920 0040 0100     		.short	1
+ 921 0042 0000     		.space	2
+ 922 0044 00000000 		.word	0
+ 923 0048 00010000 		.word	256
+ 924 004c 00000000 		.word	0
+ 925 0050 00000000 		.word	0
+ 926              	.LC15:
+ 927 0054 18000000 		.word	.LC6
+ 928 0058 00000000 		.word	Robot_Tasks_UI
+ 929 005c 0100     		.short	1
+ 930 005e 0000     		.space	2
+ 931 0060 00000000 		.word	0
+ 932 0064 00010000 		.word	256
+ 933 0068 00000000 		.word	0
+ 934 006c 00000000 		.word	0
+ 935              	.LC16:
+ 936 0070 0C000000 		.word	.LC8
+ 937 0074 00000000 		.word	Robot_Tasks_Debug
+ 938 0078 FDFF     		.short	-3
+ 939 007a 0000     		.space	2
+ 940 007c 00000000 		.word	0
+ 941 0080 00010000 		.word	256
+ 942 0084 00000000 		.word	0
+ 943 0088 00000000 		.word	0
+ 944              	.LC17:
+ 945 008c 00000000 		.word	.LC10
+ 946 0090 00000000 		.word	Robot_Tasks_Daemon
+ 947 0094 0100     		.short	1
+ 948 0096 0000     		.space	2
+ 949 0098 00000000 		.word	0
+ 950 009c 00010000 		.word	256
+ 951 00a0 00000000 		.word	0
+ 952 00a4 00000000 		.word	0
+ 953              		.text
+ 954              	.Letext0:
+ 955              		.file 3 "/Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/arm-none-eabi/include/machine/_defa
+ 956              		.file 4 "/Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/arm-none-eabi/include/sys/_stdint.h
+ 957              		.file 5 "Minibot/inc/robot.h"
+ 958              		.file 6 "control-base/typec-board-base/Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM
+ 959              		.file 7 "control-base/typec-board-base/Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h"
+ 960              		.file 8 "control-base/typec-board-base/Middlewares/Third_Party/FreeRTOS/Source/include/task.h"
+ 961              		.file 9 "control-base/typec-board-base/Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h"
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s 			page 23
 
 
- 996 0048 00010000 		.word	256
- 997 004c 00000000 		.word	0
- 998 0050 00000000 		.word	0
- 999              	.LC17:
- 1000 0054 2C000000 		.word	.LC6
- 1001 0058 00000000 		.word	Robot_Tasks_UI
- 1002 005c 0100     		.short	1
- 1003 005e 0000     		.space	2
- 1004 0060 00000000 		.word	0
- 1005 0064 00010000 		.word	256
- 1006 0068 00000000 		.word	0
- 1007 006c 00000000 		.word	0
- 1008              	.LC18:
- 1009 0070 20000000 		.word	.LC8
- 1010 0074 00000000 		.word	Robot_Tasks_Debug
- 1011 0078 FDFF     		.short	-3
- 1012 007a 0000     		.space	2
- 1013 007c 00000000 		.word	0
- 1014 0080 00010000 		.word	256
- 1015 0084 00000000 		.word	0
- 1016 0088 00000000 		.word	0
- 1017              	.LC19:
- 1018 008c 0C000000 		.word	.LC10
- 1019 0090 00000000 		.word	Robot_Tasks_Jetson_Orin
- 1020 0094 0100     		.short	1
- 1021 0096 0000     		.space	2
- 1022 0098 00000000 		.word	0
- 1023 009c 00010000 		.word	256
- 1024 00a0 00000000 		.word	0
- 1025 00a4 00000000 		.word	0
- 1026              	.LC20:
- 1027 00a8 00000000 		.word	.LC12
- 1028 00ac 00000000 		.word	Robot_Tasks_Daemon
- 1029 00b0 0100     		.short	1
- 1030 00b2 0000     		.space	2
- 1031 00b4 00000000 		.word	0
- 1032 00b8 00010000 		.word	256
- 1033 00bc 00000000 		.word	0
- 1034 00c0 00000000 		.word	0
- 1035              		.text
- 1036              	.Letext0:
- 1037              		.file 3 "/Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/arm-none-eabi/include/machine/_defa
- 1038              		.file 4 "/Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/arm-none-eabi/include/sys/_stdint.h
- 1039              		.file 5 "Minibot/inc/robot.h"
- 1040              		.file 6 "control-base/typec-board-base/Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM
- 1041              		.file 7 "control-base/typec-board-base/Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h"
- 1042              		.file 8 "control-base/typec-board-base/Middlewares/Third_Party/FreeRTOS/Source/include/task.h"
- 1043              		.file 9 "control-base/typec-board-base/Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h"
- 1044              		.file 10 "control-base/typec-board-base/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h"
- 1045              		.file 11 "control-base/typec-board-base/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h"
- 1046              		.file 12 "control-base/typec-board-base/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h"
- 1047              		.file 13 "control-base/typec-board-base/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_o
- 1048              		.file 14 "control-base/typec-board-base/Core/Inc/usart.h"
- 1049              		.file 15 "control-base/devices/inc/remote.h"
- 1050              		.file 16 "control-base/devices/inc/buzzer.h"
- 1051              		.file 17 "control-base/devices/inc/dji_motor.h"
- 1052              		.file 18 "control-base/typec-board-base/Core/Inc/main.h"
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s 			page 25
-
-
- 1053              		.file 19 "control-base/devices/inc/referee_system.h"
- 1054              		.file 20 "control-base/bsp/inc/bsp_can.h"
- 1055              		.file 21 "Minibot/inc/launch_task.h"
- 1056              		.file 22 "Minibot/inc/gimbal_task.h"
- 1057              		.file 23 "Minibot/inc/chassis_task.h"
- 1058              		.file 24 "control-base/bsp/inc/bsp_daemon.h"
- 1059              		.file 25 "control-base/devices/inc/jetson_orin.h"
- 1060              		.file 26 "Minibot/inc/debug_task.h"
- 1061              		.file 27 "Minibot/inc/motor_task.h"
- 1062              		.file 28 "<built-in>"
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s 			page 26
+ 962              		.file 10 "control-base/typec-board-base/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h"
+ 963              		.file 11 "control-base/typec-board-base/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h"
+ 964              		.file 12 "control-base/typec-board-base/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h"
+ 965              		.file 13 "control-base/typec-board-base/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_o
+ 966              		.file 14 "control-base/typec-board-base/Core/Inc/usart.h"
+ 967              		.file 15 "control-base/devices/inc/remote.h"
+ 968              		.file 16 "control-base/devices/inc/buzzer.h"
+ 969              		.file 17 "control-base/devices/inc/dji_motor.h"
+ 970              		.file 18 "control-base/typec-board-base/Core/Inc/main.h"
+ 971              		.file 19 "control-base/devices/inc/referee_system.h"
+ 972              		.file 20 "control-base/bsp/inc/bsp_can.h"
+ 973              		.file 21 "Minibot/inc/launch_task.h"
+ 974              		.file 22 "Minibot/inc/gimbal_task.h"
+ 975              		.file 23 "Minibot/inc/chassis_task.h"
+ 976              		.file 24 "control-base/bsp/inc/bsp_daemon.h"
+ 977              		.file 25 "Minibot/inc/debug_task.h"
+ 978              		.file 26 "Minibot/inc/motor_task.h"
+ 979              		.file 27 "<built-in>"
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s 			page 24
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 robot.c
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s:21     .text.Robot_Tasks_UI:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s:27     .text.Robot_Tasks_UI:00000000 Robot_Tasks_UI
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s:65     .text.Robot_Tasks_IMU:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s:71     .text.Robot_Tasks_IMU:00000000 Robot_Tasks_IMU
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s:93     .text.Robot_Tasks_Motor:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s:99     .text.Robot_Tasks_Motor:00000000 Robot_Tasks_Motor
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s:139    .text.Robot_Tasks_Debug:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s:145    .text.Robot_Tasks_Debug:00000000 Robot_Tasks_Debug
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s:185    .text.Robot_Tasks_Jetson_Orin:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s:191    .text.Robot_Tasks_Jetson_Orin:00000000 Robot_Tasks_Jetson_Orin
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s:231    .text.Robot_Tasks_Daemon:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s:237    .text.Robot_Tasks_Daemon:00000000 Robot_Tasks_Daemon
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s:277    .text.Robot_Tasks_Start:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s:283    .text.Robot_Tasks_Start:00000000 Robot_Tasks_Start
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s:419    .text.Robot_Tasks_Start:00000104 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s:967    .bss.imu_task_handle:00000000 imu_task_handle
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s:953    .bss.motor_task_handle:00000000 motor_task_handle
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s:960    .bss.robot_command_task_handle:00000000 robot_command_task_handle
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s:946    .bss.ui_task_handle:00000000 ui_task_handle
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s:939    .bss.debug_task_handle:00000000 debug_task_handle
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s:932    .bss.jetson_orin_task_handle:00000000 jetson_orin_task_handle
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s:925    .bss.daemon_task_handle:00000000 daemon_task_handle
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s:431    .text.Robot_Init:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s:437    .text.Robot_Init:00000000 Robot_Init
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s:516    .text.Robot_Init:00000078 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s:918    .bss.g_robot_state:00000000 g_robot_state
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s:530    .text.Handle_Starting_Up_State:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s:536    .text.Handle_Starting_Up_State:00000000 Handle_Starting_Up_State
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s:577    .text.Handle_Starting_Up_State:00000028 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s:584    .text.Handle_Enabled_State:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s:590    .text.Handle_Enabled_State:00000000 Handle_Enabled_State
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s:635    .text.Handle_Enabled_State:00000020 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s:641    .text.Handle_Disabled_State:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s:647    .text.Handle_Disabled_State:00000000 Handle_Disabled_State
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s:703    .text.Handle_Disabled_State:00000034 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s:709    .text.Process_Remote_Input:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s:715    .text.Process_Remote_Input:00000000 Process_Remote_Input
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s:728    .text.Process_Chassis_Control:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s:734    .text.Process_Chassis_Control:00000000 Process_Chassis_Control
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s:747    .text.Process_Gimbal_Control:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s:753    .text.Process_Gimbal_Control:00000000 Process_Gimbal_Control
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s:766    .text.Process_Launch_Control:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s:772    .text.Process_Launch_Control:00000000 Process_Launch_Control
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s:785    .text.Robot_Command_Loop:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s:791    .text.Robot_Command_Loop:00000000 Robot_Command_Loop
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s:841    .text.Robot_Command_Loop:00000028 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s:846    .text.Robot_Tasks_Robot_Command:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s:852    .text.Robot_Tasks_Robot_Command:00000000 Robot_Tasks_Robot_Command
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s:892    .rodata.str1.4:00000000 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s:915    .bss.g_robot_state:00000000 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s:922    .bss.daemon_task_handle:00000000 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s:929    .bss.jetson_orin_task_handle:00000000 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s:936    .bss.debug_task_handle:00000000 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s:943    .bss.ui_task_handle:00000000 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s:950    .bss.motor_task_handle:00000000 $d
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s 			page 27
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s:21     .text.Robot_Tasks_UI:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s:27     .text.Robot_Tasks_UI:00000000 Robot_Tasks_UI
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s:65     .text.Robot_Tasks_IMU:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s:71     .text.Robot_Tasks_IMU:00000000 Robot_Tasks_IMU
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s:93     .text.Robot_Tasks_Motor:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s:99     .text.Robot_Tasks_Motor:00000000 Robot_Tasks_Motor
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s:139    .text.Robot_Tasks_Debug:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s:145    .text.Robot_Tasks_Debug:00000000 Robot_Tasks_Debug
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s:185    .text.Robot_Tasks_Daemon:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s:191    .text.Robot_Tasks_Daemon:00000000 Robot_Tasks_Daemon
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s:231    .text.Robot_Tasks_Start:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s:237    .text.Robot_Tasks_Start:00000000 Robot_Tasks_Start
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s:357    .text.Robot_Tasks_Start:000000e0 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s:894    .bss.imu_task_handle:00000000 imu_task_handle
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s:880    .bss.motor_task_handle:00000000 motor_task_handle
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s:887    .bss.robot_command_task_handle:00000000 robot_command_task_handle
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s:873    .bss.ui_task_handle:00000000 ui_task_handle
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s:866    .bss.debug_task_handle:00000000 debug_task_handle
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s:859    .bss.daemon_task_handle:00000000 daemon_task_handle
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s:368    .text.Robot_Init:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s:374    .text.Robot_Init:00000000 Robot_Init
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s:453    .text.Robot_Init:00000078 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s:852    .bss.g_robot_state:00000000 g_robot_state
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s:467    .text.Handle_Starting_Up_State:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s:473    .text.Handle_Starting_Up_State:00000000 Handle_Starting_Up_State
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s:514    .text.Handle_Starting_Up_State:00000028 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s:521    .text.Handle_Enabled_State:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s:527    .text.Handle_Enabled_State:00000000 Handle_Enabled_State
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s:572    .text.Handle_Enabled_State:00000020 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s:578    .text.Handle_Disabled_State:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s:584    .text.Handle_Disabled_State:00000000 Handle_Disabled_State
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s:640    .text.Handle_Disabled_State:00000034 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s:646    .text.Process_Remote_Input:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s:652    .text.Process_Remote_Input:00000000 Process_Remote_Input
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s:665    .text.Process_Chassis_Control:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s:671    .text.Process_Chassis_Control:00000000 Process_Chassis_Control
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s:684    .text.Process_Gimbal_Control:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s:690    .text.Process_Gimbal_Control:00000000 Process_Gimbal_Control
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s:703    .text.Process_Launch_Control:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s:709    .text.Process_Launch_Control:00000000 Process_Launch_Control
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s:722    .text.Robot_Command_Loop:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s:728    .text.Robot_Command_Loop:00000000 Robot_Command_Loop
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s:778    .text.Robot_Command_Loop:00000028 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s:783    .text.Robot_Tasks_Robot_Command:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s:789    .text.Robot_Tasks_Robot_Command:00000000 Robot_Tasks_Robot_Command
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s:829    .rodata.str1.4:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s:849    .bss.g_robot_state:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s:856    .bss.daemon_task_handle:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s:863    .bss.debug_task_handle:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s:870    .bss.ui_task_handle:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s:877    .bss.motor_task_handle:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s:884    .bss.robot_command_task_handle:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s:891    .bss.imu_task_handle:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s:897    .rodata:00000000 $d
 
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZjbuO9.s 			page 25
 
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s:957    .bss.robot_command_task_handle:00000000 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s:964    .bss.imu_task_handle:00000000 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cczC2KD9.s:970    .rodata:00000000 $d
 
 UNDEFINED SYMBOLS
 xTaskGetTickCount
@@ -1524,7 +1408,6 @@ vTaskDelayUntil
 IMU_Task
 Motor_Task_Loop
 Debug_Task_Loop
-Jetson_Orin_Send_Data
 Daemon_Task_Loop
 osThreadCreate
 Buzzer_Init

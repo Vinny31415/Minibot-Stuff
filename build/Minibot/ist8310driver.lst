@@ -1,4 +1,4 @@
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZzGoZJ.s 			page 1
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccf94A4X.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -58,7 +58,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZzGoZJ.s 			page 1
   37              		.cfi_offset 5, -12
   38              		.cfi_offset 6, -8
   39              		.cfi_offset 14, -4
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZzGoZJ.s 			page 2
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccf94A4X.s 			page 2
 
 
   20:control-base/devices/src/ist8310driver.c ****     static const uint8_t wait_time = 1;
@@ -118,7 +118,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZzGoZJ.s 			page 1
   77              	.L2:
   37:control-base/devices/src/ist8310driver.c ****     }
   38:control-base/devices/src/ist8310driver.c ****     ist8310_delay_ms(wait_time);
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZzGoZJ.s 			page 3
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccf94A4X.s 			page 3
 
 
   39:control-base/devices/src/ist8310driver.c **** 
@@ -178,7 +178,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZzGoZJ.s 			page 1
  108              	.LVL13:
   43:control-base/devices/src/ist8310driver.c ****         res = ist8310_IIC_read_single_reg(ist8310_write_reg_data_error[writeNum][0]);
  109              		.loc 1 43 9 is_stmt 1 view .LVU26
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZzGoZJ.s 			page 4
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccf94A4X.s 			page 4
 
 
  110 004c 0120     		movs	r0, #1
@@ -238,7 +238,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZzGoZJ.s 			page 1
  152              	.L12:
  153 007a 00BF     		.align	2
  154              	.L11:
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZzGoZJ.s 			page 5
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccf94A4X.s 			page 5
 
 
  155 007c 00000000 		.word	ist8310_write_reg_data_error
@@ -298,7 +298,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZzGoZJ.s 			page 1
   64:control-base/devices/src/ist8310driver.c ****         ist8310_real_data->mag[0] = MAG_SEN * temp_ist8310_data;
  201              		.loc 1 64 9 is_stmt 1 view .LVU52
  202              		.loc 1 64 45 is_stmt 0 view .LVU53
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZzGoZJ.s 			page 6
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccf94A4X.s 			page 6
 
 
  203 001e F8EEE77A 		vcvt.f32.s32	s15, s15
@@ -358,7 +358,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZzGoZJ.s 			page 1
  253 0062 7047     		bx	lr
  254              	.LVL33:
  255              	.L14:
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZzGoZJ.s 			page 7
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccf94A4X.s 			page 7
 
 
   69:control-base/devices/src/ist8310driver.c ****     }
@@ -418,7 +418,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZzGoZJ.s 			page 1
  300 0008 6946     		mov	r1, sp
  301 000a 0320     		movs	r0, #3
  302              	.LVL36:
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZzGoZJ.s 			page 8
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccf94A4X.s 			page 8
 
 
  303              		.loc 1 80 5 is_stmt 0 view .LVU83
@@ -478,7 +478,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZzGoZJ.s 			page 1
  351              	.LVL43:
  352              		.loc 1 86 25 view .LVU104
  353 0054 1B02     		lsls	r3, r3, #8
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZzGoZJ.s 			page 9
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccf94A4X.s 			page 9
 
 
  354 0056 1BB2     		sxth	r3, r3
@@ -526,22 +526,22 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZzGoZJ.s 			page 1
  397              		.file 3 "/Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/arm-none-eabi/include/sys/_stdint.h
  398              		.file 4 "control-base/devices/inc/ist8310driver.h"
  399              		.file 5 "control-base/devices/inc/ist8310driver_middleware.h"
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZzGoZJ.s 			page 10
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccf94A4X.s 			page 10
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 ist8310driver.c
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZzGoZJ.s:21     .text.ist8310_init:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZzGoZJ.s:27     .text.ist8310_init:00000000 ist8310_init
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZzGoZJ.s:155    .text.ist8310_init:0000007c $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZzGoZJ.s:389    .rodata.ist8310_write_reg_data_error:00000000 ist8310_write_reg_data_error
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZzGoZJ.s:160    .text.ist8310_read_over:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZzGoZJ.s:166    .text.ist8310_read_over:00000000 ist8310_read_over
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZzGoZJ.s:267    .text.ist8310_read_over:00000070 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZzGoZJ.s:272    .text.ist8310_read_mag:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZzGoZJ.s:278    .text.ist8310_read_mag:00000000 ist8310_read_mag
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZzGoZJ.s:381    .text.ist8310_read_mag:00000074 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccZzGoZJ.s:386    .rodata.ist8310_write_reg_data_error:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccf94A4X.s:21     .text.ist8310_init:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccf94A4X.s:27     .text.ist8310_init:00000000 ist8310_init
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccf94A4X.s:155    .text.ist8310_init:0000007c $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccf94A4X.s:389    .rodata.ist8310_write_reg_data_error:00000000 ist8310_write_reg_data_error
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccf94A4X.s:160    .text.ist8310_read_over:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccf94A4X.s:166    .text.ist8310_read_over:00000000 ist8310_read_over
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccf94A4X.s:267    .text.ist8310_read_over:00000070 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccf94A4X.s:272    .text.ist8310_read_mag:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccf94A4X.s:278    .text.ist8310_read_mag:00000000 ist8310_read_mag
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccf94A4X.s:381    .text.ist8310_read_mag:00000074 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccf94A4X.s:386    .rodata.ist8310_write_reg_data_error:00000000 $d
 
 UNDEFINED SYMBOLS
 ist8310_GPIO_init

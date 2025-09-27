@@ -1,4 +1,4 @@
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccwCPt1p.s 			page 1
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cckgb97A.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -58,7 +58,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccwCPt1p.s 			page 1
   28:control-base/algo/src/wheel_legged_3d_lqr.c **** { -2.21620, 4.16729, -15.20522, -6.69455, 6.02876, -6.83842 },
   29:control-base/algo/src/wheel_legged_3d_lqr.c **** { -85.11481, -17.67692, 449.74542, 61.78710, 51.53198, -677.77143 },
   30:control-base/algo/src/wheel_legged_3d_lqr.c **** { -5.16575, 0.82606, 12.62309, 1.52970, -1.63613, -11.23173 },
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccwCPt1p.s 			page 2
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cckgb97A.s 			page 2
 
 
   31:control-base/algo/src/wheel_legged_3d_lqr.c **** { 0.14015, -0.52385, -0.22701, 1.86388, 0.75653, -1.77201 },
@@ -118,7 +118,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccwCPt1p.s 			page 1
   49              		.loc 1 64 10 view .LVU8
   50 0016 77EE877A 		vadd.f32	s15, s15, s14
   65:control-base/algo/src/wheel_legged_3d_lqr.c ****          + coeff[2] * l_r
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccwCPt1p.s 			page 3
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cckgb97A.s 			page 3
 
 
   51              		.loc 1 65 17 view .LVU9
@@ -178,7 +178,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccwCPt1p.s 			page 1
  101              		.cfi_startproc
  102              		@ args = 0, pretend = 0, frame = 56
  103              		@ frame_needed = 0, uses_anonymous_args = 0
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccwCPt1p.s 			page 4
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cckgb97A.s 			page 4
 
 
  104              		.loc 1 71 116 is_stmt 0 view .LVU25
@@ -238,7 +238,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccwCPt1p.s 			page 1
  149              		.loc 1 74 49 view .LVU39
  150 002a 8369     		ldr	r3, [r0, #24]	@ float
   72:control-base/algo/src/wheel_legged_3d_lqr.c ****     const float x[10] = {
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccwCPt1p.s 			page 5
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cckgb97A.s 			page 5
 
 
  151              		.loc 1 72 17 view .LVU40
@@ -298,7 +298,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccwCPt1p.s 			page 1
   83:control-base/algo/src/wheel_legged_3d_lqr.c ****             u[i] += -Kij * x[j];
  194              		.loc 1 83 13 is_stmt 1 view .LVU55
  195              		.loc 1 83 14 is_stmt 0 view .LVU56
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccwCPt1p.s 			page 6
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cckgb97A.s 			page 6
 
 
  196 0060 04F13803 		add	r3, r4, #56
@@ -358,7 +358,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccwCPt1p.s 			page 1
  240              		.loc 1 88 17 view .LVU70
  241 0096 7B60     		str	r3, [r7, #4]	@ float
   89:control-base/algo/src/wheel_legged_3d_lqr.c ****     input->T_bl = u[2];
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccwCPt1p.s 			page 7
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cckgb97A.s 			page 7
 
 
  242              		.loc 1 89 5 is_stmt 1 view .LVU71
@@ -418,7 +418,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccwCPt1p.s 			page 1
  291 000c DED44341 		.word	1094964446
  292 0010 E09CA4C0 		.word	-1062953760
  293 0014 1EF9CEC0 		.word	-1060177634
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccwCPt1p.s 			page 8
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cckgb97A.s 			page 8
 
 
  294 0018 46D49EC1 		.word	-1046555578
@@ -478,7 +478,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccwCPt1p.s 			page 1
  348 00f0 8C84AEBF 		.word	-1079081844
  349 00f4 D5B2C140 		.word	1086436053
  350 00f8 616CCDC0 		.word	-1060279199
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccwCPt1p.s 			page 9
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cckgb97A.s 			page 9
 
 
  351 00fc 1EF9CEC0 		.word	-1060177634
@@ -538,7 +538,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccwCPt1p.s 			page 1
  405 01d4 36CDC33F 		.word	1069796662
  406 01d8 B56CD1BF 		.word	-1076794187
  407 01dc 2BB533C1 		.word	-1053575893
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccwCPt1p.s 			page 10
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cckgb97A.s 			page 10
 
 
  408 01e0 7B830F3E 		.word	1041204091
@@ -598,7 +598,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccwCPt1p.s 			page 1
  462 02b8 56488EC0 		.word	-1064417194
  463 02bc 630BB9BF 		.word	-1078391965
  464 02c0 FA27E83E 		.word	1055401978
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccwCPt1p.s 			page 11
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cckgb97A.s 			page 11
 
 
  465 02c4 4DBE19BE 		.word	-1105609139
@@ -658,7 +658,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccwCPt1p.s 			page 1
  519 039c 0618E541 		.word	1105532934
  520 03a0 886888BF 		.word	-1081579384
  521 03a4 E3C21C42 		.word	1109181155
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccwCPt1p.s 			page 12
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cckgb97A.s 			page 12
 
 
  522 03a8 56488EC0 		.word	-1064417194
@@ -672,20 +672,20 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccwCPt1p.s 			page 1
  530              		.file 2 "control-base/algo/inc/wheel_legged_3d_lqr.h"
  531              		.file 3 "/Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/arm-none-eabi/include/machine/_defa
  532              		.file 4 "/Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/arm-none-eabi/include/sys/_stdint.h
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccwCPt1p.s 			page 13
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cckgb97A.s 			page 13
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 wheel_legged_3d_lqr.c
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccwCPt1p.s:21     .text._Wheel_Legged_Evaluate_Kij:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccwCPt1p.s:26     .text._Wheel_Legged_Evaluate_Kij:00000000 _Wheel_Legged_Evaluate_Kij
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccwCPt1p.s:86     .text._Wheel_Legged_Evaluate_Kij:00000058 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccwCPt1p.s:287    .rodata.K_Fit_Coefficients:00000000 K_Fit_Coefficients
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccwCPt1p.s:91     .text.Wheel_Legged_Compute_LQR_output:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccwCPt1p.s:97     .text.Wheel_Legged_Compute_LQR_output:00000000 Wheel_Legged_Compute_LQR_output
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccwCPt1p.s:270    .text.Wheel_Legged_Compute_LQR_output:000000a8 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccwCPt1p.s:278    .rodata.K_index_map:00000000 K_index_map
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccwCPt1p.s:275    .rodata.K_index_map:00000000 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccwCPt1p.s:284    .rodata.K_Fit_Coefficients:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cckgb97A.s:21     .text._Wheel_Legged_Evaluate_Kij:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cckgb97A.s:26     .text._Wheel_Legged_Evaluate_Kij:00000000 _Wheel_Legged_Evaluate_Kij
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cckgb97A.s:86     .text._Wheel_Legged_Evaluate_Kij:00000058 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cckgb97A.s:287    .rodata.K_Fit_Coefficients:00000000 K_Fit_Coefficients
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cckgb97A.s:91     .text.Wheel_Legged_Compute_LQR_output:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cckgb97A.s:97     .text.Wheel_Legged_Compute_LQR_output:00000000 Wheel_Legged_Compute_LQR_output
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cckgb97A.s:270    .text.Wheel_Legged_Compute_LQR_output:000000a8 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cckgb97A.s:278    .rodata.K_index_map:00000000 K_index_map
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cckgb97A.s:275    .rodata.K_index_map:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cckgb97A.s:284    .rodata.K_Fit_Coefficients:00000000 $d
 
 NO UNDEFINED SYMBOLS

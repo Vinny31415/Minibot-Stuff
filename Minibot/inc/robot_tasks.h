@@ -9,7 +9,6 @@
 #include "launch_task.h"
 #include "motor_task.h"
 #include "debug_task.h"
-#include "jetson_orin.h"
 #include "bsp_serial.h"
 #include "bsp_daemon.h"
 
@@ -20,7 +19,6 @@ osThreadId robot_command_task_handle;
 osThreadId motor_task_handle;
 osThreadId ui_task_handle;
 osThreadId debug_task_handle;
-osThreadId jetson_orin_task_handle;
 osThreadId daemon_task_handle;
 
 void Robot_Tasks_Robot_Command(void const *argument);
@@ -28,7 +26,6 @@ void Robot_Tasks_Motor(void const *argument);
 void Robot_Tasks_IMU(void const *argument);
 void Robot_Tasks_UI(void const *argument);
 void Robot_Tasks_Debug(void const *argument);
-void Robot_Tasks_Jetson_Orin(void const *argument);
 void Robot_Tasks_Daemon(void const *argument);
 
 void Robot_Tasks_Start()
@@ -47,9 +44,6 @@ void Robot_Tasks_Start()
 
     osThreadDef(debug_task, Robot_Tasks_Debug, osPriorityIdle, 0, 256);
     debug_task_handle = osThreadCreate(osThread(debug_task), NULL);
-
-    osThreadDef(jetson_orin_task, Robot_Tasks_Jetson_Orin, osPriorityAboveNormal, 0, 256);
-    jetson_orin_task_handle = osThreadCreate(osThread(jetson_orin_task), NULL);
 
     osThreadDef(daemon_task, Robot_Tasks_Daemon, osPriorityAboveNormal, 0, 256);
     daemon_task_handle = osThreadCreate(osThread(daemon_task), NULL);
@@ -104,18 +98,6 @@ void Robot_Tasks_Debug(void const *argument)
     while (1)
     {
         Debug_Task_Loop();
-        vTaskDelayUntil(&xLastWakeTime, TimeIncrement);
-    }
-}
-
-void Robot_Tasks_Jetson_Orin(void const *argument)
-{
-    portTickType xLastWakeTime;
-    xLastWakeTime = xTaskGetTickCount();
-    const TickType_t TimeIncrement = pdMS_TO_TICKS(JETSON_ORIN_PERIOD);
-    while (1)
-    {
-        Jetson_Orin_Send_Data();
         vTaskDelayUntil(&xLastWakeTime, TimeIncrement);
     }
 }

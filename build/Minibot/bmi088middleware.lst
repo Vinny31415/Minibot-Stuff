@@ -1,4 +1,4 @@
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc7BicA5.s 			page 1
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqVtCQ6.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -58,7 +58,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc7BicA5.s 			page 1
   38              		.cfi_offset 3, -8
   39              		.cfi_offset 14, -4
   19:control-base/devices/src/bmi088middleware.c ****     osDelay(ms);
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc7BicA5.s 			page 2
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqVtCQ6.s 			page 2
 
 
   40              		.loc 1 19 5 is_stmt 1 view .LVU2
@@ -118,7 +118,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc7BicA5.s 			page 1
   86              		.cfi_startproc
   87              		@ args = 0, pretend = 0, frame = 0
   88              		@ frame_needed = 0, uses_anonymous_args = 0
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc7BicA5.s 			page 3
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqVtCQ6.s 			page 3
 
 
   89 0000 08B5     		push	{r3, lr}
@@ -178,7 +178,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc7BicA5.s 			page 1
  139              		.cfi_endproc
  140              	.LFE142:
  142              		.section	.text.BMI088_GYRO_NS_L,"ax",%progbits
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc7BicA5.s 			page 4
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqVtCQ6.s 			page 4
 
 
  143              		.align	1
@@ -238,7 +238,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc7BicA5.s 			page 1
   45:control-base/devices/src/bmi088middleware.c ****     HAL_GPIO_WritePin(CS1_GYRO_GPIO_Port, CS1_GYRO_Pin, GPIO_PIN_SET);
  193              		.loc 1 45 5 view .LVU18
  194 0002 0122     		movs	r2, #1
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc7BicA5.s 			page 5
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqVtCQ6.s 			page 5
 
 
  195 0004 1146     		mov	r1, r2
@@ -298,7 +298,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc7BicA5.s 			page 1
   53:control-base/devices/src/bmi088middleware.c **** }
  244              		.loc 1 53 1 is_stmt 0 view .LVU26
  245 001e 9DF81700 		ldrb	r0, [sp, #23]	@ zero_extendqisi2
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc7BicA5.s 			page 6
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqVtCQ6.s 			page 6
 
 
  246 0022 07B0     		add	sp, sp, #28
@@ -323,30 +323,30 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc7BicA5.s 			page 1
  266              		.file 8 "control-base/typec-board-base/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h"
  267              		.file 9 "control-base/typec-board-base/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os
  268              		.file 10 "control-base/bsp/inc/bsp_delay.h"
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc7BicA5.s 			page 7
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqVtCQ6.s 			page 7
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 bmi088middleware.c
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc7BicA5.s:21     .text.BMI088_delay_ms:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc7BicA5.s:27     .text.BMI088_delay_ms:00000000 BMI088_delay_ms
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc7BicA5.s:49     .text.BMI088_delay_us:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc7BicA5.s:55     .text.BMI088_delay_us:00000000 BMI088_delay_us
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc7BicA5.s:77     .text.BMI088_ACCEL_NS_L:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc7BicA5.s:83     .text.BMI088_ACCEL_NS_L:00000000 BMI088_ACCEL_NS_L
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc7BicA5.s:105    .text.BMI088_ACCEL_NS_L:00000010 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc7BicA5.s:110    .text.BMI088_ACCEL_NS_H:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc7BicA5.s:116    .text.BMI088_ACCEL_NS_H:00000000 BMI088_ACCEL_NS_H
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc7BicA5.s:138    .text.BMI088_ACCEL_NS_H:00000010 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc7BicA5.s:143    .text.BMI088_GYRO_NS_L:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc7BicA5.s:149    .text.BMI088_GYRO_NS_L:00000000 BMI088_GYRO_NS_L
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc7BicA5.s:171    .text.BMI088_GYRO_NS_L:00000010 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc7BicA5.s:176    .text.BMI088_GYRO_NS_H:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc7BicA5.s:182    .text.BMI088_GYRO_NS_H:00000000 BMI088_GYRO_NS_H
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc7BicA5.s:204    .text.BMI088_GYRO_NS_H:00000010 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc7BicA5.s:209    .text.BMI088_read_write_byte:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc7BicA5.s:215    .text.BMI088_read_write_byte:00000000 BMI088_read_write_byte
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc7BicA5.s:254    .text.BMI088_read_write_byte:00000028 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqVtCQ6.s:21     .text.BMI088_delay_ms:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqVtCQ6.s:27     .text.BMI088_delay_ms:00000000 BMI088_delay_ms
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqVtCQ6.s:49     .text.BMI088_delay_us:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqVtCQ6.s:55     .text.BMI088_delay_us:00000000 BMI088_delay_us
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqVtCQ6.s:77     .text.BMI088_ACCEL_NS_L:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqVtCQ6.s:83     .text.BMI088_ACCEL_NS_L:00000000 BMI088_ACCEL_NS_L
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqVtCQ6.s:105    .text.BMI088_ACCEL_NS_L:00000010 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqVtCQ6.s:110    .text.BMI088_ACCEL_NS_H:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqVtCQ6.s:116    .text.BMI088_ACCEL_NS_H:00000000 BMI088_ACCEL_NS_H
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqVtCQ6.s:138    .text.BMI088_ACCEL_NS_H:00000010 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqVtCQ6.s:143    .text.BMI088_GYRO_NS_L:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqVtCQ6.s:149    .text.BMI088_GYRO_NS_L:00000000 BMI088_GYRO_NS_L
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqVtCQ6.s:171    .text.BMI088_GYRO_NS_L:00000010 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqVtCQ6.s:176    .text.BMI088_GYRO_NS_H:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqVtCQ6.s:182    .text.BMI088_GYRO_NS_H:00000000 BMI088_GYRO_NS_H
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqVtCQ6.s:204    .text.BMI088_GYRO_NS_H:00000010 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqVtCQ6.s:209    .text.BMI088_read_write_byte:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqVtCQ6.s:215    .text.BMI088_read_write_byte:00000000 BMI088_read_write_byte
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccqVtCQ6.s:254    .text.BMI088_read_write_byte:00000028 $d
 
 UNDEFINED SYMBOLS
 osDelay

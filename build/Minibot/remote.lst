@@ -1,4 +1,4 @@
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccX7BOOZ.s 			page 1
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc32o4qK.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -58,7 +58,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccX7BOOZ.s 			page 1
   28:control-base/devices/src/remote.c **** 	g_remote.controller.right_stick.y = (((remote_buffer[1] >> 3) | (remote_buffer[2] << 5)) & 0x07ff)
   29:control-base/devices/src/remote.c **** 	g_remote.controller.left_stick.x = (((remote_buffer[2] >> 6) | (remote_buffer[3] << 2) | (remote_b
   30:control-base/devices/src/remote.c **** 	g_remote.controller.left_stick.y = (((remote_buffer[4] >> 1) | (remote_buffer[5] << 7)) & 0x07ff) 
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccX7BOOZ.s 			page 2
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc32o4qK.s 			page 2
 
 
   31:control-base/devices/src/remote.c **** 	g_remote.controller.wheel = ((remote_buffer[16] | (remote_buffer[17] << 8)) & 0x07FF) - 1024;
@@ -118,7 +118,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccX7BOOZ.s 			page 1
   40 0004 1868     		ldr	r0, [r3]
   41 0006 FFF7FEFF 		bl	UART_Service_Init
   42              	.LVL0:
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccX7BOOZ.s 			page 3
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc32o4qK.s 			page 3
 
 
   74:control-base/devices/src/remote.c **** 	g_remote.online_flag = 0;
@@ -178,7 +178,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccX7BOOZ.s 			page 1
   91 0018 42EA0022 		orr	r2, r2, r0, lsl #8
   27:control-base/devices/src/remote.c **** 	g_remote.controller.right_stick.y = (((remote_buffer[1] >> 3) | (remote_buffer[2] << 5)) & 0x07ff)
   92              		.loc 1 27 84 view .LVU11
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccX7BOOZ.s 			page 4
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc32o4qK.s 			page 4
 
 
   93 001c C2F30A02 		ubfx	r2, r2, #0, #11
@@ -238,7 +238,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccX7BOOZ.s 			page 1
  129 0052 6179     		ldrb	r1, [r4, #5]	@ zero_extendqisi2
   30:control-base/devices/src/remote.c **** 	g_remote.controller.wheel = ((remote_buffer[16] | (remote_buffer[17] << 8)) & 0x07FF) - 1024;
  130              		.loc 1 30 63 view .LVU30
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccX7BOOZ.s 			page 5
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc32o4qK.s 			page 5
 
 
  131 0054 CA01     		lsls	r2, r1, #7
@@ -298,7 +298,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccX7BOOZ.s 			page 1
  166 0082 E179     		ldrb	r1, [r4, #7]	@ zero_extendqisi2
   36:control-base/devices/src/remote.c **** 	g_remote.mouse.y = remote_buffer[8] | (remote_buffer[9] << 8);
  167              		.loc 1 36 40 view .LVU50
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccX7BOOZ.s 			page 6
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc32o4qK.s 			page 6
 
 
  168 0084 42EA0122 		orr	r2, r2, r1, lsl #8
@@ -358,7 +358,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccX7BOOZ.s 			page 1
  202              		.loc 1 43 58 view .LVU70
  203 00ac E27B     		ldrb	r2, [r4, #15]	@ zero_extendqisi2
   43:control-base/devices/src/remote.c **** 	g_remote.keyboard.W = (key_buffer >> 0) & 0x001;
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccX7BOOZ.s 			page 7
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc32o4qK.s 			page 7
 
 
  204              		.loc 1 43 42 view .LVU71
@@ -418,7 +418,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccX7BOOZ.s 			page 1
  239 00d6 D975     		strb	r1, [r3, #23]
   50:control-base/devices/src/remote.c **** 	g_remote.keyboard.E = (key_buffer >> 7) & 0x001;
  240              		.loc 1 50 2 is_stmt 1 view .LVU91
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccX7BOOZ.s 			page 8
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc32o4qK.s 			page 8
 
 
   50:control-base/devices/src/remote.c **** 	g_remote.keyboard.E = (key_buffer >> 7) & 0x001;
@@ -478,7 +478,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccX7BOOZ.s 			page 1
   57:control-base/devices/src/remote.c **** 	g_remote.keyboard.V = (key_buffer >> 14) & 0x001;
  275              		.loc 1 57 2 is_stmt 1 view .LVU112
   57:control-base/devices/src/remote.c **** 	g_remote.keyboard.V = (key_buffer >> 14) & 0x001;
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccX7BOOZ.s 			page 9
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc32o4qK.s 			page 9
 
 
  276              		.loc 1 57 43 is_stmt 0 view .LVU113
@@ -538,7 +538,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccX7BOOZ.s 			page 1
  321              		.loc 1 65 1 is_stmt 1 view -0
  322              		.cfi_startproc
  323              		@ args = 0, pretend = 0, frame = 0
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccX7BOOZ.s 			page 10
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc32o4qK.s 			page 10
 
 
  324              		@ frame_needed = 0, uses_anonymous_args = 0
@@ -598,7 +598,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccX7BOOZ.s 			page 1
  372 0006 0849     		ldr	r1, .L15+4
  373 0008 FFF7FEFF 		bl	UART_Register
  374              	.LVL8:
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccX7BOOZ.s 			page 11
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc32o4qK.s 			page 11
 
 
  375              		.loc 1 79 16 discriminator 1 view .LVU133
@@ -658,7 +658,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccX7BOOZ.s 			page 1
  425              		.global	g_remote_uart
  426              		.section	.bss.g_remote_uart,"aw",%nobits
  427              		.align	2
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccX7BOOZ.s 			page 12
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc32o4qK.s 			page 12
 
 
  430              	g_remote_uart:
@@ -683,33 +683,33 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccX7BOOZ.s 			page 1
  447              		.file 8 "control-base/bsp/inc/bsp_uart.h"
  448              		.file 9 "control-base/devices/inc/remote.h"
  449              		.file 10 "control-base/bsp/inc/bsp_daemon.h"
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccX7BOOZ.s 			page 13
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc32o4qK.s 			page 13
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 remote.c
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccX7BOOZ.s:21     .text.Remote_Timeout_Callback:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccX7BOOZ.s:27     .text.Remote_Timeout_Callback:00000000 Remote_Timeout_Callback
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccX7BOOZ.s:53     .text.Remote_Timeout_Callback:00000014 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccX7BOOZ.s:430    .bss.g_remote_uart:00000000 g_remote_uart
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccX7BOOZ.s:437    .bss.g_remote:00000000 g_remote
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccX7BOOZ.s:59     .text.Remote_Buffer_Process:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccX7BOOZ.s:65     .text.Remote_Buffer_Process:00000000 Remote_Buffer_Process
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccX7BOOZ.s:305    .text.Remote_Buffer_Process:0000011c $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccX7BOOZ.s:416    .bss.remote_buffer:00000000 remote_buffer
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccX7BOOZ.s:409    .bss.debug_buffer:00000000 debug_buffer
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccX7BOOZ.s:312    .text.Remote_Rx_Callback:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccX7BOOZ.s:318    .text.Remote_Rx_Callback:00000000 Remote_Rx_Callback
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccX7BOOZ.s:344    .text.Remote_Rx_Callback:00000010 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccX7BOOZ.s:423    .bss.g_remote_daemon:00000000 g_remote_daemon
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccX7BOOZ.s:349    .text.Remote_Init:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccX7BOOZ.s:355    .text.Remote_Init:00000000 Remote_Init
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccX7BOOZ.s:395    .text.Remote_Init:00000024 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccX7BOOZ.s:406    .bss.debug_buffer:00000000 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccX7BOOZ.s:413    .bss.remote_buffer:00000000 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccX7BOOZ.s:420    .bss.g_remote_daemon:00000000 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccX7BOOZ.s:427    .bss.g_remote_uart:00000000 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccX7BOOZ.s:434    .bss.g_remote:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc32o4qK.s:21     .text.Remote_Timeout_Callback:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc32o4qK.s:27     .text.Remote_Timeout_Callback:00000000 Remote_Timeout_Callback
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc32o4qK.s:53     .text.Remote_Timeout_Callback:00000014 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc32o4qK.s:430    .bss.g_remote_uart:00000000 g_remote_uart
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc32o4qK.s:437    .bss.g_remote:00000000 g_remote
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc32o4qK.s:59     .text.Remote_Buffer_Process:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc32o4qK.s:65     .text.Remote_Buffer_Process:00000000 Remote_Buffer_Process
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc32o4qK.s:305    .text.Remote_Buffer_Process:0000011c $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc32o4qK.s:416    .bss.remote_buffer:00000000 remote_buffer
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc32o4qK.s:409    .bss.debug_buffer:00000000 debug_buffer
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc32o4qK.s:312    .text.Remote_Rx_Callback:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc32o4qK.s:318    .text.Remote_Rx_Callback:00000000 Remote_Rx_Callback
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc32o4qK.s:344    .text.Remote_Rx_Callback:00000010 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc32o4qK.s:423    .bss.g_remote_daemon:00000000 g_remote_daemon
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc32o4qK.s:349    .text.Remote_Init:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc32o4qK.s:355    .text.Remote_Init:00000000 Remote_Init
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc32o4qK.s:395    .text.Remote_Init:00000024 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc32o4qK.s:406    .bss.debug_buffer:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc32o4qK.s:413    .bss.remote_buffer:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc32o4qK.s:420    .bss.g_remote_daemon:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc32o4qK.s:427    .bss.g_remote_uart:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc32o4qK.s:434    .bss.g_remote:00000000 $d
 
 UNDEFINED SYMBOLS
 UART_Service_Init

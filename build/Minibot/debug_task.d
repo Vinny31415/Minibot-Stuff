@@ -65,7 +65,6 @@ build/Minibot/debug_task.o: Minibot/src/debug_task.c \
  control-base/bsp/inc/bsp_can.h \
  control-base/typec-board-base/Core/Inc/can.h \
  control-base/devices/inc/referee_system.h \
- control-base/devices/inc/jetson_orin.h \
  control-base/devices/inc/jetson_orin.h Minibot/inc/launch_task.h
 Minibot/inc/debug_task.h:
 control-base/bsp/inc/bsp_serial.h:
@@ -140,6 +139,5 @@ control-base/devices/inc/supercap.h:
 control-base/bsp/inc/bsp_can.h:
 control-base/typec-board-base/Core/Inc/can.h:
 control-base/devices/inc/referee_system.h:
-control-base/devices/inc/jetson_orin.h:
 control-base/devices/inc/jetson_orin.h:
 Minibot/inc/launch_task.h:

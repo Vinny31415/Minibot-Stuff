@@ -1,4 +1,4 @@
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -58,7 +58,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
   27:control-base/devices/src/dji_motor.c ****     // this real id will decide the order of te motor torque in the 8-byte can data frame
   28:control-base/devices/src/dji_motor.c ****     if (motor_handle->speed_controller_id > 4)
   29:control-base/devices/src/dji_motor.c ****     {
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 2
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 2
 
 
   30:control-base/devices/src/dji_motor.c ****         real_id = motor_handle->speed_controller_id - 5;
@@ -118,7 +118,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
   84:control-base/devices/src/dji_motor.c ****     motor_handle->external_velocity_feedback_ptr = config->external_velocity_feedback_ptr;
   85:control-base/devices/src/dji_motor.c **** 
   86:control-base/devices/src/dji_motor.c ****     // Initialize motor stats
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 3
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 3
 
 
   87:control-base/devices/src/dji_motor.c ****     DJI_Motor_Stats_t *motor_stats = malloc(sizeof(DJI_Motor_Stats_t));
@@ -178,7 +178,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
  141:control-base/devices/src/dji_motor.c ****     case M3508:
  142:control-base/devices/src/dji_motor.c ****         receiver_can_instance = CAN_Device_Register(config->can_bus, config->tx_id,
  143:control-base/devices/src/dji_motor.c ****                                                     0x200 + config->speed_controller_id, DJI_Motor_
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 4
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 4
 
 
  144:control-base/devices/src/dji_motor.c ****         receiver_can_instance->binding_motor_stats = motor_stats;
@@ -238,7 +238,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
  198:control-base/devices/src/dji_motor.c ****             DJI_Motor_Assign_To_Group(motor_handle, 0x200);
  199:control-base/devices/src/dji_motor.c ****             break;
  200:control-base/devices/src/dji_motor.c ****         case 5:
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 5
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 5
 
 
  201:control-base/devices/src/dji_motor.c ****         case 6:
@@ -298,7 +298,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
  255:control-base/devices/src/dji_motor.c ****         return -motor_handle->stats->current_vel_rpm;
  256:control-base/devices/src/dji_motor.c ****         break;
  257:control-base/devices/src/dji_motor.c ****     }
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 6
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 6
 
 
  258:control-base/devices/src/dji_motor.c ****     return -1;
@@ -358,7 +358,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
  312:control-base/devices/src/dji_motor.c ****     case GM6020:
  313:control-base/devices/src/dji_motor.c ****         // get torque constant from the motor type
  314:control-base/devices/src/dji_motor.c ****         current_amps = (torque / GM6020_TORQUE_CONSTANT);
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 7
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 7
 
 
  315:control-base/devices/src/dji_motor.c ****         // map the current to integers used in CAN frame
@@ -418,7 +418,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
  369:control-base/devices/src/dji_motor.c ****         case 1:
  370:control-base/devices/src/dji_motor.c ****             angle_feedback = motor->external_feedback_dir * ((float)*(motor->external_angle_feedbac
  371:control-base/devices/src/dji_motor.c ****             velocity_feedback = motor->external_feedback_dir * ((float)*(motor->external_velocity_f
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 8
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 8
 
 
  372:control-base/devices/src/dji_motor.c ****             break;
@@ -478,7 +478,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
  426:control-base/devices/src/dji_motor.c ****                 __MAP_ANGLE_TO_UNIT_CIRCLE(error); // wrap angle error to (-pi, pi)
  427:control-base/devices/src/dji_motor.c ****                 float angle_pid_output = PID(motor->angle_pid, error);
  428:control-base/devices/src/dji_motor.c ****                 // velocity pid
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 9
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 9
 
 
  429:control-base/devices/src/dji_motor.c ****                 float velocity_pid_output = PID(motor->velocity_pid, motor->velocity_pid->ref - vel
@@ -538,7 +538,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
  483:control-base/devices/src/dji_motor.c ****             static int16_t motor2 = 0;
  484:control-base/devices/src/dji_motor.c ****             motor2 = (*(group->motor_torq[1]));
  485:control-base/devices/src/dji_motor.c ****             data[2] = motor2 >> 8;
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 10
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 10
 
 
  486:control-base/devices/src/dji_motor.c ****             data[3] = motor2;
@@ -598,7 +598,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
   45              		.loc 1 524 5 is_stmt 1 view .LVU7
   46              		.loc 1 524 32 is_stmt 0 view .LVU8
   47 0006 817C     		ldrb	r1, [r0, #18]	@ zero_extendqisi2
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 11
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 11
 
 
   48              		.loc 1 524 47 view .LVU9
@@ -658,7 +658,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
   96 0054 C3ED057A 		vstr.32	s15, [r3, #20]
  531:control-base/devices/src/dji_motor.c ****     if (motor->absolute_angle_rad >= 8192)
   97              		.loc 1 531 5 is_stmt 1 view .LVU33
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 12
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 12
 
 
   98              		.loc 1 531 8 is_stmt 0 view .LVU34
@@ -718,7 +718,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
  138              		.loc 1 545 9 is_stmt 1 view .LVU46
  139              		.loc 1 545 14 is_stmt 0 view .LVU47
  140 00ba 1A69     		ldr	r2, [r3, #16]
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 13
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 13
 
 
  141              		.loc 1 545 27 view .LVU48
@@ -778,7 +778,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
  181              		.loc 1 540 5 discriminator 4 view .LVU62
  182 0108 9FED086A 		vldr.32	s12, .L23
  183 010c 77EE867A 		vadd.f32	s15, s15, s12
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 14
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 14
 
 
  184 0110 C3ED057A 		vstr.32	s15, [r3, #20]
@@ -838,7 +838,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
  233              		.cfi_offset 5, -24
  234              		.cfi_offset 6, -20
  235              		.cfi_offset 7, -16
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 15
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 15
 
 
  236              		.cfi_offset 8, -12
@@ -898,7 +898,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
  275              	.L29:
  276              	.LBB3:
   37:control-base/devices/src/dji_motor.c ****     {
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 16
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 16
 
 
  277              		.loc 1 37 51 is_stmt 1 discriminator 2 view .LVU85
@@ -958,7 +958,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
  316 004a 52F82330 		ldr	r3, [r2, r3, lsl #2]
  317              	.LVL8:
   46:control-base/devices/src/dji_motor.c ****             return 0;
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 17
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 17
 
 
  318              		.loc 1 46 56 view .LVU101
@@ -1018,7 +1018,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
   55:control-base/devices/src/dji_motor.c ****     new_group->can_instance->tx_header->StdId = tx_id;      // set id (the actual id that will be s
  357              		.loc 1 55 42 is_stmt 0 view .LVU117
  358 0072 1820     		movs	r0, #24
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 18
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 18
 
 
  359 0074 FFF7FEFF 		bl	malloc
@@ -1078,7 +1078,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
  394              		.loc 1 61 47 is_stmt 0 view .LVU136
  395 00a0 0120     		movs	r0, #1
  396 00a2 00FA05F2 		lsl	r2, r0, r5
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 19
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 19
 
 
   61:control-base/devices/src/dji_motor.c ****     // output current pointer of the motor
@@ -1138,7 +1138,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
  439              		.thumb_func
  441              	DJI_Motor_Init:
  442              	.LVL20:
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 20
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 20
 
 
  443              	.LFB143:
@@ -1198,7 +1198,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
   78:control-base/devices/src/dji_motor.c ****     motor_handle->pos_feedback_absolute_angle = config->pos_feedback_absolute_angle;
  483              		.loc 1 78 5 is_stmt 1 view .LVU164
   78:control-base/devices/src/dji_motor.c ****     motor_handle->pos_feedback_absolute_angle = config->pos_feedback_absolute_angle;
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 21
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 21
 
 
  484              		.loc 1 78 40 is_stmt 0 view .LVU165
@@ -1258,7 +1258,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
  518              		.loc 1 87 5 is_stmt 1 view .LVU185
   87:control-base/devices/src/dji_motor.c ****     motor_stats->encoder_offset = config->offset;
  519              		.loc 1 87 38 is_stmt 0 view .LVU186
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 22
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 22
 
 
  520 0036 2420     		movs	r0, #36
@@ -1318,7 +1318,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
  555              		.loc 1 98 5 is_stmt 1 view .LVU205
   98:control-base/devices/src/dji_motor.c ****     {
  556              		.loc 1 98 22 is_stmt 0 view .LVU206
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 23
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 23
 
 
  557 0054 E378     		ldrb	r3, [r4, #3]	@ zero_extendqisi2
@@ -1378,7 +1378,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
  100:control-base/devices/src/dji_motor.c ****         memcpy(motor_handle->velocity_pid, &config->velocity_pid, sizeof(PID_t));
  598              		.loc 1 100 38 view .LVU220
  599 007c FFF7FEFF 		bl	malloc
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 24
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 24
 
 
  600              	.LVL31:
@@ -1438,7 +1438,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
  644 00d4 8760     		str	r7, [r0, #8]	@ unaligned
  645 00d6 C160     		str	r1, [r0, #12]	@ unaligned
  646 00d8 1033     		adds	r3, r3, #16
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 25
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 25
 
 
  647 00da 1030     		adds	r0, r0, #16
@@ -1498,7 +1498,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
  692 0128 FFF7FEFF 		bl	CAN_Device_Register
  693              	.LVL35:
  121:control-base/devices/src/dji_motor.c ****         motor_stats->reduction_ratio = GM6020_REDUCTION_RATIO;
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 26
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 26
 
 
  694              		.loc 1 121 9 is_stmt 1 view .LVU240
@@ -1558,7 +1558,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
  734              	.L70:
  123:control-base/devices/src/dji_motor.c ****         {
  735              		.loc 1 123 9 view .LVU255
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 27
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 27
 
 
  736 015e 5BB2     		sxtb	r3, r3
@@ -1618,7 +1618,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
  158:control-base/devices/src/dji_motor.c ****             break;
  777              		.loc 1 158 13 is_stmt 1 view .LVU269
  778 0194 40F2FF11 		movw	r1, #511
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 28
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 28
 
 
  779 0198 2046     		mov	r0, r4
@@ -1678,7 +1678,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
  169:control-base/devices/src/dji_motor.c ****         {
  820              		.loc 1 169 9 is_stmt 1 view .LVU283
  169:control-base/devices/src/dji_motor.c ****         {
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 29
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 29
 
 
  821              		.loc 1 169 29 is_stmt 0 view .LVU284
@@ -1738,7 +1738,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
  864 0200 FFF7FEFF 		bl	CAN_Device_Register
  865              	.LVL56:
  190:control-base/devices/src/dji_motor.c ****         motor_stats->reduction_ratio = M2006_REDUCTION_RATIO;
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 30
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 30
 
 
  866              		.loc 1 190 9 is_stmt 1 view .LVU296
@@ -1798,7 +1798,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
  907              	.L75:
  908 0236 00BF     		.align	2
  909              	.L74:
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 31
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 31
 
 
  910 0238 00000000 		.word	DJI_Motor_Decode
@@ -1858,7 +1858,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
  955              		.loc 1 226 36 view .LVU320
  956 0018 D3ED057A 		vldr.32	s15, [r3, #20]
  226:control-base/devices/src/dji_motor.c ****         break;
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 32
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 32
 
 
  957              		.loc 1 226 57 view .LVU321
@@ -1918,7 +1918,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
  241:control-base/devices/src/dji_motor.c ****         break;
  1003              		.loc 1 241 29 is_stmt 0 view .LVU332
  1004 0016 8368     		ldr	r3, [r0, #8]
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 33
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 33
 
 
  241:control-base/devices/src/dji_motor.c ****         break;
@@ -1978,7 +1978,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
  1048              		.loc 1 255 29 is_stmt 0 view .LVU345
  1049 0016 8368     		ldr	r3, [r0, #8]
  255:control-base/devices/src/dji_motor.c ****         break;
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 34
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 34
 
 
  1050              		.loc 1 255 36 view .LVU346
@@ -2038,7 +2038,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
  1094              	.L92:
  270:control-base/devices/src/dji_motor.c ****         break;
  1095              		.loc 1 270 9 view .LVU359
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 35
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 35
 
 
  270:control-base/devices/src/dji_motor.c ****         break;
@@ -2098,7 +2098,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
  283:control-base/devices/src/dji_motor.c ****         break;
  1141              		.loc 1 283 9 is_stmt 1 view .LVU371
  283:control-base/devices/src/dji_motor.c ****         break;
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 36
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 36
 
 
  1142              		.loc 1 283 21 is_stmt 0 view .LVU372
@@ -2158,7 +2158,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
  1186 0004 0023     		movs	r3, #0
  1187 0006 8371     		strb	r3, [r0, #6]
  308:control-base/devices/src/dji_motor.c ****     float current_amps = 0;
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 37
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 37
 
 
  1188              		.loc 1 308 5 is_stmt 1 view .LVU385
@@ -2218,7 +2218,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
  1230              	.LVL75:
  1231              	.L109:
  316:control-base/devices/src/dji_motor.c ****         // set the output current to the mapped value
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 38
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 38
 
 
  1232              		.loc 1 316 9 discriminator 6 view .LVU398
@@ -2278,7 +2278,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
  1272 0086 F4EEC77A 		vcmpe.f32	s15, s14
  1273 008a F1EE10FA 		vmrs	APSR_nzcv, FPSCR
  1274 008e D9D5     		bpl	.L109
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 39
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 39
 
 
  316:control-base/devices/src/dji_motor.c ****         // set the output current to the mapped value
@@ -2338,7 +2338,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
  1316 00da F4EEC77A 		vcmpe.f32	s15, s14
  1317 00de F1EE10FA 		vmrs	APSR_nzcv, FPSCR
  1318 00e2 E7D5     		bpl	.L113
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 40
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 40
 
 
  322:control-base/devices/src/dji_motor.c ****         break;
@@ -2398,7 +2398,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
  327:control-base/devices/src/dji_motor.c ****         break;
  1360              		.loc 1 327 9 discriminator 2 view .LVU439
  1361 012a BBEE047A 		vmov.f32	s14, #-2.0e+1
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 41
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 41
 
 
  1362 012e F4EEC77A 		vcmpe.f32	s15, s14
@@ -2458,7 +2458,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
  1403              		.loc 1 334 9 view .LVU452
  1404 017c 72E7     		b	.L101
  1405              	.L138:
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 42
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 42
 
 
  332:control-base/devices/src/dji_motor.c ****         
@@ -2518,7 +2518,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
  1450 01d0 25B4E73F 		.word	1072149541
  1451              		.cfi_endproc
  1452              	.LFE149:
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 43
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 43
 
 
  1454              		.section	.text.DJI_Motor_Set_Control_Mode,"ax",%progbits
@@ -2578,7 +2578,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
  1504              		.syntax unified
  1505              		.thumb
  1506              		.thumb_func
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 44
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 44
 
 
  1508              	DJI_Motor_Current_Calc:
@@ -2638,7 +2638,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
  379:control-base/devices/src/dji_motor.c ****         {
  1550              		.loc 1 379 22 is_stmt 0 view .LVU483
  1551 0014 A379     		ldrb	r3, [r4, #6]	@ zero_extendqisi2
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 45
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 45
 
 
  379:control-base/devices/src/dji_motor.c ****         {
@@ -2698,7 +2698,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
  370:control-base/devices/src/dji_motor.c ****             velocity_feedback = motor->external_feedback_dir * ((float)*(motor->external_velocity_f
  1591              		.loc 1 370 13 is_stmt 1 view .LVU499
  370:control-base/devices/src/dji_motor.c ****             velocity_feedback = motor->external_feedback_dir * ((float)*(motor->external_velocity_f
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 46
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 46
 
 
  1592              		.loc 1 370 35 is_stmt 0 view .LVU500
@@ -2758,7 +2758,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
  1633 0078 F5000000 		.word	.L156+1
  1634 007c 0F010000 		.word	.L155+1
  1635 0080 CD010000 		.word	.L154+1
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 47
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 47
 
 
  1636 0084 21000000 		.word	.L149+1
@@ -2818,7 +2818,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
  395:control-base/devices/src/dji_motor.c ****                 __MAP_ANGLE_TO_UNIT_CIRCLE(error);
  1684              		.loc 1 395 17 view .LVU520
  395:control-base/devices/src/dji_motor.c ****                 __MAP_ANGLE_TO_UNIT_CIRCLE(error);
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 48
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 48
 
 
  1685              		.loc 1 395 36 is_stmt 0 view .LVU521
@@ -2878,7 +2878,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
  1725 0148 FFF7FEFF 		bl	PID
  1726              	.LVL122:
  397:control-base/devices/src/dji_motor.c ****                 break;
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 49
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 49
 
 
  1727              		.loc 1 397 39 discriminator 1 view .LVU536
@@ -2938,7 +2938,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
  414:control-base/devices/src/dji_motor.c ****                 __MAP_ANGLE_TO_UNIT_CIRCLE(error);
  1767              		.loc 1 414 36 is_stmt 0 view .LVU551
  1768 0178 A069     		ldr	r0, [r4, #24]
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 50
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 50
 
 
  414:control-base/devices/src/dji_motor.c ****                 __MAP_ANGLE_TO_UNIT_CIRCLE(error);
@@ -2998,7 +2998,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
  419:control-base/devices/src/dji_motor.c ****                 break;
  1809              		.loc 1 419 17 is_stmt 1 view .LVU566
  419:control-base/devices/src/dji_motor.c ****                 break;
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 51
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 51
 
 
  1810              		.loc 1 419 41 is_stmt 0 view .LVU567
@@ -3058,7 +3058,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
  1851              	.L167:
  426:control-base/devices/src/dji_motor.c ****                 float angle_pid_output = PID(motor->angle_pid, error);
  1852              		.loc 1 426 17 is_stmt 1 discriminator 3 view .LVU581
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 52
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 52
 
 
  1853 01ee DFED2F7A 		vldr.32	s15, .L182+20
@@ -3118,7 +3118,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
  1892              		.loc 1 432 17 is_stmt 1 view .LVU596
  1893 022a F9E6     		b	.L149
  1894              	.LVL147:
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 53
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 53
 
 
  1895              	.L150:
@@ -3178,7 +3178,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
  438:control-base/devices/src/dji_motor.c ****                 // angle pid output as velocity ref
  1936              		.loc 1 438 17 is_stmt 1 view .LVU610
  438:control-base/devices/src/dji_motor.c ****                 // angle pid output as velocity ref
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 54
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 54
 
 
  1937              		.loc 1 438 50 view .LVU611
@@ -3238,7 +3238,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
  1977              		.cfi_def_cfa_offset 16
  1978 0294 38BD     		pop	{r3, r4, r5, pc}
  1979              	.LVL158:
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 55
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 55
 
 
  1980              	.L183:
@@ -3298,7 +3298,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
  2027              		.loc 1 502 13 is_stmt 0 view .LVU634
  2028 000a 5868     		ldr	r0, [r3, #4]
  2029 000c FFF7FEFF 		bl	CAN_Transmit
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 56
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 56
 
 
  2030              	.LVL161:
@@ -3358,7 +3358,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
  2068 0030 164D     		ldr	r5, .L193+8
  2069 0032 2880     		strh	r0, [r5]	@ movhi
  478:control-base/devices/src/dji_motor.c ****             data[1] = motor1;
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 57
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 57
 
 
  2070              		.loc 1 478 13 is_stmt 1 view .LVU651
@@ -3418,7 +3418,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
  2107              	.LBB16:
  490:control-base/devices/src/dji_motor.c ****             motor3 = (*(group->motor_torq[2]));
  2108              		.loc 1 490 13 is_stmt 1 view .LVU669
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 58
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 58
 
 
  491:control-base/devices/src/dji_motor.c ****             data[4] = motor3 >> 8;
@@ -3478,7 +3478,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
  2145 007c 0874     		strb	r0, [r1, #16]
  500:control-base/devices/src/dji_motor.c ****         }
  2146              		.loc 1 500 13 is_stmt 1 view .LVU688
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 59
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 59
 
 
  500:control-base/devices/src/dji_motor.c ****         }
@@ -3538,7 +3538,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
  2195 0002 0024     		movs	r4, #0
  2196              		.loc 1 557 5 view .LVU697
  2197 0004 00E0     		b	.L196
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 60
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 60
 
 
  2198              	.LVL170:
@@ -3598,7 +3598,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
  2243              		.loc 1 568 1 is_stmt 1 view -0
  2244              		.cfi_startproc
  2245              		@ args = 0, pretend = 0, frame = 0
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 61
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 61
 
 
  2246              		@ frame_needed = 0, uses_anonymous_args = 0
@@ -3658,7 +3658,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
  2294              	.LFB157:
  575:control-base/devices/src/dji_motor.c **** 
  576:control-base/devices/src/dji_motor.c **** uint8_t DJI_Motor_Is_At_Angle(DJI_Motor_Handle_t *motor_handle, float tolerance) {
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 62
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 62
 
 
  2295              		.loc 1 576 82 is_stmt 1 view -0
@@ -3718,7 +3718,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
  2342              		.loc 1 585 27 is_stmt 0 view .LVU729
  2343 0000 C369     		ldr	r3, [r0, #28]
  2344              		.loc 1 585 41 view .LVU730
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 63
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 63
 
 
  2345 0002 D3ED0B7A 		vldr.32	s15, [r3, #44]
@@ -3778,7 +3778,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
  2392 0012 01D5     		bpl	.L225
  595:control-base/devices/src/dji_motor.c ****         return 1;
  2393              		.loc 1 595 16 view .LVU743
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 64
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 64
 
 
  2394 0014 0120     		movs	r0, #1
@@ -3838,7 +3838,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
  2457 0000 00       		.space	1
  2458              		.global	g_dji_motors
  2459              		.section	.bss.g_dji_motors,"aw",%nobits
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 65
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 65
 
 
  2460              		.align	2
@@ -3861,84 +3861,84 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 1
  2475              		.file 10 "control-base/devices/inc/dji_motor.h"
  2476              		.file 11 "/Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/arm-none-eabi/include/string.h"
  2477              		.file 12 "/Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/arm-none-eabi/include/stdlib.h"
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 66
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 66
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 dji_motor.c
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:21     .text.DJI_Motor_Decode:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:27     .text.DJI_Motor_Decode:00000000 DJI_Motor_Decode
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:203    .text.DJI_Motor_Decode:0000012c $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:214    .text.DJI_Motor_Assign_To_Group:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:220    .text.DJI_Motor_Assign_To_Group:00000000 DJI_Motor_Assign_To_Group
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:429    .text.DJI_Motor_Assign_To_Group:000000c8 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:2436   .bss.g_dji_motor_group_count:00000000 g_dji_motor_group_count
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:2443   .bss.g_dji_send_group:00000000 g_dji_send_group
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:435    .text.DJI_Motor_Init:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:441    .text.DJI_Motor_Init:00000000 DJI_Motor_Init
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:587    .text.DJI_Motor_Init:00000076 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:592    .text.DJI_Motor_Init:0000007a $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:910    .text.DJI_Motor_Init:00000238 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:2456   .bss.g_dji_motor_count:00000000 g_dji_motor_count
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:2463   .bss.g_dji_motors:00000000 g_dji_motors
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:920    .text.DJI_Motor_Get_Absolute_Angle:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:926    .text.DJI_Motor_Get_Absolute_Angle:00000000 DJI_Motor_Get_Absolute_Angle
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:965    .text.DJI_Motor_Get_Absolute_Angle:00000028 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:970    .text.DJI_Motor_Get_Total_Angle:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:976    .text.DJI_Motor_Get_Total_Angle:00000000 DJI_Motor_Get_Total_Angle
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:1015   .text.DJI_Motor_Get_Velocity:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:1021   .text.DJI_Motor_Get_Velocity:00000000 DJI_Motor_Get_Velocity
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:1060   .text.DJI_Motor_Set_Angle:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:1066   .text.DJI_Motor_Set_Angle:00000000 DJI_Motor_Set_Angle
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:1109   .text.DJI_Motor_Set_Angle:00000028 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:1114   .text.DJI_Motor_Set_Velocity:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:1120   .text.DJI_Motor_Set_Velocity:00000000 DJI_Motor_Set_Velocity
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:1164   .text.DJI_Motor_Set_Torque:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:1170   .text.DJI_Motor_Set_Torque:00000000 DJI_Motor_Set_Torque
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:1199   .text.DJI_Motor_Set_Torque:00000014 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:1203   .text.DJI_Motor_Set_Torque:00000018 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:1440   .text.DJI_Motor_Set_Torque:000001a8 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:1455   .text.DJI_Motor_Set_Control_Mode:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:1461   .text.DJI_Motor_Set_Control_Mode:00000000 DJI_Motor_Set_Control_Mode
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:1478   .text.DJI_Motor_Disable:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:1484   .text.DJI_Motor_Disable:00000000 DJI_Motor_Disable
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:1502   .text.DJI_Motor_Current_Calc:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:1508   .text.DJI_Motor_Current_Calc:00000000 DJI_Motor_Current_Calc
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:1633   .text.DJI_Motor_Current_Calc:00000078 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:1664   .text.DJI_Motor_Current_Calc:000000f4 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:1984   .text.DJI_Motor_Current_Calc:00000298 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:1994   .text.DJI_Motor_Send:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:2000   .text.DJI_Motor_Send:00000000 DJI_Motor_Send
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:2163   .text.DJI_Motor_Send:00000084 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:2430   .bss.motor1.3:00000000 motor1.3
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:2424   .bss.motor2.2:00000000 motor2.2
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:2418   .bss.motor3.1:00000000 motor3.1
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:2412   .bss.motor4.0:00000000 motor4.0
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:2173   .text.DJI_Motor_Disable_All:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:2179   .text.DJI_Motor_Disable_All:00000000 DJI_Motor_Disable_All
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:2229   .text.DJI_Motor_Disable_All:00000024 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:2235   .text.DJI_Motor_Enable_All:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:2241   .text.DJI_Motor_Enable_All:00000000 DJI_Motor_Enable_All
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:2280   .text.DJI_Motor_Enable_All:0000001c $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:2286   .text.DJI_Motor_Is_At_Angle:00000000 $t
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s 			page 67
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:21     .text.DJI_Motor_Decode:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:27     .text.DJI_Motor_Decode:00000000 DJI_Motor_Decode
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:203    .text.DJI_Motor_Decode:0000012c $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:214    .text.DJI_Motor_Assign_To_Group:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:220    .text.DJI_Motor_Assign_To_Group:00000000 DJI_Motor_Assign_To_Group
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:429    .text.DJI_Motor_Assign_To_Group:000000c8 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:2436   .bss.g_dji_motor_group_count:00000000 g_dji_motor_group_count
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:2443   .bss.g_dji_send_group:00000000 g_dji_send_group
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:435    .text.DJI_Motor_Init:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:441    .text.DJI_Motor_Init:00000000 DJI_Motor_Init
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:587    .text.DJI_Motor_Init:00000076 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:592    .text.DJI_Motor_Init:0000007a $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:910    .text.DJI_Motor_Init:00000238 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:2456   .bss.g_dji_motor_count:00000000 g_dji_motor_count
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:2463   .bss.g_dji_motors:00000000 g_dji_motors
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:920    .text.DJI_Motor_Get_Absolute_Angle:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:926    .text.DJI_Motor_Get_Absolute_Angle:00000000 DJI_Motor_Get_Absolute_Angle
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:965    .text.DJI_Motor_Get_Absolute_Angle:00000028 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:970    .text.DJI_Motor_Get_Total_Angle:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:976    .text.DJI_Motor_Get_Total_Angle:00000000 DJI_Motor_Get_Total_Angle
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:1015   .text.DJI_Motor_Get_Velocity:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:1021   .text.DJI_Motor_Get_Velocity:00000000 DJI_Motor_Get_Velocity
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:1060   .text.DJI_Motor_Set_Angle:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:1066   .text.DJI_Motor_Set_Angle:00000000 DJI_Motor_Set_Angle
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:1109   .text.DJI_Motor_Set_Angle:00000028 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:1114   .text.DJI_Motor_Set_Velocity:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:1120   .text.DJI_Motor_Set_Velocity:00000000 DJI_Motor_Set_Velocity
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:1164   .text.DJI_Motor_Set_Torque:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:1170   .text.DJI_Motor_Set_Torque:00000000 DJI_Motor_Set_Torque
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:1199   .text.DJI_Motor_Set_Torque:00000014 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:1203   .text.DJI_Motor_Set_Torque:00000018 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:1440   .text.DJI_Motor_Set_Torque:000001a8 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:1455   .text.DJI_Motor_Set_Control_Mode:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:1461   .text.DJI_Motor_Set_Control_Mode:00000000 DJI_Motor_Set_Control_Mode
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:1478   .text.DJI_Motor_Disable:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:1484   .text.DJI_Motor_Disable:00000000 DJI_Motor_Disable
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:1502   .text.DJI_Motor_Current_Calc:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:1508   .text.DJI_Motor_Current_Calc:00000000 DJI_Motor_Current_Calc
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:1633   .text.DJI_Motor_Current_Calc:00000078 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:1664   .text.DJI_Motor_Current_Calc:000000f4 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:1984   .text.DJI_Motor_Current_Calc:00000298 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:1994   .text.DJI_Motor_Send:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:2000   .text.DJI_Motor_Send:00000000 DJI_Motor_Send
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:2163   .text.DJI_Motor_Send:00000084 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:2430   .bss.motor1.3:00000000 motor1.3
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:2424   .bss.motor2.2:00000000 motor2.2
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:2418   .bss.motor3.1:00000000 motor3.1
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:2412   .bss.motor4.0:00000000 motor4.0
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:2173   .text.DJI_Motor_Disable_All:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:2179   .text.DJI_Motor_Disable_All:00000000 DJI_Motor_Disable_All
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:2229   .text.DJI_Motor_Disable_All:00000024 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:2235   .text.DJI_Motor_Enable_All:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:2241   .text.DJI_Motor_Enable_All:00000000 DJI_Motor_Enable_All
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:2280   .text.DJI_Motor_Enable_All:0000001c $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:2286   .text.DJI_Motor_Is_At_Angle:00000000 $t
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s 			page 67
 
 
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:2292   .text.DJI_Motor_Is_At_Angle:00000000 DJI_Motor_Is_At_Angle
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:2327   .text.DJI_Motor_Is_At_Velocity:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:2333   .text.DJI_Motor_Is_At_Velocity:00000000 DJI_Motor_Is_At_Velocity
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:2368   .text.DJI_Motor_Is_At_Torque:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:2374   .text.DJI_Motor_Is_At_Torque:00000000 DJI_Motor_Is_At_Torque
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:2409   .bss.motor4.0:00000000 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:2415   .bss.motor3.1:00000000 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:2421   .bss.motor2.2:00000000 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:2427   .bss.motor1.3:00000000 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:2437   .bss.g_dji_motor_group_count:00000000 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:2440   .bss.g_dji_send_group:00000000 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:2450   .bss.test_tmd:00000000 test_tmd
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:2447   .bss.test_tmd:00000000 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:2457   .bss.g_dji_motor_count:00000000 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cco1TItV.s:2460   .bss.g_dji_motors:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:2292   .text.DJI_Motor_Is_At_Angle:00000000 DJI_Motor_Is_At_Angle
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:2327   .text.DJI_Motor_Is_At_Velocity:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:2333   .text.DJI_Motor_Is_At_Velocity:00000000 DJI_Motor_Is_At_Velocity
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:2368   .text.DJI_Motor_Is_At_Torque:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:2374   .text.DJI_Motor_Is_At_Torque:00000000 DJI_Motor_Is_At_Torque
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:2409   .bss.motor4.0:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:2415   .bss.motor3.1:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:2421   .bss.motor2.2:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:2427   .bss.motor1.3:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:2437   .bss.g_dji_motor_group_count:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:2440   .bss.g_dji_send_group:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:2450   .bss.test_tmd:00000000 test_tmd
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:2447   .bss.test_tmd:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:2457   .bss.g_dji_motor_count:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccgqYbbD.s:2460   .bss.g_dji_motors:00000000 $d
 
 UNDEFINED SYMBOLS
 malloc

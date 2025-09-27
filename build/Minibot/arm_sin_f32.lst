@@ -1,4 +1,4 @@
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cccUZECC.s 			page 1
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc0Wsz04.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -58,7 +58,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cccUZECC.s 			page 1
   27:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_sin_f32.c ****  */
   28:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_sin_f32.c **** 
   29:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_sin_f32.c **** #include "dsp/fast_math_functions.h"
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cccUZECC.s 			page 2
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc0Wsz04.s 			page 2
 
 
   30:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_sin_f32.c **** #include "arm_common_tables.h"
@@ -118,7 +118,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cccUZECC.s 			page 1
   37              		.loc 1 76 3 view .LVU3
   77:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_sin_f32.c ****   int32_t n;
   38              		.loc 1 77 3 view .LVU4
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cccUZECC.s 			page 3
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc0Wsz04.s 			page 3
 
 
   78:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_sin_f32.c ****   float32_t findex;
@@ -178,7 +178,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cccUZECC.s 			page 1
   72 002e 9BB2     		uxth	r3, r3
   73              	.LVL7:
   99:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_sin_f32.c **** 
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cccUZECC.s 			page 4
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc0Wsz04.s 			page 4
 
 
  100:control-base/typec-board-base/Drivers/CMSIS/DSP/Source/FastMathFunctions/arm_sin_f32.c ****   /* when "in" is exactly 1, we need to rotate the index down to 0 */
@@ -238,7 +238,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cccUZECC.s 			page 1
  112 0060 B7EE007A 		vmov.f32	s14, #1.0e+0
  113 0064 37EE677A 		vsub.f32	s14, s14, s15
  114              		.loc 1 114 27 view .LVU35
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cccUZECC.s 			page 5
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc0Wsz04.s 			page 5
 
 
  115 0068 27EE067A 		vmul.f32	s14, s14, s12
@@ -282,14 +282,14 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cccUZECC.s 			page 1
  147              		.file 3 "/Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/arm-none-eabi/include/sys/_stdint.h
  148              		.file 4 "control-base/typec-board-base/Drivers/CMSIS/DSP/Include/arm_math_types.h"
  149              		.file 5 "control-base/typec-board-base/Drivers/CMSIS/DSP/Include/arm_common_tables.h"
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cccUZECC.s 			page 6
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc0Wsz04.s 			page 6
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 arm_sin_f32.c
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cccUZECC.s:21     .text.arm_sin_f32:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cccUZECC.s:27     .text.arm_sin_f32:00000000 arm_sin_f32
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cccUZECC.s:138    .text.arm_sin_f32:00000084 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc0Wsz04.s:21     .text.arm_sin_f32:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc0Wsz04.s:27     .text.arm_sin_f32:00000000 arm_sin_f32
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc0Wsz04.s:138    .text.arm_sin_f32:00000084 $d
 
 UNDEFINED SYMBOLS
 sinTable_f32

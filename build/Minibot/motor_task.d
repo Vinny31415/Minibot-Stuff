@@ -53,14 +53,7 @@ build/Minibot/motor_task.o: Minibot/src/motor_task.c \
  control-base/typec-board-base/Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h \
  control-base/typec-board-base/Middlewares/Third_Party/FreeRTOS/Source/include/timers.h \
  control-base/devices/inc/motor.h control-base/algo/inc/pid.h \
- control-base/devices/inc/dm_motor.h control-base/devices/inc/mf_motor.h \
- control-base/devices/inc/supercap.h \
- control-base/devices/inc/referee_system.h control-base/bsp/inc/bsp_crc.h \
- control-base/typec-board-base/Core/Inc/dma.h \
- control-base/bsp/inc/bsp_uart.h \
- control-base/typec-board-base/Core/Inc/usart.h \
- control-base/bsp/inc/bsp_daemon.h control-base/devices/inc/supercap.h \
- control-base/devices/inc/jetson_orin.h
+ control-base/devices/inc/dm_motor.h control-base/devices/inc/mf_motor.h
 Minibot/inc/motor_task.h:
 control-base/devices/inc/dji_motor.h:
 control-base/bsp/inc/bsp_can.h:
@@ -119,12 +112,3 @@ control-base/devices/inc/motor.h:
 control-base/algo/inc/pid.h:
 control-base/devices/inc/dm_motor.h:
 control-base/devices/inc/mf_motor.h:
-control-base/devices/inc/supercap.h:
-control-base/devices/inc/referee_system.h:
-control-base/bsp/inc/bsp_crc.h:
-control-base/typec-board-base/Core/Inc/dma.h:
-control-base/bsp/inc/bsp_uart.h:
-control-base/typec-board-base/Core/Inc/usart.h:
-control-base/bsp/inc/bsp_daemon.h:
-control-base/devices/inc/supercap.h:
-control-base/devices/inc/jetson_orin.h:

@@ -1,4 +1,4 @@
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccdH6SfQ.s 			page 1
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc8abGQI.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -32,12 +32,10 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccdH6SfQ.s 			page 1
    2:Minibot/src/motor_task.c **** #include "dji_motor.h"
    3:Minibot/src/motor_task.c **** #include "dm_motor.h"
    4:Minibot/src/motor_task.c **** #include "mf_motor.h"
-   5:Minibot/src/motor_task.c **** #include "supercap.h"
+   5:Minibot/src/motor_task.c **** 
    6:Minibot/src/motor_task.c **** 
-   7:Minibot/src/motor_task.c **** extern Supercap_t g_supercap;
-   8:Minibot/src/motor_task.c **** 
-   9:Minibot/src/motor_task.c **** void Motor_Task_Loop() {
-  29              		.loc 1 9 24 view -0
+   7:Minibot/src/motor_task.c **** void Motor_Task_Loop() {
+  29              		.loc 1 7 24 view -0
   30              		.cfi_startproc
   31              		@ args = 0, pretend = 0, frame = 0
   32              		@ frame_needed = 0, uses_anonymous_args = 0
@@ -46,73 +44,30 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccdH6SfQ.s 			page 1
   35              		.cfi_def_cfa_offset 8
   36              		.cfi_offset 3, -8
   37              		.cfi_offset 14, -4
-  10:Minibot/src/motor_task.c ****     DJI_Motor_Send();
-  38              		.loc 1 10 5 view .LVU1
+   8:Minibot/src/motor_task.c ****     DJI_Motor_Send();
+  38              		.loc 1 8 5 view .LVU1
   39 0002 FFF7FEFF 		bl	DJI_Motor_Send
   40              	.LVL0:
-  11:Minibot/src/motor_task.c ****     // MF_Motor_Send();
-  12:Minibot/src/motor_task.c ****     // DM_Motor_Send();
-  13:Minibot/src/motor_task.c **** 
-  14:Minibot/src/motor_task.c ****     g_supercap.send_counter++;
-  41              		.loc 1 14 5 view .LVU2
-  42              		.loc 1 14 15 is_stmt 0 view .LVU3
-  43 0006 074A     		ldr	r2, .L5
-  44 0008 D388     		ldrh	r3, [r2, #6]
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccdH6SfQ.s 			page 2
+   9:Minibot/src/motor_task.c ****     // MF_Motor_Send();
+  10:Minibot/src/motor_task.c ****     // DM_Motor_Send();
+  11:Minibot/src/motor_task.c **** }
+  41              		.loc 1 11 1 is_stmt 0 view .LVU2
+  42 0006 08BD     		pop	{r3, pc}
+  43              		.cfi_endproc
+  44              	.LFE142:
+  46              		.text
+  47              	.Letext0:
+  48              		.file 2 "control-base/devices/inc/dji_motor.h"
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc8abGQI.s 			page 2
 
 
-  45              		.loc 1 14 28 view .LVU4
-  46 000a 0133     		adds	r3, r3, #1
-  47 000c 9BB2     		uxth	r3, r3
-  48 000e D380     		strh	r3, [r2, #6]	@ movhi
-  15:Minibot/src/motor_task.c ****     if (g_supercap.send_counter >= 100) {
-  49              		.loc 1 15 5 is_stmt 1 view .LVU5
-  50              		.loc 1 15 8 is_stmt 0 view .LVU6
-  51 0010 632B     		cmp	r3, #99
-  52 0012 00D8     		bhi	.L4
-  53              	.L1:
-  16:Minibot/src/motor_task.c ****         Supercap_Send();
-  17:Minibot/src/motor_task.c ****         g_supercap.send_counter = 0;
-  18:Minibot/src/motor_task.c ****     }
-  19:Minibot/src/motor_task.c **** }
-  54              		.loc 1 19 1 view .LVU7
-  55 0014 08BD     		pop	{r3, pc}
-  56              	.L4:
-  16:Minibot/src/motor_task.c ****         Supercap_Send();
-  57              		.loc 1 16 9 is_stmt 1 view .LVU8
-  58 0016 FFF7FEFF 		bl	Supercap_Send
-  59              	.LVL1:
-  17:Minibot/src/motor_task.c ****     }
-  60              		.loc 1 17 9 view .LVU9
-  17:Minibot/src/motor_task.c ****     }
-  61              		.loc 1 17 33 is_stmt 0 view .LVU10
-  62 001a 024B     		ldr	r3, .L5
-  63 001c 0022     		movs	r2, #0
-  64 001e DA80     		strh	r2, [r3, #6]	@ movhi
-  65              		.loc 1 19 1 view .LVU11
-  66 0020 F8E7     		b	.L1
-  67              	.L6:
-  68 0022 00BF     		.align	2
-  69              	.L5:
-  70 0024 00000000 		.word	g_supercap
-  71              		.cfi_endproc
-  72              	.LFE142:
-  74              		.text
-  75              	.Letext0:
-  76              		.file 2 "/Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/arm-none-eabi/include/machine/_defa
-  77              		.file 3 "/Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/arm-none-eabi/include/sys/_stdint.h
-  78              		.file 4 "control-base/devices/inc/supercap.h"
-  79              		.file 5 "control-base/devices/inc/dji_motor.h"
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccdH6SfQ.s 			page 3
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc8abGQI.s 			page 3
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 motor_task.c
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccdH6SfQ.s:21     .text.Motor_Task_Loop:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccdH6SfQ.s:27     .text.Motor_Task_Loop:00000000 Motor_Task_Loop
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccdH6SfQ.s:70     .text.Motor_Task_Loop:00000024 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc8abGQI.s:21     .text.Motor_Task_Loop:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc8abGQI.s:27     .text.Motor_Task_Loop:00000000 Motor_Task_Loop
 
 UNDEFINED SYMBOLS
 DJI_Motor_Send
-Supercap_Send
-g_supercap

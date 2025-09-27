@@ -1,4 +1,4 @@
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s 			page 1
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD5kIdO.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -58,7 +58,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s 			page 1
   39 0008 80ED021A 		vstr.32	s2, [r0, #8]
   40 000c C0ED031A 		vstr.32	s3, [r0, #12]
   41 0010 80ED042A 		vstr.32	s4, [r0, #16]
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s 			page 2
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD5kIdO.s 			page 2
 
 
   42 0014 0022     		movs	r2, #0
@@ -118,7 +118,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s 			page 1
   31:control-base/algo/src/swerve_locomotion.c ****             {1, 0, -(track_width / 2)}
   32:control-base/algo/src/swerve_locomotion.c ****         }
   33:control-base/algo/src/swerve_locomotion.c ****     };
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s 			page 3
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD5kIdO.s 			page 3
 
 
   34:control-base/algo/src/swerve_locomotion.c **** 
@@ -178,7 +178,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s 			page 1
  124 000e 90ED017A 		vldr.32	s14, [r0, #4]
  125              	.LVL5:
   47:control-base/algo/src/swerve_locomotion.c ****     float omega = chassis_state->omega;
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s 			page 4
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD5kIdO.s 			page 4
 
 
  126              		.loc 1 47 5 is_stmt 1 view .LVU17
@@ -238,7 +238,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s 			page 1
   63:control-base/algo/src/swerve_locomotion.c ****         k_mat[1][0] * v_x + k_mat[1][1] * v_y + k_mat[1][2] * omega,
  164              		.loc 1 63 17 view .LVU34
  165 005a 91ED086A 		vldr.32	s12, [r1, #32]
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s 			page 5
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD5kIdO.s 			page 5
 
 
  166              		.loc 1 63 21 view .LVU35
@@ -298,7 +298,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s 			page 1
   61:control-base/algo/src/swerve_locomotion.c ****         k_mat[0][0] * v_x + k_mat[0][1] * v_y + k_mat[0][2] * omega,
  216              		.loc 1 61 11 view .LVU60
  217 00c2 8DED036A 		vstr.32	s12, [sp, #12]
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s 			page 6
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD5kIdO.s 			page 6
 
 
   66:control-base/algo/src/swerve_locomotion.c ****         k_mat[4][0] * v_x + k_mat[4][1] * v_y + k_mat[4][2] * omega,
@@ -358,7 +358,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s 			page 1
  267 0126 65EEA65A 		vmul.f32	s11, s11, s13
  268              		.loc 1 68 47 view .LVU86
  269 012a 36EE256A 		vadd.f32	s12, s12, s11
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s 			page 7
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD5kIdO.s 			page 7
 
 
   61:control-base/algo/src/swerve_locomotion.c ****         k_mat[0][0] * v_x + k_mat[0][1] * v_y + k_mat[0][2] * omega,
@@ -418,7 +418,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s 			page 1
  313 0166 5969     		ldr	r1, [r3, #20]	@ float
   55:control-base/algo/src/swerve_locomotion.c ****         }
  314              		.loc 1 55 44 view .LVU106
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s 			page 8
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD5kIdO.s 			page 8
 
 
  315 0168 1961     		str	r1, [r3, #16]	@ float
@@ -478,7 +478,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s 			page 1
  346 017a F7E7     		b	.L4
  347              	.LVL14:
  348              	.L17:
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s 			page 9
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD5kIdO.s 			page 9
 
 
   52:control-base/algo/src/swerve_locomotion.c ****         {
@@ -538,7 +538,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s 			page 1
  388 019c 02EB8303 		add	r3, r2, r3, lsl #2
  389 01a0 53ED088A 		vldr.32	s17, [r3, #-32]
  390              	.LVL19:
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s 			page 10
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD5kIdO.s 			page 10
 
 
   76:control-base/algo/src/swerve_locomotion.c ****         float speed = hypotf(x, y);
@@ -598,7 +598,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s 			page 1
  435              		.thumb_func
  437              	swerve_desaturate_wheel_speeds:
  438              	.LVL22:
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s 			page 11
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD5kIdO.s 			page 11
 
 
  439              	.LFB2:
@@ -658,7 +658,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s 			page 1
  102:control-base/algo/src/swerve_locomotion.c ****     for (int i = 1; i < NUMBER_OF_MODULES; i++) // start from 1 to find the highest speed
  481              		.loc 1 102 45 is_stmt 1 discriminator 3 view .LVU151
  482 002a 0134     		adds	r4, r4, #1
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s 			page 12
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD5kIdO.s 			page 12
 
 
  483              	.LVL27:
@@ -718,7 +718,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s 			page 1
  523 0060 D2ED037A 		vldr.32	s15, [r2, #12]
  524              		.loc 1 116 77 view .LVU168
  525 0064 67EE877A 		vmul.f32	s15, s15, s14
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s 			page 13
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD5kIdO.s 			page 13
 
 
  526              		.loc 1 116 44 view .LVU169
@@ -778,7 +778,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s 			page 1
  566              		.loc 1 129 5 view .LVU176
  567              	.LBB12:
  568              		.loc 1 129 10 view .LVU177
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s 			page 14
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD5kIdO.s 			page 14
 
 
  569              		.loc 1 129 14 is_stmt 0 view .LVU178
@@ -838,7 +838,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s 			page 1
  606              		.loc 1 146 9 is_stmt 1 view .LVU190
  607              		.loc 1 146 37 is_stmt 0 view .LVU191
  608 0040 03EB4302 		add	r2, r3, r3, lsl #1
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s 			page 15
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD5kIdO.s 			page 15
 
 
  609 0044 00EB8202 		add	r2, r0, r2, lsl #2
@@ -898,7 +898,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s 			page 1
  651              		.loc 1 137 9 is_stmt 1 view .LVU205
  137:control-base/algo/src/swerve_locomotion.c ****             chassis_state->states[i].angle -= PI;
  652              		.loc 1 137 12 is_stmt 0 view .LVU206
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s 			page 16
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD5kIdO.s 			page 16
 
 
  653 0092 DFED196A 		vldr.32	s13, .L53+16
@@ -958,7 +958,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s 			page 1
  695              		.loc 1 150 1 view .LVU218
  696 00e6 7047     		bx	lr
  697              	.L54:
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s 			page 17
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD5kIdO.s 			page 17
 
 
  698              		.align	2
@@ -1018,7 +1018,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s 			page 1
  745 0020 C6EE076A 		vdiv.f32	s13, s12, s14
  746              		.loc 1 159 40 view .LVU229
  747 0024 67EEA67A 		vmul.f32	s15, s15, s13
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s 			page 18
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD5kIdO.s 			page 18
 
 
  748 0028 C2ED037A 		vstr.32	s15, [r2, #12]
@@ -1047,25 +1047,25 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s 			page 1
  768              	.Letext0:
  769              		.file 2 "control-base/algo/inc/swerve_locomotion.h"
  770              		.file 3 "/Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/arm-none-eabi/include/math.h"
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s 			page 19
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD5kIdO.s 			page 19
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 swerve_locomotion.c
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s:21     .text.swerve_init:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s:27     .text.swerve_init:00000000 swerve_init
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s:88     .text.swerve_calculate_kinematics:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s:94     .text.swerve_calculate_kinematics:00000000 swerve_calculate_kinematics
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s:424    .text.swerve_calculate_kinematics:000001e0 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s:431    .text.swerve_desaturate_wheel_speeds:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s:437    .text.swerve_desaturate_wheel_speeds:00000000 swerve_desaturate_wheel_speeds
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s:547    .text.swerve_desaturate_wheel_speeds:00000074 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s:552    .text.swerve_optimize_module_angles:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s:558    .text.swerve_optimize_module_angles:00000000 swerve_optimize_module_angles
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s:700    .text.swerve_optimize_module_angles:000000e8 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s:710    .text.swerve_convert_to_rpm:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s:716    .text.swerve_convert_to_rpm:00000000 swerve_convert_to_rpm
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccVBu3Aj.s:762    .text.swerve_convert_to_rpm:00000034 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD5kIdO.s:21     .text.swerve_init:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD5kIdO.s:27     .text.swerve_init:00000000 swerve_init
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD5kIdO.s:88     .text.swerve_calculate_kinematics:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD5kIdO.s:94     .text.swerve_calculate_kinematics:00000000 swerve_calculate_kinematics
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD5kIdO.s:424    .text.swerve_calculate_kinematics:000001e0 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD5kIdO.s:431    .text.swerve_desaturate_wheel_speeds:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD5kIdO.s:437    .text.swerve_desaturate_wheel_speeds:00000000 swerve_desaturate_wheel_speeds
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD5kIdO.s:547    .text.swerve_desaturate_wheel_speeds:00000074 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD5kIdO.s:552    .text.swerve_optimize_module_angles:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD5kIdO.s:558    .text.swerve_optimize_module_angles:00000000 swerve_optimize_module_angles
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD5kIdO.s:700    .text.swerve_optimize_module_angles:000000e8 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD5kIdO.s:710    .text.swerve_convert_to_rpm:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD5kIdO.s:716    .text.swerve_convert_to_rpm:00000000 swerve_convert_to_rpm
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccD5kIdO.s:762    .text.swerve_convert_to_rpm:00000034 $d
 
 UNDEFINED SYMBOLS
 atan2f

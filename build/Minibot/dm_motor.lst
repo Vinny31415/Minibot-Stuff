@@ -1,4 +1,4 @@
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s 			page 1
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -58,7 +58,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s 			page 1
   32              		@ args = 0, pretend = 0, frame = 0
   33              		@ frame_needed = 0, uses_anonymous_args = 0
   34              		@ link register save eliminated.
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s 			page 2
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s 			page 2
 
 
   25:control-base/devices/src/dm_motor.c ****     float span = x_max - x_min;
@@ -118,7 +118,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s 			page 1
   82              		.loc 1 33 5 is_stmt 1 view .LVU15
   83              		.loc 1 33 11 is_stmt 0 view .LVU16
   84 0004 70EEC00A 		vsub.f32	s1, s1, s0
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s 			page 3
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s 			page 3
 
 
   85              	.LVL5:
@@ -178,7 +178,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s 			page 1
  135              	.LCFI1:
  136              		.cfi_def_cfa_offset 32
  137              		.cfi_offset 80, -32
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s 			page 4
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s 			page 4
 
 
  138              		.cfi_offset 81, -28
@@ -238,7 +238,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s 			page 1
  184 0032 06F47066 		and	r6, r6, #3840
  185              		.loc 1 47 57 view .LVU52
  186 0036 E37D     		ldrb	r3, [r4, #23]	@ zero_extendqisi2
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s 			page 5
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s 			page 5
 
 
  187              		.loc 1 47 51 view .LVU53
@@ -298,7 +298,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s 			page 1
  234              		.loc 1 54 43 view .LVU72
  235 0086 38EE678A 		vsub.f32	s16, s16, s15
  236              		.loc 1 54 21 view .LVU73
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s 			page 6
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s 			page 6
 
 
  237 008a 85ED028A 		vstr.32	s16, [r5, #8]
@@ -358,7 +358,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s 			page 1
  268              		.loc 1 79 5 is_stmt 1 view .LVU79
  269              		.loc 1 79 10 is_stmt 0 view .LVU80
  270 0004 C378     		ldrb	r3, [r0, #3]	@ zero_extendqisi2
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s 			page 7
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s 			page 7
 
 
  271              		.loc 1 79 30 view .LVU81
@@ -418,7 +418,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s 			page 1
  311              		.loc 1 95 13 is_stmt 0 view .LVU95
  312 000a 5A73     		strb	r2, [r3, #13]
   96:control-base/devices/src/dm_motor.c ****     data[4] = 0xFF;
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s 			page 8
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s 			page 8
 
 
  313              		.loc 1 96 5 is_stmt 1 view .LVU96
@@ -478,7 +478,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s 			page 1
  107:control-base/devices/src/dm_motor.c ****     case DM_MOTOR_ZERO_CURRENT: 
  108:control-base/devices/src/dm_motor.c ****     {
  109:control-base/devices/src/dm_motor.c ****         motor->send_pending_flag |= DM_MOTOR_DISABLE_PENDING;
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s 			page 9
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s 			page 9
 
 
  359              		.loc 1 109 9 is_stmt 1 view .LVU111
@@ -538,7 +538,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s 			page 1
  400              		.loc 1 124 13 is_stmt 0 view .LVU124
  401 0002 FF22     		movs	r2, #255
  402 0004 9A72     		strb	r2, [r3, #10]
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s 			page 10
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s 			page 10
 
 
  125:control-base/devices/src/dm_motor.c ****     data[1] = 0xFF;
@@ -598,7 +598,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s 			page 1
  448              		.cfi_offset 4, -36
  449              		.cfi_offset 5, -32
  450              		.cfi_offset 6, -28
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s 			page 11
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s 			page 11
 
 
  451              		.cfi_offset 7, -24
@@ -658,7 +658,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s 			page 1
  498              		.loc 1 142 15 is_stmt 0 view .LVU153
  499 0040 0C20     		movs	r0, #12
  500 0042 9FED201A 		vldr.32	s2, .L14+4
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s 			page 12
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s 			page 12
 
 
  501 0046 F0EE480A 		vmov.f32	s1, s16
@@ -718,7 +718,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s 			page 1
  548              		.loc 1 149 39 view .LVU170
  549 0096 45EA0715 		orr	r5, r5, r7, lsl #4
  550              		.loc 1 149 13 view .LVU171
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s 			page 13
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s 			page 13
 
 
  551 009a 6573     		strb	r5, [r4, #13]
@@ -778,7 +778,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s 			page 1
  156:control-base/devices/src/dm_motor.c **** void DM_Motor_Disable_All()
  157:control-base/devices/src/dm_motor.c **** {
  601              		.loc 1 157 1 is_stmt 1 view -0
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s 			page 14
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s 			page 14
 
 
  602              		.cfi_startproc
@@ -838,7 +838,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s 			page 1
  647 0022 00BF     		.align	2
  648              	.L22:
  649 0024 00000000 		.word	g_dm_motor_num
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s 			page 15
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s 			page 15
 
 
  650 0028 00000000 		.word	g_dm_motors
@@ -898,7 +898,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s 			page 1
  699              		.loc 1 173 43 is_stmt 0 view .LVU204
  700 0016 436A     		ldr	r3, [r0, #36]
  701              		.loc 1 173 50 view .LVU205
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s 			page 16
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s 			page 16
 
 
  702 0018 D3ED047A 		vldr.32	s15, [r3, #16]
@@ -958,7 +958,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s 			page 1
  751 0066 94ED060A 		vldr.32	s0, [r4, #24]
  752 006a FFF7FEFF 		bl	float_to_uint
  753              	.LVL53:
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s 			page 17
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s 			page 17
 
 
  754              		.loc 1 178 13 discriminator 1 view .LVU224
@@ -1018,7 +1018,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s 			page 1
  186:control-base/devices/src/dm_motor.c ****     data[4] = kp_temp;
  801              		.loc 1 186 5 is_stmt 1 view .LVU242
  802              		.loc 1 186 13 is_stmt 0 view .LVU243
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s 			page 18
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s 			page 18
 
 
  803 00ba 009B     		ldr	r3, [sp]
@@ -1078,7 +1078,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s 			page 1
  846              		.cfi_def_cfa_offset 36
  847              	.LVL63:
  848              		.loc 1 197 1 view .LVU260
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s 			page 19
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s 			page 19
 
 
  849 00e8 BDE8F08F 		pop	{r4, r5, r6, r7, r8, r9, r10, fp, pc}
@@ -1138,7 +1138,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s 			page 1
  897              		.cfi_offset 8, -20
  898              		.cfi_offset 9, -16
  899              		.cfi_offset 10, -12
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s 			page 20
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s 			page 20
 
 
  900              		.cfi_offset 11, -8
@@ -1198,7 +1198,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s 			page 1
  947 003a FAEE090A 		vmov.f32	s1, #-1.25e+1
  948              	.LVL70:
  949              		.loc 1 207 16 view .LVU286
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s 			page 21
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s 			page 21
 
 
  950 003e FFF7FEFF 		bl	float_to_uint
@@ -1258,7 +1258,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s 			page 1
  1000 009a FAEE040A 		vmov.f32	s1, #-1.0e+1
  1001 009e B0EE480A 		vmov.f32	s0, s16
  1002 00a2 FFF7FEFF 		bl	float_to_uint
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s 			page 22
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s 			page 22
 
 
  1003              	.LVL80:
@@ -1318,7 +1318,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s 			page 1
  222:control-base/devices/src/dm_motor.c ****     // set the flag to send the data
  223:control-base/devices/src/dm_motor.c ****     motor->send_pending_flag |= DM_MOTOR_SEND_PENDING;
  1047              		.loc 1 223 5 is_stmt 1 view .LVU323
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s 			page 23
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s 			page 23
 
 
  1048              		.loc 1 223 10 is_stmt 0 view .LVU324
@@ -1378,7 +1378,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s 			page 1
  1092 0100 E370     		strb	r3, [r4, #3]
  1093              		.loc 1 228 1 view .LVU337
  1094 0102 F2E7     		b	.L30
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s 			page 24
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s 			page 24
 
 
  1095              	.L35:
@@ -1438,7 +1438,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s 			page 1
  1144 0000 38B5     		push	{r3, r4, r5, lr}
  1145              	.LCFI21:
  1146              		.cfi_def_cfa_offset 16
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s 			page 25
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s 			page 25
 
 
  1147              		.cfi_offset 3, -16
@@ -1498,7 +1498,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s 			page 1
  1192 0024 6B69     		ldr	r3, [r5, #20]	@ float
  1193              		.loc 1 246 15 view .LVU368
  1194 0026 8361     		str	r3, [r0, #24]	@ float
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s 			page 26
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s 			page 26
 
 
  247:control-base/devices/src/dm_motor.c ****     motor->kd = config->kd;
@@ -1558,7 +1558,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s 			page 1
  256:control-base/devices/src/dm_motor.c **** }
  1240              		.loc 1 256 1 is_stmt 0 view .LVU389
  1241 005a 2046     		mov	r0, r4
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s 			page 27
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s 			page 27
 
 
  1242 005c 38BD     		pop	{r3, r4, r5, pc}
@@ -1618,7 +1618,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s 			page 1
  1290              	.LFE156:
  1292              		.section	.text.DM_Motor_Send,"ax",%progbits
  1293              		.align	1
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s 			page 28
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s 			page 28
 
 
  1294              		.global	DM_Motor_Send
@@ -1678,7 +1678,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s 			page 1
  279:control-base/devices/src/dm_motor.c ****         {
  280:control-base/devices/src/dm_motor.c ****             DM_Motor_Frame_Enable_Protocol(g_dm_motors[i]);      // Form the enable data with DaMia
  1337              		.loc 1 280 13 is_stmt 1 view .LVU405
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s 			page 29
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s 			page 29
 
 
  1338 001c FFF7FEFF 		bl	DM_Motor_Frame_Enable_Protocol
@@ -1738,7 +1738,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s 			page 1
  1381              		.loc 1 277 27 view .LVU421
  1382 0058 C378     		ldrb	r3, [r0, #3]	@ zero_extendqisi2
  277:control-base/devices/src/dm_motor.c ****         // Check if enable pending, this flag is set when the motor is enabled by user but motor fe
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s 			page 30
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s 			page 30
 
 
  1383              		.loc 1 277 12 view .LVU422
@@ -1798,7 +1798,7 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s 			page 1
  1426              		.loc 1 293 1 view .LVU437
  1427              		.align	2
  1428              	.L53:
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s 			page 31
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s 			page 31
 
 
  1429 0094 00000000 		.word	g_dm_motors
@@ -1828,53 +1828,53 @@ ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s 			page 1
  1454              		.file 7 "control-base/bsp/inc/bsp_can.h"
  1455              		.file 8 "control-base/devices/inc/dm_motor.h"
  1456              		.file 9 "/Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/arm-none-eabi/include/stdlib.h"
-ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s 			page 32
+ARM GAS  /var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s 			page 32
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 dm_motor.c
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s:21     .text.float_to_uint:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s:27     .text.float_to_uint:00000000 float_to_uint
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s:66     .text.uint_to_float:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s:72     .text.uint_to_float:00000000 uint_to_float
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s:111    .text.DM_Motor_Decode:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s:117    .text.DM_Motor_Decode:00000000 DM_Motor_Decode
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s:250    .text.DM_Motor_Enable_Motor:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s:256    .text.DM_Motor_Enable_Motor:00000000 DM_Motor_Enable_Motor
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s:281    .text.DM_Motor_Frame_Enable_Protocol:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s:287    .text.DM_Motor_Frame_Enable_Protocol:00000000 DM_Motor_Frame_Enable_Protocol
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s:332    .text.DM_Motor_Disable_Motor:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s:338    .text.DM_Motor_Disable_Motor:00000000 DM_Motor_Disable_Motor
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s:381    .text.DM_Motor_Frame_Disable_Protocol:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s:387    .text.DM_Motor_Frame_Disable_Protocol:00000000 DM_Motor_Frame_Disable_Protocol
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s:431    .text.DM_Motor_Frame_Zero_Current_Protocol:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s:437    .text.DM_Motor_Frame_Zero_Current_Protocol:00000000 DM_Motor_Frame_Zero_Current_Protocol
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s:587    .text.DM_Motor_Frame_Zero_Current_Protocol:000000c0 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s:593    .text.DM_Motor_Disable_All:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s:599    .text.DM_Motor_Disable_All:00000000 DM_Motor_Disable_All
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s:649    .text.DM_Motor_Disable_All:00000024 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s:1438   .bss.g_dm_motor_num:00000000 g_dm_motor_num
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s:1445   .bss.g_dm_motors:00000000 g_dm_motors
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s:655    .text.DM_Motor_Ctrl_MIT:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s:661    .text.DM_Motor_Ctrl_MIT:00000000 DM_Motor_Ctrl_MIT
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s:870    .text.DM_Motor_Ctrl_MIT:000000fc $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s:876    .text.DM_Motor_Ctrl_MIT_PD:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s:882    .text.DM_Motor_Ctrl_MIT_PD:00000000 DM_Motor_Ctrl_MIT_PD
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s:1098   .text.DM_Motor_Ctrl_MIT_PD:00000104 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s:1104   .text.DM_Motor_Set_MIT_PD:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s:1110   .text.DM_Motor_Set_MIT_PD:00000000 DM_Motor_Set_MIT_PD
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s:1130   .text.DM_Motor_Init:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s:1136   .text.DM_Motor_Init:00000000 DM_Motor_Init
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s:1248   .text.DM_Motor_Init:00000060 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s:1255   .text.DM_Motor_CtrlPosVel:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s:1261   .text.DM_Motor_CtrlPosVel:00000000 DM_Motor_CtrlPosVel
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s:1274   .text.DM_Motor_CtrlVel:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s:1280   .text.DM_Motor_CtrlVel:00000000 DM_Motor_CtrlVel
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s:1293   .text.DM_Motor_Send:00000000 $t
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s:1299   .text.DM_Motor_Send:00000000 DM_Motor_Send
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s:1429   .text.DM_Motor_Send:00000094 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s:1439   .bss.g_dm_motor_num:00000000 $d
-/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//cc3L5BWt.s:1442   .bss.g_dm_motors:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s:21     .text.float_to_uint:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s:27     .text.float_to_uint:00000000 float_to_uint
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s:66     .text.uint_to_float:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s:72     .text.uint_to_float:00000000 uint_to_float
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s:111    .text.DM_Motor_Decode:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s:117    .text.DM_Motor_Decode:00000000 DM_Motor_Decode
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s:250    .text.DM_Motor_Enable_Motor:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s:256    .text.DM_Motor_Enable_Motor:00000000 DM_Motor_Enable_Motor
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s:281    .text.DM_Motor_Frame_Enable_Protocol:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s:287    .text.DM_Motor_Frame_Enable_Protocol:00000000 DM_Motor_Frame_Enable_Protocol
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s:332    .text.DM_Motor_Disable_Motor:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s:338    .text.DM_Motor_Disable_Motor:00000000 DM_Motor_Disable_Motor
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s:381    .text.DM_Motor_Frame_Disable_Protocol:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s:387    .text.DM_Motor_Frame_Disable_Protocol:00000000 DM_Motor_Frame_Disable_Protocol
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s:431    .text.DM_Motor_Frame_Zero_Current_Protocol:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s:437    .text.DM_Motor_Frame_Zero_Current_Protocol:00000000 DM_Motor_Frame_Zero_Current_Protocol
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s:587    .text.DM_Motor_Frame_Zero_Current_Protocol:000000c0 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s:593    .text.DM_Motor_Disable_All:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s:599    .text.DM_Motor_Disable_All:00000000 DM_Motor_Disable_All
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s:649    .text.DM_Motor_Disable_All:00000024 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s:1438   .bss.g_dm_motor_num:00000000 g_dm_motor_num
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s:1445   .bss.g_dm_motors:00000000 g_dm_motors
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s:655    .text.DM_Motor_Ctrl_MIT:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s:661    .text.DM_Motor_Ctrl_MIT:00000000 DM_Motor_Ctrl_MIT
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s:870    .text.DM_Motor_Ctrl_MIT:000000fc $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s:876    .text.DM_Motor_Ctrl_MIT_PD:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s:882    .text.DM_Motor_Ctrl_MIT_PD:00000000 DM_Motor_Ctrl_MIT_PD
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s:1098   .text.DM_Motor_Ctrl_MIT_PD:00000104 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s:1104   .text.DM_Motor_Set_MIT_PD:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s:1110   .text.DM_Motor_Set_MIT_PD:00000000 DM_Motor_Set_MIT_PD
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s:1130   .text.DM_Motor_Init:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s:1136   .text.DM_Motor_Init:00000000 DM_Motor_Init
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s:1248   .text.DM_Motor_Init:00000060 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s:1255   .text.DM_Motor_CtrlPosVel:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s:1261   .text.DM_Motor_CtrlPosVel:00000000 DM_Motor_CtrlPosVel
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s:1274   .text.DM_Motor_CtrlVel:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s:1280   .text.DM_Motor_CtrlVel:00000000 DM_Motor_CtrlVel
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s:1293   .text.DM_Motor_Send:00000000 $t
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s:1299   .text.DM_Motor_Send:00000000 DM_Motor_Send
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s:1429   .text.DM_Motor_Send:00000094 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s:1439   .bss.g_dm_motor_num:00000000 $d
+/var/folders/sg/pxk9dyzj7jz_x3889hx3b3dw0000gn/T//ccu8m4S2.s:1442   .bss.g_dm_motors:00000000 $d
 
 UNDEFINED SYMBOLS
 malloc

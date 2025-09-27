@@ -51,26 +51,24 @@ build/Minibot/robot.o: Minibot/src/robot.c Minibot/inc/robot.h \
  control-base/typec-board-base/Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h \
  control-base/typec-board-base/Middlewares/Third_Party/FreeRTOS/Source/include/timers.h \
  Minibot/inc/robot.h Minibot/inc/launch_task.h Minibot/inc/motor_task.h \
- Minibot/inc/debug_task.h control-base/devices/inc/jetson_orin.h \
- control-base/bsp/inc/bsp_uart.h \
+ Minibot/inc/debug_task.h control-base/bsp/inc/bsp_serial.h \
  control-base/typec-board-base/Core/Inc/usart.h \
  control-base/typec-board-base/Core/Inc/main.h \
- control-base/devices/inc/referee_system.h control-base/bsp/inc/bsp_crc.h \
- control-base/typec-board-base/Core/Inc/dma.h \
- control-base/bsp/inc/bsp_daemon.h control-base/devices/inc/supercap.h \
- control-base/bsp/inc/bsp_can.h \
- control-base/typec-board-base/Core/Inc/can.h \
- control-base/devices/inc/jetson_orin.h control-base/bsp/inc/bsp_serial.h \
- Minibot/inc/chassis_task.h Minibot/inc/gimbal_task.h \
- Minibot/inc/launch_task.h control-base/devices/inc/remote.h \
+ control-base/bsp/inc/bsp_daemon.h Minibot/inc/chassis_task.h \
+ Minibot/inc/gimbal_task.h Minibot/inc/launch_task.h \
+ control-base/devices/inc/remote.h control-base/bsp/inc/bsp_uart.h \
  control-base/devices/inc/imu_task.h control-base/bsp/inc/bsp_pwm.h \
  control-base/typec-board-base/Core/Inc/tim.h \
  control-base/devices/inc/bmi088driver.h \
  control-base/devices/inc/ist8310driver.h control-base/algo/inc/pid.h \
  control-base/algo/inc/MahonyAHRS.h \
+ control-base/devices/inc/referee_system.h control-base/bsp/inc/bsp_crc.h \
+ control-base/typec-board-base/Core/Inc/dma.h \
+ control-base/devices/inc/supercap.h control-base/bsp/inc/bsp_can.h \
+ control-base/typec-board-base/Core/Inc/can.h \
  control-base/devices/inc/referee_system.h \
- control-base/devices/inc/buzzer.h control-base/devices/inc/dji_motor.h \
- control-base/devices/inc/motor.h
+ control-base/devices/inc/jetson_orin.h control-base/devices/inc/buzzer.h \
+ control-base/devices/inc/dji_motor.h control-base/devices/inc/motor.h
 Minibot/inc/robot.h:
 control-base/algo/inc/user_math.h:
 Minibot/inc/robot_tasks.h:
@@ -128,23 +126,15 @@ Minibot/inc/robot.h:
 Minibot/inc/launch_task.h:
 Minibot/inc/motor_task.h:
 Minibot/inc/debug_task.h:
-control-base/devices/inc/jetson_orin.h:
-control-base/bsp/inc/bsp_uart.h:
+control-base/bsp/inc/bsp_serial.h:
 control-base/typec-board-base/Core/Inc/usart.h:
 control-base/typec-board-base/Core/Inc/main.h:
-control-base/devices/inc/referee_system.h:
-control-base/bsp/inc/bsp_crc.h:
-control-base/typec-board-base/Core/Inc/dma.h:
 control-base/bsp/inc/bsp_daemon.h:
-control-base/devices/inc/supercap.h:
-control-base/bsp/inc/bsp_can.h:
-control-base/typec-board-base/Core/Inc/can.h:
-control-base/devices/inc/jetson_orin.h:
-control-base/bsp/inc/bsp_serial.h:
 Minibot/inc/chassis_task.h:
 Minibot/inc/gimbal_task.h:
 Minibot/inc/launch_task.h:
 control-base/devices/inc/remote.h:
+control-base/bsp/inc/bsp_uart.h:
 control-base/devices/inc/imu_task.h:
 control-base/bsp/inc/bsp_pwm.h:
 control-base/typec-board-base/Core/Inc/tim.h:
@@ -153,6 +143,13 @@ control-base/devices/inc/ist8310driver.h:
 control-base/algo/inc/pid.h:
 control-base/algo/inc/MahonyAHRS.h:
 control-base/devices/inc/referee_system.h:
+control-base/bsp/inc/bsp_crc.h:
+control-base/typec-board-base/Core/Inc/dma.h:
+control-base/devices/inc/supercap.h:
+control-base/bsp/inc/bsp_can.h:
+control-base/typec-board-base/Core/Inc/can.h:
+control-base/devices/inc/referee_system.h:
+control-base/devices/inc/jetson_orin.h:
 control-base/devices/inc/buzzer.h:
 control-base/devices/inc/dji_motor.h:
 control-base/devices/inc/motor.h:
