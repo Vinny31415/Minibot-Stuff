@@ -32,7 +32,7 @@ void Chassis_Task_Init()
                 .output_limit = M2006_MAX_CURRENT, // m2006 is the motor
             },
     };
-    DJI_Motor_Handle_t* motor_w1 = DJI_Motor_Init(&chassis_w1, M2006); // Initializing motor 1
+    motor_w1 = DJI_Motor_Init(&chassis_w1, M2006); // Initializing motor 1
 
     Motor_Config_t chassis_w2 = {
         .can_bus = 1, // what can bus the motor is on
@@ -48,7 +48,7 @@ void Chassis_Task_Init()
                 .output_limit = M2006_MAX_CURRENT, // m2006 is the motor
             },
     };
-    DJI_Motor_Handle_t* motor_w2 = DJI_Motor_Init(&chassis_w2, M2006); // Initializing motor 2
+    motor_w2 = DJI_Motor_Init(&chassis_w2, M2006); // Initializing motor 2
 
     Motor_Config_t chassis_w3 = {
         .can_bus = 1, // what can bus the motor is on
@@ -64,7 +64,7 @@ void Chassis_Task_Init()
                 .output_limit = M2006_MAX_CURRENT, // m2006 is the motor
             },
     };
-    DJI_Motor_Handle_t* motor_w3 = DJI_Motor_Init(&chassis_w3, M2006); // Initializing motor 3
+    motor_w3 = DJI_Motor_Init(&chassis_w3, M2006); // Initializing motor 3
 
     Motor_Config_t chassis_w4 = {
         .can_bus = 1, // what can bus the motor is on
@@ -80,7 +80,7 @@ void Chassis_Task_Init()
                 .output_limit = M2006_MAX_CURRENT, // m2006 is the motor
             },
     };
-    DJI_Motor_Handle_t* motor_w4 = DJI_Motor_Init(&chassis_w4, M2006); // Initializing motor 1
+    motor_w4 = DJI_Motor_Init(&chassis_w4, M2006); // Initializing motor 1
 }
 
 void Chassis_Ctrl_Loop()
