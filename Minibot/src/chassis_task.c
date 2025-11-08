@@ -8,7 +8,7 @@
 extern Robot_State_t g_robot_state;
 extern Remote_t g_remote;
 
-float chassis_rad = 5.0; // radius of the chassis wheels
+float chassis_rad = 0.035; // radius of the chassis wheels
 DJI_Motor_Handle_t* motor_w1;
 DJI_Motor_Handle_t* motor_w2;
 DJI_Motor_Handle_t* motor_w3;
@@ -29,7 +29,7 @@ void Chassis_Task_Init()
                 .kp = 500.0f,
                 .kd = 0.0f,
                 .kf = 0.0f,
-                .output_limit = M2006_MAX_CURRENT, // m2006 is the motor
+                .output_limit = M2006_MAX_CURRENT_INT, // m2006 is the motor
             },
     };
     motor_w1 = DJI_Motor_Init(&chassis_w1, M2006); // Initializing motor 1
@@ -45,7 +45,7 @@ void Chassis_Task_Init()
                 .kp = 500.0f,
                 .kd = 0.0f,
                 .kf = 0.0f,
-                .output_limit = M2006_MAX_CURRENT, // m2006 is the motor
+                .output_limit = M2006_MAX_CURRENT_INT, // m2006 is the motor
             },
     };
     motor_w2 = DJI_Motor_Init(&chassis_w2, M2006); // Initializing motor 2
@@ -61,7 +61,7 @@ void Chassis_Task_Init()
                 .kp = 500.0f,
                 .kd = 0.0f,
                 .kf = 0.0f,
-                .output_limit = M2006_MAX_CURRENT, // m2006 is the motor
+                .output_limit = M2006_MAX_CURRENT_INT, // m2006 is the motor
             },
     };
     motor_w3 = DJI_Motor_Init(&chassis_w3, M2006); // Initializing motor 3
@@ -77,7 +77,7 @@ void Chassis_Task_Init()
                 .kp = 500.0f,
                 .kd = 0.0f,
                 .kf = 0.0f,
-                .output_limit = M2006_MAX_CURRENT, // m2006 is the motor
+                .output_limit = M2006_MAX_CURRENT_INT, // m2006 is the motor
             },
     };
     motor_w4 = DJI_Motor_Init(&chassis_w4, M2006); // Initializing motor 1
@@ -87,9 +87,9 @@ void Chassis_Ctrl_Loop()
 {
     // Control loop for the chassis
 
-    float d = 15.0;        
+    float d = .26;        
     float rad = PI/4;
-    float omega = 1.0;
+    float omega = 0.0;
     float dx = g_robot_state.input.vx;    
     float dy = g_robot_state.input.vy;
 
