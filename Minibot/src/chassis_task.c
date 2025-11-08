@@ -90,8 +90,11 @@ void Chassis_Ctrl_Loop()
     float d = .26;        
     float rad = PI/4;
     float omega = 0.0;
-    float dx = g_robot_state.input.vx;    
-    float dy = g_robot_state.input.vy;
+    // we've swapped x and y somehow
+    float dy = g_robot_state.input.vx;    
+    float dx = g_robot_state.input.vy;
+    // and the 'y' inputs are inverted
+    dx *= -1;
 
     float Phi1 = -sin(rad)*dx + cos(rad)*dy + omega*d;
     float Phi2 = -cos(rad)*dx - sin(rad)*dy + omega*d;
