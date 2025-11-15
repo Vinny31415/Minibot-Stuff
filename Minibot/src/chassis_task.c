@@ -112,8 +112,8 @@ void Chassis_Ctrl_Loop()
     Phi3 *= RADS_TO_RPM;
     Phi4 *= RADS_TO_RPM;
 
-    DJI_Motor_Set_Velocity(motor_w1, Phi1);
-    DJI_Motor_Set_Velocity(motor_w2, Phi2);
-    DJI_Motor_Set_Velocity(motor_w3, Phi3);
-    DJI_Motor_Set_Velocity(motor_w4, Phi4);
+    DJI_Motor_Set_Velocity(motor_w1, Phi4);
+    DJI_Motor_Set_Velocity(motor_w2, Phi1);
+    DJI_Motor_Set_Velocity(motor_w3, Phi2);
+    DJI_Motor_Set_Velocity(motor_w4, Phi3);
 }
