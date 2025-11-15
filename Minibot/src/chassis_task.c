@@ -85,24 +85,35 @@ void Chassis_Task_Init()
 
 void Chassis_Ctrl_Loop()
 {
-    // Control loop for the chassis
+    float d = 0.26f;
+    float R = chassis_rad;
 
-    float d = .26;        
-    float rad = PI/4;
+    float dx = g_robot_state.input.vx;
+    float dy = g_robot_state.input.vy;
     float omega = 0.0;
-    // we've swapped x and y somehow
-    float dy = g_robot_state.input.vx;    
-    float dx = g_robot_state.input.vy;
-    // and the 'y' inputs are inverted
-    dx *= -1;
+    float theta = PI/4;
 
-    float Phi1 = -sin(rad)*dx + cos(rad)*dy + omega*d;
-    float Phi2 = -cos(rad)*dx - sin(rad)*dy + omega*d;
-    float Phi3 =  sin(rad)*dx - cos(rad)*dy + omega*d;
-    float Phi4 =  cos(rad)*dx + sin(rad)*dy + omega*d;
+    float s = sin(theta);
+    float c = cos(theta);
 
-    DJI_Motor_Set_Velocity(motor_w1, Phi1*(1/chassis_rad));
-    DJI_Motor_Set_Velocity(motor_w2, Phi2*(1/chassis_rad));
-    DJI_Motor_Set_Velocity(motor_w3, Phi3*(1/chassis_rad));
-    DJI_Motor_Set_Velocity(motor_w4, Phi4*(1/chassis_rad));
+    float Phi1 = (-s * dx) + ( c * dy) + omega * d;
+    float Phi2 = (-c * dx) + (-s * dy) + omega * d;
+    float Phi3 = ( s * dx) + (-c * dy) + omega * d;
+    float Phi4 = ( c * dx) + ( s * dy) + omega * d;
+
+    Phi1 /= R;
+    Phi2 /= R;
+    Phi3 /= R;
+    Phi4 /= R;
+
+    const float RADS_TO_RPM = 9.5492966f;
+    Phi1 *= RADS_TO_RPM;
+    Phi2 *= RADS_TO_RPM;
+    Phi3 *= RADS_TO_RPM;
+    Phi4 *= RADS_TO_RPM;
+
+    DJI_Motor_Set_Velocity(motor_w1, Phi1);
+    DJI_Motor_Set_Velocity(motor_w2, Phi2);
+    DJI_Motor_Set_Velocity(motor_w3, Phi3);
+    DJI_Motor_Set_Velocity(motor_w4, Phi4);
 }
